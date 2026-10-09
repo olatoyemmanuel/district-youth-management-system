@@ -1,29 +1,35 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
+import { validateEnvironment } from './config/env.validation.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 
 /**
  * Root module for the District Youth Management System API.
  *
- * Rate limiting is registered globally so new controllers are protected
- * by default unless a route is explicitly configured otherwise.
- *
- * The default in-memory throttler storage is suitable for initial local
- * development and a single application instance. Multi-instance production
- * deployments will need shared storage, such as Redis.
+ * Environment variables are validated during startup. The global
+ * throttler reads its limits from the validated configuration.
  */
 @Module({
   imports: [
-    ThrottlerModule.forRoot([
-      {
-        name: 'default',
-        ttl: 60_000,
-        limit: 100,
-      },
-    ]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: validateEnvironment,
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => [
+        {
+          name: 'default',
+          ttl: configService.get<number>('RATE_LIMIT_TTL_MS', 60_000),
+          limit: configService.get<number>('RATE_LIMIT_MAX', 100),
+        },
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [
