@@ -3,8 +3,8 @@ import { z } from 'zod';
 /**
  * Validates environment variables used by the DYMS API.
  *
- * Defaults support local development. Production deployments should
- * explicitly configure their environment rather than rely on defaults.
+ * Database connectivity is mandatory. Other local-development defaults
+ * remain available, while production should configure values explicitly.
  */
 export const environmentSchema = z.object({
   NODE_ENV: z
@@ -19,6 +19,20 @@ export const environmentSchema = z.object({
     .min(1)
     .max(65535)
     .default(3000),
+
+  // Require a valid PostgreSQL connection URL without exposing its password.
+  DATABASE_URL: z
+    .string()
+    .url()
+    .refine(
+      (value) =>
+        value.startsWith('postgresql://') ||
+        value.startsWith('postgres://'),
+      {
+        message:
+          'DATABASE_URL must use the postgresql:// or postgres:// protocol',
+      },
+    ),
 
   RATE_LIMIT_TTL_MS: z.coerce
     .number()
@@ -37,9 +51,7 @@ export const environmentSchema = z.object({
 
 /**
  * Validates and normalizes the environment variables loaded by NestJS.
- *
- * Zod throws a descriptive validation error if any supplied value is
- * invalid. NestJS will then fail during application initialization.
+ * Invalid configuration prevents the application from starting.
  */
 export function validateEnvironment(
   config: Record<string, unknown>,

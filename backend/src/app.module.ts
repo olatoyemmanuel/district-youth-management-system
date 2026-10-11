@@ -3,15 +3,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
-import { validateEnvironment } from './config/env.validation.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { validateEnvironment } from './config/env.validation.js';
+import { PrismaModule } from './database/prisma.module.js';
 
 /**
  * Root module for the District Youth Management System API.
  *
- * Environment variables are validated during startup. The global
- * throttler reads its limits from the validated configuration.
+ * Environment configuration is validated at startup. PostgreSQL access
+ * is provided through Prisma, and the existing global rate-limit guard
+ * remains enabled.
  */
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { AppService } from './app.service.js';
         },
       ],
     }),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,0 +1,10 @@
+// Prisma Client is generated as TypeScript inside the application source.
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// Prisma 7 reads the connection URL from the Prisma config file.
+datasource db {
+  provider = "postgresql"
+}
