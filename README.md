@@ -8,12 +8,12 @@ reporting, and auditability.
 ## Project Status
 
 - Product requirements: approved baseline
-- Architecture and design specification: frozen for implementation
+- Architecture and design specification: baseline reopened following owner approval on 2026-10-29
+- DFR-006 formal design freeze: LIFTED; implementation authorized
 - Engineering foundation: in progress
-- Application implementation: not yet started
+- Application implementation: in progress only as work is explicitly completed and verified
 
-The design freeze approves the implementation specification. It does not
-indicate that the software has been implemented, tested, or deployed.
+The project owner lifted the formal design freeze on 2026-10-29 and authorized implementation. This does not mean that software has been implemented, tested, or deployed. Unresolved requirements remain unresolved; material design changes must be documented and reviewed, and the approved security, authorization, audit, migration, testing, and production-readiness controls remain mandatory.
 
 ## Technology Stack
 
