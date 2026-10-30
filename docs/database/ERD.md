@@ -1006,3 +1006,18 @@ The following requirements apply across the ERD and must be implemented consiste
 6. Financial approval, posting, reversal, required audit records, and applicable idempotency state must be handled consistently within database transactions.
 
 ### 10.5 Credential integrity
+
+## 11. Current approved decision overlay — 2026-10-30
+
+This section updates the policy status of the conceptual design. It does not approve the ERD or any physical database schema. If an earlier section labels one of the following policy questions unresolved, this section takes precedence for the stated rule only.
+
+1. **User–Member:** one-to-one cardinality is approved. Every Member has exactly one User; each User has at most one Member (MEM-02).
+2. **Youth classification:** Adventurer (4–9), Pathfinder (10–15), and Senior Youth (16–30+) remain the top-level categories. Ambassador and Young Adult are Senior Youth affiliations. A 21-year-old may hold both, subject to local ministry approval. Public Campus Ministry is an additional campus-context affiliation. Master Guide is a training/credential pathway, not a top-level age category. Category transition/history details not expressly decided remain open.
+3. **Primary church:** each Member has one current primary church. Transfer closes the previous membership and opens the new membership atomically; prior history is preserved (DDD-003).
+4. **Appointments:** terms run January 1–December 31. Renewal creates a new historical appointment. Higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the account (DDD-004).
+5. **Authentication idempotency:** use the consolidated DDD-013 specification for AUTH-IDEM-001–041. Its consistency review reports policy consistency passed with implementation-contract gaps and ERD readiness NOT READY. The authentication ERD slice requires those gaps to be resolved and validated before schema authorization.
+6. **Authentication retention:** apply the approved authentication retention periods recorded in the database decision register and DDD-014 resolution. Other business-domain retention remains unresolved.
+
+### 11.1 Current design gate
+
+DFR-006 was lifted on 2026-10-29. Implementation was authorized, but the corrected ERD still requires explicit project-owner approval before Prisma models or migrations are created. This document remains a proposed conceptual design until that approval is recorded.
