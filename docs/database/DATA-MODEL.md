@@ -570,3 +570,11 @@ Authentication mutation idempotency is governed by DDD-013-AUTHENTICATION-IDEMPO
 ### 16.6 Current implementation boundary
 
 DFR-006 was lifted on 2026-10-29 and implementation was authorized. This does not authorize Prisma models or migrations before formal approval of the corrected ERD. No physical schema or migration is approved by this document.
+
+### 16.7 DDD-013 authentication persistence boundary
+
+The approved authentication idempotency contract requires conceptual persistence for operation scope, request fingerprint, HMAC key version, operation state, processing lease, BIGINT fencing counter, safe terminal result metadata, retention timestamps, tombstones, and recovery outcomes. Authenticated and pre-authenticated scopes must remain distinguishable and enforceably unique.
+
+Password-reset delivery requires an outbox reference and a protected short-lived secret-storage boundary. Queue messages must carry opaque references rather than reset secrets. The exact division into tables/entities, foreign keys, partial indexes, and secret-store integration is not approved by this domain model. It must be specified in the authentication ERD slice and reviewed against DDD-013-CONSISTENCY-REVIEW.md §§5 and 9.
+
+CR-01 through CR-06 are approved. The remaining gate is physical modeling and verification, not policy approval. Session ownership remains independent of User–Member cardinality.
