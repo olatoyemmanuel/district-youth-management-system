@@ -1021,3 +1021,20 @@ This section updates the policy status of the conceptual design. It does not app
 ### 11.1 Current design gate
 
 DFR-006 was lifted on 2026-10-29. Implementation was authorized, but the corrected ERD still requires explicit project-owner approval before Prisma models or migrations are created. This document remains a proposed conceptual design until that approval is recorded.
+
+### 11.2 DDD-013 authentication ERD-slice validation requirements
+
+The following conceptual elements are required by the approved DDD-013 contract. This list is a modeling checklist, not a final declaration of physical tables, columns, indexes, or foreign keys:
+
+- Idempotency operation identity and scope, with authenticated and pre-authenticated modes represented distinctly.
+- Server-calculated request fingerprint and HMAC key-version metadata.
+- Persisted operation lifecycle state, fixed processing lease, and BIGINT fencing counter.
+- Safe terminal result metadata and response-retention timestamps.
+- Compact tombstone identity and expiry for retained key-use protection.
+- Recovery scheduling/outcome metadata or a clearly justified related record.
+- Password-reset delivery outbox reference and protected short-lived secret-storage boundary. Queue messages carry opaque references, not reset secrets.
+- Database uniqueness and partial-index strategy for the mutually exclusive authenticated/pre-authenticated scopes.
+- Foreign-key and lifecycle integrity without making Session ownership depend on User–Member cardinality.
+- Endpoint-specific transaction boundaries, lock ordering, replay authorization, and failure recovery.
+
+CR-01 through CR-06 are approved policy/contract decisions and are incorporated into DDD-013. The remaining NOT READY status is a physical-modeling and verification gate, not a claim that those six policy decisions remain unapproved. See DDD-013-CONSISTENCY-REVIEW.md §§5 and 9.
