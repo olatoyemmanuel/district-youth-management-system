@@ -3,7 +3,7 @@
 - Document status: DRAFT FOR CONSISTENCY REVIEW
 - Prepared: 2026-10-30
 - Domain: Authentication and session management
-- Decision range incorporated: AUTH-IDEM-001 through AUTH-IDEM-035
+- Decision range incorporated: AUTH-IDEM-001 through AUTH-IDEM-041
 - Implementation status: NOT IMPLEMENTED
 - Schema/migration authorization: NOT GRANTED
 
@@ -11,7 +11,7 @@
 
 Define the idempotency contract for state-changing authentication operations. The contract prevents duplicate effects when clients retry requests, while preserving authentication secrecy, session integrity, and safe recovery after concurrency or process failure.
 
-This document consolidates approved decisions AUTH-IDEM-001 through AUTH-IDEM-035. It does not claim that the contract has been implemented or verified. The ten policy recommendations previously listed as DDD13-O1 through DDD13-O10 have been explicitly approved and recorded as AUTH-IDEM-026 through AUTH-IDEM-035. DDD-013 now proceeds to consistency review and ERD-slice validation.
+This document consolidates approved decisions AUTH-IDEM-001 through AUTH-IDEM-041. It does not claim that the contract has been implemented or verified. The ten policy recommendations previously listed as DDD13-O1 through DDD13-O10 have been explicitly approved and recorded as AUTH-IDEM-026 through AUTH-IDEM-035. DDD-013 now proceeds to consistency review and ERD-slice validation.
 
 ## 2. Scope
 
@@ -265,3 +265,25 @@ DDD-013 may be marked complete only after:
 5. The user explicitly approves the final DDD-013 specification.
 
 No Prisma models, migrations, or production implementation are authorized by this draft.
+
+
+## 12.2 Approved consistency-gap resolutions: AUTH-IDEM-036 through AUTH-IDEM-041
+
+The product owner explicitly approved all six recommendations from the consistency review on 2026-10-30. Each is recorded as a separate formal decision:
+
+| Decision | Approved resolution | Formal record |
+|---|---|---|
+| AUTH-IDEM-036 | Host-only pre-auth cookie, no Domain, Path `/api/v1/auth`, Secure, HttpOnly, SameSite=Lax, Max-Age 600; hashed server-side context; bind login and password-reset mutations; rotate/invalidate context; non-browser clients require separate design | `AUTHENTICATION-IDEMPOTENCY-PREAUTH-COOKIE-LIFECYCLE-DECISION.md` |
+| AUTH-IDEM-037 | New operations use active HMAC key version; retries use the version stored on the original operation; retain required versions; unavailable/compromised key means no execution and controlled review | `AUTHENTICATION-IDEMPOTENCY-HMAC-KEY-VERSION-SELECTION-DECISION.md` |
+| AUTH-IDEM-038 | Explicit mutually exclusive authenticated and pre-auth scope modes; separate partial unique indexes or equivalent; do not rely on nullable composite UNIQUE semantics | `AUTHENTICATION-IDEMPOTENCY-POSTGRES-SCOPE-UNIQUENESS-DECISION.md` |
+| AUTH-IDEM-039 | Reset delivery secret held separately in envelope-encrypted short-lived secret storage; outbox/queue contain opaque reference only; worker-only access; expire by reset-token lifetime and erase after delivery/expiry | `PASSWORD-RESET-DELIVERY-SECRET-PROTECTION-DECISION.md` |
+| AUTH-IDEM-040 | Replay validates live context: authenticated principal/session for authenticated operations, pre-auth context for login/reset, reset-token state for completion; no sensitive disclosure when context is invalid | `AUTHENTICATION-IDEMPOTENCY-REPLAY-AUTHORIZATION-CONTEXT-DECISION.md` |
+| AUTH-IDEM-041 | Same idempotency identity with different fingerprint returns HTTP 409, `IDEMPOTENCY_KEY_REUSED`, standard error envelope; no execution or sensitive disclosure; safe security event | `AUTHENTICATION-IDEMPOTENCY-KEY-FINGERPRINT-CONFLICT-DECISION.md` |
+
+These six decisions resolve the policy questions raised as CR-01 through CR-06. Their exact physical representation, vendor-specific secret-store integration, index predicates, and endpoint-level tests remain subject to ERD and implementation-contract validation. In particular, AUTH-IDEM-039 approves the protection pattern, not a specific secret-store vendor or deployment product.
+
+## 12.3 Updated validation gate
+
+The six policy gaps CR-01 through CR-06 are approved and separately recorded. DDD-013 is not yet complete: the remaining work is to incorporate these decisions into the ERD slice, specify exact physical constraints and secret-store integration, validate endpoint transaction/replay behavior, complete consistency review, and obtain explicit approval of the final DDD-013 specification.
+
+No Prisma models, migrations, or production implementation are authorized by this update.
