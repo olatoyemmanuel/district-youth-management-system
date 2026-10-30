@@ -229,3 +229,67 @@ For each decision, append a resolution record only when evidence and approval ex
 
 This register organizes the questions; it does not resolve them. Before adding this draft tothe live repository, compare it with the current `REQUIREMENTS-TRACEABILITY.md`, invariant register, approved decision register, and working tree to confirm no newer changes or additional blockers are missing.
 nuel_toye@nueltoye:~/project/dyms$
+
+## 9. Resolution and reconciliation update — 2026-10-30
+
+The following records supersede earlier status text in this register where the earlier entry says EVIDENCE REQUIRED or BLOCKED for the specific question now resolved. They do not close adjacent policy questions that were not decided.
+
+### DDD-001 — Authoritative product requirements baseline
+
+- **Status:** RESOLVED for the working-baseline question; historical provenance gap retained.
+- **Decision:** PRB-001 v0.1 is approved as the reconstructed, versioned working product baseline.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30 (explicit confirmation of the reconstructed-baseline recommendation; earlier working-baseline approval recorded 2026-10-21).
+- **Qualification:** The historical authoritative original PRD has not been recovered. PRB-001 must not be described as the original PRD. Proposed requirements and blocked policies remain individually classified.
+
+### MEM-02 — User–Member cardinality
+
+- **Status:** RESOLVED.
+- **Decision:** One User is associated with at most one Member, and every Member has exactly one User. The mandatory association policy remains in force for platform members.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30.
+- **Implementation note:** The policy is approved; exact mandatory-participation enforcement and transaction mechanics remain schema-design details.
+
+### DDD-002 — Youth categories and affiliations
+
+- **Status:** RESOLVED for the category/affiliation classification and age-21 overlap rule. Other category lifecycle/history details not expressly decided remain open.
+- **Decision:** DYMS top-level categories remain Adventurer (4–9), Pathfinder (10–15), and Senior Youth (16–30+). Ambassador and Young Adult are Senior Youth affiliations. Public Campus Ministry is an additional affiliation. Master Guide is a training/credential pathway, not a top-level age category.
+- **Age-21 rule:** A 21-year-old may hold both Ambassador and Young Adult affiliations concurrently, subject to approval by the relevant local ministry authorities. DYMS must not impose a new age boundary or mutual exclusivity at age 21.
+- **Source:** Official General Conference Adventist Youth Ministries website. It publishes Ambassador 16–21 and Young Adults 21–30; a July 2025 Adventist News Network report gives Young Adults as 22–30. Preserve this published-source discrepancy in the traceability record.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30.
+
+### DDD-003 — Primary church membership and transfers
+
+- **Status:** RESOLVED for cardinality and transfer-history policy; technical concurrency mechanism remains a schema-design item.
+- **Decision:** Each Member has one current primary church membership. A transfer closes the prior membership and opens the new membership atomically. Prior membership history is preserved.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30.
+
+### DDD-004 — Annual appointment lifecycle
+
+- **Status:** RESOLVED for annual term, renewal, authority, and self-renewal policy. Other role-precedence and conflicting-position rules remain under DDD-005.
+- **Decision:** Terms run January 1 through December 31. Renewal creates a new historical appointment record. The designated higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the account or deleting membership.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30.
+
+### DDD-013 — Authentication idempotency
+
+- **Status:** PARTIALLY RESOLVED for authentication operations; non-authentication business-domain idempotency remains outside this decision.
+- **Decision evidence:** AUTH-IDEM-001 through AUTH-IDEM-041 are consolidated in DDD-013-AUTHENTICATION-IDEMPOTENCY-SPECIFICATION.md on the associated specification branch. The consistency review is DDD-013-CONSISTENCY-REVIEW.md.
+- **Review result:** Policy consistency passed with implementation-contract gaps. ERD readiness remains NOT READY. The review identifies outstanding gaps CR-01 onward and requires authentication ERD-slice validation. No Prisma/schema authorization is granted.
+
+### DDD-014 — Retention and deletion
+
+- **Status:** PARTIALLY RESOLVED for authentication record classes only; all other business-domain retention remains BLOCKED.
+- **Approved authentication retention:** Session records: 12 months after expiry/revocation; refresh-token history: 12 months after expiry/consumption/revocation; password-reset records: 90 days after expiry/consumption/revocation; security events: 24 months after occurrence. Legal holds and active security investigations suspend deletion. Cleanup must be audited and retry-safe. Backup retention is separate.
+- **Approver:** Project owner.
+- **Approval date:** 2026-10-30.
+
+### Still blocked
+
+DDD-005 through DDD-012 and DDD-015 remain blocked to the extent stated in their entries. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
+
+## 10. Current implementation gate
+
+The recovered database documents are restored and the decisions above are recorded for reconciliation. The ERD remains a proposed design. DDD-013's authentication slice is not ERD-ready until the consistency-review gaps are resolved and validated. No Prisma models or migrations are authorized until the user formally approves the corrected ERD.
