@@ -277,7 +277,7 @@ The following records supersede earlier status text in this register where the e
 
 - **Status:** PARTIALLY RESOLVED for authentication operations; non-authentication business-domain idempotency remains outside this decision.
 - **Decision evidence:** AUTH-IDEM-001 through AUTH-IDEM-041 are consolidated in DDD-013-AUTHENTICATION-IDEMPOTENCY-SPECIFICATION.md on the associated specification branch. The consistency review is DDD-013-CONSISTENCY-REVIEW.md.
-- **Review result:** Policy consistency passed with implementation-contract gaps. ERD readiness remains NOT READY. The review identifies outstanding gaps CR-01 onward and requires authentication ERD-slice validation. No Prisma/schema authorization is granted.
+- **Review result:** Policy consistency passed with implementation-contract gaps. ERD readiness remains NOT READY. CR-01 through CR-06 were approved and incorporated into the consolidated DDD-013 specification. The remaining work is physical ERD modeling and verification of the approved contracts, as listed in DDD-013-CONSISTENCY-REVIEW.md §9. No Prisma/schema authorization is granted.
 
 ### DDD-014 — Retention and deletion
 
@@ -292,4 +292,4 @@ DDD-005 through DDD-012 and DDD-015 remain blocked to the extent stated in their
 
 ## 10. Current implementation gate
 
-The recovered database documents are restored and the decisions above are recorded for reconciliation. The ERD remains a proposed design. DDD-013's authentication slice is not ERD-ready until the consistency-review gaps are resolved and validated. No Prisma models or migrations are authorized until the user formally approves the corrected ERD.
+The recovered database documents are restored and the decisions above are recorded for reconciliation. The ERD remains a proposed design. DDD-013's authentication slice is not ERD-ready until the approved CR-01 through CR-06 contracts are physically modeled and validated against the consistency-review checklist. No Prisma models or migrations are authorized until the user formally approves the corrected ERD.
