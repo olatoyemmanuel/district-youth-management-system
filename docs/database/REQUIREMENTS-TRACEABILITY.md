@@ -86,7 +86,7 @@ final ERD approval.
 
 | DFR-005 Backup and Disaster Recovery | Operational delivery matrix in §5 below; no ERD entity was added for infrastructure. | Approved target; implementation evidence is absent. |
 
-| DFR-006 Formal Design Freeze | All new material is labelled approved, verified, proposed, or blocked. No approved decision was changed. | Approved and preserved. |
+| DFR-006 Formal Design Freeze | Historical formal design freeze was explicitly lifted on 2026-10-29; implementation was authorized subject to the remaining ERD and schema approval gates. | Historical decision preserved; freeze no longer active. |
 
 ## **4. Requirement-to-design traceability matrix**
 
@@ -216,7 +216,7 @@ not silently change an approved rule.
 
 ## **8. Traceability conclusion**
 
-The ERD remains a proposed design and the database design remains **NOT READY** because the material questions in §6 lack authoritative product evidence. DFR-001 through DFR-006 remain unchanged; this matrix does not establish that every ERD relationship or workflow is approved. In particular, RT-003 cardinality, RT-025 event-registration policy, and RT-026 audit retention remain blocked until the relevant authoritative requirements or decisions are approved. No new rule in this document converts a blocked or proposed item into an approved one.
+The ERD remains a proposed design and the database design remains **NOT READY**. DFR-006 was lifted on 2026-10-29; DFR-001 through DFR-005 remain approved. The dated decision reconciliation in §9 supersedes older statuses for MEM-02, DDD-002, DDD-003, DDD-004, authentication idempotency, and authentication retention. RT-025 event-registration policy, RT-026 non-authentication audit/business retention, and other unresolved product policies remain blocked. No new rule in this document converts a blocked or proposed item into an approved one.
 nuel_toye@nueltoye:~/project/dyms$
 
 ## 9. Current decision reconciliation — 2026-10-30
