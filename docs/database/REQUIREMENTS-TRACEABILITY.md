@@ -96,3 +96,28 @@ Before granting final ERD approval, confirm that:
 
 **Final disposition: NOT READY.** This review documents remediation and outstanding decisions; it does not grant ERD approval or authorize schema implementation.
 nuel_toye@nueltoye:~/project/dyms$
+
+## 9. Current decision reconciliation — 2026-10-30
+
+This section supersedes older traceability rows only for the specific decisions stated below. It does not imply that every related implementation mechanism is approved.
+
+| Requirement | Current approved rule | Design trace | Status and remaining boundary |
+|---|---|---|---|
+| RT-003 / MEM-02 | Every Member has exactly one User; each User has at most one Member. | USER ↔ MEMBER; unique User reference from Member. | **Policy approved 2026-10-30.** Exact mandatory-participation enforcement remains a schema-design choice. |
+| RT-004 / DDD-003 | Each Member has one current primary church. Transfer closes the previous membership and opens the new membership atomically; history is preserved. | MEMBER, CHURCH, CHURCH_MEMBERSHIP_HISTORY. | **Policy approved 2026-10-30.** Exact concurrency/constraint mechanism remains proposed. |
+| RT-006 / DDD-002 | Top-level categories: Adventurer 4–9, Pathfinder 10–15, Senior Youth 16–30+. Ambassador and Young Adult are Senior Youth affiliations; Public Campus Ministry is an additional affiliation; Master Guide is a credential/training pathway. | Member category and ministry affiliation representation; CREDENTIAL_DEFINITION, MEMBER_CREDENTIAL. | **Classification approved 2026-10-30.** A 21-year-old may hold both Ambassador and Young Adult affiliations with local ministry approval. Other transition/history details remain open. |
+| RT-008 / DDD-004 | Appointment term is Jan 1–Dec 31. Renewal creates a new historical appointment; higher authority controls appointment/renewal; no self-appointment or self-renewal. | ROLE_ASSIGNMENT, APPOINTMENT, actor/authority references. | **Policy approved 2026-10-30.** Role catalogue, precedence, and conflicting-position matrix remain blocked under DDD-005. |
+| RT-027 / DDD-013 | Authentication mutations use the approved idempotency contract in AUTH-IDEM-001–041. | IDEMPOTENCY_RECORD and protected authentication mutation workflows. | **Authentication policy consolidated.** DDD-013 consistency review passed policy consistency but lists implementation-contract gaps; authentication ERD slice is NOT READY. Do not infer idempotency policy for all business domains. |
+| RT-028 / DDD-014 | Authentication retention: sessions 12 months; refresh-token history 12 months; password-reset records 90 days; security events 24 months, measured from the approved lifecycle event. Legal holds/investigations suspend deletion. | SESSION, REFRESH_TOKEN_USE, PASSWORD_RESET_TOKEN, SECURITY_EVENT. | **Authentication retention approved 2026-10-30.** Other business-domain retention remains blocked. Backup retention is separate. |
+
+### 9.1 Product baseline provenance
+
+PRB-001 v0.1 is approved as the reconstructed, versioned working product baseline. The historical authoritative original PRD remains unrecovered. Do not describe PRB-001 as the historical original. The baseline approval does not approve every proposed requirement or close unrelated blockers.
+
+### 9.2 Authoritative youth ministry source note
+
+The official General Conference Adventist Youth Ministries website lists Adventurers 4–9, Pathfinders 10–15, Ambassadors 16–21, and Young Adults 21–30. A July 2025 Adventist News Network report describes Young Adults as 22–30. The approved DYMS rule permits both Ambassador and Young Adult affiliations at age 21, subject to local ministry approval, and does not invent a replacement boundary. Public Campus Ministry is campus-context affiliation, not an exclusive age category. Master Guide is a training/credential pathway.
+
+### 9.3 DFR-006 status
+
+DFR-006 remains part of the historical decision record but was explicitly lifted on 2026-10-29. Implementation was authorized. This does not remove the requirement for formal ERD approval before Prisma models or migrations.
