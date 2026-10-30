@@ -12,7 +12,7 @@ Reviewed the consolidated DDD-013 specification against:
 
 - DFR-001 authentication architecture.
 - DFR-004 authentication and session parameters.
-- AUTH-IDEM-026 through AUTH-IDEM-035, each explicitly approved by the product owner.
+- AUTH-IDEM-026 through AUTH-IDEM-041, each explicitly approved by the product owner.
 - The previously approved idempotency decisions AUTH-IDEM-001 through AUTH-IDEM-025 as represented in the consolidated specification and project decision history.
 
 This is a design consistency review. It does not establish that software has been implemented or tested.
@@ -147,3 +147,35 @@ CR-01, CR-02, CR-03, CR-04, CR-05, and CR-06 are implementation-contract/ERD gap
 DDD-013 remains DRAFT FOR CONSISTENCY REVIEW. The authentication idempotency ERD slice is NOT READY for final approval until the blocking gaps are resolved and reflected in the specification.
 
 No Prisma models, migrations, or production implementation are authorized by this review.
+
+
+## 8. Product-owner approval of CR-01 through CR-06
+
+On 2026-10-30, the product owner explicitly approved all six recommendations. Each was recorded in a separate formal decision and submitted as an individual pull request:
+
+| Review gap | Decision | Approved resolution | Pull request |
+|---|---|---|---|
+| CR-01 | AUTH-IDEM-036 | Pre-auth cookie host-only, Path `/api/v1/auth`, Secure, HttpOnly, SameSite=Lax, 600-second lifetime, hashed server-side context, lifecycle and endpoint binding rules | #46 |
+| CR-02 | AUTH-IDEM-037 | Existing operation retries use the original record's HMAC key version; unavailable or compromised verification key prevents execution | #47 |
+| CR-03 | AUTH-IDEM-038 | Explicit mutually exclusive authenticated/pre-auth identity modes with separate partial unique indexes or equivalent PostgreSQL enforcement | #48 |
+| CR-04 | AUTH-IDEM-039 | Protected envelope-encrypted short-lived reset-delivery secret store; outbox and queue carry opaque references only; worker-restricted access and expiry/erasure rules | #49 |
+| CR-05 | AUTH-IDEM-040 | Replay validates current authenticated or pre-auth context and reset-token state as applicable; invalid context does not receive stored result | #50 |
+| CR-06 | AUTH-IDEM-041 | HTTP 409 with `IDEMPOTENCY_KEY_REUSED`; no execution or sensitive disclosure; safe security event | #51 |
+
+The six decisions are approved by the product owner but their pull requests are open and unmerged. Their records are therefore not yet part of the default branch. The consolidated DDD-013 specification branch has been updated to incorporate the decisions.
+
+## 9. Revised consistency assessment
+
+**Policy consistency:** PASS, subject to the scope of the decisions reviewed. CR-01 through CR-06 are now approved policy and contract decisions.
+
+**ERD readiness:** NOT READY. The approved policies still require physical modeling and verification, including:
+- Exact authenticated/pre-auth scope columns, predicates, and partial unique indexes.
+- Pre-auth context relationships, lifecycle, and cleanup.
+- Protected reset-delivery secret reference and its integration boundary.
+- HMAC key-version metadata and retry lookup behavior.
+- Tombstone and recovery-record relationships and retention enforcement.
+- Endpoint-specific transaction, lock ordering, and replay test coverage.
+
+**Schema/migration authorization:** NOT GRANTED.
+
+The six approved decisions resolve the prior policy questions. They do not constitute approval of the ERD, Prisma models, migrations, or implementation.
