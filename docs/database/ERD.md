@@ -962,13 +962,13 @@ Before Prisma schema or application implementation, verify:
 - Transaction boundaries for the business mutation, required audit event, and idempotency state.
 - Handling of external side effects and uncertain outcomes.
 - Appropriate foreign keys, indexes, deletion restrictions, and concurrency controls.
-- Consistency with the approved requirements and DFR-001 through DFR-006.
+- Consistency with approved requirements, DFR-001 through DFR-005, and the recorded DFR-006 lift/change history.
 
 No Prisma schema, migration, or application implementation may be created until the ERD review is complete and the implementation gate is explicitly approved.
 
 ## 10. Cross-Domain Integrity Requirements
 
-The following requirements apply across the ERD and must be implemented consistently with DFR-001 through DFR-006.
+The following requirements apply across the ERD and must be implemented consistently with DFR-001 through DFR-005 and the recorded DFR-006 lift/change history.
 
 ### 10.1 Relational integrity and organizational scope
 
