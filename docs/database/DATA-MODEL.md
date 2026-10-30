@@ -83,7 +83,7 @@ tracking if participation can change.
 ### 3.4 Future expansion
 
 Multi-district and multi-conference operation is outside the initial
-scope. Any expansion that changes the frozen specification requires a
+scope. Any expansion that changes the approved specification requires a
 documented change request and impact review.
 
 ## 4. Identity and Membership
@@ -534,7 +534,7 @@ Do not add Prisma models or generate migrations until:
 
 - The proposed entity relationships are reviewed.
 - Required invariants and unresolved requirements are documented.
-- The model is checked against DFR-001 through DFR-006.
+- The model is checked against DFR-001 through DFR-005 and the recorded DFR-006 lift/change history.
 - Any conflict with the frozen design is resolved through the approved
   change-control process.
 - The data-model document is reviewed and its status is explicitly updated.
