@@ -542,3 +542,31 @@ Do not add Prisma models or generate migrations until:
 After approval, implementation should proceed in small, testable increments
 with Prisma validation, migration review, automated tests, and verified
 Git commits.
+
+## 16. Current approved decision reconciliation — 2026-10-30
+
+This section is the current policy overlay for the restored domain model. Where earlier sections describe a now-resolved question as proposed or blocked, this section takes precedence for the policy only. It does not approve physical schema details.
+
+### 16.1 Identity
+
+Every Member has exactly one User account, and each User is associated with at most one Member. This one-to-one cardinality is approved under MEM-02. The exact database mechanism for mandatory participation and atomic provisioning remains a schema-design item.
+
+### 16.2 Ministry category and affiliation distinction
+
+DYMS top-level member categories are Adventurer (4–9), Pathfinder (10–15), and Senior Youth (16–30+). Ambassador and Young Adult are affiliations within Senior Youth. A 21-year-old may hold both affiliations concurrently, subject to local ministry approval. Public Campus Ministry is an additional affiliation based on campus context. Master Guide is a training/credential pathway and is not a top-level age category. Category transition/history details not expressly decided remain open.
+
+### 16.3 Primary church membership
+
+Each Member has one current primary church membership. A transfer closes the previous membership and opens the new primary membership atomically. Historical membership records are preserved. The precise database concurrency mechanism remains for schema design.
+
+### 16.4 Leadership appointments
+
+Leadership appointment terms run from January 1 through December 31. Renewal creates a new historical appointment record rather than overwriting the prior appointment. The designated higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the User or deleting the Member. Role catalogue, permission precedence, and conflicting-position policy remain open under DDD-005.
+
+### 16.5 Authentication idempotency and retention
+
+Authentication mutation idempotency is governed by DDD-013-AUTHENTICATION-IDEMPOTENCY-SPECIFICATION.md and its consistency review. AUTH-IDEM-001–041 are consolidated there. The review identifies outstanding implementation-contract gaps; this domain is not yet ERD-ready. Authentication retention is approved as follows: Session records 12 months after expiry/revocation; refresh-token history 12 months after expiry/consumption/revocation; password-reset records 90 days after expiry/consumption/revocation; SecurityEvent records 24 months after occurrence. Legal holds and active security investigations suspend deletion. Cleanup must be audited and retry-safe. Backup retention is separate. Retention for other business records remains unresolved.
+
+### 16.6 Current implementation boundary
+
+DFR-006 was lifted on 2026-10-29 and implementation was authorized. This does not authorize Prisma models or migrations before formal approval of the corrected ERD. No physical schema or migration is approved by this document.
