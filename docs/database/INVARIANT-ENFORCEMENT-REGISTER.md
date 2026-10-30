@@ -133,3 +133,19 @@ A status in this register does not indicate that a control is implemented or
 
 tested today.
 nuel_toye@nueltoye:~/project/dyms$
+
+## 4. Approved policy updates — 2026-10-30
+
+The following policy rules are approved. The concrete database constraints and concurrency mechanisms remain proposed until the ERD is approved and physical schema design is authorized.
+
+| Invariant IDs | Approved policy | Enforcement and verification obligation | Status |
+|---|---|---|---|
+| IM-01, IM-02 | One-to-one User–Member: every Member has exactly one User; each User has at most one Member. | Required and unique relationship; account/member provisioning must be atomic. Test duplicate association and rollback. | Policy approved; exact database mechanism proposed. |
+| IM-03 | Each Member has one current primary church. | Required current membership; validate district scope. Test null/invalid church rejection. | Policy approved; exact database mechanism proposed. |
+| IM-04, IM-05 | Transfer closes prior church membership and opens the new primary membership atomically; prior history is preserved; concurrent transfers must not create contradictory current memberships. | One transaction for current church, history close/open, and audit. Choose lock/constraint strategy during schema design. Test rollback, retry, and concurrent transfer. | Policy approved; technical enforcement proposed. |
+| CAT-01 | Top-level categories are Adventurer, Pathfinder, Senior Youth. Ambassador/Young Adult are Senior Youth affiliations; age 21 permits both with local approval. Public Campus Ministry is additional affiliation; Master Guide is a credential/training pathway. | Model category, affiliation, and credential as distinct concepts. Do not encode age-21 mutual exclusion. Test local-approval gate. | Classification approved; remaining category history/transition details open. |
+| LA-01, LA-02, LA-03, LA-05 | Annual appointment Jan 1–Dec 31; renewal is a new historical appointment; higher authority appoints/renews; no self-appointment or self-renewal; expiry removes appointment-derived authority without deactivating the account. | Preserve subject, creator, approver, and ending actor; evaluate authority using appointment validity, date, scope, and actor. Test expiry and prohibited self-actions. | Policy approved; exact lifecycle state model and role precedence remain partly open. |
+| AU-IDEM-01 | Authentication state-changing operations follow AUTH-IDEM-001–041. | Coordinate idempotency acquisition, protected mutation, audit/outbox requirements, and replay/recovery contract. See DDD-013 specification and consistency review. | Policy consolidated; ERD slice not ready due to CR gaps. |
+| AU-RET-01 | Authentication retention periods: session 12 months; refresh history 12 months; password-reset records 90 days; security events 24 months. Legal holds/investigations suspend deletion. | Audited, retry-safe cleanup; backup retention separate. Test retention cutoff, holds, and retry. | Authentication retention approved; other domain retention remains blocked. |
+
+A policy approval does not mean the corresponding constraint, transaction, application logic, or test has been implemented. Do not mark an implementation control as complete until it is built and verified.
