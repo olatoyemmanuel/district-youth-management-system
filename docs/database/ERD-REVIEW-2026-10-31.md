@@ -156,7 +156,7 @@ At the time of this 7.1 update, the detailed role-to-permission matrix remained 
 
 The project owner approved the proposed role-to-permission matrix without modification for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant. The approved matrix is recorded in [DDD-005 Approved Role-to-Permission Matrix](../decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md). Its concrete grants and resource-scope limits are approved. HOLD entries remain withheld pending their domain decisions and are not grants or explicit denies.
 
-The ERD remains NOT READY. Remaining DDD-005 questions are stable permission identifiers and complete resource mapping, explicit-deny representation and administration, specific role-conflict combinations, and appointment overlap/duplicate constraints. DDD-004 mid-year and early-ending appointment rules remain unresolved. No Prisma schema or migration is authorized.
+The ERD remains NOT READY. Remaining DDD-005 questions are physical deny representation/enforcement, explicit-deny representation and administration, specific role-conflict combinations, and appointment overlap/duplicate constraints. DDD-004 mid-year and early-ending appointment rules remain unresolved. No Prisma schema or migration is authorized.
 
 
 ### 7.3 DDD-005 explicit-deny and role-conflict approval — 2026-10-31
