@@ -39,12 +39,12 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-002 — Member Categories and Transitions
 
 - **Priority:** High
-- **Status:** PARTIALLY RESOLVED. Category/affiliation classification and age-21 overlap are approved; category transitions, effective dates, and history remain blocked.
+- **Status:** PARTIALLY RESOLVED. Category/affiliation policy and its conceptual ERD representation are now documented; category transitions, effective dates, and history remain blocked.
 - **Decision question:** Can a member have only one active category at a time? What transitions are permitted, are effective dates required, and must category history be preserved?
-- **Current documented position:** The current baseline lists Adventurer, Pathfinder, and Senior Youth as categories and Master Guide as a credential. Exact transition and history rulesremain blocked.
+- **Current documented position:** `MEMBER.category_code` distinguishes Adventurer, Pathfinder, and Senior Youth. `MINISTRY_AFFILIATION`, `MEMBER_MINISTRY_AFFILIATION`, and `MINISTRY_AFFILIATION_APPROVAL` represent Ambassador, Young Adult, Public Campus Ministry, and the approved age-21 dual-affiliation approval. Master Guide remains a credential/training pathway. Category transitions, effective dates, and history remain blocked.
 - **Affected requirements, entities, and invariants:** Traceability B-002; RT-006; `MEMBER`,`CREDENTIAL_DEFINITION`, `MEMBER_CREDENTIAL`; relevant membership invariants.
 - **Evidence or approval required:** Authoritative product/youth-ministry policy or explicitapproved product decision covering category cardinality, transitions, effective dating, and history.
-- **Required follow-up:** Update requirements, ERD/data model, invariants, and tests after approval. Do not reinterpret Master Guide as a category.
+- **Required follow-up:** Keep category/affiliation concepts distinct in ERD and data model; validate age-21 dual affiliation requires local approval. Do not invent category transition/history rules.
 
 ### DDD-003 — Church Membership Transfers
 
@@ -149,12 +149,12 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-013 — Idempotency Contract
 
 - **Priority:** High
-- **Status:** PARTIALLY RESOLVED. Authentication operations are governed by AUTH-IDEM-001–041 and the consolidated DDD-013 specification. Non-authentication business-domain idempotency remains blocked.
+- **Status:** PARTIALLY RESOLVED. Authentication policy is approved and its conceptual persistence structures are now represented in ERD §§2.1 and 9. Non-authentication business-domain idempotency remains blocked; physical constraints and verification remain.
 - **Decision question:** What idempotency contract applies to each operation class, and how are scope, fingerprint, replay, retention, failure recovery, and external side effects represented?
-- **Current documented position:** Authentication policy is approved and consolidated. CR-01 through CR-06 are approved. The authentication ERD slice remains NOT READY pending physical modeling and verification. Other business-domain idempotency policies remain unresolved.
+- **Current documented position:** AUTH-IDEM-001–041 and CR-01–CR-06 are approved. The ERD now represents mutually exclusive authenticated/pre-authentication scopes, `PRE_AUTH_CONTEXT`, `OUTBOX_MESSAGE`, and the external protected reset-secret-store boundary. Exact index predicates, field constraints, secret-store integration, and endpoint verification remain technical gates. Other business-domain idempotency policies remain unresolved.
 - **Affected requirements, entities, and invariants:** RT-022 and RT-027; `IDEMPOTENCY_RECORD`; related mutation/audit invariants.
-- **Evidence or approval required:** For non-authentication operations, approve a domain-specific contract before applying idempotency behavior. For authentication, complete the DDD-013 physical ERD slice and consistency verification.
-- **Required follow-up:** Keep authentication and non-authentication idempotency policies explicitly separated; add same-key concurrency and response-loss tests for each applicable domain.
+- **Evidence or approval required:** For non-authentication operations, approve a domain-specific contract before applying idempotency behavior. For authentication, verify the represented ERD slice against DDD-013 and complete physical constraint/secret-store integration design after ERD approval.
+- **Required follow-up:** Keep authentication and non-authentication policies separate; verify scope-mode exclusivity, fingerprint conflict, outbox atomicity, secret-reference protection, recovery/tombstone retention, and endpoint replay tests.
 
 ### DDD-014 — Retention and Deletion
 
@@ -225,9 +225,7 @@ For each decision, append a resolution record only when evidence and approval ex
 
 ## 8. Current Conclusion
 
-**NOT READY** — do not approve the ERD or generate `schema.prisma`/migrations while materialblockers remain unresolved.
-
-This register organizes the questions; it does not resolve them. Before adding this draft tothe live repository, compare it with the current `REQUIREMENTS-TRACEABILITY.md`, invariant register, approved decision register, and working tree to confirm no newer changes or additional blockers are missing.
+**NOT READY** — the three structural findings ERD-R02, ERD-R03, and ERD-R04 have been represented in the conceptual ERD and data model. Remaining product-policy blockers DDD-005 through DDD-012 and DDD-015, DDD-002 category transition/history, DDD-014 non-authentication retention, and DDD-013 physical validation remain. This register is reconciled with the 2026-10-31 review; it does not approve the ERD or authorize Prisma models/migrations.
 ## 9. Resolution and reconciliation update — 2026-10-30
 
 The following records supersede earlier status text in this register where the earlier entry says EVIDENCE REQUIRED or BLOCKED for the specific question now resolved. They do not close adjacent policy questions that were not decided.
