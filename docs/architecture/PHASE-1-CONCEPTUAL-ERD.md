@@ -599,3 +599,88 @@ The following issues do not block a conceptual draft, but they do block final po
 ## 19. Approval status
 
 **Not approved for implementation.** This document is a working conceptual ERD. The next Phase 1 activity is a consistency review against the requirements and domain-boundary documents, followed by a final ERD approval package. No Prisma schema, migration, physical database schema, or application code has been created or changed as part of this work.
+
+
+## 20. Integrity review refinements (supersedes ambiguous wording above)
+
+This section records the refinements required by the Phase 1 integrity review. Where an earlier section is less precise, this section controls the conceptual interpretation.
+
+### 20.1 Exact account/member cardinality
+
+- Every MEMBER references exactly one USER_ACCOUNT.
+- A USER_ACCOUNT references zero or one MEMBER.
+- The USER_ACCOUNT-to-MEMBER link is unique in both directions.
+- A user account may exist before a member profile is created or completed.
+- A MEMBER record cannot be activated for DYMS member use until its individual USER_ACCOUNT exists and is linked.
+- No guardian account, shared account, login delegation, or guardian-child relationship is modelled.
+
+### 20.2 Supported organizational scope targets
+
+The conceptual scope targets for v1.0 are:
+- DISTRICT: district-wide authority and district-owned records.
+- CHURCH: records owned or administered within one church.
+- DEPARTMENT: a department/programme scope, optionally bounded by its owning district or church as defined by the relevant business rule.
+
+Not every entity supports every target. Each scoped entity must declare its permitted target types. For example, a church-owned financial account must reference a CHURCH, while a district account must reference a DISTRICT. A role assignment must reference only a scope type permitted for that role.
+
+The eventual physical design must enforce valid scope targets and referential integrity. A free-form `scope_type + scope_id` pair without target validation is not sufficient. The physical design may use separate nullable foreign keys with a controlled exactly-one rule, or another integrity-preserving structure approved during physical design.
+
+### 20.3 Appointment and authorization separation
+
+- POSITION is the definition of an office.
+- APPOINTMENT is the approved time-bounded assignment of a member to that office and scope.
+- ROLE is an application authorization bundle.
+- PERMISSION is an individual action/resource capability.
+- USER_ROLE_ASSIGNMENT represents a role granted independently of an appointment.
+- APPOINTMENT_ROLE_LINK explicitly maps an appointment to zero or more roles under a versioned mapping.
+- Appointment approval does not grant an implicit unrestricted role. Authorization is computed from active, approved appointment-derived and independently granted roles, explicit scope, permission rules, conflict decisions, and active denies.
+- The appointing authority and approving actor are separately recorded where they are different people. Self-approval restrictions apply wherever required by the approved governance rules.
+
+### 20.4 Decision and approval history
+
+For any workflow that permits multiple reviewers, approval stages, rejection, resubmission, or a later decision, preserve a decision history record with at least:
+- target workflow record;
+- decision-maker account;
+- decision value;
+- reason or decision note where required;
+- decision timestamp;
+- stage or decision sequence where multiple stages are formally defined.
+
+This is a conceptual pattern, not a mandate to add identical generic approval tables to every bounded context. Prefer domain-specific decision records where they make ownership and constraints clearer. Do not invent approval stages for policies that have not defined them.
+
+### 20.5 Attendance uniqueness with optional sessions
+
+Attendance must support one of two mutually exclusive modes for a given event:
+- Event-level attendance: one valid attendance record per member/event, with no session reference.
+- Session-level attendance: one valid attendance record per member/event session, where the session belongs to that event.
+
+A member/event must not be double-counted by mixing an event-level record and session-level records for the same attendance purpose. The final physical design must enforce this with suitable conditional uniqueness and validation. The business decision on whether registration is mandatory before attendance remains open.
+
+### 20.6 Financial amount and reversal semantics
+
+- The amount representation and debit/credit sign convention require an approved accounting policy before physical schema approval.
+- PAYMENT may represent one or more payment attempts, but this does not approve partial settlement.
+- Partial payments, allocation, refunds, failed/returned payments and partial reversals remain policy gaps.
+- A full reversal must not exceed the amount of its original posted transaction. If partial reversals are later approved, cumulative successful reversals must not exceed the original reversible amount.
+- A transaction's account currency and transaction currency must match. Foreign-exchange reporting is a separate approved capability, not an implicit conversion.
+
+### 20.7 Idempotency and webhook identity
+
+- An idempotency operation is scoped by actor identity, operation identity, resource/organizational scope, and normalized request fingerprint.
+- Reuse of the same key with a different fingerprint is a conflict. Reuse with the same fingerprint returns the original safe result or an in-progress outcome without repeating the business effect.
+- Provider webhook identity is separately unique within a provider. A provider event ID is not a substitute for the application's idempotency key.
+- Repeated or out-of-order provider events must not duplicate or regress a business state. Store processing outcome and correlation to the affected business record.
+- Exact key format, storage lease, expiry and retry values remain technical implementation decisions.
+
+### 20.8 Audit actor and payload minimization
+
+AUDIT_EVENT preserves actor type and, where applicable, the stable account identity. For delegated activity, preserve both the initiating actor and the represented subject. Audit data stores a safe change summary and references, not credentials, tokens, secrets, or unnecessary copies of sensitive personal or financial payloads. Access to audit records, searches and exports is itself auditable.
+
+### 20.9 Retention target and hold integrity
+
+Retention policies and holds must identify a supported record category and a valid target/scope. A hold must resolve to the exact records covered and block destructive actions until released by an authorized actor. Generic target references require enforceable target validation in physical design. Evidence files use secure object references and must follow their parent record's approved access and retention rules unless a separate approved schedule applies.
+
+### 20.10 Provider event processing
+
+Webhook event identifiers are unique within the provider that issued them. Signature verification, replay detection, payload validation, deduplication, and state-transition validation occur before the event triggers a business mutation. Provider callbacks are evidence of an external event, not authorization grants. Processing result, failure/retry state, and business correlation are retained for reconciliation.
+
