@@ -168,12 +168,12 @@ The six decisions are approved by the product owner but their pull requests are 
 
 **Policy consistency:** PASS, subject to the scope of the decisions reviewed. CR-01 through CR-06 are now approved policy and contract decisions.
 
-**ERD readiness:** NOT READY. The approved policies still require physical modeling and verification, including:
+**ERD readiness:** NOT READY. The conceptual ERD now represents authenticated/pre-authentication scope modes, PRE_AUTH_CONTEXT, OUTBOX_MESSAGE, and the external protected reset-secret-store boundary. The approved policies still require physical modeling and verification, including:
 - Exact authenticated/pre-auth scope columns, predicates, and partial unique indexes.
-- Pre-auth context relationships, lifecycle, and cleanup.
-- Protected reset-delivery secret reference and its integration boundary.
+- Exact physical pre-auth context foreign keys, lifecycle constraints, and cleanup implementation. The conceptual PRE_AUTH_CONTEXT relationship is now represented in ERD §9.1 and DATA-MODEL §11.1.
+- Physical OUTBOX_MESSAGE relationship and protected reset-delivery secret-store integration. The conceptual outbox and external secret-store boundary are now represented in ERD §9.6 and DATA-MODEL §10.
 - HMAC key-version metadata and retry lookup behavior.
-- Tombstone and recovery-record relationships and retention enforcement.
+- Final physical representation of tombstone and recovery metadata/records and retention enforcement. Conceptual requirements are now listed in ERD §9.6.
 - Endpoint-specific transaction, lock ordering, and replay test coverage.
 
 **Schema/migration authorization:** NOT GRANTED.
