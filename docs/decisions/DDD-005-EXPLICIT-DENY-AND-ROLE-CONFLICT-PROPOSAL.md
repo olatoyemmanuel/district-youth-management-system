@@ -1,10 +1,13 @@
 # DDD-005 Follow-up: Explicit-Deny and Role-Conflict Policy Proposal
 
-- Status: PROPOSAL FOR PROJECT-OWNER REVIEW
+- Status: APPROVED
 - Date: 2026-10-31
 - Applies to: DYMS v1.0, Sango District
 - Related decisions: DDD-004, DDD-005, DDD-012
-- Approval status: NOT APPROVED
+- Approval status: APPROVED
+- Approval date: 2026-10-31
+- Approver: Project owner
+- Approval basis: Explicit approval without modification of all four decision groups. Additional instructions: none.
 - Implementation status: NOT IMPLEMENTED
 - Schema/migration authorization: NOT GRANTED
 
@@ -123,3 +126,15 @@ After approval, the design must include tests for:
 This proposal does not amend DFR-001 through DFR-005, the historical DFR-006 lift, DDD-004, the approved DDD-005 role catalogue/scope/permission matrix, or DDD-012 audit-administration decisions.
 
 This is a policy proposal only. It does not approve the ERD, physical database design, Prisma models, migrations, APIs, or application implementation. The corrected ERD still requires separate explicit project-owner approval before Prisma models or migrations are created.
+
+
+## 8. Formal approval record — 2026-10-31
+
+The project owner approved all four decision groups without modification. Additional instructions: none.
+
+1. **Explicit-deny scope and precedence: APPROVED.** A deny applies only to its named permission and resource scope, overrides every applicable grant, and does not spread to unrelated scopes. Descendant-resource coverage applies only where the permission's approved scope model expressly defines it. Ambiguous scope fails closed for the affected protected operation.
+2. **Explicit-deny administration and audit: APPROVED.** Only a separately authorised administrative authority may create or revoke a deny. The affected actor cannot create, approve, modify, or remove their own restriction. Record the reason, target actor, permission, resource scope, effective start, optional expiry/review date, issuer, and lifecycle status. Audit creation, attempted use, review, modification, expiry, and revocation. Preserve history after revocation. Temporary restrictions should expire or receive scheduled review; permanent restrictions require a reason and periodic review. Physical representation remains a technical design decision.
+3. **Role-combination classifications: APPROVED.** Every role-pair classification in §3 is approved unchanged. Allowed combinations require separate valid assignments/appointments and independent scopes. Prohibited combinations must not be active concurrently. Review-required combinations remain inactive until independently approved.
+4. **Independent review workflow: APPROVED.** An authorised reviewer who is not the affected Member must record approval before a review-required combination becomes effective.
+
+This approval does not change the existing role catalogue, approved four-role permission matrix, DDD-004 appointment lifecycle decisions, or DDD-012 audit-administration authority. It does not determine physical storage, schema, Prisma models, migrations, APIs, or application implementation.
