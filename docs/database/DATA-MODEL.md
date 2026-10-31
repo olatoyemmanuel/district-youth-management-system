@@ -2,7 +2,7 @@
 
 > **Restoration and current-decision note (2026-10-30):** This document is restored from the latest recoverable project snapshot located in the user's saved files. Its original content is retained as the design baseline, with the status corrections below taking precedence wherever older text conflicts. This restoration is not ERD approval and does not authorize Prisma models or migrations.
 >
-> Current approved domain resolutions supersede conflicting earlier wording: MEM-02 is one-to-one User–Member; DDD-003 requires one current primary church with atomic transfer and preserved history; DDD-004 requires annual historical appointments with higher-authority renewal and no self-renewal. DDD-002 permits concurrent Ambassador and Young Adult affiliations at age 21 when locally approved. DFR-006 was lifted on 2026-10-29. See `DOMAIN-DECISION-APPROVAL-UPDATE-2026-10-30.md` and the DDD-013 specification for the authentication/idempotency slice.
+> Current approved domain resolutions supersede conflicting earlier wording: MEM-02 is one-to-one User–Member; DDD-003 requires one current primary church with atomic transfer and preserved history; DDD-004 requires annual historical appointments with higher-authority renewal and no self-renewal. DDD-002 permits concurrent Ambassador and Young Adult affiliations at age 21 when locally approved. DFR-006 was lifted on 2026-10-29. See `DATABASE-DESIGN-DECISION-REGISTER.md` §9 and the DDD-013 specification for the authentication/idempotency slice.
 
 ## 1. Document Status
 
