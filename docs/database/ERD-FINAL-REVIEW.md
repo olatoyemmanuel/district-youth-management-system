@@ -91,8 +91,6 @@ Before granting final ERD approval, confirm that:
 8. You explicitly approve the final ERD before any Prisma model or migration work begins.
 
 **Final disposition: NOT READY.** This review documents remediation and outstanding decisions; it does not grant ERD approval or authorize schema implementation.
-nuel_toye@nueltoye:~/project/dyms$
-
 ## 8. Current review update — 2026-10-30
 
 The following approvals were received after the original review snapshot and must be treated as current:
