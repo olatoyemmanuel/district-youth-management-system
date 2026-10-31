@@ -101,14 +101,14 @@ The review is documentation and design analysis only. It does not approve a phys
 - MEM-02: one-to-one User–Member cardinality is approved.
 - DDD-002: category/affiliation classification and age-21 dual affiliation with local approval are approved; category transition/history details remain open.
 - DDD-003: one current primary church and atomic history-preserving transfers are approved; physical concurrency enforcement remains proposed.
-- DDD-004: Jan 1–Dec 31 annual appointments, new historical appointment on renewal, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved. Role precedence and conflicting-position policy remain open.
+- DDD-004: Jan 1–Dec 31 annual appointments, new historical appointment on renewal, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved. DDD-005 role-pair classifications are now approved; DDD-004 mid-year/early-ending/replacement lifecycle and technical overlap/duplicate enforcement remain open.
 - DDD-013: AUTH-IDEM-001–041 and CR-01–CR-06 are approved. Policy consistency passes; the authentication ERD slice remains NOT READY pending physical modeling and verification.
 - DDD-014: authentication retention is approved for sessions (12 months), refresh-token history (12 months), password-reset records (90 days), and security events (24 months), subject to legal holds/investigations. Audit-log and other business-domain retention remain unresolved.
 - DFR-006: historical design freeze was lifted on 2026-10-29. The explicit ERD approval gate remains.
 
 ## 4. Remaining product-policy blockers
 
-- DDD-005: stable permission identifiers and complete permission-to-resource scope mapping, explicit-deny representation, specific prohibited/review-required role combinations, and appointment overlap/duplicate constraints. The initial role categories, scopes, permission groups, combination precedence, and four leadership-role grant matrix were approved on 2026-10-31.
+- DDD-005: stable permission identifiers and complete permission-to-resource scope mapping, technical explicit-deny representation/enforcement, and assignment/appointment duplicate or overlap constraints beyond approved role-pair classifications. The initial role categories, scopes, permission groups, combination precedence, and four leadership-role grant matrix were approved on 2026-10-31.
 - DDD-006: department membership lifecycle and eligibility.
 - DDD-007: event ownership and registration lifecycle.
 - DDD-008: duplicate attendance scans, correction concurrency and retention.
@@ -140,7 +140,7 @@ The entity inventory is 33 conceptual entities. The secret store is an external 
 
 DDD-012 is partially resolved based on the user's approvals recorded in PRs #4, #5, #6, #8, and #9: role-based access and access logging; Audit Viewer and Audit Administrator responsibilities; sole appointment/revocation authority vested in one System Administrator; and controlled bootstrap provisioning. Remaining actor taxonomy, record scopes, masking, exports, access reviews, break-glass, and audit-of-audit retention remain open.
 
-DDD-002 is partially resolved: category/affiliation concepts and age-21 local approval are now represented; category transition/history policy remains open. DDD-001, DDD-003, DDD-004, DDD-013, and the authentication subset of DDD-014 retain their recorded approved/partially resolved boundaries. DDD-005 is partially resolved by the 2026-10-31 approval of the initial roles, scopes, permission groups, additive grants, explicit-deny precedence, strict scope enforcement, and four leadership-role grant matrix; stable permission identifiers, complete resource mapping, explicit-deny representation, role-conflict matrix, and overlap/duplicate constraints remain open. DDD-006 through DDD-011 and DDD-015 remain blocked or partially resolved as listed in the decision register. DDD-014 remains blocked for non-authentication records.
+DDD-002 is partially resolved: category/affiliation concepts and age-21 local approval are now represented; category transition/history policy remains open. DDD-001, DDD-003, DDD-004, DDD-013, and the authentication subset of DDD-014 retain their recorded approved/partially resolved boundaries. DDD-005 is partially resolved by the 2026-10-31 approval of the initial roles, scopes, permission groups, additive grants, explicit-deny precedence, strict scope enforcement, and four leadership-role grant matrix; stable permission identifiers, complete resource mapping, physical deny representation/enforcement, and overlap/duplicate constraints beyond approved role-pair classifications remain open. DDD-006 through DDD-011 and DDD-015 remain blocked or partially resolved as listed in the decision register. DDD-014 remains blocked for non-authentication records.
 
 **Disposition:** ERD-R02 through ERD-R04 have conceptual corrections applied. The ERD remains NOT READY for formal approval pending the physical DDD-013 validation and remaining policy blockers. No Prisma schema, migration, or database implementation is authorized.
 
@@ -157,3 +157,8 @@ At the time of this 7.1 update, the detailed role-to-permission matrix remained 
 The project owner approved the proposed role-to-permission matrix without modification for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant. The approved matrix is recorded in [DDD-005 Approved Role-to-Permission Matrix](../decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md). Its concrete grants and resource-scope limits are approved. HOLD entries remain withheld pending their domain decisions and are not grants or explicit denies.
 
 The ERD remains NOT READY. Remaining DDD-005 questions are stable permission identifiers and complete resource mapping, explicit-deny representation and administration, specific role-conflict combinations, and appointment overlap/duplicate constraints. DDD-004 mid-year and early-ending appointment rules remain unresolved. No Prisma schema or migration is authorized.
+
+
+### 7.3 DDD-005 explicit-deny and role-conflict approval — 2026-10-31
+
+The project owner approved all four groups without modification. The approved policy defines permission/resource-scoped deny precedence, independent deny administration and immutable audit history, all role-pair classifications, and independent approval before review-required combinations become effective. Physical restriction representation remains undecided. The ERD remains NOT READY; no Prisma schema, migration, or database implementation is authorized.
