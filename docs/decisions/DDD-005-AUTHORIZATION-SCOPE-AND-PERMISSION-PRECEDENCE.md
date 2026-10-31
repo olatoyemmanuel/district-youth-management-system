@@ -17,7 +17,7 @@ The project owner approved all four DDD-005 proposal groups without modification
 3. Action-specific permission catalogue and domain groups.
 4. Permission combination and precedence.
 
-This approval resolves the corresponding policy questions only to the extent stated in this record. It does not approve every possible role-to-permission grant, every role-combination rule, an exhaustive permission identifier catalogue, or the remaining appointment lifecycle rules.
+This approval was supplemented on 2026-10-31 by the approved role-to-permission matrix in [DDD-005 Approved Role-to-Permission Matrix](DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md). The matrix approves the concrete grants and scope limits for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant. Its HOLD entries remain withheld pending the related domain decisions. It does not resolve every role-combination rule, explicit-deny technical representation, or the remaining appointment lifecycle rules.
 
 ## 2. Initial role categories and scope
 
@@ -90,11 +90,11 @@ The explicit-deny rule is a policy precedence rule. Its exact representation in 
 
 The following remain unresolved and must not be inferred:
 
-- The exhaustive permission identifiers and the exact role-to-permission grant matrix.
+- Exhaustive stable permission identifiers, permission descriptions, and complete permission-to-resource mappings beyond the approved matrix.
 - The exact representation and administration of explicit deny rules.
 - The prohibited or review-required combinations of specific roles, including combinations held concurrently by one Member.
 - The exact overlap and duplicate-active-record constraints for appointments and assignments.
-- The named higher-authority actor and appointment workflow for each leadership role, where not already established by approved policy.
+- The named higher-authority actor and appointment workflow for leadership actions still marked HOLD in the approved matrix.
 - Mid-year appointment creation, early ending/termination, replacement, and other lifecycle states under DDD-004.
 - Secretary, Financial Secretary, and other roles not included in the approved initial catalogue.
 - Domain-specific authority still blocked under DDD-010 (finance), DDD-011 (credentials), and DDD-012 (remaining audit access controls).
@@ -103,8 +103,9 @@ The following remain unresolved and must not be inferred:
 
 Before implementation, prepare and review:
 
-- A complete role-to-permission matrix.
-- A permission-to-resource and permission-to-scope matrix.
+- Complete stable permission identifiers and a permission-to-resource/permission-to-scope specification that expands the approved matrix without broadening its grants.
+- Explicit-deny representation and administration rules.
+- Prohibited/review-required role-combination and appointment-overlap rules.
 - Positive and negative authorization tests for each role and scope.
 - Cross-church, cross-department, and cross-district IDOR tests.
 - Multiple-role additive-permission tests.
@@ -119,3 +120,12 @@ Before implementation, prepare and review:
 This decision supplements and does not alter DFR-001 through DFR-005, the historical DFR-006 lift, DDD-004, or the approved DDD-012 audit-administration decisions.
 
 It is a product-policy approval only. It does not approve the ERD, physical schema, Prisma models, migrations, API implementation, or deployment. The user must explicitly approve the corrected final ERD before Prisma models or migrations are created.
+
+
+## 9. Role-to-permission matrix approval update — 2026-10-31
+
+The project owner approved the proposed role-to-permission matrix without modification for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant. The approved matrix is recorded in [DDD-005 Approved Role-to-Permission Matrix](DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md).
+
+All concrete grants and their resource-scope limits in those four columns are approved. HOLD entries remain withheld, not granted and not treated as explicit denies, until the referenced domain decisions are resolved. The approval does not grant additional operational permissions to Local Church Youth Assistants, expand District Departmental Coordinator access beyond the assigned department, or establish higher-authority appointment powers where the matrix marks leadership actions HOLD.
+
+The initial matrix approval resolves the detailed grants for the four leadership roles to the extent listed in the matrix. Remaining DDD-005 questions are stable permission identifiers and complete permission-to-resource mapping, explicit-deny representation and administration, prohibited/review-required role combinations, and appointment overlap/duplicate constraints. DDD-004 mid-year creation, early ending, replacement, and other lifecycle questions remain open.
