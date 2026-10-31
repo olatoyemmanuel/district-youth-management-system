@@ -139,12 +139,18 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-012 — Audit Actor Representation and Access
 
 - **Priority:** High
-- **Status:** BLOCKED
-- **Decision question:** How are system/anonymous actors represented, who may access audit records, and what access exceptions are allowed?
-- **Current documented position:** Audit history is intended to be append-only, scope-aware,and secret-free. Actor representation and audit access policy need further specification.
-- **Affected requirements, entities, and invariants:** Traceability B-008; RT-021; LA-02; `AUDIT_LOG`, `SECURITY_EVENT`, relevant actor references.
-- **Evidence or approval required:** Approved audit access matrix and policy for unauthenticated/system actors, sensitive fields, access review, and exceptional access.
-- **Required follow-up:** Align audit schema and authorization with approved policy; preserve append-only controls and avoid secrets.
+- **Status:** PARTIALLY RESOLVED. Role-based access, access logging, Audit Viewer/Audit Administrator permission levels, sole System Administrator appointment authority, and single-administrator sufficiency are approved. System/anonymous actor taxonomy and detailed access controls remain blocked.
+- **Approved access policy (2026-10-30):**
+  - Access to sensitive audit and security records is role-based and restricted to authorised administrators. Every access attempt is logged, including denied attempts where technically feasible (PR #4).
+  - Audit Viewer may view only records within the viewer's authorised scope. It cannot edit/delete records or manage audit-access permissions (PR #5).
+  - Audit Administrator may manage audit-access permissions and review access activity, but cannot alter or erase historical audit records (PR #5).
+  - Only the System Administrator may appoint or revoke Audit Administrators. Audit Administrators cannot appoint themselves, appoint peers, or revoke another Audit Administrator (PR #6).
+  - One System Administrator is sufficient to approve and execute Audit Administrator appointments/revocations; no second-person approval is required (PR #8).
+  - Initial System Administrator provisioning is controlled deployment/bootstrap, not public registration. Provisioning and recovery must be audited; verified ownership and a documented recovery procedure are required (PR #9).
+- **Decision question still open:** How are anonymous/system actors represented, and what exact record scopes, sensitive-field masking, exports, access reviews, break-glass controls, and audit-of-audit retention apply?
+- **Affected requirements, entities, and invariants:** Traceability B-008; RT-021; AD-01, AD-02, AD-07; `AUDIT_LOG`, `SECURITY_EVENT`, `ROLE`, `PERMISSION`, relevant actor references.
+- **Evidence or approval required:** Resolve the remaining scope, masking, export, access-review, emergency-access, actor-taxonomy, and audit-of-audit retention questions.
+- **Required follow-up:** Keep historical audit records immutable; model viewer/admin permissions distinctly; ensure the System Administrator is the sole appointment authority for Audit Administrators; log access and all appointment/revocation actions.
 
 ### DDD-013 — Idempotency Contract
 
@@ -284,7 +290,7 @@ The following records supersede earlier status text in this register where the e
 
 ### Still blocked
 
-DDD-005 through DDD-012 and DDD-015 remain blocked to the extent stated in their entries. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
+DDD-005 through DDD-011 and DDD-015 remain blocked to the extent stated in their entries. DDD-012 is partially resolved as recorded above; its remaining actor/access-scope controls remain blocked. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
 
 ## 10. Current implementation gate
 
