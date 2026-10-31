@@ -231,7 +231,7 @@ For each decision, append a resolution record only when evidence and approval ex
 
 ## 8. Current Conclusion
 
-**NOT READY** — the three structural findings ERD-R02, ERD-R03, and ERD-R04 have been represented in the conceptual ERD and data model. DDD-005 is partially resolved by the 2026-10-31 approval; its remaining role-to-permission, explicit-deny representation, and specific role-conflict matrix remain open. Other product-policy blockers DDD-006 through DDD-012 and DDD-015, DDD-002 category transition/history, DDD-014 non-authentication retention, and DDD-013 physical validation remain. This register does not approve the ERD or authorize Prisma models/migrations.
+**NOT READY** — the three structural findings ERD-R02, ERD-R03, and ERD-R04 have been represented in the conceptual ERD and data model. DDD-005 policy decisions now include the approved role catalogue/scopes, four-role permission matrix, explicit-deny scope/precedence and independent administration/audit controls, role-pair classifications, and independent-review workflow. Remaining DDD-005 work is stable permission identifiers, complete permission/resource mapping, physical deny representation/enforcement, overlap/duplicate constraints beyond the approved role-pair classifications, and authorization tests. Other product-policy blockers DDD-006 through DDD-012 and DDD-015, DDD-002 category transition/history, DDD-014 non-authentication retention, DDD-004 appointment lifecycle, and DDD-013 physical validation remain. This register does not approve the ERD or authorize Prisma models/migrations.
 ## 9. Resolution and reconciliation update — 2026-10-30
 
 The following records supersede earlier status text in this register where the earlier entry says EVIDENCE REQUIRED or BLOCKED for the specific question now resolved. They do not close adjacent policy questions that were not decided.
@@ -299,7 +299,7 @@ The following records supersede earlier status text in this register where the e
 
 ### Still blocked
 
-DDD-005 is partially resolved as recorded above; the four leadership-role grant matrix is approved, while explicit-deny representation, specific role-conflict rules, and overlap/duplicate constraints remain open. DDD-006 through DDD-011 and DDD-015 remain blocked to the extent stated in their entries. DDD-012 is partially resolved as recorded above; its remaining actor/access-scope controls remain blocked. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
+DDD-005 is partially resolved as recorded above; the role catalogue, four-role grant matrix, explicit-deny policy/administration, role-pair classifications, and independent-review workflow are approved. Stable permission/resource mapping, physical deny representation/enforcement, overlap/duplicate constraints beyond approved role pairs, and authorization tests remain open. DDD-006 through DDD-011 and DDD-015 remain blocked to the extent stated in their entries. DDD-012 is partially resolved as recorded above; its remaining actor/access-scope controls remain blocked. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
 
 ## 10. Current implementation gate
 
