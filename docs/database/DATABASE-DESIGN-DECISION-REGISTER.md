@@ -31,7 +31,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 - **Priority:** Critical
 - **Status:** EVIDENCE REQUIRED
 - **Decision question:** How should the project record the product-requirements baseline when no historical authoritative document has been recovered?
-- **Current documented position:** No historical authoritative product-requirements documenthas been recovered, and the available Git history did not reveal one. The project owner approved `docs/product/PRODUCT-REQUIREMENTS-BASELINE.md` (PRB-001) on 2026-10-21 as the working review baseline. This does not automatically approve proposed requirements, resolve blocked domain decisions, or approve the ERD, schema, or migrations. DFR-001–DFR-006 and the user-confirmed domain baseline remain sources for the decisions they cover.
+- **Current documented position:** No historical authoritative product-requirements document has been recovered, and the available Git history did not reveal one. PRB-001 v0.1 is approved as the reconstructed, versioned working review baseline; it is not the recovered original PRD. This does not automatically approve proposed requirements, resolve blocked domain decisions, or approve the ERD, schema, or migrations. DFR-001–DFR-005 and the user-confirmed domain baseline remain sources for the decisions they cover.
 - **Affected requirements, entities, and invariants:** Traceability B-001; RT-001–RT-026; all proposed domain entities and workflows.
 - **Evidence or approval required:** PRB-001 has been explicitly approved as the working review baseline, with the project owner as approver and 2026-10-21 as the approval date. The historical source remains unrecovered. Product-policy gaps must be resolved individually and recorded; do not treat baseline approval as approval of every proposed requirement.
 - **Required follow-up:** Record PRB-001 provenance in the traceability matrix; classify downstream requirements against approved evidence; keep unresolved policy decisions blocked until individually decided and recorded.
@@ -149,12 +149,12 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-013 — Idempotency Contract
 
 - **Priority:** High
-- **Status:** BLOCKED
-- **Decision question:** What is the idempotency-key scope, payload fingerprint, replay response, retention period, failure recovery, and handling of external side effects for each sensitive operation?
-- **Current documented position:** Operation-specific idempotency is required for sensitive mutations, but endpoint-specific contracts and recovery details remain unresolved.
-- **Affected requirements, entities, and invariants:** Traceability B-008; RT-022; `IDEMPOTENCY_RECORD`; related mutation/audit invariants.
-- **Evidence or approval required:** Approved API/idempotency contract by operation class, including key scope, payload mismatch behavior, replay semantics, retention, retry, and recovery rules.
-- **Required follow-up:** Keep policy separate from the eventual database locking and storage design; add same-key concurrency and response-loss tests.
+- **Status:** PARTIALLY RESOLVED. Authentication operations are governed by AUTH-IDEM-001–041 and the consolidated DDD-013 specification. Non-authentication business-domain idempotency remains blocked.
+- **Decision question:** What idempotency contract applies to each operation class, and how are scope, fingerprint, replay, retention, failure recovery, and external side effects represented?
+- **Current documented position:** Authentication policy is approved and consolidated. CR-01 through CR-06 are approved. The authentication ERD slice remains NOT READY pending physical modeling and verification. Other business-domain idempotency policies remain unresolved.
+- **Affected requirements, entities, and invariants:** RT-022 and RT-027; `IDEMPOTENCY_RECORD`; related mutation/audit invariants.
+- **Evidence or approval required:** For non-authentication operations, approve a domain-specific contract before applying idempotency behavior. For authentication, complete the DDD-013 physical ERD slice and consistency verification.
+- **Required follow-up:** Keep authentication and non-authentication idempotency policies explicitly separated; add same-key concurrency and response-loss tests for each applicable domain.
 
 ### DDD-014 — Retention and Deletion
 
@@ -228,8 +228,6 @@ For each decision, append a resolution record only when evidence and approval ex
 **NOT READY** — do not approve the ERD or generate `schema.prisma`/migrations while materialblockers remain unresolved.
 
 This register organizes the questions; it does not resolve them. Before adding this draft tothe live repository, compare it with the current `REQUIREMENTS-TRACEABILITY.md`, invariant register, approved decision register, and working tree to confirm no newer changes or additional blockers are missing.
-nuel_toye@nueltoye:~/project/dyms$
-
 ## 9. Resolution and reconciliation update — 2026-10-30
 
 The following records supersede earlier status text in this register where the earlier entry says EVIDENCE REQUIRED or BLOCKED for the specific question now resolved. They do not close adjacent policy questions that were not decided.
