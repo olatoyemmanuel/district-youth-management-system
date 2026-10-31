@@ -29,7 +29,10 @@ It does not authorize application implementation, Prisma schema changes, migrati
 5. [Phase 1 Conceptual ERD](./PHASE-1-CONCEPTUAL-ERD.md)  
    Candidate entities, attributes, relationships, cardinalities, history, scope, integrity and transaction boundaries.
 
-6. [Phase 1 ERD Integrity Review](./PHASE-1-ERD-INTEGRITY-REVIEW.md)  
+6. [Phase 1 Conceptual ERD Diagrams](./PHASE-1-CONCEPTUAL-ERD-DIAGRAMS.md)  
+   Mermaid relationship diagrams grouped by bounded context. These are visual companions to the full conceptual model.
+
+7. [Phase 1 ERD Integrity Review](./PHASE-1-ERD-INTEGRITY-REVIEW.md)  
    Ten design refinements and the security, data-integrity, policy and governance review.
 
 ## 3. Conceptual model coverage
