@@ -140,3 +140,14 @@ DFR-006 remains part of the historical decision record but was explicitly lifted
 ### 11.4 DDD-005 explicit-deny and role-conflict approval — 2026-10-31
 
 The project owner approved all four groups without modification. The approved policy defines permission/resource-scoped deny precedence, independent deny administration and immutable audit history, the complete role-pair classification table, and independent review before a review-required combination becomes effective. Physical storage and enforcement details remain to be designed.
+
+
+### 11.5 DDD-005 stable permission catalogue and resource mapping approval — 2026-10-31
+
+The project owner approved all five review points without modification. The stable authorization contract now consists of the action-specific lowercase dot-separated permission identifiers, the complete logical permission-to-resource mapping, the seven approved scope labels (`DISTRICT`, `ASSIGNED_CHURCH`, `ASSIGNED_DEPARTMENT`, `DISTRICT_DESCENDANTS`, `LINKED_CHURCH_DEPARTMENT`, `AUDIT_SCOPE`, `SYSTEM`), and the role-grant reconciliation in the DDD-005 catalogue.
+
+Existing approved grants are unchanged. `HOLD` remains withheld and is not an allow; `NO GRANT` is not an explicit deny; `CONDITIONAL` requires a separate valid assignment and scope. Local Church Youth Assistant member visibility remains limited, with exact visible fields deferred to a separate decision. District Departmental Coordinator member visibility remains HOLD.
+
+These approvals establish logical policy and resource targets only. They do not approve additional grants, new entities, fields, tables, indexes, constraints, physical deny representation, Prisma models, migrations, or application implementation. The documented unresolved domain decisions and technical enforcement details remain open. The corrected ERD remains NOT READY for formal approval and requires separate explicit project-owner approval before schema implementation.
+
+Authoritative decision: [DDD-005 Stable Permission Catalogue and Resource-Scope Mapping](../decisions/DDD-005-STABLE-PERMISSION-CATALOGUE-AND-RESOURCE-SCOPE-PROPOSAL.md).
