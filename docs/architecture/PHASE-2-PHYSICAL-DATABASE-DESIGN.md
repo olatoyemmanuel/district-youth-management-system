@@ -567,3 +567,205 @@ The following are blockers for the final physical design or for specific modules
 ## 13. Current status
 
 The conceptual ERD is approved. This physical database design is a working proposal and is not yet approved for implementation. Open church-policy, accounting, retention, safeguarding, and operational questions remain visible. No Prisma schema, migration, SQL DDL, or database object has been created or changed.
+
+---
+
+## 14. Normative resolution of PDB-R01 to PDB-R12
+
+This section controls where earlier sections use shorthand or leave alternatives open. It does not amend the approved conceptual ERD or invent church, finance, safeguarding, credential, or retention policy.
+
+### 14.1 Appointment and position scope (PDB-R01)
+
+Add positions.allowed_scope_type, constrained to DISTRICT, CHURCH, or DEPARTMENT. This is a technical scope classification, not a new leadership policy. A position has one declared scope type. For DEPARTMENT positions, positions.department_id is required and appointments.department_id must reference that exact department. For DISTRICT and CHURCH positions, department_id is NULL unless a separately approved model permits an association.
+
+Appointments must contain exactly one scope FK matching the position scope:
+- DISTRICT: district_id populated, church_id and department_id NULL.
+- CHURCH: church_id populated, other scope FKs NULL.
+- DEPARTMENT: department_id populated, other scope FKs NULL.
+
+Use composite candidate keys/FKs to bind appointment scope to the position and to prove church/department parent ownership. If PostgreSQL cannot express the exact invariant declaratively, use a named constraint trigger with a documented lock protocol. Do not use unchecked scope_type/scope_id.
+
+Prevent overlapping occupied appointment periods for the same position and exact scope using PostgreSQL exclusion constraints over effective time ranges, with scope-specific constraints where necessary. The predicate for occupied states must come from the approved appointment lifecycle catalogue. An application pre-check or simple partial unique index is insufficient.
+
+Acceptance: reject a department position assigned to another department; reject unrelated church/district scope; concurrent overlapping appointments cannot both commit; non-overlapping history remains valid.
+
+### 14.2 Attendance mode normalization (PDB-R02)
+
+Replace the cross-mode uniqueness strategy with:
+- event_attendance_subjects: id UUID PK, event_id FK, member_id FK, mode constrained to EVENT or SESSION, created_at; UNIQUE(event_id,member_id), UNIQUE(id,event_id,member_id).
+- attendance_records: attendance_subject_id NOT NULL FK, event_id, member_id, optional event_session_id, status, method, actor and recorded_at. Enforce one event-level record per subject or one record per subject/session.
+- EVENT mode requires event_session_id NULL. SESSION mode requires event_session_id NOT NULL, with a composite FK proving the session belongs to the same event.
+
+Because a CHECK cannot inspect the parent subject row, enforce mode/shape consistency using a deferred constraint trigger or normalized subtype tables. The trigger must lock the subject row and reject a mode mismatch. A member has one mode per event, never both. Registration prerequisite remains an explicit policy gap.
+
+Acceptance: concurrent event-level and session-level attendance for one member/event cannot both commit; duplicate session records cannot commit; session attendance remains tied to the correct event.
+
+### 14.3 Finance composite keys and reversals (PDB-R03, PDB-R09)
+
+Declare these candidate keys explicitly:
+- financial_accounts: UNIQUE(id,currency_code).
+- financial_transactions: UNIQUE(id,currency_code) and UNIQUE(id,financial_account_id,currency_code).
+- financial_transactions(financial_account_id,currency_code) references financial_accounts(id,currency_code).
+- payments(financial_transaction_id,currency_code) references financial_transactions(id,currency_code).
+- transaction_reversals carries original_transaction_id, reversal_transaction_id, financial_account_id and currency_code; composite FKs prove both transactions share the same account and currency.
+
+A full reversal is a distinct transaction in the same account and currency. It cannot point to itself. Uniqueness prevents a second full reversal. Serialize reversal creation by locking the original transaction, rechecking posted state and existing reversal, then inserting the reversal and link atomically. Require the reversal transaction to meet the approved transaction-type and posted-state catalogue. Partial reversals remain disabled. Do not invent amount signs, debit/credit rules, partial settlement, refunds, or accounting-line semantics.
+
+Acceptance: mismatched transaction/account/payment currency is rejected; cross-account or cross-currency reversal is rejected; concurrent full reversal attempts produce at most one posted reversal; unposted transactions cannot be reversed as posted facts.
+
+### 14.4 Retention subject and hold binding (PDB-R04)
+
+Add retention_subjects: id UUID PK, record_class, created_at, lifecycle_state, optional disposal_eligible_at. Each retained domain record receives a unique FK to its retention subject when that class is governed. Where a record cannot carry the FK, create a target-specific link table with a real FK to the exact target and a unique FK to the retention subject. A subject must resolve to exactly one supported record.
+
+retention_holds and retention_actions reference retention_subjects, never a free-form target ID. Actions also reference the exact approved policy version and record requesting, approving and executing actors, reason, action, timestamps and outcome.
+
+Hold creation/release and destructive action lock the same retention_subject row. A destructive action then checks for active holds and a current approved schedule within the same transaction. Unknown periods continue to disable automated permanent deletion. No retention periods are invented.
+
+Acceptance: a hold blocks a concurrent action on the same subject; it does not block unrelated subjects; release preserves history; no approved schedule means no automated permanent deletion.
+
+### 14.5 Audit actor and delegated action (PDB-R05)
+
+Add service_principals with stable UUID, unique code, display name and status. It contains no secrets.
+
+audit_events uses actor_type USER, SYSTEM, SERVICE or ANONYMOUS; nullable actor_user_account_id; nullable actor_service_principal_id; and nullable initiating_user_account_id. CHECK rules:
+- USER requires actor_user_account_id and forbids actor_service_principal_id.
+- SERVICE requires actor_service_principal_id and forbids actor_user_account_id.
+- SYSTEM and ANONYMOUS require both actor identity FKs to be NULL.
+- initiating_user_account_id is allowed for SYSTEM/SERVICE only when a human initiated or authorized the delegated operation. It is not a substitute for actor identity. USER actor is already identified by actor_user_account_id.
+
+A user-triggered background job is attributed to SERVICE plus initiating_user_account_id. An independent scheduled process is SYSTEM. An unauthenticated visitor is ANONYMOUS. A dedicated audit-writer role inserts audit rows. Runtime roles cannot UPDATE or DELETE them. Secrets and tokens are never logged.
+
+Acceptance: invalid actor combinations fail; delegated jobs preserve service and initiating user; runtime credentials cannot mutate audit history.
+
+### 14.6 Table-by-table scope matrix (PDB-R06)
+
+| Table/aggregate | Allowed scope | Required integrity |
+|---|---|---|
+| districts | District root | Unique district code |
+| churches | One district | FK district; candidate key (id,district_id) |
+| departments | District-wide or church-specific | FK district; optional church belongs to same district; candidate keys bind id/district and, where needed, id/church/district |
+| positions | Declared DISTRICT/CHURCH/DEPARTMENT | allowed_scope_type; department FK required only for department-bound position |
+| appointments | Exactly one district/church/department | Scope type matches position; composite parent-scope FKs |
+| user_role_assignments | Exactly one district/church/department | Exactly-one CHECK; church/department parent chain |
+| access_denies | Exactly one district/church/department | Exactly-one CHECK; valid target and permission FKs |
+| events | Exactly one district/church/department, subject to event policy | Exactly-one CHECK; owner hierarchy valid |
+| event_approvals, event_change_records | Inherit event scope | Composite FK to event |
+| event_registrations, event_sessions | Inherit event scope | Composite FK to event; registration also references member |
+| event_attendance_subjects, attendance_records | Inherit event scope | Composite FK to event/subject; session belongs to same event |
+| financial_accounts | Exactly one district or church | Exactly-one CHECK; church belongs to district context |
+| financial_transactions | Inherit financial account | Composite account/currency FK |
+| transaction_approvals, transaction_revisions, payments, transaction_reversals | Inherit transaction/account | Composite FKs prove transaction/account/currency chain |
+| budgets | Exactly one district or church | Exactly-one CHECK; currency policy |
+| budget_lines | Inherit budget | FK budget; currency inherited |
+| credential_definitions | District or church issuer scope, or explicitly approved global definition | Explicit issuer FKs and exactly-one/global discriminator |
+| credential_definition_versions | Inherit definition | FK definition |
+| credential_issuances | Member and definition version | FKs to both |
+| credential_evidence | Inherit issuance | FK issuance; protected object key |
+| report_runs | Exactly one authorized report scope | Explicit scope FKs and exactly-one CHECK |
+| audit_events, audit_access_events | Historical target/scope metadata | Typed historical reference allowed; never business ownership |
+| retention_subjects, retention_holds, retention_actions | Exact retained record | Exact subject FK |
+
+Use composite FKs such as (church_id,district_id) to churches(id,district_id) and (department_id,district_id) to departments(id,district_id). Church-specific department links include the full church/district tuple. Child records inherit scope from parents and must not carry independently editable scope unless a composite FK binds it. Any remaining trigger invariant needs a named trigger, lock rule and concurrency test.
+
+Acceptance includes cross-district and unrelated-department mismatch attempts for each scoped aggregate.
+
+### 14.7 Event capacity (PDB-R07)
+
+Add events.reserved_count INTEGER NOT NULL DEFAULT 0 CHECK (reserved_count >= 0). events.capacity remains the configured maximum. Capacity-consuming registration states must be listed in the approved event lifecycle catalogue before activation; do not guess them here.
+
+Confirmation transaction:
+1. Lock the event row FOR UPDATE.
+2. Recheck publication, registration window, eligibility, duplicate registration and capacity.
+3. Require reserved_count < capacity when capacity is non-null.
+4. Insert/transition registration into a capacity-consuming state and increment reserved_count atomically.
+5. Cancellation or transition out decrements once, guarded by prior state and the same event lock.
+6. Reconcile counter against qualifying registrations and alert on mismatch; never silently repair without an audited action.
+
+Late registration and capacity overrides remain disabled pending policy. Prevent direct writes that bypass the reservation protocol with a trigger or restricted database operation. Concurrent requests for the last slot must yield exactly one confirmation.
+
+### 14.8 Authentication token invariants (PDB-R08)
+
+For auth_sessions, absolute_expires_at is immutable; inactivity_expires_at cannot exceed it. Refresh is rejected for revoked, inactivity-expired or absolute-expired sessions. A partial unique index permits at most one token row per session where consumed_at and revoked_at are both NULL.
+
+Rotation locks session and current token rows, conditionally consumes the old token, inserts one new token hash, and updates activity/inactivity expiry in one transaction. New inactivity expiry is capped at the original absolute expiry. A consumed-token replay triggers the approved reuse response and atomically revokes the session and active token. No raw tokens are stored. Cleanup of token hashes waits for an approved security retention schedule.
+
+Acceptance: concurrent rotation yields one success; replay revokes session; inactivity never extends absolute expiry; revoked/expired sessions cannot rotate.
+
+### 14.9 Event and transaction history (PDB-R10)
+
+event_change_records and transaction_revisions are mandatory immutable workflow history:
+- Significant event changes preserve allowlisted previous/proposed snapshots, requester, reason, approver, decision and timestamps. Effective event mutation and approval commit atomically.
+- Transaction revisions apply only before posting, use monotonically increasing revision_number unique per transaction, and preserve requester, reason, snapshots, status and decision history.
+- Rejected proposals remain retrievable. Posted transactions are corrected only through linked reversal.
+- JSON snapshots are versioned, bounded and allowlisted. They exclude secrets, credentials and unrelated personal data.
+
+### 14.10 Durable outbox (PDB-R11)
+
+Strengthen outbox_messages with event_id UUID NOT NULL UNIQUE, aggregate_type, aggregate_id, event_type, event_version INTEGER NOT NULL CHECK (>0), allowlisted versioned payload, occurred_at, status, attempt_count INTEGER NOT NULL DEFAULT 0 CHECK (>=0), available_at, locked_at, lock_owner, lease_expires_at, published_at and last_error_code.
+
+The source mutation and outbox insert commit in one transaction. Workers claim due rows with a short concurrency-safe lease, using FOR UPDATE SKIP LOCKED as a PostgreSQL candidate. They publish at least once and mark complete only after acknowledgement. Lease expiry permits crash recovery. Consumers persist processed-event identity before applying a non-idempotent effect. Stable domain event identity, not timestamps, drives deduplication. Provider secrets and unnecessary personal data are excluded.
+
+### 14.11 Defaults, nullability and lifecycle contract (PDB-R12)
+
+Unless a table explicitly overrides:
+- UUID primary keys and required FKs are NOT NULL. Optional FKs must have a documented lifecycle reason.
+- Required owner, parent, actor, amount, currency, business key, effective start and creation timestamp are NOT NULL.
+- Decision, termination, revocation and closure actors/timestamps remain NULL until that transition occurs; NULL never implies approval.
+- created_at is NOT NULL and assigned consistently by the database using CURRENT_TIMESTAMP. updated_at is NOT NULL on mutable rows and updated through one centrally enforced database trigger/persistence mechanism. User-scheduled event instants remain distinct from audit timestamps.
+- Counters default to zero with non-negative CHECKs. Monetary values have no generic default. Required status fields have no permissive default; creation must provide an explicit initial state.
+- Effective end must be later than start; term_end >= term_start; event/session ends later than starts; expiry later than issue/creation.
+- Login, email, phone and codes use one documented normalization function for writes/lookups. Unique indexes apply to normalized values; optional email/phone use partial unique indexes when non-null.
+- Every status column has a table-specific, versioned state catalogue and transition graph. No generic status enum and no guessed CHECK values. The exact states and transition authority must be documented before DDL approval.
+- No permission, approval, consent, credential verification, payment success or publication flag defaults to true.
+- Approval-bearing state transitions preserve append-only decision/history rows.
+
+State-bearing tables requiring an explicit catalogue entry are: user_accounts, members, districts, churches, member_category_assignments, church_memberships, church_transfer_requests, departments, department_eligibility_rules, department_memberships, positions, appointments, roles, permissions, user_role_assignments, access_denies, role_conflict_rules, role_conflict_reviews, events, event_approvals, event_change_records, event_registrations, event_sessions, attendance_records, attendance_corrections, financial_accounts, financial_transactions, transaction_revisions, transaction_approvals, payments, transaction_reversals, budgets, credential_definitions, credential_definition_versions, credential_issuances, credential_evidence, notification_templates, notification_preferences, notifications, notification_recipients, integration_providers, notification_deliveries, outbox_messages, webhook_events, integration_failures, audit_events, idempotency_records, retention_policies, retention_holds, retention_actions, report_definitions and report_runs.
+
+Required worksheet, one row per state-bearing table:
+
+| Table | Initial state | Allowed states | Transition authority | Terminal states | History record |
+|---|---|---|---|---|---|
+| table-specific | Owner/policy-defined | Explicit enumerated values | Named role/authority | Explicit values | Related decision/audit record |
+
+Do not guess states for member, appointment, transfer, event, finance, credential or retention workflows. Missing catalogue entries block DDL approval; they do not permit arbitrary text values.
+
+## 15. Updated review disposition
+
+| Finding | Resolution | Status |
+|---|---|---|
+| PDB-R01 | Position scope type, composite binding and overlap exclusion | Addressed in design; PostgreSQL proof required |
+| PDB-R02 | Normalized event/member attendance subject and exclusive mode | Addressed in design; trigger/subtype proof required |
+| PDB-R03 | Explicit finance composite keys and FKs | Addressed in design; accounting policy still blocks final finance DDL |
+| PDB-R04 | Exact retention subject FK and shared lock protocol | Addressed in design; target coverage inventory required |
+| PDB-R05 | Actor CHECK contract, service principals and append-only writer | Addressed in design; privilege test required |
+| PDB-R06 | Table-by-table scope matrix and composite FK rules | Addressed in design; complete DDL mapping required |
+| PDB-R07 | Locked capacity counter protocol | Addressed in design; concurrency test required |
+| PDB-R08 | Atomic token rotation, replay revocation and fixed absolute expiry | Addressed in design; concurrency test required |
+| PDB-R09 | Same-account/currency full reversal and serialization | Addressed in design; finance policy remains open |
+| PDB-R10 | Mandatory event/transaction revision history | Addressed in design |
+| PDB-R11 | Stable outbox identity, lease and consumer deduplication | Addressed in design |
+| PDB-R12 | Nullability/default/timestamp contract and exhaustive state-table inventory | Partially addressed; table-specific lifecycle values remain open |
+
+## 16. Second-review acceptance plan
+
+Independently verify this revision against all twelve findings, the approved conceptual ERD, all 97 testable requirement IDs, and DFR-001–DFR-006 / DDD-001–DDD-015. Required adversarial cases:
+1. Cross-district and cross-department scope mismatch for each scoped aggregate.
+2. Concurrent overlapping appointment approval.
+3. Concurrent event-level versus session-level attendance for one member/event.
+4. Account/transaction/payment currency mismatch and duplicate full reversal.
+5. Hold creation racing with retention action on the same subject.
+6. Invalid audit actor combinations and runtime mutation attempt.
+7. Last-slot registration under concurrency and counter reconciliation.
+8. Concurrent refresh, consumed-token replay, inactivity and absolute expiry.
+9. Event and transaction revision history preservation.
+10. Outbox worker crash, lease expiry, duplicate publish and consumer deduplication.
+11. Invalid status, missing required actor/owner and invalid interval.
+12. Individual account/member cardinality and no guardian/delegation relationship.
+
+This is a design-level plan only. No SQL, migration, Prisma model or live database test is authorized.
+
+## 17. Revised status and implementation boundary
+
+This revision incorporates explicit design solutions for the twelve review findings. It remains a working proposal, not approved for implementation. PDB-R12 is partially open because each state-bearing table needs an approved lifecycle catalogue. PostgreSQL-version compatibility, concrete DDL proofs, query-plan validation, finance policy, retention schedule, child-account safeguarding policy and credential authority evidence also remain outstanding.
+
+Conceptual ERD approval remains in force. This revision authorizes no Prisma changes, migrations, SQL DDL, database objects, generated clients or application implementation. Separate project-owner approval of the physical design and separate implementation authorization remain mandatory.
