@@ -309,3 +309,8 @@ The recovered database documents are restored and the decisions above are record
 ### DDD-005 approval update — explicit denies and role conflicts — 2026-10-31
 
 The project owner approved all four groups in [DDD-005 Explicit-Deny and Role-Conflict Approval](../decisions/DDD-005-EXPLICIT-DENY-AND-ROLE-CONFLICT-PROPOSAL.md) without modification. The approved policy defines permission/resource-scoped deny precedence, independently authorised deny administration and immutable audit history, all role-pair classifications, and independent approval before review-required combinations become effective. Physical representation remains undecided. Stable permission identifiers, full permission/resource mapping, overlap/duplicate constraints beyond the role-pair table, and DDD-004 mid-year/early-ending/replacement lifecycle remain open.
+
+
+### DDD-005 follow-up — stable permission catalogue proposal — 2026-10-31
+
+A draft stable permission catalogue and logical resource-scope mapping has been prepared in [DDD-005 Stable Permission Catalogue and Resource-Scope Mapping Proposal](../decisions/DDD-005-STABLE-PERMISSION-CATALOGUE-AND-RESOURCE-SCOPE-PROPOSAL.md). It normalizes the already approved role matrix into action-specific identifiers, resource targets, scope labels, and APPROVED/HOLD/NO GRANT states. It is pending project-owner review and does not expand any approved grant. The catalogue, identifier convention, scope vocabulary, and logical target mappings are not approved until the project owner decides the five review points in §8 of that proposal. Physical schema, deny storage, Prisma, migrations, and application implementation remain unauthorized.
