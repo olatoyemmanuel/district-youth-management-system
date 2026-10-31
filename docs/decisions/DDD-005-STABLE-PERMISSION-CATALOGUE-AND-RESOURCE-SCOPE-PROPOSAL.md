@@ -1,11 +1,11 @@
 # DDD-005: Stable Permission Catalogue and Resource-Scope Mapping Proposal
 
-- Status: DRAFT FOR PROJECT-OWNER REVIEW
+- Status: APPROVED POLICY CONTRACT
 - Decision: DDD-005
 - Date prepared: 2026-10-31
 - Applies to: DYMS v1.0, Sango District
 - Related decisions: DDD-004, DDD-005, DDD-006 through DDD-012
-- Approval status: NOT APPROVED
+- Approval status: APPROVED WITHOUT MODIFICATION ON 2026-10-31
 - Implementation status: NOT IMPLEMENTED
 - Schema/migration authorization: NOT GRANTED
 
@@ -222,3 +222,18 @@ This proposal preserves DFR-001 through DFR-005, the historical DFR-006 lift, DD
 Approval of this catalogue would settle permission identifiers, their logical resource targets, scope vocabulary, and the role-grant mapping only to the extent expressly approved. It would not authorize a physical deny model, database schema, Prisma models, migrations, API implementation, or application code.
 
 The corrected ERD still requires separate explicit project-owner approval before Prisma models or migrations are created.
+
+
+## 9. Project-owner approval record — 2026-10-31
+
+**Approval status: APPROVED WITHOUT MODIFICATION.** The project owner explicitly approved all five review points in §8:
+
+1. The lowercase, dot-separated, action-specific `domain.action` permission identifier convention.
+2. The complete proposed logical permission-to-resource mapping, including the documented workflow boundaries and unresolved persistence targets.
+3. The seven scope labels: `DISTRICT`, `ASSIGNED_CHURCH`, `ASSIGNED_DEPARTMENT`, `DISTRICT_DESCENDANTS`, `LINKED_CHURCH_DEPARTMENT`, `AUDIT_SCOPE`, and `SYSTEM`.
+4. The role-grant reconciliation exactly as proposed. Existing approved grants remain unchanged; `HOLD` remains withheld; `NO GRANT` is not converted into an explicit deny; `CONDITIONAL` requires a separate valid assignment and scope.
+5. Local Church Youth Assistant member visibility remains limited, with its exact field-visibility profile deferred to a separate decision. District Departmental Coordinator member visibility remains `HOLD`.
+
+This approval adopts the catalogue and logical resource/scope mapping as the stable authorization policy contract. It does not approve new role grants, new business authority, new entities, fields, APIs, tables, indexes, constraints, physical deny storage, or implementation details that this proposal expressly leaves unresolved.
+
+**Implementation status: NOT IMPLEMENTED. Schema/migration authorization: NOT GRANTED.** The corrected ERD still requires separate formal project-owner approval before Prisma models, migrations, or application implementation.
