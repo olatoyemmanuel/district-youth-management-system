@@ -110,3 +110,27 @@ DFR-006 was lifted on 2026-10-29. Implementation was authorized, but this does n
 ## 9. Current disposition
 
 **NOT READY.** The restored documents have been reconciled with the decisions currently approved. Outstanding DDD-005 through DDD-012 and DDD-015 policy questions, non-authentication DDD-014 retention, and the DDD-013 physical ERD-slice validation remain. The user must formally approve the corrected ERD before Prisma models or migrations are created.
+
+
+## 10. Review update — 2026-10-31
+
+The original blocker table in §§4–7 is a historical snapshot and must be read together with this current update and the detailed findings in [ERD-REVIEW-2026-10-31.md](ERD-REVIEW-2026-10-31.md). Its entries concerning PRB-001 provenance, User–Member cardinality, category/affiliation classification, church-transfer policy, annual appointment renewal, and authentication idempotency policy have since been partly or fully resolved as stated below.
+
+| Area | Current disposition |
+|---|---|
+| Product requirements baseline | PRB-001 v0.1 is approved as a reconstructed working baseline. Historical original PRD remains unrecovered. |
+| User–Member | One-to-one cardinality approved. Mandatory participation enforcement remains a technical design item. |
+| Ministry categories | Top-level category and affiliation classification approved, including age-21 dual Ambassador/Young Adult affiliation with local approval. Category transition/history and its explicit ERD representation remain outstanding. |
+| Primary church | One current primary church and atomic history-preserving transfer approved. Current-reference/history consistency and concurrency enforcement remain to be modeled. |
+| Appointments | Annual term, renewal as a new historical appointment, higher-authority appointment/renewal, and no self-appointment/self-renewal approved. Role precedence and conflicting-position policy remain blocked. |
+| Authentication idempotency | AUTH-IDEM-001–041 and CR-01 through CR-06 approved. Policy consistency passes. The authentication ERD slice remains NOT READY pending physical modeling and verification. |
+| Authentication retention | Session, refresh-token, password-reset, and security-event retention periods approved. Audit-log and other business-domain retention remain blocked. |
+| Remaining product decisions | DDD-005 through DDD-012 and DDD-015 remain blocked to the extent specified in the decision register; DDD-002 and DDD-014 remain partially resolved. |
+
+### 10.1 Additional structural findings
+
+The review identified that the ERD does not yet explicitly represent the approved ministry-affiliation model or the pre-authentication idempotency context. It also lacks a clear outbox relationship and protected password-reset delivery-secret boundary required by DDD-013. These are material design gaps, not merely naming or indexing tasks.
+
+The Requirements Traceability Matrix was also restored from an incorrect source during the initial restoration. It has since been replaced with the correct October 30 traceability source and updated with the current decision overlay. Review the final branch diff to verify this correction.
+
+**Current disposition remains NOT READY.** Do not approve the ERD or create Prisma models/migrations until the structural gaps and remaining blockers in ERD-REVIEW-2026-10-31.md are resolved.
