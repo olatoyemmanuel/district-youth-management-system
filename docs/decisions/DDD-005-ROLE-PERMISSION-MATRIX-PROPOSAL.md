@@ -1,18 +1,21 @@
-# DDD-005 Follow-up: Role-to-Permission Matrix Proposal
+# DDD-005: Approved Role-to-Permission Matrix
 
-- Status: PROPOSAL FOR PROJECT-OWNER REVIEW
-- Date: 2026-10-31
+- Status: APPROVED
+- Approval date: 2026-10-31
+- Approver: Project owner
 - Applies to: DYMS v1.0, Sango District
 - Related decisions: DDD-004, DDD-005, DDD-006 through DDD-012
-- Approval status: NOT APPROVED
+- Approval basis: Explicit approval of the proposed matrix for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant, with no additional instructions.
 - Implementation status: NOT IMPLEMENTED
 - Schema/migration authorization: NOT GRANTED
 
-## 1. Purpose and decision boundary
+**Approval interpretation:** The project owner approved the matrix exactly as proposed. Every concrete grant in the matrix is approved subject to its stated resource scope and the existing DDD-005 authorization rules. Every `HOLD` remains withheld pending the referenced domain decision. A HOLD is neither an allow nor an explicit deny, and must not be implemented as a permission grant.
 
-DDD-005 approved the initial role categories, organizational scopes, permission domains, additive permission combination, explicit-deny precedence, and strict scope enforcement. It did not approve exact grants to each role.
+## 1. Approval scope and decision boundary
 
-This proposal is a conservative starting point for reviewing the role-to-permission matrix. It does not grant permissions and must not be treated as approved policy. Where a related domain decision remains blocked, the corresponding grant is deliberately withheld rather than inferred.
+The project owner approved this matrix on 2026-10-31 for the four leadership roles listed in the approval basis. The System Administrator, Audit Administrator, and Audit Viewer entries are retained consistently with the previously approved DDD-005 and DDD-012 policies; this approval does not enlarge their authority.
+
+The approved matrix defines the current grant baseline only. HOLD entries remain unavailable until the relevant domain decision and any required follow-up approval are completed. The matrix does not resolve explicit-deny data representation, prohibited role combinations, or appointment overlap/lifecycle policy.
 
 ## 2. Permission notation
 
@@ -33,7 +36,7 @@ A proposed grant is still subject to valid account and membership state, assignm
 
 ## 3. Proposed role-to-permission matrix
 
-The following is a conservative proposal, not an approval.
+The following matrix is approved as the role-grant baseline, subject to the scope and HOLD restrictions stated above and below.
 
 | Permission domain/action | District Youth Leader | District Departmental Coordinator | Local Church Youth Leader | Local Church Youth Assistant | System Administrator |
 |---|---|---|---|---|---|
@@ -104,21 +107,23 @@ The HOLD entries are not explicit denies. They mean the product policy is incomp
 11. Every grant is subject to explicit deny-overrides-allow, appointment validity where required, and server-side resource-scope verification.
 12. Any grant or permission change must be auditable.
 
-## 6. Decisions requested from the project owner
+## 6. Approval record
 
-Please review the matrix and decide:
+The project owner explicitly approved all four proposed leadership-role columns without modification:
 
-- Whether the proposed grants for Members, Churches, Departments, Leadership and Reports are correct for each leadership role.
-- Whether Local Church Youth Assistants should receive any additional operational grants beyond limited church-scoped viewing and explicitly delegated support.
-- Whether District Departmental Coordinators should receive member visibility limited to members participating in their assigned department.
-- Which role-specific higher authorities should receive leadership approve, renew and end permissions. This must remain consistent with DDD-004 and the prohibition on self-appointment/self-renewal/self-approval.
-- Whether the conservative HOLD treatment for Events, Attendance, Finance and Credentials should remain until their domain decisions are resolved.
+- District Youth Leader: approved.
+- District Departmental Coordinator: approved.
+- Local Church Youth Leader: approved.
+- Local Church Youth Assistant: approved.
+- Additional instructions: none.
 
-Do not approve the HOLD entries by implication. They require their respective domain decisions.
+The approval accepts the proposed concrete grants and their stated resource scopes. It also accepts the conservative HOLD treatment: withheld permissions remain withheld and require the relevant domain policy decision. No additional operational permissions are inferred for Local Church Youth Assistants, and District Departmental Coordinator member visibility remains limited to members participating in the assigned department as expressed in the matrix.
+
+The approval does not create new higher-authority appointment powers. Leadership approval, renewal, and ending actions remain HOLD where the actor's authority or appointment lifecycle policy is not established under DDD-004/DDD-005.
 
 ## 7. Verification required after approval
 
-After the project owner approves a final matrix:
+Following this matrix approval:
 
 - Define stable permission identifiers and descriptions.
 - Map each permission to resource type and allowed scope.
@@ -136,4 +141,4 @@ After the project owner approves a final matrix:
 
 This proposal does not amend or supersede DFR-001 through DFR-005, the historical DFR-006 lift, DDD-004, DDD-005, DDD-012, or any other approved decision.
 
-This is a documentation proposal only. It does not approve the final role-to-permission matrix, the ERD, physical database design, Prisma models, migrations, APIs, or application implementation. The corrected ERD still requires separate explicit project-owner approval before Prisma models or migrations are created.
+This is an approved product-policy matrix only. It does not approve the ERD, physical database design, Prisma models, migrations, APIs, or application implementation. The corrected ERD still requires separate explicit project-owner approval before Prisma models or migrations are created.
