@@ -16,6 +16,8 @@ It does not authorize application implementation, Prisma schema changes, migrati
 
 8. [Phase 2 Physical Database Design](./PHASE-2-PHYSICAL-DATABASE-DESIGN.md)  
    PostgreSQL-oriented table/column proposal, keys, constraints, indexes, scope integrity, transaction controls, and physical-design blockers. This is a working proposal only and is not approved for implementation.
+9. [Phase 2 Physical Database Design Review](./PHASE-2-PHYSICAL-DATABASE-DESIGN-REVIEW.md)  
+   Independent consistency review with 12 findings, severity, required revisions, and acceptance tests. The physical design needs revision before approval.
 
 1. [Phase 1 Requirements Consolidation](../product/PHASE-1-REQUIREMENTS-CONSOLIDATION.md)  
    Consolidated business and platform requirements, scope, approved rules, open decisions and implementation gate.
@@ -156,4 +158,4 @@ The conceptual ERD approval gate is now closed for the exact approved revision. 
 - Do not begin application implementation based on this draft.
 - Do not merge this draft PR as an implementation authorization.
 
-**Current status: Conceptual ERD approved. A working Phase 2 physical database design proposal has been prepared for review. The physical design itself is not yet approved. Application/Prisma/migration/database implementation remains unauthorized.**
+**Current status: Conceptual ERD approved. A working Phase 2 physical database design proposal and a 12-finding review have been prepared. The physical design requires revision and is not yet approved. Application/Prisma/migration/database implementation remains unauthorized.**
