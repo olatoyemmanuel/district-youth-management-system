@@ -171,7 +171,7 @@ The following database work must be atomic for each authentication operation:
 | Password-reset request | Idempotency completion, reset-token creation, and delivery-outbox record |
 | Password-reset completion | Idempotency completion, password update, reset-token consumption, and session revocation |
 
-External email delivery and other network calls execute outside the database transaction. Where delivery must follow a committed database change, persist a transactional outbox record in the same transaction. Outbox payloads must not contain raw credentials or reset secrets unless a separately approved secure delivery design explicitly requires a protected short-lived secret reference.
+External email delivery and other network calls execute outside the database transaction. Where delivery must follow a committed database change, persist a transactional outbox record in the same transaction. Outbox payloads must not contain raw credentials or reset secrets. Under approved AUTH-IDEM-039, the outbox stores only an opaque reference to a separately envelope-encrypted, short-lived reset-delivery secret. The secret store is worker-only, expires no later than the reset-token lifetime, and is erased after delivery or expiry. No specific vendor is approved.
 
 A timeout or rollback must not be treated as proof of non-commit unless the database outcome is established.
 
