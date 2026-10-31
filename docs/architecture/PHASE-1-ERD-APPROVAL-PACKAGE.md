@@ -2,7 +2,7 @@
 
 **Project:** District Youth Management System (DYMS)  
 **Product scope:** v1.0, Sango District  
-**Status:** Prepared for project-owner review. ERD approval has not been granted.  
+**Status:** APPROVED by the project owner on 2026-10-31. See [formal approval record](../decisions/PHASE-1-CONCEPTUAL-ERD-APPROVAL.md).  
 **Working branch:** `phase-1/requirements-consolidation`  
 **Pull request:** https://github.com/olatoyemmanuel/district-youth-management-system/pull/53
 
@@ -132,7 +132,11 @@ The ERD is a coherent working model, but the policy/evidence items above remain 
 
 ## 9. Formal project-owner decision
 
-The project owner is asked to review the conceptual ERD and package, then provide one of these explicit outcomes:
+**Decision: APPROVED.** On 2026-10-31, the project owner explicitly approved the conceptual ERD at exact revision `25f2813e0256d9472daded45657dfb7ac9f70a43`. The formal record is [Phase 1 Conceptual ERD Approval](../decisions/PHASE-1-CONCEPTUAL-ERD-APPROVAL.md).
+
+This approval authorizes progression to physical database design only. It does not authorize application code, Prisma schema changes, migrations, or physical database schema implementation.
+
+The following outcomes describe the decision process for any future material revision:
 
 - **Approve the conceptual ERD:** Authorizes preparation of the physical database design and implementation plan, but does not by itself authorize application code, Prisma schema, migrations, or database schema changes.
 - **Approve with specified amendments:** The requested amendments are recorded, applied, and re-reviewed before the ERD is marked approved.
@@ -142,11 +146,11 @@ Any approval must identify the exact ERD revision/commit being approved. Materia
 
 ## 10. Implementation gate
 
-Until explicit approval of the final ERD:
+The conceptual ERD approval gate is now closed for the exact approved revision. The following implementation restrictions remain in force until separate explicit authorization:
 - Do not add domain models to `backend/prisma/schema.prisma`.
 - Do not create or run Prisma migrations.
 - Do not create physical database tables or schema objects.
 - Do not begin application implementation based on this draft.
 - Do not merge this draft PR as an implementation authorization.
 
-**Current status: ERD approval pending. No implementation authorization granted.**
+**Current status: Conceptual ERD approved. Physical database design is the next authorized stage. Application/Prisma/migration/database implementation remains unauthorized.**
