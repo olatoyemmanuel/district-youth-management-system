@@ -192,11 +192,16 @@ that requires approval cannot produce effective authority until it is valid
 and approved. Historical appointments remain available but grant no current
 authority after expiry or ending.
 
-The exhaustive permission identifiers, exact role-to-permission grant
-matrix, permission-to-resource mapping, technical representation of explicit
-denies, and prohibited/review-required combinations of specific roles remain
-unresolved. The system must not infer those grants or combinations. Mid-year
-appointment creation and early-ending rules remain open under DDD-004.
+The four leadership-role grants in the approved role-to-permission matrix
+are recorded in
+`docs/decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md`. HOLD entries
+remain ungranted pending their domain decisions. Stable permission
+identifiers, complete permission-to-resource mapping, technical
+representation and administration of explicit denies, prohibited/review-
+required combinations of specific roles, and appointment overlap/duplicate
+constraints remain unresolved. The system must not infer those grants or
+combinations. Mid-year appointment creation and early-ending rules remain
+open under DDD-004.
 
 The server must derive effective access from trusted records. A client-
 supplied identifier must never, by itself, grant access to another
