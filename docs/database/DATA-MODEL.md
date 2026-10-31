@@ -153,37 +153,50 @@ membership and does not automatically grant leadership permissions.
 
 ### 5.1 Roles and permissions
 
-Roles group permissions. Permissions describe specific actions.
+Roles group action-specific permissions. Permissions describe specific
+actions, and `RolePermission` is the explicit many-to-many junction between
+`Role` and `Permission`.
 
-`RolePermission` is the explicit junction between `Role` and `Permission`.
-It represents their many-to-many relationship and preserves the identity of
-both related records. Whether permission-to-role changes are versioned, take
-effect immediately, or require reapproval remains unresolved; the
-implementation must audit the change and must not silently reinterpret
-historical authorization decisions.
+The project owner approved the initial role categories, assignment scopes,
+permission groups, and precedence policy on 2026-10-31. The initial roles are
+District Youth Leader (district scope, appointment required), District
+Departmental Coordinator (assigned department scope, appointment required),
+Local Church Youth Leader (assigned church scope, appointment required),
+Local Church Youth Assistant (assigned church scope, appointment required),
+System Administrator (system-wide scope, no leadership appointment),
+Audit Administrator (explicitly approved audit-administration scope, no
+leadership appointment), and Audit Viewer (explicitly authorised audit-record
+scope, no leadership appointment). System Administrator bootstrap and Audit
+Administrator appointment/revocation remain subject to DDD-012.
 
-Assignments must be scoped to the appropriate district, church,
-department, or resource context.
+The approved permission groups cover members, churches, departments,
+leadership, events, attendance, finance, credentials, reports, audit, and
+system administration. Permissions must be action-specific, for example
+view, create, update, approve, post, reverse, issue, revoke, or export where
+applicable. The complete initial examples and boundaries are recorded in
+`docs/decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md`.
 
-A RoleAssignment grants a role to a Member within an explicit organizational
-scope. An Appointment records a time-bounded leadership designation and its
-lifecycle. Every appointment references the RoleAssignment it activates or
-governs; the appointment, assignment, Member, role, and scope must agree.
-The subject Member, creating actor, approving authority, and ending or
-revoking actor are distinct identities. Creation does not constitute approval.
+Permissions from valid assignments combine additively. An explicit deny
+overrides an allow. Every permission remains limited to the assignment scope
+and the resource scope expressly allowed by that permission. There is no
+automatic permission inheritance between roles or scopes and no general
+seniority-based override between role titles. Department participation alone
+does not grant leadership authority. Technical administrator privileges do
+not automatically grant financial approval or credential-issuance authority.
 
-An appointment that requires approval cannot produce effective authority
-until it is valid and approved. Appointment-independent assignments may exist
-only where the eventual role policy permits them. Neither record grants
-permissions outside its approved scope.
+Every appointment references the RoleAssignment it activates or governs;
+the appointment, assignment, Member, role, and scope must agree. The subject
+Member, creating actor, approving authority, and ending or revoking actor are
+distinct identities. Creation does not constitute approval. An appointment
+that requires approval cannot produce effective authority until it is valid
+and approved. Historical appointments remain available but grant no current
+authority after expiry or ending.
 
-The source material does not define the role catalogue, permission precedence,
-the conflicting-position matrix, or which roles are appointment-independent.
-The authorization policy must define these before implementation. Until then,
-the design must not choose a precedence algorithm or a universal active-term
-uniqueness rule. It must still prevent exact duplicate and contradictory active
-records using a reviewed scope identity, effective-period checks, transactions,
-and tests.
+The exhaustive permission identifiers, exact role-to-permission grant
+matrix, permission-to-resource mapping, technical representation of explicit
+denies, and prohibited/review-required combinations of specific roles remain
+unresolved. The system must not infer those grants or combinations. Mid-year
+appointment creation and early-ending rules remain open under DDD-004.
 
 The server must derive effective access from trusted records. A client-
 supplied identifier must never, by itself, grant access to another
