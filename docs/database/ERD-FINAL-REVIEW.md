@@ -107,7 +107,7 @@ DFR-006 was lifted on 2026-10-29. Implementation was authorized, but this does n
 
 ## 9. Current disposition
 
-**NOT READY.** DDD-005 is partially resolved; the four leadership-role grant matrix is approved. Stable permission identifiers, complete resource mapping, physical deny representation/enforcement, duplicate/overlap constraints beyond approved role-pair classifications, and DDD-004 appointment lifecycle details remain open. Other outstanding DDD-006 through DDD-012 and DDD-015 policy questions, non-authentication DDD-014 retention, DDD-002 category transition/history, DDD-004 appointment lifecycle details, and DDD-013 physical ERD-slice validation remain. The user must formally approve the corrected ERD before Prisma models or migrations are created.
+**NOT READY.** DDD-005 is partially resolved; the four leadership-role grant matrix is approved. Physical deny representation/enforcement, duplicate/overlap constraints beyond approved role-pair classifications, and DDD-004 appointment lifecycle details remain open. Other outstanding DDD-006 through DDD-012 and DDD-015 policy questions, non-authentication DDD-014 retention, DDD-002 category transition/history, DDD-004 appointment lifecycle details, and DDD-013 physical ERD-slice validation remain. The user must formally approve the corrected ERD before Prisma models or migrations are created.
 
 
 ## 10. Review update — 2026-10-31
