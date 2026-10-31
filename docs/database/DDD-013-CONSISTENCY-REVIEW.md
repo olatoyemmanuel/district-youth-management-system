@@ -140,11 +140,11 @@ The authentication idempotency ERD slice must show:
 
 The policy decisions AUTH-IDEM-001 through AUTH-IDEM-035 remain approved. This review does not revoke or silently amend them.
 
-CR-01, CR-02, CR-03, CR-04, CR-05, and CR-06 are implementation-contract/ERD gaps. The recommendations above are not approved decisions unless separately accepted by the product owner.
+At the time of this initial review, CR-01 through CR-06 were recommendations awaiting product-owner approval. They were subsequently approved on 2026-10-30 and are recorded in §8. The remaining work is physical ERD modeling and verification, not approval of those policy recommendations.
 
 ## 7. Gate
 
-DDD-013 remains DRAFT FOR CONSISTENCY REVIEW. The authentication idempotency ERD slice is NOT READY for final approval until the blocking gaps are resolved and reflected in the specification.
+The policy gaps CR-01 through CR-06 have since been approved and incorporated into the consolidated specification. DDD-013 policy consistency passes; the authentication idempotency ERD slice remains NOT READY until the physical modeling and verification items in §9 are completed.
 
 No Prisma models, migrations, or production implementation are authorized by this review.
 
