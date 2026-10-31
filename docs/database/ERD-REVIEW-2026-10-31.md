@@ -149,7 +149,7 @@ DDD-002 is partially resolved: category/affiliation concepts and age-21 local ap
 
 The project owner approved all four DDD-005 proposal groups without modification. The approved initial roles, scopes, permission groups, additive permission combination, explicit-deny precedence, strict resource-scope enforcement, and no title-seniority override are recorded in [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md).
 
-The decision does not close the detailed role-to-permission grant matrix, permission-to-resource matrix, exact explicit-deny representation, prohibited/review-required role-combination matrix, or DDD-004 mid-year/early-ending appointment lifecycle. ERD status remains NOT READY. No Prisma schema or migration is authorized.
+At the time of this 7.1 update, the detailed role-to-permission matrix remained open. It was subsequently approved for the four leadership roles in §7.2. The permission-to-resource mapping, exact explicit-deny representation, prohibited/review-required role-combination matrix, appointment overlap/duplicate constraints, and DDD-004 mid-year/early-ending appointment lifecycle remain unresolved. ERD status remains NOT READY. No Prisma schema or migration is authorized.
 
 
 ### 7.2 DDD-005 role-to-permission matrix approval — 2026-10-31
