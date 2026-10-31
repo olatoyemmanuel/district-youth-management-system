@@ -174,10 +174,16 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `code varchar(50) NOT NULL`, `name text NOT NULL`, `status varchar(20) NOT NULL`
 - Use separate uniqueness rules for district-level and church-level department codes. Validate church belongs to district.
 
+#### `department_eligibility_rules`
+- `id uuid PK`, `department_id uuid NOT NULL FK departments(id)`, `version varchar(40) NOT NULL`, `description text NOT NULL`, `source_authority text NULL`, `evidence_requirements jsonb NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`, `status varchar(20) NOT NULL`.
+- Unique `(department_id, version)`. JSONB is limited to descriptive evidence metadata, not member eligibility decisions.
+- Do not activate a rule until its official source and approving authority are recorded.
+
 #### `department_memberships`
 - `id uuid PK`, `member_id uuid NOT NULL FK members(id)`, `department_id uuid NOT NULL FK departments(id)`
 - `requested_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `approved_by_user_account_id uuid NULL FK user_accounts(id)`, `ended_by_user_account_id uuid NULL FK user_accounts(id)`
+- `eligibility_rule_id uuid NULL FK department_eligibility_rules(id)` to retain the rule version considered, where a rule exists.
 - `status varchar(24) NOT NULL`, `requested_at timestamptz NOT NULL`, `effective_from timestamptz NULL`, `effective_to timestamptz NULL`, `end_reason text NULL`
 - Partial unique index prevents duplicate active membership for member/department.
 - Department eligibility, renewal and transfer behavior remain policy gaps.
@@ -250,6 +256,11 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `stage varchar(40) NOT NULL`, `decision varchar(24) NOT NULL`, `reason text NULL`, `decided_at timestamptz NOT NULL`
 - Keep every decision. Do not store only the latest approval state.
 
+#### `event_change_records`
+- `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `requested_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
+- `change_type varchar(40) NOT NULL`, `previous_values jsonb NOT NULL`, `proposed_values jsonb NOT NULL`, `reason text NOT NULL`, `status varchar(20) NOT NULL`, `requested_at timestamptz NOT NULL`, `decided_at timestamptz NULL`.
+- JSONB snapshots are restricted to allowlisted event fields and must not contain secrets or unrelated personal data. Significant changes retain request and approval history.
+
 #### `event_registrations`
 - `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `member_id uuid NOT NULL FK members(id)`
 - `status varchar(24) NOT NULL`, `registered_at timestamptz NOT NULL`, `registration_channel varchar(24) NOT NULL`, `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
@@ -296,6 +307,11 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `submitted_at timestamptz NULL`, `rejection_reason text NULL`, `posted_at timestamptz NULL`, `posted_by_user_account_id uuid NULL FK user_accounts(id)`
 - Composite FK or trigger/service validation ensures transaction currency equals account currency. Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
 - Unique `(financial_account_id, reference)`.
+
+#### `transaction_revisions`
+- `id uuid PK`, `financial_transaction_id uuid NOT NULL FK financial_transactions(id)`, `revision_number integer NOT NULL CHECK (revision_number > 0)`
+- `requested_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `reason text NOT NULL`, `previous_snapshot jsonb NOT NULL`, `proposed_snapshot jsonb NOT NULL`, `status varchar(20) NOT NULL`, `created_at timestamptz NOT NULL`, `decided_at timestamptz NULL`.
+- Unique `(financial_transaction_id, revision_number)`. Snapshots are allowlisted and preserve submitted transaction history; posted transactions are corrected only by reversal, not revision.
 
 #### `transaction_approvals`
 - `id uuid PK`, `financial_transaction_id uuid NOT NULL FK financial_transactions(id)`, `approver_user_account_id uuid NOT NULL FK user_accounts(id)`
