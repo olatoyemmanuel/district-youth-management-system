@@ -52,20 +52,23 @@ The current remediation outcome and user approval checklist are in
 ### 2.1 Reconciled entity inventory and notation
 
 The following is the complete conceptual inventory shared by this ERD and the
-database domain model. Entity names in uppercase identify conceptual database
-entities; implementation naming remains a later schema decision.
+database domain model. It contains 33 conceptual entities after adding the
+approved ministry-affiliation structures and DDD-013 authentication persistence
+structures. Entity names in uppercase identify conceptual database entities;
+implementation naming remains a later schema decision.
 
 | Domain                | Entities                                                                            |
 | --------------------- | ----------------------------------------------------------------------------------- |
 | Identity              | `USER`, `MEMBER`                                                                    |
+| Member classification | `MINISTRY_AFFILIATION`, `MEMBER_MINISTRY_AFFILIATION`, `MINISTRY_AFFILIATION_APPROVAL` |
 | Organization          | `DISTRICT`, `CHURCH`, `DEPARTMENT`, `CHURCH_DEPARTMENT`                             |
 | Membership            | `CHURCH_MEMBERSHIP_HISTORY`, `DEPARTMENT_MEMBERSHIP`                                |
 | Authorization         | `ROLE`, `PERMISSION`, `ROLE_PERMISSION`, `ROLE_ASSIGNMENT`, `APPOINTMENT`           |
-| Authentication        | `SESSION`, `REFRESH_TOKEN_USE`, `PASSWORD_RESET_TOKEN`, `SECURITY_EVENT`            |
+| Authentication        | `SESSION`, `REFRESH_TOKEN_USE`, `PASSWORD_RESET_TOKEN`, `SECURITY_EVENT`, `PRE_AUTH_CONTEXT` |
 | Events and attendance | `EVENT`, `EVENT_REGISTRATION`, `ATTENDANCE_RECORD`, `ATTENDANCE_CORRECTION_HISTORY` |
 | Finance               | `FINANCIAL_ACCOUNT`, `FINANCIAL_TRANSACTION`, `FINANCIAL_APPROVAL`                  |
 | Credentials           | `CREDENTIAL_DEFINITION`, `MEMBER_CREDENTIAL`                                        |
-| Audit and idempotency | `AUDIT_LOG`, `IDEMPOTENCY_RECORD`                                                   |
+| Audit and idempotency | `AUDIT_LOG`, `IDEMPOTENCY_RECORD`, `OUTBOX_MESSAGE`                                  |
 
 `ROLE_PERMISSION` and `REFRESH_TOKEN_USE` are part of the inventory. Their
 absence from an earlier data-model inventory was a documentation omission,
@@ -83,6 +86,10 @@ changes.
 ```mermaid id="3f9f8e"
 erDiagram
     USER ||--o| MEMBER : "has profile"
+    MINISTRY_AFFILIATION ||--o{ MEMBER_MINISTRY_AFFILIATION : defines
+    MEMBER ||--o{ MEMBER_MINISTRY_AFFILIATION : holds
+    MEMBER ||--o{ MINISTRY_AFFILIATION_APPROVAL : receives
+    USER ||--o{ MINISTRY_AFFILIATION_APPROVAL : authorizes
     DISTRICT ||--o{ CHURCH : contains
     DISTRICT ||--o{ DEPARTMENT : owns
     CHURCH ||--o{ MEMBER : "current primary church"
@@ -123,12 +130,19 @@ erDiagram
 - Department membership must retain status, effective dates, and relevant history.
 - Department participation does not change primary church membership and does not automatically grant leadership permissions.
 
-### 3.4 Member categories and credentials
+### 3.4 Member categories, ministry affiliations, and credentials
 
-- The v1.0 member categories are `ADVENTURER`, `PATHFINDER`, and `SENIOR_YOUTH`.
-- Master Guide is a credential, not a member category.
-- Master Guide is modeled as a credential/training pathway, not as a member category. The approved classification decision does not establish a universal rule that every Master Guide must have a particular current member category.
-- Category transitions and their historical treatment must be resolved against the approved requirements before schema implementation.
+The approved classification is represented as three distinct concepts:
+
+- `MEMBER.category_code` records the member's top-level category: `ADVENTURER`, `PATHFINDER`, or `SENIOR_YOUTH`. The approved age guidance is Adventurers 4–9, Pathfinders 10–15, and Senior Youth 16–30+.
+- `MINISTRY_AFFILIATION` is the catalogue of affiliations, including `AMBASSADOR`, `YOUNG_ADULT`, and `PUBLIC_CAMPUS_MINISTRY`.
+- `MEMBER_MINISTRY_AFFILIATION` records a member's affiliation independently of the top-level category. Public Campus Ministry is an additional campus-context affiliation and is not exclusive to another affiliation.
+- `MINISTRY_AFFILIATION_APPROVAL` records the local ministry approval required when a 21-year-old concurrently holds Ambassador and Young Adult affiliations. It identifies the approving User, local authority/scope, decision, and approval time. Both affiliation records reference the same approval record where applicable.
+- `CREDENTIAL_DEFINITION` and `MEMBER_CREDENTIAL` continue to represent credentials. Master Guide remains a training/credential pathway, not a category or affiliation.
+
+The model must not impose mutual exclusion between Ambassador and Young Adult at age 21. The approval record is required for that dual-affiliation case; this does not imply a universal approval workflow for every affiliation.
+
+Category transition rules, category effective dating/history, affiliation transition rules beyond the approved age-21 case, and approval-authority details beyond the local-ministry requirement remain open under DDD-002/DDD-005. Do not add a one-active-category history constraint or infer a new age boundary.
 
 ### 3.5 Implementation review requirements
 
@@ -850,10 +864,16 @@ The audit and idempotency domain contains:
 ```mermaid
 erDiagram
     USER o|--o{ AUDIT_LOG : performs
-    USER ||--o{ IDEMPOTENCY_RECORD : owns
+    USER o|--o{ IDEMPOTENCY_RECORD : authenticated_scope
+    SESSION o|--o{ IDEMPOTENCY_RECORD : session_scope
+    PRE_AUTH_CONTEXT o|--o{ IDEMPOTENCY_RECORD : preauth_scope
+    USER ||--o{ PRE_AUTH_CONTEXT : creates_or_owns
+    USER ||--o{ PASSWORD_RESET_TOKEN : requests
+    PASSWORD_RESET_TOKEN ||--o| OUTBOX_MESSAGE : delivery
+    IDEMPOTENCY_RECORD ||--o| OUTBOX_MESSAGE : completes
 ```
 
-These are conceptual relationships. Audit targets span multiple domains and therefore may require a resource type and identifier rather than a direct foreign key to every business entity.
+These are conceptual relationships. Audit targets span multiple domains and therefore may require a resource type and identifier rather than a direct foreign key to every business entity. The optional authenticated-scope references and pre-authentication reference on `IDEMPOTENCY_RECORD` are mutually exclusive scope modes, not interchangeable nullable ownership fields.
 
 The relationship diagram does not independently enforce audit immutability, request uniqueness, authorization, or transactional consistency. These requirements must be addressed through schema constraints, database permissions, application services, and tests.
 
@@ -911,7 +931,7 @@ Before implementation, each applicable API operation must define:
 
 The uniqueness rule must prevent two concurrent requests within the same approved scope from independently executing the same protected operation.
 
-For authentication mutations, these policies are approved in DDD-013 AUTH-IDEM-001–041. For other business domains, operation-specific idempotency policy remains unresolved. Physical field/index design and integration boundaries remain subject to the DDD-013 ERD-slice review.
+For authentication mutations, the policy is approved in DDD-013 AUTH-IDEM-001–041. The idempotency identity is the operation plus its selected authenticated or pre-authentication scope and UUID v4 key. The request fingerprint is stored and compared after identity lookup; it is not part of the uniqueness identity, so a reused key with a different fingerprint is detected and rejected rather than treated as a new operation. Authenticated and pre-authentication modes require separate partial unique indexes or an equivalent constraint strategy; do not rely on nullable composite-UNIQUE behavior. Other business-domain idempotency remains unresolved.
 
 ### 9.5 Idempotency lifecycle and retry behavior
 
@@ -930,7 +950,19 @@ The following rules apply:
 
 For authentication mutations, operation states, retention, recovery, and endpoint-specific replay behavior are defined in DDD-013. Other business-domain idempotency behavior remains unresolved and must not inherit the authentication policy by assumption.
 
-### 9.6 Transactional and cross-domain consistency
+### 9.6 Authentication idempotency persistence and reset-delivery boundary
+
+The approved authentication contract requires the following conceptual persistence structure. Exact physical columns, predicates, and constraint expressions remain schema-design work:
+
+- `PRE_AUTH_CONTEXT` stores only a hash or secure reference for the pre-authentication cookie, creation/expiry/invalidation state, and lifecycle metadata. The cookie is host-only, Secure, HttpOnly, SameSite=Lax, scoped to `/api/v1/auth`, and has a 600-second lifetime. Raw cookie material is never stored. Login and password-reset mutations bind to this context as specified by AUTH-IDEM-036.
+- `IDEMPOTENCY_RECORD` identifies exactly one scope mode: authenticated (principal and, where applicable, session) or pre-authentication (`PRE_AUTH_CONTEXT`). The two modes are mutually exclusive and are enforced with separate partial unique indexes or equivalent database constraints. The identity uniqueness excludes the request fingerprint; fingerprint mismatch is handled as AUTH-IDEM-041 (`409 IDEMPOTENCY_KEY_REUSED`).
+- `IDEMPOTENCY_RECORD` also retains the approved operation state, request fingerprint, HMAC key version, fixed processing lease, BIGINT fencing counter, safe terminal result metadata, response-retention deadline, tombstone identity/expiry, and recovery outcome/scheduling metadata. Whether tombstone and recovery metadata are columns or related records is a physical modeling choice, provided lifecycle and retention guarantees are preserved.
+- `OUTBOX_MESSAGE` is persisted in the same transaction as password-reset-token creation and idempotency completion. It contains delivery metadata and an opaque secret reference only. The queue message likewise carries only the opaque reference.
+- The reset token's raw delivery secret is held outside the ordinary relational database in a separately managed, envelope-encrypted, short-lived secret store. The outbox references that store; worker-only access is permitted. Expire the secret no later than the reset-token lifetime and erase it after delivery or expiry. No vendor is selected by this ERD.
+
+The password-reset request transaction atomically persists the idempotency terminal state, reset-token record, and outbox message. External email delivery occurs after commit. A worker resolves the opaque reference under its restricted identity, sends the message, and records delivery outcome without copying the raw secret into queue payloads, logs, audit records, or idempotency results. The secret-store boundary is external to the ERD's relational entity inventory.
+
+### 9.7 Transactional and cross-domain consistency
 
 Where a business operation requires an audit record and an idempotency record, the implementation must define their transaction boundaries together with the protected mutation.
 
@@ -1015,7 +1047,7 @@ This section updates the policy status of the conceptual design. It does not app
 2. **Youth classification:** Adventurer (4–9), Pathfinder (10–15), and Senior Youth (16–30+) remain the top-level categories. Ambassador and Young Adult are Senior Youth affiliations. A 21-year-old may hold both, subject to local ministry approval. Public Campus Ministry is an additional campus-context affiliation. Master Guide is a training/credential pathway, not a top-level age category. Category transition/history details not expressly decided remain open.
 3. **Primary church:** each Member has one current primary church. Transfer closes the previous membership and opens the new membership atomically; prior history is preserved (DDD-003).
 4. **Appointments:** terms run January 1–December 31. Renewal creates a new historical appointment. Higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the account (DDD-004).
-5. **Authentication idempotency:** use the consolidated DDD-013 specification for AUTH-IDEM-001–041. Its consistency review reports policy consistency PASS, including approved CR-01 through CR-06. The authentication ERD slice remains NOT READY pending physical modeling and verification of the approved scope, indexes, pre-auth context, reset-delivery secret boundary, key-version metadata, tombstone/recovery relationships, transaction boundaries, and replay behavior.
+5. **Authentication idempotency:** use the consolidated DDD-013 specification for AUTH-IDEM-001–041. Its policy consistency review reports PASS, including approved CR-01 through CR-06. This ERD now represents the mutually exclusive authenticated/pre-authentication scope modes, `PRE_AUTH_CONTEXT`, `OUTBOX_MESSAGE`, and the external protected reset-secret-store boundary. Physical index predicates, field-level constraints, secret-store integration, tombstone/recovery representation, transaction boundaries, and endpoint tests remain validation deliverables.
 6. **Authentication retention:** apply the approved authentication retention periods recorded in the database decision register and DDD-014 resolution. Other business-domain retention remains unresolved.
 
 ### 11.1 Current design gate
