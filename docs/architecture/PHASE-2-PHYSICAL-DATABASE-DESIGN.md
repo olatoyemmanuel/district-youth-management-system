@@ -103,7 +103,6 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `auth_sessions`
 - `id uuid PK`, `user_account_id uuid NOT NULL FK`
-- `refresh_token_hash text NOT NULL`, unique
 - `created_at timestamptz NOT NULL`, `last_activity_at timestamptz NOT NULL`
 - `inactivity_expires_at timestamptz NOT NULL`, `absolute_expires_at timestamptz NOT NULL`
 - `revoked_at timestamptz NULL`, `revocation_reason text NULL`
@@ -114,7 +113,8 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `auth_session_tokens`
 - `id uuid PK`, `auth_session_id uuid NOT NULL FK auth_sessions(id)`
-- `token_hash text NOT NULL UNIQUE`, `issued_at timestamptz NOT NULL`, `consumed_at timestamptz NULL`, `revoked_at timestamptz NULL`
+- `token_hash text NOT NULL UNIQUE`, `token_generation integer NOT NULL CHECK (token_generation > 0)`, `issued_at timestamptz NOT NULL`, `consumed_at timestamptz NULL`, `revoked_at timestamptz NULL`
+- Unique `(auth_session_id, token_generation)`; at most one unconsumed, unrevoked token per session using a partial unique index.
 - Keep only the minimum token-fingerprint history required for reuse detection. Retention is security-policy dependent.
 - Concurrent rotation must be atomic and serialize on the session row.
 
@@ -305,7 +305,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `amount numeric(19,4) NOT NULL`, `currency_code char(3) NOT NULL`, `status varchar(24) NOT NULL`
 - `transaction_date date NOT NULL`, `submitted_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `submitted_at timestamptz NULL`, `rejection_reason text NULL`, `posted_at timestamptz NULL`, `posted_by_user_account_id uuid NULL FK user_accounts(id)`
-- Composite FK or trigger/service validation ensures transaction currency equals account currency. Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
+- Add `UNIQUE (id, currency_code)` on financial accounts and a composite FK `(financial_account_id, currency_code)` from transactions to enforce account/transaction currency equality. Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
 - Unique `(financial_account_id, reference)`.
 
 #### `transaction_revisions`
@@ -322,7 +322,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `financial_transaction_id uuid NOT NULL FK financial_transactions(id)`, `provider_id uuid NULL FK integration_providers(id)`
 - `payment_reference varchar(100) NOT NULL UNIQUE`, `provider_reference varchar(150) NULL`, `amount numeric(19,4) NOT NULL`, `currency_code char(3) NOT NULL`
 - `status varchar(24) NOT NULL`, `initiated_at timestamptz NOT NULL`, `confirmed_at timestamptz NULL`, `failure_reason text NULL`
-- Do not infer partial settlement or refund behavior. Store attempts distinctly; reconciliation required for uncertain outcomes.
+- Add composite FK `(financial_transaction_id, currency_code)` to the transaction's unique `(id, currency_code)` key. Do not infer partial settlement or refund behavior. Store attempts distinctly; reconciliation required for uncertain outcomes.
 
 #### `transaction_reversals`
 - `id uuid PK`, `original_transaction_id uuid NOT NULL FK financial_transactions(id)`, `reversal_transaction_id uuid NOT NULL UNIQUE FK financial_transactions(id)`
@@ -384,6 +384,12 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `notification_recipient_id uuid NOT NULL FK notification_recipients(id)`, `provider_id uuid NOT NULL FK integration_providers(id)`
 - `attempt_number integer NOT NULL CHECK (attempt_number > 0)`, `provider_message_id text NULL`, `status varchar(24) NOT NULL`, `accepted_at timestamptz NULL`, `delivered_at timestamptz NULL`, `failed_at timestamptz NULL`, `failure_code text NULL`
 - Unique `(notification_recipient_id, attempt_number)`. Do not mark delivered based only on provider acceptance.
+
+#### `outbox_messages`
+- `id uuid PK`, `aggregate_type varchar(80) NOT NULL`, `aggregate_id uuid NOT NULL`, `event_type varchar(100) NOT NULL`, `payload jsonb NOT NULL`, `occurred_at timestamptz NOT NULL`
+- `status varchar(20) NOT NULL`, `attempt_count integer NOT NULL DEFAULT 0 CHECK (attempt_count >= 0)`, `available_at timestamptz NOT NULL`, `locked_at timestamptz NULL`, `published_at timestamptz NULL`, `last_error_code text NULL`
+- Unique logical event key to be defined per aggregate/event identity. Payload is versioned, allowlisted, and contains references rather than unnecessary personal data or secrets.
+- Insert the outbox row in the same transaction as the business mutation. A worker claims rows with a concurrency-safe lock/lease and publishes at least once; consumers deduplicate.
 
 #### `webhook_events`
 - `id uuid PK`, `provider_id uuid NOT NULL FK integration_providers(id)`, `provider_event_id text NOT NULL`, `event_type varchar(80) NOT NULL`, `received_at timestamptz NOT NULL`
@@ -489,7 +495,7 @@ Do not add indexes speculatively to every column. Validate query plans with real
 - Use unique/exclusion constraints as the final defense against concurrent duplicates.
 - Use serializable isolation only for workflows that need it and have retry handling; default to READ COMMITTED with explicit locks and constraints where sufficient.
 - Do not rely on application pre-checks without a database constraint or lock.
-- Use an outbox table for durable notification/integration dispatch where the business mutation and message scheduling must commit together. Outbox design must be included in the next technical implementation plan, not improvised in a controller.
+- Use `outbox_messages` for durable notification/integration dispatch where the business mutation and message scheduling must commit together. The publisher is at-least-once; consumers deduplicate by stable event identity. Outbox design must be included in the implementation plan, not improvised in a controller.
 - Treat webhook delivery as at-least-once. Deduplicate by provider event identity and validate business transition order.
 - Make audit inserts part of the same transaction as the protected business mutation when the audit event is required for the mutation to be considered complete.
 - Posted finance records and audit events are append-only from the application perspective. Corrections create linked records.
