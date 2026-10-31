@@ -120,7 +120,6 @@ erDiagram
     RETENTION_POLICY ||--o{ RETENTION_ACTION : "governs"
     USER_ACCOUNT ||--o{ AUDIT_ACCESS_EVENT : "accesses audit"
     AUDIT_EVENT o|--o{ AUDIT_ACCESS_EVENT : "access may concern"
-    RETENTION_HOLD ||--o{ RETENTION_ACTION : "blocks covered action"
 ```
 
 AUDIT_EVENT, IDEMPOTENCY_RECORD, RETENTION_POLICY, RETENTION_HOLD, and RETENTION_ACTION have cross-domain relationships. An audit access event may concern one specific audit event or a broader search/export. A retention hold is an independent legal or investigation control, not a child of a retention policy. Some records use conceptual target references; physical design must enforce valid targets. Retention periods are not invented, and a valid hold blocks covered destructive actions.
