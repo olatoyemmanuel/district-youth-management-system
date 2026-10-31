@@ -150,3 +150,14 @@ A policy approval does not mean the corresponding constraint, transaction, appli
 
 
 | LA-07 | Authorization: review-required role combinations must not become effective before approval by an authorised independent reviewer; prohibited combinations must not be concurrently active. | Approved role-pair classification and persisted independent reviewer/decision evidence. | Gate activation on approval; reject prohibited combinations; preserve historical assignments and appointments. | Reviewer must not be the affected Member; verify separate valid assignments and scopes. | Self-review, bypassed review, or prohibited pair activated under concurrency. | Negative tests for every prohibited pair; review-required pair remains inactive until independent approval. | DDD-005 Explicit-Deny and Role-Conflict Approval 2026-10-31; RT-029. | Policy approved; technical persistence and enforcement remain to be designed |
+
+
+### DDD-005 stable permission catalogue approval — 2026-10-31
+
+The project owner approved all five review points without modification. The stable authorization contract now consists of the action-specific lowercase dot-separated permission identifiers, the complete logical permission-to-resource mapping, the seven approved scope labels (`DISTRICT`, `ASSIGNED_CHURCH`, `ASSIGNED_DEPARTMENT`, `DISTRICT_DESCENDANTS`, `LINKED_CHURCH_DEPARTMENT`, `AUDIT_SCOPE`, `SYSTEM`), and the role-grant reconciliation in the DDD-005 catalogue.
+
+Existing approved grants are unchanged. `HOLD` remains withheld and is not an allow; `NO GRANT` is not an explicit deny; `CONDITIONAL` requires a separate valid assignment and scope. Local Church Youth Assistant member visibility remains limited, with exact visible fields deferred to a separate decision. District Departmental Coordinator member visibility remains HOLD.
+
+These approvals establish logical policy and resource targets only. They do not approve additional grants, new entities, fields, tables, indexes, constraints, physical deny representation, Prisma models, migrations, or application implementation. The documented unresolved domain decisions and technical enforcement details remain open. The corrected ERD remains NOT READY for formal approval and requires separate explicit project-owner approval before schema implementation.
+
+Authoritative decision: [DDD-005 Stable Permission Catalogue and Resource-Scope Mapping](../decisions/DDD-005-STABLE-PERMISSION-CATALOGUE-AND-RESOURCE-SCOPE-PROPOSAL.md).
