@@ -69,12 +69,12 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-005 — Authorization Scope and Permission Precedence
 
 - **Priority:** Critical
-- **Status:** PARTIALLY RESOLVED. The initial role categories, organizational scope policy, action-specific permission groups, additive permission combination, explicit-deny precedence, and no-title-seniority rule were approved on 2026-10-31. Detailed role-to-permission grants, deny representation, and specific conflicting-role combinations remain unresolved.
-- **Decision question:** Which exact permissions are granted to each role, how are explicit denies represented, and which specific role combinations are prohibited or require review?
-- **Approved policy:** See [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md). The approved initial roles are District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, Local Church Youth Assistant, System Administrator, Audit Administrator, and Audit Viewer, each with the scope and appointment requirement recorded in that decision.
+- **Status:** PARTIALLY RESOLVED. The initial role categories, organizational scope policy, action-specific permission groups, additive permission combination, explicit-deny precedence, no-title-seniority rule, and role-to-permission matrix for the four leadership roles were approved on 2026-10-31.
+- **Decision question:** How are explicit denies represented and administered, which specific role combinations are prohibited or require review, and what overlap/duplicate constraints apply to assignments and appointments?
+- **Approved policy:** See [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md) and [DDD-005 Approved Role-to-Permission Matrix](../decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md). The matrix's concrete grants and scope limits for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant are approved. HOLD entries remain withheld pending their domain decisions.
 - **Affected requirements, entities, and invariants:** Traceability B-003; RT-007–RT-009 and RT-029; LA-03, LA-04, LA-06; `ROLE`, `PERMISSION`, `ROLE_PERMISSION`, `ROLE_ASSIGNMENT`, `APPOINTMENT`.
-- **Remaining evidence or approval required:** Complete role-to-permission grant matrix; permission-to-resource/scope mapping; exact explicit-deny representation; prohibited/review-required role-combination matrix; overlap/duplicate constraints.
-- **Required follow-up:** Prepare the complete authorization matrix and positive/negative tests. Preserve DDD-004 appointment rules and DDD-012 audit-administration authority. Do not infer authority from department membership.
+- **Remaining evidence or approval required:** Stable permission identifiers and complete permission-to-resource/scope mapping; explicit-deny representation/administration; prohibited/review-required role-combination matrix; assignment/appointment overlap and duplicate constraints.
+- **Required follow-up:** Define deny semantics and role-conflict rules, then complete positive/negative authorization tests. Preserve DDD-004 appointment rules and DDD-012 audit-administration authority. Do not infer authority from department membership.
 
 ### DDD-006 — Department Membership Lifecycle
 
@@ -299,7 +299,7 @@ The following records supersede earlier status text in this register where the e
 
 ### Still blocked
 
-DDD-005 is partially resolved as recorded above; its remaining grant matrix, deny representation, and role-conflict matrix remain open. DDD-006 through DDD-011 and DDD-015 remain blocked to the extent stated in their entries. DDD-012 is partially resolved as recorded above; its remaining actor/access-scope controls remain blocked. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
+DDD-005 is partially resolved as recorded above; the four leadership-role grant matrix is approved, while explicit-deny representation, specific role-conflict rules, and overlap/duplicate constraints remain open. DDD-006 through DDD-011 and DDD-015 remain blocked to the extent stated in their entries. DDD-012 is partially resolved as recorded above; its remaining actor/access-scope controls remain blocked. DDD-014 remains blocked for non-authentication business records. DDD-002 category transition/history rules not expressly covered above remain open. None of these resolutions approves the ERD or a physical schema.
 
 ## 10. Current implementation gate
 
