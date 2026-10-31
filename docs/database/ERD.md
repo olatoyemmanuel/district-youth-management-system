@@ -866,8 +866,7 @@ erDiagram
     USER o|--o{ AUDIT_LOG : performs
     USER o|--o{ IDEMPOTENCY_RECORD : authenticated_scope
     SESSION o|--o{ IDEMPOTENCY_RECORD : session_scope
-    PRE_AUTH_CONTEXT o|--o{ IDEMPOTENCY_RECORD : preauth_scope
-    USER ||--o{ PRE_AUTH_CONTEXT : creates_or_owns
+    PRE_AUTH_CONTEXT ||--o{ IDEMPOTENCY_RECORD : preauth_scope
     USER ||--o{ PASSWORD_RESET_TOKEN : requests
     PASSWORD_RESET_TOKEN ||--o| OUTBOX_MESSAGE : delivery
     IDEMPOTENCY_RECORD ||--o| OUTBOX_MESSAGE : completes
