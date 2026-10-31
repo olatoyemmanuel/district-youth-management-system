@@ -17,7 +17,9 @@ It does not authorize application implementation, Prisma schema changes, migrati
 8. [Phase 2 Physical Database Design](./PHASE-2-PHYSICAL-DATABASE-DESIGN.md)  
    PostgreSQL-oriented table/column proposal, keys, constraints, indexes, scope integrity, transaction controls, and physical-design blockers. This is a working proposal only and is not approved for implementation.
 9. [Phase 2 Physical Database Design Review](./PHASE-2-PHYSICAL-DATABASE-DESIGN-REVIEW.md)  
-   Independent consistency review with 12 findings, severity, required revisions, and acceptance tests. The physical design needs revision before approval.
+   Initial independent consistency review with 12 findings, severity, required revisions, and acceptance tests. The findings are addressed in the revised proposal, subject to the second-review limitations.
+10. [Phase 2 Physical Database Design Second Review](./PHASE-2-PHYSICAL-DATABASE-DESIGN-SECOND-REVIEW.md)  
+   Verifies the revised proposal against all 12 findings and the 97 unique testable requirement rows. PDB-R12 remains partially open, and implementation remains unauthorized.
 
 1. [Phase 1 Requirements Consolidation](../product/PHASE-1-REQUIREMENTS-CONSOLIDATION.md)  
    Consolidated business and platform requirements, scope, approved rules, open decisions and implementation gate.
@@ -158,4 +160,4 @@ The conceptual ERD approval gate is now closed for the exact approved revision. 
 - Do not begin application implementation based on this draft.
 - Do not merge this draft PR as an implementation authorization.
 
-**Current status: Conceptual ERD approved. A working Phase 2 physical database design proposal and a 12-finding review have been prepared. The physical design requires revision and is not yet approved. Application/Prisma/migration/database implementation remains unauthorized.**
+**Current status: Conceptual ERD approved. The Phase 2 physical-design proposal has been revised against all 12 first-review findings and has passed a second document-level review with limitations. PDB-R12 remains partially open, and lifecycle catalogues, exact DDL-level scope proofs, PostgreSQL compatibility, finance policy, retention schedules, safeguarding policy and credential authority evidence remain outstanding. The physical design is not approved for implementation. Application/Prisma/migration/database implementation remains unauthorized.**
