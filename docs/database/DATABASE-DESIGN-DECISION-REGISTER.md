@@ -29,7 +29,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-001 — Authoritative Product Requirements
 
 - **Priority:** Critical
-- **Status:** EVIDENCE REQUIRED
+- **Status:** RESOLVED for the working-baseline decision; historical original PRD remains unrecovered
 - **Decision question:** How should the project record the product-requirements baseline when no historical authoritative document has been recovered?
 - **Current documented position:** No historical authoritative product-requirements document has been recovered, and the available Git history did not reveal one. PRB-001 v0.1 is approved as the reconstructed, versioned working review baseline; it is not the recovered original PRD. This does not automatically approve proposed requirements, resolve blocked domain decisions, or approve the ERD, schema, or migrations. DFR-001–DFR-005 and the user-confirmed domain baseline remain sources for the decisions they cover.
 - **Affected requirements, entities, and invariants:** Traceability B-001; RT-001–RT-026; all proposed domain entities and workflows.
@@ -39,7 +39,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-002 — Member Categories and Transitions
 
 - **Priority:** High
-- **Status:** BLOCKED
+- **Status:** PARTIALLY RESOLVED. Category/affiliation classification and age-21 overlap are approved; category transitions, effective dates, and history remain blocked.
 - **Decision question:** Can a member have only one active category at a time? What transitions are permitted, are effective dates required, and must category history be preserved?
 - **Current documented position:** The current baseline lists Adventurer, Pathfinder, and Senior Youth as categories and Master Guide as a credential. Exact transition and history rulesremain blocked.
 - **Affected requirements, entities, and invariants:** Traceability B-002; RT-006; `MEMBER`,`CREDENTIAL_DEFINITION`, `MEMBER_CREDENTIAL`; relevant membership invariants.
@@ -49,7 +49,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-003 — Church Membership Transfers
 
 - **Priority:** High
-- **Status:** BLOCKED
+- **Status:** RESOLVED for one current primary church and atomic history-preserving transfer policy; technical enforcement remains proposed.
 - **Decision question:** What transfer states and effective-date rules apply, and how must the system preserve one current primary church under concurrent transfers?
 - **Current documented position:** The model proposes one current primary church and preserved transfer history. The concurrency mechanism and exact lifecycle rules are not fully approved.
 - **Affected requirements, entities, and invariants:** Traceability B-004; RT-004; IM-03, IM-04, IM-05; `MEMBER`, `CHURCH`, `CHURCH_MEMBERSHIP_HISTORY`.
@@ -59,7 +59,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-004 — Appointment Lifecycle and Precedence
 
 - **Priority:** Critical
-- **Status:** BLOCKED
+- **Status:** PARTIALLY RESOLVED. Annual term, renewal history, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved; role precedence and conflicting-position policy remain blocked under DDD-005.
 - **Decision question:** What are the exact appointment states, mid-year changes, renewal rules, overlapping-position rules, and behavior when appointments conflict?
 - **Current documented position:** Annual term, higher-authority renewal, no self-appointment/self-renewal/self-approval, retained history, and expiry of appointment-derived authority are part of the confirmed baseline. Broader state and precedence policies remain unresolved.
 - **Affected requirements, entities, and invariants:** Traceability B-003; RT-007–RT-009; LA-01–LA-06; `ROLE_ASSIGNMENT`, `APPOINTMENT`, `ROLE`, `PERMISSION`, `ROLE_PERMISSION`.
@@ -159,7 +159,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-014 — Retention and Deletion
 
 - **Priority:** High
-- **Status:** BLOCKED
+- **Status:** PARTIALLY RESOLVED. Authentication record retention is approved; audit-log and other business-domain retention remain blocked.
 - **Decision question:** What retention/deletion periods and exceptions apply separately to audit logs, security events, sessions, refresh-token history, reset tokens, membership/appointment history, attendance corrections, finance records, and credentials?
 - **Current documented position:** Historical business records are preserved under approved rules, but the traceability matrix explicitly identifies audit/security-record retention and broader retention policy as unresolved. Do not infer one common retention period for all records.
 - **Affected requirements, entities, and invariants:** Traceability B-008–B-009; RT-010–RT-014, RT-016, RT-019–RT-021, and RT-026; relevant historical/security entities.
