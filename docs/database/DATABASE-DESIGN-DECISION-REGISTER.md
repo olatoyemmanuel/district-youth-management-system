@@ -59,7 +59,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 ### DDD-004 — Appointment Lifecycle and Precedence
 
 - **Priority:** Critical
-- **Status:** PARTIALLY RESOLVED. Annual term, renewal history, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved; role precedence and conflicting-position policy remain blocked under DDD-005.
+- **Status:** PARTIALLY RESOLVED. Annual term, renewal history, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved; the specified role-pair classifications are now approved under DDD-005; DDD-004 appointment lifecycle and technical overlap/duplicate enforcement remain open.
 - **Decision question:** What are the exact appointment states, mid-year changes, renewal rules, overlapping-position rules, and behavior when appointments conflict?
 - **Current documented position:** Annual term, higher-authority renewal, no self-appointment/self-renewal/self-approval, retained history, and expiry of appointment-derived authority are part of the confirmed baseline. Broader state and precedence policies remain unresolved.
 - **Affected requirements, entities, and invariants:** Traceability B-003; RT-007–RT-009; LA-01–LA-06; `ROLE_ASSIGNMENT`, `APPOINTMENT`, `ROLE`, `PERMISSION`, `ROLE_PERMISSION`.
@@ -73,8 +73,8 @@ Priority describes the potential consequence of leaving the question unresolved,
 - **Decision question:** How are explicit denies represented and administered, which specific role combinations are prohibited or require review, and what overlap/duplicate constraints apply to assignments and appointments?
 - **Approved policy:** See [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md) and [DDD-005 Approved Role-to-Permission Matrix](../decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md). The matrix's concrete grants and scope limits for District Youth Leader, District Departmental Coordinator, Local Church Youth Leader, and Local Church Youth Assistant are approved. HOLD entries remain withheld pending their domain decisions.
 - **Affected requirements, entities, and invariants:** Traceability B-003; RT-007–RT-009 and RT-029; LA-03, LA-04, LA-06; `ROLE`, `PERMISSION`, `ROLE_PERMISSION`, `ROLE_ASSIGNMENT`, `APPOINTMENT`.
-- **Remaining evidence or approval required:** Stable permission identifiers and complete permission-to-resource/scope mapping; explicit-deny representation/administration; prohibited/review-required role-combination matrix; assignment/appointment overlap and duplicate constraints.
-- **Required follow-up:** Review the [DDD-005 Explicit-Deny and Role-Conflict Policy Proposal](../decisions/DDD-005-EXPLICIT-DENY-AND-ROLE-CONFLICT-PROPOSAL.md), decide its deny-scope/administration rules and role-pair classifications, then complete positive/negative authorization tests. Preserve DDD-004 appointment rules and DDD-012 audit-administration authority. Do not infer authority from department membership.
+- **Remaining evidence or approval required:** Stable permission identifiers and complete permission-to-resource/scope mapping; technical representation/enforcement of explicit denies; assignment/appointment overlap and duplicate constraints not settled by the approved role-pair classifications.
+- **Required follow-up:** Implement the approved deny and role-pair policy in the corrected design after stable permission/resource mapping and appointment lifecycle constraints are resolved; complete positive/negative authorization tests. Preserve DDD-004 appointment rules and DDD-012 audit-administration authority. Do not infer authority from department membership.
 
 ### DDD-006 — Department Membership Lifecycle
 
@@ -278,11 +278,11 @@ The following records supersede earlier status text in this register where the e
 ### DDD-005 — Authorization scope and permission precedence
 
 - **Status:** PARTIALLY RESOLVED on 2026-10-31.
-- **Decision:** The project owner approved the initial role categories and their scopes; district, church, department, system-wide, and explicitly authorised audit scopes; action-specific permission groups; additive permissions across valid assignments; explicit deny-overrides-allow; strict scope enforcement; and no automatic title-based seniority override.
+- **Decision:** The project owner approved the initial role categories/scopes, action-specific permission groups, additive grants, explicit deny-overrides-allow, strict scope enforcement, no title-seniority override, four-role permission matrix, explicit-deny scope/precedence and independent administration/audit controls, all specified role-pair classifications, and the independent-review workflow.
 - **Decision record:** [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md).
 - **Approver:** Project owner.
 - **Approval date:** 2026-10-31.
-- **Remaining:** Exact role-to-permission grants, permission identifiers and resource-scope mapping, technical representation of explicit denies, prohibited/review-required role combinations, and appointment overlap/lifecycle details. These are not silently resolved by the initial catalogue approval.
+- **Remaining:** Stable permission identifiers, complete permission-to-resource/scope mapping, technical representation/enforcement of denies, and assignment/appointment duplicate or overlap constraints not covered by the approved role-pair classifications. DDD-004 mid-year creation, early ending, and replacement lifecycle details remain open.
 
 ### DDD-013 — Authentication idempotency
 
@@ -304,3 +304,8 @@ DDD-005 is partially resolved as recorded above; the four leadership-role grant 
 ## 10. Current implementation gate
 
 The recovered database documents are restored and the decisions above are recorded for reconciliation. The ERD remains a proposed design. DDD-013's authentication slice is not ERD-ready until the approved CR-01 through CR-06 contracts are physically modeled and validated against the consistency-review checklist. No Prisma models or migrations are authorized until the user formally approves the corrected ERD.
+
+
+### DDD-005 approval update — explicit denies and role conflicts — 2026-10-31
+
+The project owner approved all four groups in [DDD-005 Explicit-Deny and Role-Conflict Approval](../decisions/DDD-005-EXPLICIT-DENY-AND-ROLE-CONFLICT-PROPOSAL.md) without modification. The approved policy defines permission/resource-scoped deny precedence, independently authorised deny administration and immutable audit history, all role-pair classifications, and independent approval before review-required combinations become effective. Physical representation remains undecided. Stable permission identifiers, full permission/resource mapping, overlap/duplicate constraints beyond the role-pair table, and DDD-004 mid-year/early-ending/replacement lifecycle remain open.
