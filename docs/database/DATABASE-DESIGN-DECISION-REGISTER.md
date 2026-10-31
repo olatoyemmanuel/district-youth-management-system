@@ -318,3 +318,10 @@ The project owner approved all five review points in the [DDD-005 Stable Permiss
 Logical targets and workflow boundaries are approved as policy mappings only. Unresolved persistence targets do not imply new entities. Physical deny representation/enforcement, exact assistant field visibility, department participation lifecycle under DDD-006, leadership nomination persistence/authority, audit/system access persistence, appointment lifecycle/overlap constraints, and implementation verification remain open as applicable.
 
 **DDD-005 stable catalogue approval does not authorize Prisma, migrations, physical schema, or application code. The corrected ERD remains subject to separate explicit project-owner approval.**
+
+
+### DDD-005 technical follow-up — explicit restriction representation and assignment conflicts — 2026-10-31
+
+A technical proposal is available in [DDD-005 Explicit-Deny Representation and Assignment-Conflict Technical Proposal](../decisions/DDD-005-EXPLICIT-DENY-AND-ASSIGNMENT-CONFLICT-TECHNICAL-PROPOSAL.md). It recommends a distinct logical access-restriction concept, append-only restriction lifecycle/audit history, conflict checks based on the already approved role-pair matrix, duplicate/overlap detection, and atomic concurrency-safe activation.
+
+**Status: DRAFT FOR PROJECT-OWNER REVIEW.** The proposal does not assign restriction-administration authority to any existing role, does not decide DDD-004 appointment lifecycle questions, and does not select physical tables, columns, constraints, indexes, locks, Prisma models, migrations, or application implementation. Its six review points require explicit owner approval. The stable permission catalogue approval and all previously approved grants/HOLD boundaries remain unchanged.
