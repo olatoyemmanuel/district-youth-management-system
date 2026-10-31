@@ -408,7 +408,7 @@ Non-authentication business-domain idempotency remains unresolved and must not i
 
 ## 11. Reconciled Domain Inventory
 
-The following is the complete conceptual inventory shared with `ERD.md`.
+The following is the complete conceptual inventory shared with `ERD.md`. It contains 33 conceptual entities after adding three ministry-affiliation entities, PRE_AUTH_CONTEXT, and OUTBOX_MESSAGE.
 Uppercase names identify conceptual database entities. Entity names in a later
 Prisma schema remain an implementation decision. `ROLE_PERMISSION` and
 `REFRESH_TOKEN_USE` were added here to correct prior inventory omissions.
