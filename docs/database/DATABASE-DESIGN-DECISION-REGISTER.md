@@ -51,7 +51,7 @@ Priority describes the potential consequence of leaving the question unresolved,
 - **Priority:** High
 - **Status:** RESOLVED for one current primary church and atomic history-preserving transfer policy; technical enforcement remains proposed.
 - **Decision question:** What transfer states and effective-date rules apply, and how must the system preserve one current primary church under concurrent transfers?
-- **Current documented position:** The model proposes one current primary church and preserved transfer history. The concurrency mechanism and exact lifecycle rules are not fully approved.
+- **Current documented position:** One current primary church and atomic transfer with preserved history are approved. Transfer request/approval/cancellation states, if any, and the exact concurrency mechanism remain to be specified without changing the approved policy.
 - **Affected requirements, entities, and invariants:** Traceability B-004; RT-004; IM-03, IM-04, IM-05; `MEMBER`, `CHURCH`, `CHURCH_MEMBERSHIP_HISTORY`.
 - **Evidence or approval required:** Approved transfer policy covering initiation, acceptance/approval if applicable, effective dates, cancellation/reversal, and conflict behavior.
 - **Required follow-up:** Specify lifecycle invariants first; choose database constraint/locking strategy later during schema design without changing the policy.
@@ -161,10 +161,10 @@ Priority describes the potential consequence of leaving the question unresolved,
 - **Priority:** High
 - **Status:** PARTIALLY RESOLVED. Authentication record retention is approved; audit-log and other business-domain retention remain blocked.
 - **Decision question:** What retention/deletion periods and exceptions apply separately to audit logs, security events, sessions, refresh-token history, reset tokens, membership/appointment history, attendance corrections, finance records, and credentials?
-- **Current documented position:** Historical business records are preserved under approved rules, but the traceability matrix explicitly identifies audit/security-record retention and broader retention policy as unresolved. Do not infer one common retention period for all records.
+- **Current documented position:** Authentication retention periods are approved for sessions, refresh-token history, password-reset records, and security events. Audit-log and non-authentication business-record retention remain unresolved. Do not infer one common retention period for all records.
 - **Affected requirements, entities, and invariants:** Traceability B-008–B-009; RT-010–RT-014, RT-016, RT-019–RT-021, and RT-026; relevant historical/security entities.
-- **Evidence or approval required:** Authoritative retention schedule and legal/privacy policy, with record-class-specific periods, legal holds, purge/anonymization rules, and exceptions.
-- **Required follow-up:** Separate audit retention from session/token lifecycle; update eachrecord class and operational process consistently.
+- **Evidence or approval required:** For non-authentication records, an authoritative retention schedule and legal/privacy policy with record-class-specific periods, legal holds, purge/anonymization rules, and exceptions. Preserve the approved authentication retention subset.
+- **Required follow-up:** Separate audit and business-record retention from the approved authentication retention schedule; update each record class and operational process consistently.
 
 ### DDD-015 — External-Event Delivery and Recovery
 
