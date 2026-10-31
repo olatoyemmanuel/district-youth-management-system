@@ -109,13 +109,16 @@ that every Member has a User must also be guaranteed by the application
 creation workflow or an appropriate database-level mechanism; a unique
 foreign key alone does not enforce mandatory participation on both sides.
 
-Member categories for v1.0:
+The approved top-level category is stored distinctly from ministry affiliation:
 
-- ADVENTURER
-- PATHFINDER
-- SENIOR_YOUTH
+- `MEMBER.category_code`: `ADVENTURER` (ages 4–9), `PATHFINDER` (ages 10–15), or `SENIOR_YOUTH` (ages 16–30+).
+- `MINISTRY_AFFILIATION`: catalogue including `AMBASSADOR`, `YOUNG_ADULT`, and `PUBLIC_CAMPUS_MINISTRY`.
+- `MEMBER_MINISTRY_AFFILIATION`: effective member-to-affiliation association. Ambassador and Young Adult are Senior Youth affiliations; Public Campus Ministry is an additional campus-context affiliation.
+- `MINISTRY_AFFILIATION_APPROVAL`: records local ministry approval for the age-21 case where Ambassador and Young Adult affiliations are held concurrently. It records the approving User, local authority/scope, decision, and approval time, and is referenced by the applicable affiliation records.
 
-Master Guide is a credential, not a member category.
+A 21-year-old may hold both Ambassador and Young Adult affiliations concurrently with local ministry approval. Do not impose mutual exclusion at age 21. This does not establish a universal approval workflow for every affiliation. Master Guide remains a credential/training pathway, not a category or affiliation.
+
+Category transition/effective-date/history rules and affiliation lifecycle details beyond the approved age-21 case remain open under DDD-002/DDD-005.
 
 ### 4.3 Primary church membership
 
@@ -375,10 +378,14 @@ Sensitive personal information must not be placed on-chain.
 
 ## 10. Audit and Idempotency
 
-Proposed entities:
+Conceptual entities:
 
-- AuditLog
-- IdempotencyRecord
+- `AUDIT_LOG`
+- `IDEMPOTENCY_RECORD`
+- `PRE_AUTH_CONTEXT`
+- `OUTBOX_MESSAGE`
+
+The reset-delivery secret store is an external protected component, not a relational entity.
 
 Audit records should capture, where applicable:
 
@@ -393,11 +400,11 @@ Audit records should capture, where applicable:
 
 Audit history must be append-only through application policy and appropriate database permissions. Existing audit entries must not be edited or deleted through normal application workflows. The retention period and any exceptions remain unresolved (DDD-014: BLOCKED) and must follow an authoritative policy once located or formally approved. Indefinite retention is not an approved policy. Sensitive values, passwords, raw tokens, and authentication secrets must not be recorded.
 
-Idempotency records should protect sensitive operations against unintended
-duplicate execution. Their key scope, retention period, payload-fingerprint
-rules, and response-replay behavior must be specified for each applicable
-API operation. Idempotency checks and the protected mutation must be
-coordinated to prevent duplicate side effects.
+Authentication idempotency is governed by DDD-013 AUTH-IDEM-001–041. An idempotency record has exactly one scope mode: authenticated principal/session or pre-authentication context. The scope and operation plus UUID v4 key form the identity; the request fingerprint is stored separately and compared after lookup. A fingerprint mismatch returns the approved conflict and never starts a second operation. Authentication records include operation state, HMAC key version, lease/fencing metadata, safe result metadata, response retention, tombstone, and recovery information as specified by DDD-013.
+
+`PRE_AUTH_CONTEXT` stores only a hash or secure reference for the 600-second pre-auth cookie and its lifecycle. `OUTBOX_MESSAGE` coordinates password-reset delivery after the database transaction commits. It stores an opaque reference to the separately envelope-encrypted short-lived reset secret, never the secret itself. Queue messages contain the opaque reference only. The secret store is external; worker-only access, expiry no later than the reset-token lifetime, and deletion after delivery/expiry are required. Vendor selection and exact physical constraints remain implementation design.
+
+Non-authentication business-domain idempotency remains unresolved and must not inherit the authentication contract by assumption.
 
 ## 11. Reconciled Domain Inventory
 
@@ -409,14 +416,15 @@ Prisma schema remain an implementation decision. `ROLE_PERMISSION` and
 | Domain                | Entities                 |
 | --------------------- | ----------------------------------------------------------------------------------- |
 | Identity              | `USER`, `MEMBER`                 |
+| Member classification | `MINISTRY_AFFILIATION`, `MEMBER_MINISTRY_AFFILIATION`, `MINISTRY_AFFILIATION_APPROVAL` |
 | Organization          | `DISTRICT`, `CHURCH`, `DEPARTMENT`, `CHURCH_DEPARTMENT`                 |
 | Membership            | `CHURCH_MEMBERSHIP_HISTORY`, `DEPARTMENT_MEMBERSHIP`                 |
 | Authorization         | `ROLE`, `PERMISSION`, `ROLE_PERMISSION`, `ROLE_ASSIGNMENT`, `APPOINTMENT`           |
-| Authentication        | `SESSION`, `REFRESH_TOKEN_USE`, `PASSWORD_RESET_TOKEN`, `SECURITY_EVENT`            |
+| Authentication        | `SESSION`, `REFRESH_TOKEN_USE`, `PASSWORD_RESET_TOKEN`, `SECURITY_EVENT`, `PRE_AUTH_CONTEXT` |
 | Events and attendance | `EVENT`, `EVENT_REGISTRATION`, `ATTENDANCE_RECORD`, `ATTENDANCE_CORRECTION_HISTORY` |
 | Finance               | `FINANCIAL_ACCOUNT`, `FINANCIAL_TRANSACTION`, `FINANCIAL_APPROVAL`                 |
 | Credentials           | `CREDENTIAL_DEFINITION`, `MEMBER_CREDENTIAL`                 |
-| Audit and idempotency | `AUDIT_LOG`, `IDEMPOTENCY_RECORD`                 |
+| Audit and idempotency | `AUDIT_LOG`, `IDEMPOTENCY_RECORD`, `OUTBOX_MESSAGE`                 |
 
 ### 11.1 Entity responsibility catalogue
 
@@ -429,7 +437,10 @@ approved change control.
 | Entity                          | Owning domain and purpose              | Key relationships and cardinality                       | Lifecycle, preservation, or unresolved decision                                                                                  |
 | ------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `USER`                          | Identity; authenticated account and account status.              | Has `0..1` `MEMBER`; owns `0..*` sessions, reset tokens, and actor records.                       | Password hashes only; suspension invalidates sessions. Account lifecycle and retention need product policy.                                           |
-| `MEMBER`                        | Membership; youth membership profile.              | Must have `1` `USER`, `1` current `CHURCH`; has `0..*` histories, departmentmemberships, assignments, appointments, registrations, attendance records, and credentials.                       | Preserve profile-linked history. Category transitions and category-history model are blocked.                                                         |
+| `MEMBER`                        | Membership; youth membership profile with one top-level category. | Must have `1` `USER`, `1` current `CHURCH`; has `0..*` histories, affiliations, department memberships, assignments, appointments, registrations, attendance records, and credentials. | Category code is Adventurer, Pathfinder, or Senior Youth. Category transition/history remains open. |
+| `MINISTRY_AFFILIATION`           | Member classification; catalogue of Senior Youth and campus-context affiliations. | Has `0..*` member-affiliation records. | Includes Ambassador, Young Adult, and Public Campus Ministry; catalogue lifecycle is controlled by approved ministry policy. |
+| `MEMBER_MINISTRY_AFFILIATION`    | Member classification; a member's affiliation independent of top-level category. | Belongs to `1` member and `1` affiliation; may reference `0..1` local approval record. | Supports simultaneous affiliations; no age-21 mutual exclusion. Other transition/history rules remain open. |
+| `MINISTRY_AFFILIATION_APPROVAL`  | Member classification; evidence of local approval for age-21 dual Ambassador/Young Adult affiliation. | Belongs to `1` member and identifies `1` approving User and local authority/scope; may be referenced by both applicable affiliation records. | Records decision and approval time; does not imply universal approval workflow for all affiliations. |
 | `DISTRICT`                      | Organization; Sango District deployment boundary.              | Has `0..*` churches and departments.                       | V1 has no multi-district or conference expansion. District businesskeys and deletion policy are unresolved.                                          |
 | `CHURCH`                        | Organization; district-owned church.              | Belongs to `1` district; has `0..*` members, membership histories, and church-department records.                       | Historical references must be retained. Church lifecycle and business-key policy are unresolved.                                                      |
 | `DEPARTMENT`                    | Organization; district-owned youth department.              | Belongs to `1` district; has `0..*` church-department and department-membership records.                       | Department lifecycle and leadership rules are blocked.                                                                                  |
@@ -441,7 +452,8 @@ approved change control.
 | `ROLE_PERMISSION`               | Authorization; explicit role-to-permission junction.              | Belongs to `1` role and `1` permission; each parent has `0..*` records.                       | Pair uniqueness is required conceptually; change/version policy is unresolved.                                                                        |
 | `ROLE_ASSIGNMENT`               | Authorization; role granted to a member in an explicit scope.          | Belongs to `1` member and `1` role; has `0..*` appointments; scope is district, church, department, or approved resource context.                       | Effective dates/status and scope identity are required. Scope encoding, duplicate/overlap rules, and appointment-independence are blocked.            |
 | `APPOINTMENT`                   | Leadership; time-bounded designation governing one assignment.         | Has `1` subject member and `1` role assignment; each assignment can support `0..*` historical appointments. Creator, approver, and ending actor are distinct actor links as applicable. | Annual Jan 1–Dec 31 term, renewal as a new historical appointment, higher-authority appointment/renewal, and no self-appointment/self-renewal are approved. Mid-year creation, early termination, overlap/conflict policy, and exact actor-field representation remain open. |
-| `SESSION`                       | Authentication; persistent server-side authenticated session.          | Belongs to `1` user; has `0..*` refresh-token uses and security events.                       | Enforce status, inactivity, 30-day absolute expiry, and revocation;retain per approved security policy.                                              |
+| `PRE_AUTH_CONTEXT`               | Authentication; short-lived browser context for pre-authentication idempotency. | Has `1` User-independent opaque identity and `0..*` pre-auth idempotency records. | Stores only cookie hash/secure reference, creation, 600-second expiry, and invalidation/rotation state; never raw cookie material. |
+| `SESSION`                       | Authentication; persistent server-side authenticated session.          | Belongs to `1` user; has `0..*` refresh-token uses and security events.                       | Enforce status, inactivity, 30-day absolute expiry, and revocation; approved retention is 12 months after expiry/revocation, subject to legal holds/investigations.                                              |
 | `REFRESH_TOKEN_USE`             | Authentication; hash-only history of each rotating refresh credential. | Belongs to `1` session; may reference `0..1` replacement token and one predecessor.                       | Issued, consumed, expired, and reuse-detection history are preserved. Approved retention is 12 months after expiry/consumption/revocation; exact physical linkage fields remain for schema design. |
 | `PASSWORD_RESET_TOKEN`          | Authentication; single-use reset credential record.              | Belongs to `1` user.                       | Hash-only, 30-minute expiry, consumed/invalidated state; approved retention is 90 days after expiry/consumption/revocation, subject to legal holds/investigations. |
 | `SECURITY_EVENT`                | Authentication/security; recordable security outcome.              | May reference `0..1` user and `0..1` session; can exist with neither.                       | Preserve without secrets. Approved retention is 24 months after occurrence, subject to legal holds/investigations. System-actor representation remains open. |
@@ -454,8 +466,9 @@ approved change control.
 | `FINANCIAL_APPROVAL`            | Finance; actor decision about a transaction.              | Belongs to `1` transaction and `1` approving user.                       | Preserves actor and decision. Approval stages, thresholds, and posting relation are blocked.                                                          |
 | `CREDENTIAL_DEFINITION`         | Credentials; catalogue definition.              | Has `0..*` member-credential issuances.                       | Catalogue ownership, uniqueness, eligibility, lifecycle, and issuerrules are blocked.                                                                |
 | `MEMBER_CREDENTIAL`             | Credentials; individual credential issuance.              | Belongs to `1` definition and `1` member; issued/revoked by an authorized actor; may link to `0..1` prior issuance.                       | Every issuance is retained. Revocation and reissuance preserve history. Disclosure, retention, and replacement eligibility are blocked.               |
+| `OUTBOX_MESSAGE`                 | Delivery; durable post-commit password-reset delivery instruction. | References `1` password-reset token, `1` idempotency operation, and an opaque external secret-store reference. | Queue/outbox carry opaque reference only; worker-only access; secret expires by reset-token lifetime and is erased after delivery/expiry. |
 | `AUDIT_LOG`                     | Audit; append-only business or security action history.              | May reference `0..1` human user or formal system actor; targets use resourcetype plus identifier rather than a foreign key to every entity.                       | No normal update/delete. Access, system actor, metadata, and retention exceptions are blocked.                                                        |
-| `IDEMPOTENCY_RECORD`            | API reliability; coordinates one protected mutation and retry result.  | Authentication scope is authenticated principal/session or pre-auth context plus operation identity; business mutation/audit linkage is logical and endpoint-specific. | Authentication policy AUTH-IDEM-001–041 is approved; response retention, tombstones, state, fingerprint, and replay rules are specified in DDD-013. Physical scope, indexes, recovery/outbox relationships remain to be modeled. Other business-domain idempotency remains unresolved. |
+| `IDEMPOTENCY_RECORD`            | API reliability; coordinates one protected mutation and retry result. | Exactly one authenticated principal/session scope or pre-authentication context plus operation and UUID v4 key. | Authentication policy AUTH-IDEM-001–041 is approved; fingerprint is compared separately from identity; state, HMAC key version, lease/fencing, safe result, 24-hour response retention, 30-day tombstone, and recovery metadata follow DDD-013. Physical predicates/constraints remain to be verified. Business-domain idempotency remains unresolved. |
 
 This inventory is provisional. Entity boundaries, names, fields, and
 relationships must be reviewed before Prisma models are written.
