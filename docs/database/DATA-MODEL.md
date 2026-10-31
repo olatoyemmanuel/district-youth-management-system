@@ -398,7 +398,7 @@ Audit records should capture, where applicable:
 - Request or correlation identifier
 - Reason and relevant change metadata
 
-Audit history must be append-only through application policy and appropriate database permissions. Existing audit entries must not be edited or deleted through normal application workflows. The retention period and any exceptions remain unresolved (DDD-014: BLOCKED) and must follow an authoritative policy once located or formally approved. Indefinite retention is not an approved policy. Sensitive values, passwords, raw tokens, and authentication secrets must not be recorded.
+Audit history must be append-only through application policy and appropriate database permissions. Existing audit entries must not be edited or deleted through normal application workflows. Audit-log retention and non-authentication business-record retention remain unresolved under DDD-014. The approved 24-month SECURITY_EVENT retention is an authentication/security-event rule and does not establish AUDIT_LOG retention. Indefinite retention is not an approved policy. Sensitive values, passwords, raw tokens, and authentication secrets must not be recorded.
 
 Authentication idempotency is governed by DDD-013 AUTH-IDEM-001–041. An idempotency record has exactly one scope mode: authenticated principal/session or pre-authentication context. The scope and operation plus UUID v4 key form the identity; the request fingerprint is stored separately and compared after lookup. A fingerprint mismatch returns the approved conflict and never starts a second operation. Authentication records include operation state, HMAC key version, lease/fencing metadata, safe result metadata, response retention, tombstone, and recovery information as specified by DDD-013.
 
