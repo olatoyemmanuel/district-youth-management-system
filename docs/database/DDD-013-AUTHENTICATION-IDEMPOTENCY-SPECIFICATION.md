@@ -252,7 +252,7 @@ These are validation and physical-design tasks. They do not reopen the approved 
 - Authentication retention decisions apply only to authentication records; broader domain retention remains governed by DDD-014.
 - Security-event access remains subject to the approved audit-access policy and its unresolved detailed authorization scope.
 - External side-effect delivery and recovery beyond the authentication database boundary remain subject to DDD-015.
-- This specification does not resolve the User–Member cardinality blocker (MEM-02) and must not introduce a dependency on Member records for authentication session ownership.
+- MEM-02 now approves one-to-one User–Member cardinality. Authentication session ownership remains directly associated with User and must not depend on Member records.
 
 ## 14. Approval gate
 
