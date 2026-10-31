@@ -125,3 +125,21 @@ The review is documentation and design analysis only. It does not approve a phys
 Do not formally approve the ERD yet. First resolve ERD-R02 through ERD-R05 and update the final review/checklists and all decision-status rows. Then perform a fresh cross-document consistency pass and present the corrected ERD for explicit approval.
 
 No Prisma models, migrations, or database schema changes are authorized by this review.
+
+## 6. Structural remediation verification — 2026-10-31
+
+The conceptual corrections for ERD-R02, ERD-R03, and ERD-R04 have been applied to ERD.md and DATA-MODEL.md:
+
+- ERD-R02: added MINISTRY_AFFILIATION, MEMBER_MINISTRY_AFFILIATION, and MINISTRY_AFFILIATION_APPROVAL; separated the top-level member category from affiliation and credential; represented local approval for age-21 dual Ambassador/Young Adult affiliation.
+- ERD-R03: added PRE_AUTH_CONTEXT and the mutually exclusive authenticated/pre-authentication idempotency scope modes. The pre-auth context is independent of a User.
+- ERD-R04: added OUTBOX_MESSAGE, linked it to the password-reset token and idempotency operation, and specified an external envelope-encrypted short-lived secret store referenced only by opaque identifier.
+
+The entity inventory is 33 conceptual entities. The secret store is an external component, not a database entity. DDD-013 remains NOT READY for physical schema authorization until exact scope indexes, constraints, lifecycle links, worker access, secret-store integration, and endpoint-level recovery/replay tests are verified.
+
+## 7. Updated policy reconciliation
+
+DDD-012 is partially resolved based on the user's approvals recorded in PRs #4, #5, #6, #8, and #9: role-based access and access logging; Audit Viewer and Audit Administrator responsibilities; sole appointment/revocation authority vested in one System Administrator; and controlled bootstrap provisioning. Remaining actor taxonomy, record scopes, masking, exports, access reviews, break-glass, and audit-of-audit retention remain open.
+
+DDD-002 is partially resolved: category/affiliation concepts and age-21 local approval are now represented; category transition/history policy remains open. DDD-001, DDD-003, DDD-004, DDD-013, and the authentication subset of DDD-014 retain their recorded approved/partially resolved boundaries. DDD-005 through DDD-011 and DDD-015 remain blocked as listed in the decision register. DDD-014 remains blocked for non-authentication records.
+
+**Disposition:** ERD-R02 through ERD-R04 have conceptual corrections applied. The ERD remains NOT READY for formal approval pending the physical DDD-013 validation and remaining policy blockers. No Prisma schema, migration, or database implementation is authorized.
