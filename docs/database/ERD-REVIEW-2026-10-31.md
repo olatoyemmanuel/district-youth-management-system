@@ -108,7 +108,7 @@ The review is documentation and design analysis only. It does not approve a phys
 
 ## 4. Remaining product-policy blockers
 
-- DDD-005: role catalogue, permission precedence, scope and conflicting-position rules.
+- DDD-005: detailed role-to-permission grants, permission-to-resource scope mapping, explicit-deny representation, and specific prohibited/review-required role combinations. The initial role categories, scopes, permission groups, and combination precedence were approved on 2026-10-31.
 - DDD-006: department membership lifecycle and eligibility.
 - DDD-007: event ownership and registration lifecycle.
 - DDD-008: duplicate attendance scans, correction concurrency and retention.
@@ -140,6 +140,13 @@ The entity inventory is 33 conceptual entities. The secret store is an external 
 
 DDD-012 is partially resolved based on the user's approvals recorded in PRs #4, #5, #6, #8, and #9: role-based access and access logging; Audit Viewer and Audit Administrator responsibilities; sole appointment/revocation authority vested in one System Administrator; and controlled bootstrap provisioning. Remaining actor taxonomy, record scopes, masking, exports, access reviews, break-glass, and audit-of-audit retention remain open.
 
-DDD-002 is partially resolved: category/affiliation concepts and age-21 local approval are now represented; category transition/history policy remains open. DDD-001, DDD-003, DDD-004, DDD-013, and the authentication subset of DDD-014 retain their recorded approved/partially resolved boundaries. DDD-005 through DDD-011 and DDD-015 remain blocked as listed in the decision register. DDD-014 remains blocked for non-authentication records.
+DDD-002 is partially resolved: category/affiliation concepts and age-21 local approval are now represented; category transition/history policy remains open. DDD-001, DDD-003, DDD-004, DDD-013, and the authentication subset of DDD-014 retain their recorded approved/partially resolved boundaries. DDD-005 is partially resolved by the 2026-10-31 approval of the initial roles, scopes, permission groups, additive grants, explicit-deny precedence, and strict scope enforcement; its detailed grant/deny/conflict matrix remains open. DDD-006 through DDD-011 and DDD-015 remain blocked or partially resolved as listed in the decision register. DDD-014 remains blocked for non-authentication records.
 
 **Disposition:** ERD-R02 through ERD-R04 have conceptual corrections applied. The ERD remains NOT READY for formal approval pending the physical DDD-013 validation and remaining policy blockers. No Prisma schema, migration, or database implementation is authorized.
+
+
+### 7.1 DDD-005 approval update — 2026-10-31
+
+The project owner approved all four DDD-005 proposal groups without modification. The approved initial roles, scopes, permission groups, additive permission combination, explicit-deny precedence, strict resource-scope enforcement, and no title-seniority override are recorded in [DDD-005 Authorization Scope and Permission Precedence](../decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md).
+
+The decision does not close the detailed role-to-permission grant matrix, permission-to-resource matrix, exact explicit-deny representation, prohibited/review-required role-combination matrix, or DDD-004 mid-year/early-ending appointment lifecycle. ERD status remains NOT READY. No Prisma schema or migration is authorized.
