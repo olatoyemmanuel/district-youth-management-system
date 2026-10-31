@@ -236,34 +236,44 @@ historical record remains available. Account or membership suspension also
 removes effective access under the approved authorization rules without
 deleting history.
 
-The available sources do not define a role catalogue, permission-precedence
-algorithm, conflicting-position matrix, or whether a role assignment may be
-appointment-independent for each role. The final authorization policy must
-therefore specify how permissions combine when multiple assignments or
-appointments exist, how a deny or conflict is resolved, and which scopes or
-terms may overlap. Until then, implementation must not infer a precedence
-algorithm or impose a universal one-active-appointment uniqueness rule.
+The initial role categories, assignment scopes, action-specific permission
+groups, and permission-combination policy were approved under DDD-005 on
+2026-10-31. The initial catalogue and scope matrix are recorded in
+`docs/decisions/DDD-005-AUTHORIZATION-SCOPE-AND-PERMISSION-PRECEDENCE.md`.
 
-At minimum, the schema review must specify a stable scope identity and an
-effective-period conflict check for duplicate or contradictory active
-assignment and appointment records. Exact composite unique keys and overlap
-rules are blocked on the unresolved policy above. Creation, approval, renewal,
-ending, and audit recording are a single transaction-safe lifecycle workflow;
-the acting User must be checked against the subject Member to prevent
-self-appointment, self-renewal, and prohibited self-approval.
+Permissions from valid assignments combine additively, but remain limited to
+the assignment scope and the resource scope expressly allowed by each
+permission. An explicit deny overrides an allow. No role title automatically
+outranks another role title, and no permission is inherited automatically
+between roles or scopes. The server must validate the actor's trusted
+assignments, permission, and target resource scope on every protected
+operation.
+
+The approval does not define the exhaustive role-to-permission grant matrix,
+the exact representation of explicit denies, or every prohibited or
+review-required combination of specific roles. The schema review must retain
+a stable scope identity and define effective-period checks for duplicate or
+contradictory active assignments and appointments without inventing a
+universal one-active-appointment rule. Creation, approval, renewal, ending,
+and audit recording remain transaction-safe lifecycle workflows; the acting
+User must be checked against the subject Member to prevent self-appointment,
+self-renewal, and prohibited self-approval. Mid-year creation and early-ending
+rules remain open under DDD-004.
 
 ### 4.2.3 Permission and role-assignment rules
 
-- A role may be associated with multiple permissions, and a permission may be associated with multiple roles.
-- A role assignment must identify the role and organizational scope to which it applies.
-- Effective access must be derived from trusted server-side records and the approved authorization rules.
-- A permission associated with a role must not grant access beyond the role assignment's approved organizational scope.
+- A role may be associated with multiple permissions, and a permission may be associated with multiple roles through `ROLE_PERMISSION`.
+- Every role assignment must identify the role and its approved district, church, department, system-wide, or specifically authorised audit scope.
+- Effective access is derived from trusted server-side identity, account and membership state, role assignments, permissions, required appointment validity, resource ownership, and applicable business rules.
+- Permissions from valid assignments combine additively, subject to explicit deny-overrides-allow and strict scope enforcement.
+- A permission never grants access beyond the assignment scope and the resource scope expressly allowed by that permission. There is no automatic permission inheritance between roles or scopes.
 - Where a permission requires an appointment, the appointment must be valid and linked to the applicable role assignment.
-- Appointment-independent role assignments may exist only under their applicable authorization rules.
+- The approved initial appointment-independent administrative roles are System Administrator, Audit Administrator, and Audit Viewer, subject to the distinct DDD-012 provisioning and appointment controls.
+- No role title automatically outranks another role title.
 - Technical administrator privileges must not automatically grant financial approval or credential-issuance authority.
-- The implementation must define how permission changes affect existing role assignments and how such changes are audited.
+- Permission changes must be audited. Their effect on existing assignments and historical authorization decisions must be explicitly versioned or otherwise traceable during technical design.
 
-The precise permission catalogue, scope rules, and treatment of permission changes remain subject to verification against the authoritative product requirements.
+The initial action groups and examples are recorded in the DDD-005 approval record. The exhaustive permission identifiers, role-to-permission grant matrix, permission-to-resource mapping, and exact representation of explicit denies remain to be completed before implementation.
 
 ### 4.3 Role assignment and appointment lifecycle
 
@@ -296,11 +306,14 @@ Authorization decisions must consider, as applicable:
 
 - The authenticated User and associated Member.
 - Active membership and account-status requirements.
-- The role and permissions granted by a valid role assignment.
+- All valid role assignments held by the actor and the action-specific permissions granted through them.
+- Additive permission combination across valid assignments, subject to explicit deny-overrides-allow.
 - The existence and validity of any required appointment.
 - Appointment effective dates and lifecycle state.
-- Organizational scope, resource ownership, and applicable business rules.
-- Separation-of-duties restrictions and the authority of the acting User.
+- The assignment's approved district, church, department, system-wide, or specifically authorised audit scope.
+- The requested resource's actual scope and ownership; client-supplied identifiers are not authority.
+- Applicable business rules and separation-of-duties restrictions.
+- No automatic permission inheritance or title-based seniority override.
 
 Appointment-dependent permissions must cease to be effective when the appointment expires or ends, even if historical role-assignment and appointment records remain stored.
 
