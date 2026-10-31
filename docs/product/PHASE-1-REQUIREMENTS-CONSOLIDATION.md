@@ -304,26 +304,28 @@ The following frozen security requirements remain applicable:
 
 ## 10. Requirements traceability matrix
 
-| Requirement group | Consolidated requirement IDs | Source decisions |
-|---|---|---|
-| Identity and account | ID-001 to ID-008 | DDD-001, DDD-002, project-owner individual-account approval |
-| Member categories | MEM-001 to MEM-008 | DDD-002 |
-| Church transfers | ORG-001 to ORG-009 | DDD-003 |
-| Appointments | APP-001 to APP-010 | DDD-004 |
-| Authorization and roles | AUTHZ-001 to AUTHZ-014 | DDD-005 and approved explicit-deny/role-conflict follow-up |
-| Department membership | DEPT-001 to DEPT-009 | DDD-006 |
-| Events and registration | EVT-001 to EVT-010 | DDD-007 |
-| Attendance | ATT-001 to ATT-012 | DDD-008 |
-| Accounts and currency | FIN-001 to FIN-012 | DDD-009 |
-| Transactions and budgets | FIN-013 to FIN-026 | DDD-010 |
-| Credentials | CRED-001 to CRED-009 | DDD-011 |
-| Audit and accountability | AUD-001 to AUD-010 | DDD-012 |
-| Idempotency | INTG-001 to INTG-008 | DDD-013 |
-| Retention and disposal | RET-001 to RET-009 | DDD-014 |
-| Notifications and integrations | NOTIF-001 to NOTIF-010 | DDD-015 |
-| Cross-cutting security/data integrity | SEC-001 to SEC-020 | DFR-001 to DFR-006; DDD-005; DDD-012 to DDD-015 |
+The following ranges are checked against the current detailed testable requirements document. The group IDs below are the IDs currently enumerated there, not planned or reserved identifiers.
 
-The requirement group IDs above are traceability anchors. The next requirements pass must expand them into individually testable statements with acceptance criteria, priority, dependencies, and exact decision references before the requirements baseline is marked complete.
+| Requirement group | Current requirement IDs | Source decisions |
+|---|---|---|
+| Identity and account | ID-001 to ID-004 | DDD-001, DDD-002, project-owner individual-account approval |
+| Member categories | MEM-001 to MEM-006 | DDD-002 |
+| Church transfers | ORG-001 to ORG-007 | DDD-003 |
+| Appointments | APP-001 to APP-007 | DDD-004 |
+| Authorization and roles | AUTHZ-001 to AUTHZ-011 | DDD-005 and approved explicit-deny/role-conflict follow-up |
+| Department membership | DEPT-001 to DEPT-006 | DDD-006 |
+| Events and registration | EVT-001 to EVT-007 | DDD-007 |
+| Attendance | ATT-001 to ATT-007 | DDD-008 |
+| Accounts and currency | FIN-001 to FIN-005 | DDD-009 |
+| Transactions and finance workflow | FIN-006 to FIN-012 | DDD-010 |
+| Credentials | CRED-001 to CRED-004 | DDD-011 |
+| Audit and accountability | AUD-001 to AUD-004 | DDD-012 |
+| Idempotency and sensitive mutation controls | SEC-005 to SEC-006 | DDD-013 |
+| Retention and disposal | RET-001 to RET-004 | DDD-014 |
+| Notifications, webhooks and payment integration | NOTIF-001 to NOTIF-006 | DDD-015 |
+| Cross-cutting security/data integrity | SEC-001 to SEC-012 | DFR-001 to DFR-006; DDD-005; DDD-012 to DDD-015 |
+
+The current detailed file enumerates 97 testable requirement IDs. This table is maintained against the actual IDs in `PHASE-1-TESTABLE-REQUIREMENTS.md`. It does not imply that every policy question is closed. DDD-013 and DDD-015 details are mapped to SEC and NOTIF requirement groups respectively; additional independent IDs should be added only if the acceptance criteria are expanded.
 
 ## 11. Open decisions, evidence gaps, and repository reconciliation
 
