@@ -7,7 +7,7 @@
 > - A 21-year-old may hold both Ambassador and Young Adult affiliations, subject to local ministry approval. Do not force exclusivity at age 21.
 > - Each Member has one current primary church; transfers close the previous membership and open the new one atomically while preserving history (DDD-003).
 > - Leadership terms are January 1–December 31; renewals create new historical appointments, require higher-authority action, and prohibit self-renewal (DDD-004).
-> - DDD-013 authentication idempotency is specified in the consolidated specification and remains subject to the consistency-review gaps and ERD-slice validation.
+> - DDD-013 AUTH-IDEM-001–041 and CR-01 through CR-06 are approved. The authentication ERD slice remains subject to physical modeling and verification.
 
 ## 1. Document Status
 
@@ -127,7 +127,7 @@ erDiagram
 
 - The v1.0 member categories are `ADVENTURER`, `PATHFINDER`, and `SENIOR_YOUTH`.
 - Master Guide is a credential, not a member category.
-- Every Master Guide is a Senior Youth, but not every Senior Youth is a Master Guide.
+- Master Guide is modeled as a credential/training pathway, not as a member category. The approved classification decision does not establish a universal rule that every Master Guide must have a particular current member category.
 - Category transitions and their historical treatment must be resolved against the approved requirements before schema implementation.
 
 ### 3.5 Implementation review requirements
@@ -911,7 +911,7 @@ Before implementation, each applicable API operation must define:
 
 The uniqueness rule must prevent two concurrent requests within the same approved scope from independently executing the same protected operation.
 
-The exact database key, fingerprint algorithm, response-storage format, and retention period remain implementation decisions until the applicable API contracts are approved.
+For authentication mutations, these policies are approved in DDD-013 AUTH-IDEM-001–041. For other business domains, operation-specific idempotency policy remains unresolved. Physical field/index design and integration boundaries remain subject to the DDD-013 ERD-slice review.
 
 ### 9.5 Idempotency lifecycle and retry behavior
 
@@ -928,7 +928,7 @@ The following rules apply:
 - If the business mutation commits but response delivery fails, a retry must not repeat the mutation.
 - Expiration or cleanup of idempotency records must not undermine the approved retry and duplicate-prevention guarantees.
 
-The specific status values, failure recovery rules, retry window, and response-replay behavior must be defined per applicable operation before implementation. They must not be inferred solely from the presence of an idempotency record.
+For authentication mutations, operation states, retention, recovery, and endpoint-specific replay behavior are defined in DDD-013. Other business-domain idempotency behavior remains unresolved and must not inherit the authentication policy by assumption.
 
 ### 9.6 Transactional and cross-domain consistency
 
