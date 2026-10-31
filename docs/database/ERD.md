@@ -249,9 +249,11 @@ between roles or scopes. The server must validate the actor's trusted
 assignments, permission, and target resource scope on every protected
 operation.
 
-The approval does not define the exhaustive role-to-permission grant matrix,
-the exact representation of explicit denies, or every prohibited or
-review-required combination of specific roles. The schema review must retain
+The approved four-leadership-role grant matrix is recorded in
+`docs/decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md`; its HOLD entries
+remain ungranted pending the related domain decisions. The exact
+representation of explicit denies and every prohibited or review-required
+combination of specific roles remain unresolved. The schema review must retain
 a stable scope identity and define effective-period checks for duplicate or
 contradictory active assignments and appointments without inventing a
 universal one-active-appointment rule. Creation, approval, renewal, ending,
@@ -273,7 +275,7 @@ rules remain open under DDD-004.
 - Technical administrator privileges must not automatically grant financial approval or credential-issuance authority.
 - Permission changes must be audited. Their effect on existing assignments and historical authorization decisions must be explicitly versioned or otherwise traceable during technical design.
 
-The initial action groups and examples are recorded in the DDD-005 approval record. The exhaustive permission identifiers, role-to-permission grant matrix, permission-to-resource mapping, and exact representation of explicit denies remain to be completed before implementation.
+The initial action groups and examples are recorded in the DDD-005 approval record. The approved role-to-permission matrix for the four leadership roles is recorded in `docs/decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md`. Stable permission identifiers, complete permission-to-resource mapping, exact representation of explicit denies, and prohibited/review-required role combinations remain to be completed before implementation.
 
 ### 4.3 Role assignment and appointment lifecycle
 
