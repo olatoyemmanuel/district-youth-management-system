@@ -132,3 +132,42 @@ The review identified that the ERD does not yet explicitly represent the approve
 The Requirements Traceability Matrix was also restored from an incorrect source during the initial restoration. It has since been replaced with the correct October 30 traceability source and updated with the current decision overlay. Review the final branch diff to verify this correction.
 
 **Current disposition remains NOT READY.** Do not approve the ERD or create Prisma models/migrations until the structural gaps and remaining blockers in ERD-REVIEW-2026-10-31.md are resolved.
+
+## 11. Structural remediation and policy reconciliation — 2026-10-31
+
+This section supersedes contradictory historical statements in §§4–10. Earlier tables are retained as review history, not current status.
+
+### 11.1 Three critical structural gaps
+
+| Finding | Current conceptual correction | Remaining validation |
+|---|---|---|
+| ERD-R02: ministry category/affiliation model absent | Added MINISTRY_AFFILIATION, MEMBER_MINISTRY_AFFILIATION, and MINISTRY_AFFILIATION_APPROVAL. MEMBER retains one top-level category. Ambassador/Young Adult are affiliations; age-21 dual affiliation references local approval. Public Campus Ministry is an additional affiliation; Master Guide remains a credential/training pathway. | Confirm approval authority/scope semantics and category/affiliation history rules. No new age boundary or one-active-category rule is inferred. |
+| ERD-R03: pre-authentication idempotency scope absent | Added PRE_AUTH_CONTEXT, linked to pre-authentication idempotency records and not owned by a User. Authenticated and pre-authentication scope modes are explicitly mutually exclusive. | Verify physical partial unique-index predicates, foreign keys, cookie-context lifecycle, and operation-scope constraints. |
+| ERD-R04: reset delivery outbox and secret boundary absent | Added OUTBOX_MESSAGE and its relationship to the password-reset token and idempotency operation. The reset secret remains in an external envelope-encrypted, short-lived secret store; outbox and queue carry opaque references only. | Select and review the secret-store integration, worker permissions, expiry/erasure behavior, and transactional failure/recovery tests. No vendor is selected. |
+
+The conceptual inventory is now 33 entities: the original 28 plus three ministry-affiliation entities, PRE_AUTH_CONTEXT, and OUTBOX_MESSAGE. The external secret store is a component boundary, not a relational entity.
+
+### 11.2 Current policy decision status
+
+- DDD-001: RESOLVED for PRB-001 v0.1 as the reconstructed working baseline. The historical original PRD remains unrecovered.
+- MEM-02: one-to-one User–Member cardinality approved; mandatory participation enforcement remains a technical design item.
+- DDD-002: category/affiliation classification and age-21 dual affiliation with local approval approved and represented. Category transitions/effective dates/history remain open.
+- DDD-003: one current primary church and atomic history-preserving transfer approved. Current-reference/history invariant and concurrency mechanism remain technical design items.
+- DDD-004: annual Jan 1–Dec 31 terms, renewal as a new historical appointment, higher-authority appointment/renewal, and no self-appointment/self-renewal approved. Mid-year/early-ending and conflicting-role precedence remain open.
+- DDD-012: partially resolved. Role-based sensitive-record access and access logging are approved. Audit Viewer and Audit Administrator responsibilities are approved. Only the single System Administrator appoints/revokes Audit Administrators; no second-person approval is required. Detailed record scopes, masking, exports, access reviews, break-glass, system/anonymous actor taxonomy, and audit-of-audit retention remain open. The decision records are in PRs #4, #5, #6, #8, and #9.
+- DDD-013: AUTH-IDEM-001–041 and CR-01–CR-06 approved. Policy consistency passes. Conceptual scope, pre-auth context, outbox, and protected reset-secret boundary are now represented. Physical constraints and endpoint verification remain.
+- DDD-014: authentication retention approved: sessions 12 months, refresh-token history 12 months, password-reset records 90 days, security events 24 months, subject to legal holds/active investigations. Audit-log and other business-domain retention remain blocked.
+- DDD-005–DDD-011 and DDD-015 remain blocked to the extent specified in the decision register.
+
+### 11.3 Cross-document integrity checks
+
+The following companion records were updated in the same specification branch:
+- ERD.md: inventory, category/affiliation model, pre-auth scope, outbox, secret-store boundary, DDD-013 persistence contract.
+- DATA-MODEL.md: matching inventory and entity catalogue, approved authentication retention, category/affiliation and reset-delivery structures.
+- DATABASE-DESIGN-DECISION-REGISTER.md: DDD-002 and DDD-013 current status, plus partially resolved DDD-012 approvals.
+- REQUIREMENTS-TRACEABILITY.md: RT-006 and blockers B-002/B-008 updated.
+- INVARIANT-ENFORCEMENT-REGISTER.md: audit-access invariant AD-07 and record-class-specific AD-06 status.
+
+A fresh final verification is still required for every relationship/cardinality, all catalogue rows, relative links, and invariant/traceability IDs. The historical PRs documenting DDD-012 approvals are open and unmerged; their approval statements are recorded here for reconciliation but must be checked against the canonical decision history before merge.
+
+**Current disposition: NOT READY FOR FORMAL ERD APPROVAL.** The three critical conceptual gaps have been addressed. Remaining policy blockers and physical validation items are not resolved by these structural corrections. No Prisma models, migrations, or schema changes are authorized.
