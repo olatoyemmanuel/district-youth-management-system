@@ -195,13 +195,12 @@ authority after expiry or ending.
 The four leadership-role grants in the approved role-to-permission matrix
 are recorded in
 `docs/decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md`. HOLD entries
-remain ungranted pending their domain decisions. Stable permission
-identifiers, complete permission-to-resource mapping, technical
-representation and administration of explicit denies, prohibited/review-
-required combinations of specific roles, and appointment overlap/duplicate
-constraints remain unresolved. The system must not infer those grants or
-combinations. Mid-year appointment creation and early-ending rules remain
-open under DDD-004.
+remain ungranted pending their domain decisions. Stable permission identifiers, complete permission-to-resource mapping,
+physical deny representation/enforcement, and duplicate/overlap constraints
+beyond the approved role-pair classifications remain unresolved. The approved
+role-pair classifications and independent-review gate must be enforced. HOLD
+entries remain ungranted. Mid-year appointment creation, early-ending, and
+replacement rules remain open under DDD-004.
 
 The server must derive effective access from trusted records. A client-
 supplied identifier must never, by itself, grant access to another
@@ -592,7 +591,7 @@ Each Member has one current primary church membership. A transfer closes the pre
 
 ### 16.4 Leadership appointments
 
-Leadership appointment terms run from January 1 through December 31. Renewal creates a new historical appointment record rather than overwriting the prior appointment. The designated higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the User or deleting the Member. Role catalogue, permission precedence, and conflicting-position policy remain open under DDD-005.
+Leadership appointment terms run from January 1 through December 31. Renewal creates a new historical appointment record rather than overwriting the prior appointment. The designated higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the User or deleting the Member. The approved DDD-005 role catalogue, permission precedence, and role-pair classifications govern authorization. Stable permission/resource mapping and technical enforcement remain open.
 
 ### 16.5 Authentication idempotency and retention
 
