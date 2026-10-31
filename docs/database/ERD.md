@@ -904,7 +904,7 @@ The final representation of system actors, target identifiers, organizational sc
 - A failed business operation must not leave an audit record that falsely represents the operation as successfully completed.
 - Security events that occur outside a business transaction, such as rejected authentication attempts, must still be recorded according to the approved security-event policy.
 - Audit history must remain append-only under the approved controls. Its retention period and any exceptions remain unresolved (DDD-014: BLOCKED) and must follow an authoritative policy once located or formally approved; indefinite retention is not an approved policy.
-- Audit access must be authorized and appropriately restricted.
+- Audit access must be authorized and appropriately restricted. The approved access levels are Audit Viewer (authorised read-only access) and Audit Administrator (manage audit-access permissions and review access activity, without altering historical audit records). Only the single System Administrator appoints or revokes Audit Administrators. Sensitive audit-record access is logged, including denied attempts where technically feasible. Exact record scopes, masking, export, review cadence, and break-glass rules remain open under DDD-012.
 
 Passwords, raw access or refresh tokens, raw password-reset tokens, session secrets, credentials, and other sensitive authentication values must never be written to audit records. Change metadata must be reviewed to prevent sensitive information from being exposed through before-and-after values.
 
@@ -1048,6 +1048,7 @@ This section updates the policy status of the conceptual design. It does not app
 4. **Appointments:** terms run January 1–December 31. Renewal creates a new historical appointment. Higher authority controls appointment and renewal. Self-appointment and self-renewal are prohibited. Expiry ends appointment-derived authority without deactivating the account (DDD-004).
 5. **Authentication idempotency:** use the consolidated DDD-013 specification for AUTH-IDEM-001–041. Its policy consistency review reports PASS, including approved CR-01 through CR-06. This ERD now represents the mutually exclusive authenticated/pre-authentication scope modes, `PRE_AUTH_CONTEXT`, `OUTBOX_MESSAGE`, and the external protected reset-secret-store boundary. Physical index predicates, field-level constraints, secret-store integration, tombstone/recovery representation, transaction boundaries, and endpoint tests remain validation deliverables.
 6. **Authentication retention:** apply the approved authentication retention periods recorded in the database decision register and DDD-014 resolution. Other business-domain retention remains unresolved.
+7. **Audit access:** apply the partially approved DDD-012 policy: role-based access; Audit Viewer read-only; Audit Administrator permission-management/access-review but no historical-record alteration; only the single System Administrator appoints/revokes Audit Administrators; sensitive access is logged. Detailed scopes and operational controls remain open.
 
 ### 11.1 Current design gate
 
