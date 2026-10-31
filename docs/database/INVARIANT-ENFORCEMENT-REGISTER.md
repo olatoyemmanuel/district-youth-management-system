@@ -50,7 +50,7 @@ appears here.
 
 | IM-04 | Membership: transfer preserves prior history and opens new history. | Effective-date and status integrity for `CHURCH_MEMBERSHIP_HISTORY`; exact partial uniqueness/check rule is pending. | Update current church, close prior record, open new record, and audit together.| Validate dates and authorized scope. | Crash or retry between close/open steps. | Rollbackand retry leave one coherent before/after history. | ERD §3.2; DFR-003. | Proposed |
 
-| IM-05 | Membership: concurrent transfers cannot create contradictory current memberships. | Row lock, serializable operation, exclusion/partial-unique constraint, or other reviewed mechanism. | Entire transfer workflow. | Surface a defined conflict/retry result. | Simultaneous transfer requests. | Parallel transfers never create two current histories. | ERD §3.2; DFR-003; DDD-003. | Blocked |
+| IM-05 | Membership: concurrent transfers cannot create contradictory current memberships. | Row lock, serializable operation, exclusion/partial-unique constraint, or other reviewed mechanism. | Entire transfer workflow. | Surface a defined conflict/retry result. | Simultaneous transfer requests. | Parallel transfers never create two current histories. | ERD §3.2; DFR-003; DDD-003. | Proposed |
 
 | DP-01 | Departments: church participation and member participation are separate concepts. | Separate `CHURCH_DEPARTMENT` and `DEPARTMENT_MEMBERSHIP` foreign-key junctions. | Each relationship lifecycle is independent. | Do not infer one from the other. | Accidental coupling in bulk updates. | Member can participate where primary church does not; changes remain independent. | ERD §3.3; DATA-MODEL §4.4. | Verified |
 
@@ -115,9 +115,9 @@ appears here.
 | AD-03 | Audit: secrets never enter audit records. | Restricted metadata schema/redaction; no raw credential/token fields. | Apply redaction before audit write. | Code review and safe logging/audit helpers. | Exception payload or before/after value leaks secret. | Secret-injection/redaction tests and log audit. | DFR-001; Security §11; ERD §9.3. | Verified |
 | AD-06 | Audit: retention period and exceptions follow an authoritative approved policy; indefinite retention is not assumed. | Retention/deletion controls must remain unspecified until the policy is located or formally approved; preserve append-only controls subject to that policy. | Any retention or disposition workflow must follow the approved policy and be auditable. | Do not configure indefinite retention or deletion exceptions by assumption. | Unapproved indefinite retention, premature deletion, or conflicting retention rules. | Verify policy reference and approved retention behavior before implementation; confirm DDD-014 is resolved. | DDD-014; ERD §9.3; Decision Register DDD-014. | Blocked |
 
-| AD-04 | Idempotency: protected mutation and idempotency state remain coordinated. | Scopedkey uniqueness, request fingerprint, state/result storage design. | Idempotency acquisition,mutation, and required audit/event state in one recoverable transaction. | Return defined in-progress/completed/failure/replay outcome. | Same key concurrently or response lost after commit. | Same-key retry never duplicates committed financial or other protected effect. | DFR-002; ERD §§9.4–9.6; DDD-013. | Blocked |
+| AD-04 | Non-authentication idempotency: protected business mutation and idempotency state remain coordinated. | Scoped key uniqueness, request fingerprint, state/result storage design. | Idempotency acquisition, mutation, and required audit/event state in one recoverable transaction. | Define per-domain replay and recovery policy before use. | Same key concurrently or response lost after commit. | Same-key retry never duplicates a committed protected business effect. | DFR-002; ERD §§9.4–9.6; DDD-013. | Blocked for non-authentication domains; authentication contract is approved under AUTH-IDEM-001–041. |
 
-| AD-05 | Idempotency: concurrent duplicates cannot create duplicate protected effects. | Unique scoped key plus locking/isolation or comparable mechanism. | Entire protected operation.| Enforce payload mismatch and retry policy. | Concurrent requests with equivalent/differentpayload. | Parallel same-key and mismatch tests. | DFR-002; ERD §9.5; DDD-013. | Blocked |
+| AD-05 | Non-authentication idempotency: concurrent duplicates cannot create duplicate protected effects. | Unique scoped key plus locking/isolation or comparable mechanism. | Entire protected operation. | Enforce approved payload-mismatch and retry policy for the relevant domain. | Concurrent requests with equivalent/different payload. | Parallel same-key and mismatch tests. | DFR-002; ERD §9.5; DDD-013. | Blocked for non-authentication domains; authentication contract is approved under AUTH-IDEM-001–041. |
 
 ## **3. Readiness rule**
 
@@ -132,8 +132,6 @@ concrete constraint or transaction mechanism during approved schema design.
 A status in this register does not indicate that a control is implemented or
 
 tested today.
-nuel_toye@nueltoye:~/project/dyms$
-
 ## 4. Approved policy updates — 2026-10-30
 
 The following policy rules are approved. The concrete database constraints and concurrency mechanisms remain proposed until the ERD is approved and physical schema design is authorized.
