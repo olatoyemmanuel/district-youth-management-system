@@ -251,12 +251,9 @@ operation.
 
 The approved four-leadership-role grant matrix is recorded in
 `docs/decisions/DDD-005-ROLE-PERMISSION-MATRIX-PROPOSAL.md`; its HOLD entries
-remain ungranted pending the related domain decisions. The exact
-representation of explicit denies and every prohibited or review-required
-combination of specific roles remain unresolved. The schema review must retain
-a stable scope identity and define effective-period checks for duplicate or
-contradictory active assignments and appointments without inventing a
-universal one-active-appointment rule. Creation, approval, renewal, ending,
+remain ungranted pending the related domain decisions. The explicit-deny policy, independent administration/audit controls, role-pair classifications, and independent-review workflow are approved in
+`docs/decisions/DDD-005-EXPLICIT-DENY-AND-ROLE-CONFLICT-PROPOSAL.md`.
+The physical representation and enforcement of denies remain a technical design task. The schema review must retain a stable scope identity and define effective-period checks for duplicate or contradictory active assignments and appointments without inventing a universal one-active-appointment rule. Review-required combinations must not become effective before independent approval; prohibited pairs must not be concurrently active. Creation, approval, renewal, ending,
 and audit recording remain transaction-safe lifecycle workflows; the acting
 User must be checked against the subject Member to prevent self-appointment,
 self-renewal, and prohibited self-approval. Mid-year creation and early-ending
