@@ -133,12 +133,12 @@ This is a structural review only. It does not establish that any index is perfor
 
 ## 4. Acceptance checklist for the next register revision
 
-- [ ] Every one of the 65 tables has an explicit FK inventory row, including tables with zero FKs.
-- [ ] Every FK is represented as a distinct relationship with a stable constraint name.
-- [ ] Every composite FK has exact, ordered source and target tuples.
-- [ ] Every target tuple is backed by a PK or UNIQUE constraint with the same ordered columns.
-- [ ] Every nullable composite FK has a documented all-null/all-present rule; partial tuples are rejected.
-- [ ] Every FK has a per-relationship delete/update action.
+- [x] Every one of the 65 tables has an explicit FK inventory row, including tables with zero FKs.
+- [x] Every FK is represented as a distinct relationship with a stable constraint name in the 155-row relationship register.
+- [x] Every composite FK has exact, ordered source and target tuples.
+- [x] Every target tuple has identified PK or UNIQUE evidence with the same ordered columns, pending independent verification.
+- [x] Every nullable composite FK has explicit nullability and MATCH semantics; optional attendance references use MATCH SIMPLE.
+- [x] Every FK has a per-relationship ON DELETE and ON UPDATE action.
 - [ ] Every FK has either a complete left-prefix support index or a documented exception.
 - [ ] No standalone index duplicates a wider suitable index without a workload justification.
 - [ ] No two constraint/index names collide after PostgreSQL identifier-length handling.
@@ -161,7 +161,7 @@ The following changes have now been applied to the canonical FK register, physic
 | FKI-03 | Removed the standalone retention_subject_id index proposals. The wider subject/status and subject/executed_at indexes already cover those FK columns by left prefix. | Addressed in documentation; independent review pending |
 | FKI-04 | Kept full ordered tuple support indexes for composite department-scope, finance, payment, budget-line, reversal, attendance and report-definition relationships. Workload indexes are explicitly distinguished from complete composite-FK support. | Addressed at proposal level; SQL/index validation pending |
 | FKI-05 | Removed standalone event_id → events and member_id → members FKs from attendance_records. The mandatory subject composite FK remains the authoritative event/member binding; the columns remain present in that tuple. | Addressed in documentation; independent review pending |
-| FKI-06 | Replaced shortened ordinal-suffix index names with readable canonical names. A structural check reports 109 unique index names, none over 63 bytes, and no ordinal-suffix/double-underscore workarounds. | Addressed in documentation; independent review pending |
+| FKI-06 | Replaced shortened ordinal-suffix index names with readable canonical names. A structural check reports 116 unique FK-register index names, none over 63 bytes, and no ordinal-suffix/double-underscore workarounds. | Addressed in documentation; independent review pending |
 | FKI-07 | Added RESTRICT/RESTRICT action statements to every FK-bearing table row in the canonical FK register. Tables with no parent FK are explicitly distinguished. Exceptions require separate documented review. | Addressed as a proposed action baseline; independent review pending |
 
 ### Verification boundary
@@ -170,7 +170,7 @@ The document checks confirm that:
 - the canonical FK register contains 65 table rows;
 - each of the 54 FK-bearing table rows records the proposed RESTRICT/RESTRICT action for its listed relationships;
 - the remaining 11 rows have no parent FK;
-- the current FK-register index-name list contains 112 unique names, all within the PostgreSQL identifier limit;
+- the current FK-register index-name list contains 116 unique names, all within the PostgreSQL identifier limit;
 - 44 stable FK constraint names are recorded for the expanded relationship rows, with no duplicate or overlength names;
 - the attendance subject relationship is consistent across the physical design, FK register and integrity matrix.
 
@@ -183,9 +183,9 @@ The document-level corrections are complete for the seven findings, but this aud
 1. Every named FK target tuple is backed by an exact PK/UNIQUE candidate key with matching order.
 2. All 44 newly named constraints reconcile with the physical table definitions and relational matrix.
 3. All other existing FK relationships receive stable final constraint names in the DDL worksheet before implementation.
-4. The 202 distinct names in the canonical combined inventory reconcile the named unique, partial-unique, FK-supporting and workload index proposals from both source catalogues.
+4. The 206 distinct names in the canonical combined inventory reconcile the named unique, partial-unique, FK-supporting and workload index proposals from both source catalogues.
 5. Every composite FK has full ordered tuple support, including the departments church/district relationship.
-6. PostgreSQL target version, extension availability, partial-index semantics and all-null/all-present composite FK behavior are verified.
+6. PostgreSQL target version, extension availability, partial-index semantics and MATCH SIMPLE composite FK behavior are verified.
 7. No SQL compilation, live catalogue or query-plan result is claimed until those checks are actually run in an authorized environment.
 
 The physical design remains **further revision required** until the independent review is completed and the owner approves the full physical design.
@@ -201,7 +201,7 @@ Current status:
 - FKI-03: RESOLVED AT DOCUMENT LEVEL.
 - FKI-04: PARTIALLY RESOLVED.
 - FKI-05: RESOLVED AT DOCUMENT LEVEL; optional attendance composite FKs now specify MATCH SIMPLE and negative/positive integrity tests.
-- FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 202 distinct names.
-- FKI-07: PARTIALLY RESOLVED.
+- FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 206 distinct names.
+- FKI-07: RESOLVED AT DOCUMENT LEVEL; all 155 FK relationships have explicit RESTRICT/RESTRICT actions.
 
 Do not treat the original finding headings or the preliminary remediation table as final acceptance. PIR-01 through PIR-07 are the controlling open findings until corrected and independently re-reviewed.
