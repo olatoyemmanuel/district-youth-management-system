@@ -323,6 +323,10 @@ These are FK-maintenance and scoped-query candidates. A composite index may sati
 
 ## 5.7 Additional FK support-index coverage proposals
 
+A structural comparison was performed between the FK source-column register and the named unique/access indexes. The following proposals supplement the earlier catalogue. Composite FK coverage must be checked against the full ordered tuple, not merely the first source column. Entries already covered by Section 5.6 or a wider suitable index are not duplicated here.
+
+| Proposed index name | Table | Key columns | Predicate |
+|---|---|---|---|
 | `ix_fk_user_role_assignments_role_id` | `user_role_assignments` | `role_id` | `None` |
 | `ix_fk_user_role_assignments_granted_by_user_account_id` | `user_role_assignments` | `granted_by_user_account_id` | `None` |
 | `ix_fk_events_created_by_user_account_id` | `events` | `created_by_user_account_id` | `None` |
@@ -335,10 +339,6 @@ These are FK-maintenance and scoped-query candidates. A composite index may sati
 | `ix_fk_retention_actions_initiated_by_user_account_id` | `retention_actions` | `initiated_by_user_account_id` | `None` |
 | `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id` | `WHERE approved_by_user_account_id IS NOT NULL` |
 
-A structural comparison was performed between the FK source-column register and the named unique/access indexes. The following proposals supplement the earlier catalogue. Composite FK coverage must be checked against the full ordered tuple, not merely the first source column. Entries already covered by Section 5.6 or a wider suitable index are not duplicated here.
-
-| Proposed index name | Table | Key columns | Predicate |
-|---|---|---|---|
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | `None` |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | `None` |
 | `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id` | ` WHERE church_id IS NOT NULL` |
