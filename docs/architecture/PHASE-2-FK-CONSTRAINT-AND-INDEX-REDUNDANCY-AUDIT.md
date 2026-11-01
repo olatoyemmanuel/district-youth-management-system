@@ -189,3 +189,19 @@ The document-level corrections are complete for the seven findings, but this aud
 7. No SQL compilation, live catalogue or query-plan result is claimed until those checks are actually run in an authorized environment.
 
 The physical design remains **further revision required** until the independent review is completed and the owner approves the full physical design.
+
+
+## 8. Current disposition after independent review
+
+The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) supersedes the preliminary remediation labels in Section 6 for acceptance purposes.
+
+Current status:
+- FKI-01: PARTIALLY RESOLVED.
+- FKI-02: RESOLVED AT DOCUMENT LEVEL.
+- FKI-03: RESOLVED AT DOCUMENT LEVEL.
+- FKI-04: PARTIALLY RESOLVED.
+- FKI-05: RESOLVED AT DOCUMENT LEVEL, subject to attendance null-semantics correction PIR-02.
+- FKI-06: RESOLVED AT DOCUMENT LEVEL, subject to complete combined inventory reconciliation PIR-05.
+- FKI-07: PARTIALLY RESOLVED.
+
+Do not treat the original finding headings or the preliminary remediation table as final acceptance. PIR-01 through PIR-07 are the controlling open findings until corrected and independently re-reviewed.
