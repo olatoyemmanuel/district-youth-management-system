@@ -337,6 +337,6 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is t
 
 The 65 table rows still reconcile exactly with the FK register. This table-count match does not establish complete per-relationship FK declarations, target-key evidence, MATCH semantics, full index coverage or complete per-column definitions.
 
-PIR-01 through PIR-07 remain the current findings. In particular, optional attendance registration/session composite FKs need corrected null semantics, authorization FK indexes require named coverage, and the full combined index catalogue needs reconciliation.
+PIR-01 through PIR-07 remain subject to independent review. PIR-01 through PIR-04 have document-level corrections recorded; PIR-05 remains partially resolved pending definition-level index review; PIR-06 and PIR-07 remain open.
 
 **Current status:** Further revision required. No implementation is authorized.
