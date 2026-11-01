@@ -148,3 +148,29 @@ This is a structural review only. It does not establish that any index is perfor
 ## 5. Implementation boundary
 
 This audit authorizes no implementation. No Prisma schema, SQL DDL, migration, database object, generated client, seed or application code has been changed. The physical design remains unapproved for implementation. DFR-001 through DFR-006 and the approved conceptual ERD remain preserved. Open owner decisions remain open.
+
+
+## 6. Canonical-document remediation status
+
+The following changes have now been applied to the canonical FK register, physical database design and relational integrity matrix on the review branch:
+
+| Finding | Document remediation | Current disposition |
+|---|---|---|
+| FKI-01 | Replaced the nine malformed column-inventory rows with explicit source-to-target FK relationship rows. The canonical Section 3 inventory still contains 65 unique table rows; the 11 tables with no parent FK are explicitly marked as such. | Addressed in documentation; independent review pending |
+| FKI-02 | Corrected the role_permissions index statement. The unique (role_id, permission_id) key supports role_id by left prefix only; a separate permission_id index is now in the FK register and named index catalogue. | Addressed in documentation; independent review pending |
+| FKI-03 | Removed the standalone retention_subject_id index proposals. The wider subject/status and subject/executed_at indexes already cover those FK columns by left prefix. | Addressed in documentation; independent review pending |
+| FKI-04 | Kept full ordered tuple support indexes for composite finance, payment, budget-line, reversal, attendance and report-definition relationships. Workload indexes are explicitly distinguished from complete composite-FK support. | Addressed at proposal level; SQL/index validation pending |
+| FKI-05 | Removed standalone event_id → events and member_id → members FKs from attendance_records. The mandatory subject composite FK remains the authoritative event/member binding; the columns remain present in that tuple. | Addressed in documentation; independent review pending |
+| FKI-06 | Replaced shortened ordinal-suffix index names with readable canonical names. A structural check reports 110 unique index names, none over 63 bytes, and no ordinal-suffix/double-underscore workarounds. | Addressed in documentation; independent review pending |
+| FKI-07 | Added RESTRICT/RESTRICT action statements to every FK-bearing table row in the canonical FK register. Tables with no parent FK are explicitly distinguished. Exceptions require separate documented review. | Addressed as a proposed action baseline; independent review pending |
+
+### Verification boundary
+
+The document checks confirm that:
+- the canonical FK register contains 65 table rows;
+- each of the 54 FK-bearing table rows records the proposed RESTRICT/RESTRICT action for its listed relationships;
+- the remaining 11 rows have no parent FK;
+- the current index-name list contains 110 unique names, all within the PostgreSQL identifier limit;
+- the attendance subject relationship is consistent across the physical design, FK register and integrity matrix.
+
+These are source-document checks only. No PostgreSQL parser, database catalogue, query plan, migration, Prisma schema or application test was run. The physical design remains unapproved for implementation.
