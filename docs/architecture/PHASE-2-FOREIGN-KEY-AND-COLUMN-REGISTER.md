@@ -49,8 +49,8 @@ This is not SQL DDL. The FK actions below are proposed defaults. The register do
 | `role_permissions` | `role_id`; `permission_id` | `roles(id)`; `permissions(id)` | Both NOT NULL | `uq_role_permissions_role_permission` supports `role_id` by left prefix only; `ix_fk_role_permissions_permission_id` separately supports `permission_id`; RESTRICT/RESTRICT for both FKs |
 | `user_role_assignments` | `user_account_id`; `role_id`; `granted_by_user_account_id`; `district_id`; `church_id`; `department_id` | `user_accounts(id)`; `roles(id)`; `user_accounts(id)`; `districts(id)`; `churches(id)`; `departments(id)` | User/role/grantor NOT NULL; exactly one of district/church/department scope FKs populated; composite hierarchy binding required where scope stores parent context | Separate source indexes for each FK; `ix_user_role_assignments_user_scope` covers user lookup only; RESTRICT/RESTRICT for every FK |
 | `appointment_role_links` | `appointment_id`; `role_id`; `created_by_user_account_id` | `appointments(id)`; `roles(id)`; `user_accounts(id)` | All NOT NULL | UNIQUE `(appointment_id,role_id,mapping_version)`; `ix_fk_appointment_role_links_role_id`; `ix_fk_appointment_role_links_created_by_user_account_id`; RESTRICT/RESTRICT for every listed FK |
-| `access_denies` | `target_user_account_id`; `permission_id`; `district_id`; `church_id`; `department_id`; `issued_by_user_account_id`; `reviewed_by_user_account_id` | `user_accounts(id)`; `permissions(id)`; `districts(id)`; `churches(id)`; `departments(id)`; `user_accounts(id)`; `user_accounts(id)` | Target/permission/issuer NOT NULL; reviewer NULL; exactly one scope FK populated | Separate source indexes for every FK; `ix_access_denies_target_scope` covers target/permission leading pair for lookup, not each FK independently; RESTRICT/RESTRICT for every FK |
-| `role_conflict_rules` | `role_a_id`; `role_b_id` | `roles(id)` for both | Both NOT NULL | UNIQUE canonical role pair/version supports both; RESTRICT/RESTRICT for every listed FK |
+| `access_denies` | `target_user_account_id`; `permission_id`; `district_id`; `church_id`; `department_id`; `issued_by_user_account_id`; `reviewed_by_user_account_id` | `user_accounts(id)`; `permissions(id)`; `districts(id)`; `churches(id)`; `departments(id)`; `user_accounts(id)`; `user_accounts(id)` | Target/permission/issuer NOT NULL; reviewer NULL; exactly one scope FK populated | `ix_access_denies_target_scope` covers `target_user_account_id` only by left prefix; add `ix_fk_access_denies_permission_id`, `ix_fk_access_denies_issued_by_user_account_id`, and `ix_fk_access_denies_reviewed_by_user_account_id`; scope indexes are listed in Section 5.6; RESTRICT/RESTRICT for every FK |
+| `role_conflict_rules` | `role_a_id`; `role_b_id` | `roles(id)` for both | Both NOT NULL | UNIQUE `(role_a_id,role_b_id,version)` supports `role_a_id` by left prefix only; `ix_fk_role_conflict_rules_role_b_id` separately supports `role_b_id`; RESTRICT/RESTRICT for every listed FK |
 | `role_conflict_reviews` | `user_account_id`; `role_conflict_rule_id`; `reviewed_by_user_account_id` | `user_accounts(id)`; `role_conflict_rules(id)`; `user_accounts(id)` | All NOT NULL | `ix_fk_role_conflict_reviews_user_account_id`; `ix_fk_role_conflict_reviews_role_conflict_rule_id`; `ix_fk_role_conflict_reviews_reviewed_by_user_account_id`; RESTRICT/RESTRICT for every listed FK |
 | `events` | `district_id`; `church_id`; `department_id`; `created_by_user_account_id` | `districts(id)`; `churches(id)`; `departments(id)`; `user_accounts(id)` | Exactly one permitted owner FK populated; creator NOT NULL; owner scope validity remains subject to ODR-004 | Separate scope FK indexes and creator index; RESTRICT/RESTRICT for every FK |
 | `event_approvals` | `event_id`; `reviewer_user_account_id` | `events(id)`; `user_accounts(id)` | Both NOT NULL | `ix_fk_event_approvals_event_id`; `ix_fk_event_approvals_reviewer_user_account_id`; RESTRICT/RESTRICT for every listed FK |
@@ -357,6 +357,9 @@ These names make the previously generic scope-index requirements concrete. They 
 | `access_denies` | `district_id` | `ix_access_denies_district_id` | `district_id IS NOT NULL` |
 | `access_denies` | `church_id` | `ix_access_denies_church_id` | `church_id IS NOT NULL` |
 | `access_denies` | `department_id` | `ix_access_denies_department_id` | `department_id IS NOT NULL` |
+| `access_denies` | `permission_id` | `ix_fk_access_denies_permission_id` | `None` |
+| `access_denies` | `issued_by_user_account_id` | `ix_fk_access_denies_issued_by_user_account_id` | `None` |
+| `access_denies` | `reviewed_by_user_account_id` | `ix_fk_access_denies_reviewed_by_user_account_id` | `reviewed_by_user_account_id IS NOT NULL` |
 | `events` | `district_id` | `ix_events_district_id` | `district_id IS NOT NULL` |
 | `events` | `church_id` | `ix_events_church_id` | `church_id IS NOT NULL` |
 | `events` | `department_id` | `ix_events_department_id` | `department_id IS NOT NULL` |
@@ -415,6 +418,9 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_appointment_role_links_role_id` | `appointment_role_links` | `role_id` | `None` |
 | `ix_fk_appointment_role_links_created_by_user_account_id` | `appointment_role_links` | `created_by_user_account_id` | `None` |
 | `ix_fk_role_conflict_rules_role_b_id` | `role_conflict_rules` | `role_b_id` | `None` |
+| `ix_fk_access_denies_permission_id` | `access_denies` | `permission_id` | `None` |
+| `ix_fk_access_denies_issued_by_user_account_id` | `access_denies` | `issued_by_user_account_id` | `None` |
+| `ix_fk_access_denies_reviewed_by_user_account_id` | `access_denies` | `reviewed_by_user_account_id` | ` WHERE reviewed_by_user_account_id IS NOT NULL` |
 | `ix_fk_role_conflict_reviews_user_account_id` | `role_conflict_reviews` | `user_account_id` | `None` |
 | `ix_fk_role_conflict_reviews_role_conflict_rule_id` | `role_conflict_reviews` | `role_conflict_rule_id` | `None` |
 | `ix_fk_role_conflict_reviews_reviewed_by_user_account_id` | `role_conflict_reviews` | `reviewed_by_user_account_id` | ` WHERE reviewed_by_user_account_id IS NOT NULL` |
