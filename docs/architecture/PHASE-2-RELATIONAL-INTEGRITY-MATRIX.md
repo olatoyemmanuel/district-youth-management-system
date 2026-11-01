@@ -326,3 +326,14 @@ The matrix is reconciled with the [FK Constraint and Index Redundancy Audit](./P
 - FK-support indexes and query-support indexes are classified separately. No performance claim is made without workload and query-plan evidence.
 
 This is a design-document reconciliation only. It does not authorize SQL, Prisma, migrations or database changes.
+
+
+## 18. Post-FKI independent review status
+
+The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment after the FKI-01 through FKI-07 documentation changes.
+
+The 65 table rows still reconcile exactly with the FK register. This table-count match does not establish complete per-relationship FK declarations, target-key evidence, MATCH semantics, full index coverage or complete per-column definitions.
+
+PIR-01 through PIR-07 remain the current findings. In particular, optional attendance registration/session composite FKs need corrected null semantics, authorization FK indexes require named coverage, and the full combined index catalogue needs reconciliation.
+
+**Current status:** Further revision required. No implementation is authorized.
