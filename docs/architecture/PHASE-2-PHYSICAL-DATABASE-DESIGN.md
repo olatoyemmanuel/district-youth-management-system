@@ -949,7 +949,7 @@ The detailed proposed response to RIM-02 through RIM-08 is documented in the [Hi
 
 It specifies proposed complete column inventories for budget and reporting records; normalizes appointment scope through positions; defines the attendance subject serialization contract; specifies same-account and same-currency full reversal relationships; defines source-record binding and locking for retention subjects; and gives the audit actor identity truth table and append-only privilege requirements.
 
-This is a design amendment only. The 599-column typed register now reconciles field names, PostgreSQL types and nullability across all 65 tables. It is not executable DDL or a complete approval contract: default decisions, CHECK naming/expressions, policy blockers, retention schedule evidence, finance authority decisions, department ownership, report governance and production PostgreSQL compatibility remain open.
+This is a design amendment only. The 617-column typed register now reconciles field names, PostgreSQL types and nullability across all 65 tables. It is not executable DDL or a complete approval contract: default decisions, CHECK naming/expressions, policy blockers, retention schedule evidence, finance authority decisions, department ownership, report governance and production PostgreSQL compatibility remain open.
 
 **Status:** high-severity findings have documented proposed resolutions. They are not marked closed pending canonical design reconciliation and independent review. No implementation is authorized.
 
@@ -971,7 +971,7 @@ The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY
 
 The canonical report table definitions now preserve the immutable report-definition version through a composite FK. The canonical position, appointment, attendance, finance reversal, budget, and audit definitions were reconciled in Section 5 and the preceding high-severity amendment.
 
-**Remaining limitation:** the named index register requires definition-level redundancy and predicate review. The 599-column register reconciles type/nullability and declared FK/index participation, but defaults not stated in the source remain unresolved, CHECK constraints need stable names/expressions, and lifecycle predicates and production PostgreSQL compatibility remain open. No implementation is authorized.
+**Remaining limitation:** the named index register requires definition-level redundancy and predicate review. The 617-column register reconciles type/nullability and declared FK/index participation, but defaults not stated in the source remain unresolved, CHECK constraints need stable names/expressions, and lifecycle predicates and production PostgreSQL compatibility remain open. No implementation is authorized.
 
 
 ## 24. Independent relational-integrity second review
@@ -1037,7 +1037,7 @@ No DDL or Prisma changes are authorized by these corrections.
 
 The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment of the corrected FK register, relational integrity matrix and index proposals.
 
-The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. PIR-01 through PIR-04 have document-level corrections recorded; PIR-05 remains partially resolved pending definition-level review; PIR-06 has a document-level status reconciliation; PIR-07 is partially resolved with the 599-column register, while defaults and constraint definitions remain open.
+The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. PIR-01 through PIR-04 have document-level corrections recorded; PIR-05 remains partially resolved pending definition-level review; PIR-06 has a document-level status reconciliation; PIR-07 is partially resolved with the 617-column register, while defaults and constraint definitions remain open.
 
 The former 190-index count in Section 28 and subsequent 199-, 202- and 206-name summaries are historical and superseded. The current inventories contain 121 distinct names in the FK/column register and 94 in the medium-severity catalogue, with four shared names. The combined distinct-name count is 211. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md). This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
 
