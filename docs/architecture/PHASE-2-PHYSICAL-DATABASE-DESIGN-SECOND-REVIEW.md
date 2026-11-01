@@ -89,3 +89,40 @@ The conceptual ERD is approved. The physical database design remains a working p
 ## 7. Conclusion
 
 The first review's twelve findings have been addressed or explicitly retained as partial in the revised proposal. The design is materially more precise and ready for the next design-completion pass, but it is not implementation-ready and is not approved for implementation. PDB-R12 remains partially open, and the policy/evidence blockers above must remain visible.
+
+
+---
+
+## 8. Follow-up completion review: lifecycle catalogue and table definitions
+
+**Follow-up reviewed physical-design blob:** `3e7bbdef7172949a0532dfece39640462cf50a04`  
+**Lifecycle catalogue blob:** `a4b01f329f3932439e521975c6c3ea417eca4a3d`
+
+The follow-up design pass completed the two documentation gaps identified in the first second-review:
+
+1. The physical-design catalogue now contains full column, key, index and integrity proposals for `event_attendance_subjects`, `retention_subjects` and `service_principals` in Section 18.
+2. The linked lifecycle catalogue contains 52 unique table rows. It records initial conditions, candidate states/outcomes, transition authority, terminal states and a classification for each row.
+
+PDB-R12 is therefore **addressed as a design-documentation deliverable**, but **not approved for DDL**. The catalogue intentionally marks several state sets POLICY BLOCKED or PROPOSED because the applicable authority has not yet confirmed them. The project owner and relevant ministry, finance, security, integration and records authorities must approve or amend those entries before restrictive database CHECK constraints or production seed values are generated.
+
+### Follow-up acceptance
+
+| Check | Result |
+|---|---|
+| Three additional physical structures have dedicated table definitions | Pass |
+| Lifecycle catalogue has 52 table rows | Pass |
+| Lifecycle table names are unique | Pass |
+| Proposed, derived, policy-blocked and immutable-history entries are distinguished | Pass |
+| Guardian relationship/delegation model introduced | No |
+| Prisma, migration, SQL DDL or database objects changed | No |
+| Project-owner physical-design approval obtained | No |
+
+### Remaining technical and policy gates
+
+- Validate all composite FKs, exact scope checks, attendance-mode triggers/subtypes, appointment exclusion constraints and audit privileges against the selected PostgreSQL major version.
+- Complete the final named constraint/index/nullability matrix.
+- Obtain accounting policy, retention schedules, younger-member onboarding/safeguarding policy, and credential authority/evidence rules.
+- Confirm every PROPOSED lifecycle value and resolve every POLICY BLOCKED entry with its responsible authority.
+- Obtain explicit project-owner approval of the exact physical-design revision before any implementation.
+
+The physical design remains a working proposal. This follow-up does not authorize Prisma, migrations, SQL, database changes or application implementation.
