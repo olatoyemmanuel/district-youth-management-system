@@ -31,10 +31,10 @@ The discriminator values are proposed. They must be approved before a final CHEC
 
 Avoid `NULLS NOT DISTINCT` and avoid a polymorphic `scope_type + scope_id` reference. Use four mutually exclusive partial unique indexes:
 
-- `uq_idempotency_global_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, key_digest) WHERE scope_kind = 'GLOBAL'.
-- `uq_idempotency_district_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, district_id, key_digest) WHERE scope_kind = 'DISTRICT'.
-- `uq_idempotency_church_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, church_id, key_digest) WHERE scope_kind = 'CHURCH'.
-- `uq_idempotency_department_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, department_id, key_digest) WHERE scope_kind = 'DEPARTMENT'.
+- `uq_idempotency_global_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, key_digest) WHERE district_id IS NULL AND church_id IS NULL AND department_id IS NULL.
+- `uq_idempotency_district_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, district_id, key_digest) WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL.
+- `uq_idempotency_church_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, church_id, key_digest) WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL.
+- `uq_idempotency_department_actor_operation_key`: UNIQUE (actor_user_account_id, operation_code, department_id, key_digest) WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL.
 
 The normalized request fingerprint remains separate from the uniqueness key. Reuse of a key with a different fingerprint returns conflict. A retry with the same fingerprint returns the original safe result or in-progress state. The idempotency key digest is never exposed.
 
@@ -69,8 +69,8 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | Proposed index name | Table | Key/predicate | Purpose/status |
 |---|---|---|---|
 | `uq_user_accounts_login_identifier` | user_accounts | login_identifier | Unique login identity; normalization and nullable policy open |
-| `uq_user_accounts_email_present` | user_accounts | normalized_email WHERE normalized_email IS NOT NULL | Optional email uniqueness; confirm whether email is a login identifier |
-| `uq_user_accounts_phone_present` | user_accounts | normalized_phone WHERE normalized_phone IS NOT NULL | Optional phone uniqueness; confirm account identity policy |
+| `uq_user_accounts_email_present` | user_accounts | UNRESOLVED normalized email expression WHERE email IS NOT NULL | POLICY BLOCKED: no normalized_email column or approved deterministic expression exists in the physical definition |
+| `uq_user_accounts_phone_present` | user_accounts | phone_e164 WHERE phone_e164 IS NOT NULL | Optional E.164 phone uniqueness; confirm account identity policy |
 | `uq_members_user_account` | members | user_account_id | Enforce one-to-one member/account |
 | `uq_members_member_number` | members | member_number | Unique member number |
 | `uq_churches_district_code` | churches | district_id, code | Church code within district |
@@ -87,14 +87,17 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `uq_positions_department_code` | positions | department_id, code WHERE department_id IS NOT NULL | Position code per department scope |
 | `uq_role_permissions_role_permission` | role_permissions | role_id, permission_id | Unique permission mapping |
 | `uq_appointment_role_links_mapping` | appointment_role_links | appointment_id, role_id, mapping_version | Versioned appointment-role mapping |
-| `uq_role_conflict_rules_pair_version` | role_conflict_rules | canonical role_a_id, role_b_id, version | One rule per canonical pair/version |
-| `uq_events_scope_id` | events | owner scope plus id | Candidate composite keys for child scope binding |
+| `uq_role_conflict_rules_pair_version` | role_conflict_rules | role_a_id, role_b_id, version | One rule per canonical pair/version |
+| `uq_events_id_church` | events | id, church_id WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL | Church-scoped event candidate key |
+| `uq_events_id_department` | events | id, department_id WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL | Department-scoped event candidate key |
+| `uq_events_id_district` | events | id, district_id WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL | District-scoped event candidate key |
 | `uq_event_registrations_current_member` | event_registrations | event_id, member_id WHERE approved valid-registration predicate | Blocked until registration states approved |
 | `uq_event_sessions_id_event` | event_sessions | id, event_id | Composite session/event FK target |
 | `uq_event_attendance_subject_event_member` | event_attendance_subjects | event_id, member_id | One attendance subject per member/event |
 | `uq_attendance_records_event_subject` | attendance_records | attendance_subject_id WHERE event_session_id IS NULL | One event-level record |
 | `uq_attendance_records_session_subject` | attendance_records | attendance_subject_id, event_session_id WHERE event_session_id IS NOT NULL | One record per session |
-| `uq_financial_accounts_owner_code` | financial_accounts | owner-specific account code partial indexes | Unique account code within owner |
+| `uq_financial_accounts_church_account_code` | financial_accounts | church_id, account_code WHERE church_id IS NOT NULL AND district_id IS NULL | Unique account code within church |
+| `uq_financial_accounts_district_account_code` | financial_accounts | district_id, account_code WHERE district_id IS NOT NULL AND church_id IS NULL | Unique account code within district |
 | `uq_financial_accounts_id_currency` | financial_accounts | id, currency_code | Composite transaction FK target |
 | `uq_financial_transactions_account_reference` | financial_transactions | financial_account_id, reference | Unique reference per account |
 | `uq_financial_transactions_id_account_currency` | financial_transactions | id, financial_account_id, currency_code | Reversal composite FK target |
@@ -137,7 +140,9 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `ix_fk_access_denies_permission_id` | access_denies | permission_id | Permission-side FK lookup; the target-scope index does not begin with permission_id |
 | `ix_fk_access_denies_issued_by_user_account_id` | access_denies | issued_by_user_account_id | Issuer-side FK lookup |
 | `ix_fk_access_denies_reviewed_by_user_account_id` | access_denies | reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL | Optional reviewer FK lookup; partial because the source column is nullable |
-| `ix_events_scope_start` | events | owner scope, starts_at | Scoped event calendar |
+| `ix_events_church_start` | events | church_id, starts_at WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL | Church event calendar |
+| `ix_events_department_start` | events | department_id, starts_at WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL | Department event calendar |
+| `ix_events_district_start` | events | district_id, starts_at WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL | District event calendar |
 | `ix_event_registrations_event_status` | event_registrations | event_id, status, registered_at | Registration administration |
 | `ix_event_sessions_event_start` | event_sessions | event_id, starts_at | Session listing |
 | `ix_attendance_records_event_member` | attendance_records | event_id, member_id | Event attendance lookup; query-supporting only, not a standalone FK index |
@@ -297,6 +302,6 @@ A document-level left-prefix comparison reports zero FK source-column groups wit
 
 The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) found that the medium-severity index catalogue and FK-support index register are not yet reconciled as one canonical inventory. It also identified missing named FK-support proposals for access-deny permission, issuer and reviewer relationships.
 
-The current distinct-name count is 94 in this document and 121 in the FK/column register, with four shared names. The combined distinct-name count is 211. These counts do not establish index-definition correctness.
+The current distinct-name count is 99 in this document and 121 in the FK/column register, with four shared names. The combined distinct-name count is 216. These counts do not establish index-definition correctness.
 
 PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 and PIR-07 remain partially resolved pending definition-level completion. PIR-06 has a document-level status reconciliation. No index or database object has been created. No index or database object has been created.
