@@ -23,7 +23,7 @@ The original finding headings below retain their initial OPEN labels as historic
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant retention subject-only indexes removed |
 | FKI-04 | RESOLVED AT DOCUMENT LEVEL, verified 2026-11-01 | All 10 composite target tuples match exact named UNIQUE keys; all 155 source support indexes begin with the complete ordered source tuple. Partial-index predicates cover every nullable FK component. SQL validation remains pending. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Attendance subject FK retained; duplicate event/member FKs removed; MATCH SIMPLE semantics recorded |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | 211-name canonical index inventory; names within 63-byte limit |
+| FKI-06 | RESOLVED AT DOCUMENT LEVEL | 216-name canonical index inventory; names within 63-byte limit |
 | FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | RESTRICT/RESTRICT is stated for all 155 FK relationships |
 
 ## 2. Findings requiring correction
@@ -199,7 +199,7 @@ The document-level corrections and dispositions are recorded for all seven findi
 1. Every named FK target tuple is backed by an exact PK/UNIQUE candidate key with matching order.
 2. Independently verify all 155 named constraints against the physical table definitions and relational matrix.
 3. Verify the exact ordered target candidate keys and source index definitions before implementation.
-4. The 211 distinct names in the canonical combined inventory reconcile the named unique, partial-unique, FK-supporting and workload index proposals from both source catalogues.
+4. The 216 distinct names in the canonical combined inventory reconcile the named unique, partial-unique, FK-supporting and workload index proposals from both source catalogues.
 5. Every composite FK has full ordered tuple support, including the departments church/district relationship.
 6. PostgreSQL target version, extension availability, partial-index semantics and MATCH SIMPLE composite FK behavior are verified.
 7. No SQL compilation, live catalogue or query-plan result is claimed until those checks are actually run in an authorized environment.
@@ -217,7 +217,7 @@ Current status:
 - FKI-03: RESOLVED AT DOCUMENT LEVEL.
 - FKI-04: RESOLVED AT DOCUMENT LEVEL, pending SQL/index validation.
 - FKI-05: RESOLVED AT DOCUMENT LEVEL; optional attendance composite FKs now specify MATCH SIMPLE and negative/positive integrity tests.
-- FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 211 distinct names.
+- FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 216 distinct names.
 - FKI-07: RESOLVED AT DOCUMENT LEVEL; all 155 FK relationships have explicit RESTRICT/RESTRICT actions.
 
 Do not treat the original finding headings or preliminary remediation labels as current status. The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) controls the current PIR disposition: PIR-01 through PIR-04 are verified at document level, PIR-05 remains partially resolved, PIR-06 is verified at document level, and PIR-07 remains partially resolved.
