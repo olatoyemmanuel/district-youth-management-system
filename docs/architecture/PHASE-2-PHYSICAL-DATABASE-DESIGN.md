@@ -132,7 +132,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `churches`
 - `id uuid PK`, `district_id uuid NOT NULL FK districts(id)`
 - `code varchar(50) NOT NULL`, `name text NOT NULL`, `status varchar(20) NOT NULL`
-- `UNIQUE (district_id, code)`, `UNIQUE (id, district_id)`.
+- `UNIQUE (district_id, code)` named `uq_churches_district_code`; `UNIQUE (id, district_id)` named `uq_churches_id_district`.
 
 #### `member_categories`
 - `id uuid PK`, `code varchar(40) NOT NULL UNIQUE`, `name text NOT NULL`, `is_active boolean NOT NULL`
@@ -270,13 +270,13 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `event_registrations`
 - `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `member_id uuid NOT NULL FK members(id)`
 - `status varchar(24) NOT NULL`, `registered_at timestamptz NOT NULL`, `registration_channel varchar(24) NOT NULL`, `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
-- Candidate key `UNIQUE (id, event_id, member_id)` supports attendance registration binding.
+- Candidate key `UNIQUE (id, event_id, member_id)` named `uq_event_registrations_id_event_member` supports attendance registration binding.
 - Unique active registration per event/member via partial unique index, with the predicate blocked until registration lifecycle values are approved. Capacity enforcement must lock or atomically update an event capacity counter to avoid oversubscription.
 
 #### `event_sessions`
 - `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `name text NOT NULL`
 - `starts_at timestamptz NOT NULL`, `ends_at timestamptz NOT NULL`, `timezone text NOT NULL`, `venue text NULL`, `status varchar(20) NOT NULL`
-- `UNIQUE (id, event_id)`; CHECK ends_at > starts_at.
+- `UNIQUE (id, event_id)` named `uq_event_sessions_id_event`; CHECK ends_at > starts_at.
 
 #### `attendance_records`
 - `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL`, `event_session_id uuid NULL`, `member_id uuid NOT NULL`. `event_id` and `member_id` are identity columns in the subject composite relationship, not separate standalone FKs.
@@ -303,7 +303,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `account_code varchar(50) NOT NULL`, `name text NOT NULL`
 - Exactly one owner FK: `district_id uuid NULL` or `church_id uuid NULL`; CHECK `num_nonnulls(district_id, church_id) = 1`.
 - `currency_code char(3) NOT NULL FK currencies(code)`, `status varchar(20) NOT NULL`, `opened_at timestamptz NOT NULL`, `closed_at timestamptz NULL`
-- Candidate key `UNIQUE (id, currency_code)` supports account/currency binding from transactions.
+- Candidate key `UNIQUE (id, currency_code)` named `uq_financial_accounts_id_currency` supports account/currency binding from transactions.
 - Unique account code within owning scope. Account currency is immutable after first posted transaction; changing currency requires a new account.
 
 #### `currencies`
@@ -316,7 +316,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `amount numeric(19,4) NOT NULL`, `currency_code char(3) NOT NULL`, `status varchar(24) NOT NULL`
 - `transaction_date date NOT NULL`, `submitted_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `submitted_at timestamptz NULL`, `rejection_reason text NULL`, `posted_at timestamptz NULL`, `posted_by_user_account_id uuid NULL FK user_accounts(id)`
-- Candidate keys: `UNIQUE (id, currency_code)` for payment currency binding and `UNIQUE (id, financial_account_id, currency_code)` for reversal binding.
+- Candidate keys: `UNIQUE (id, currency_code)` named `uq_financial_transactions_id_currency` for payment currency binding and `UNIQUE (id, financial_account_id, currency_code)` named `uq_financial_transactions_id_account_currency` for reversal binding.
 - Composite FK `(financial_account_id, currency_code)` references `financial_accounts(id, currency_code)`, enforcing account/transaction currency equality.
 - Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
 - Unique `(financial_account_id, reference)`.
@@ -354,7 +354,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `approved_by_user_account_id uuid NULL FK user_accounts(id)`, `approved_at timestamptz NULL`
 - `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL`
 - Exactly one of district_id and church_id must be populated. CHECK period_end >= period_start.
-- Candidate composite key `UNIQUE (id, currency_code)`. Budget code/period uniqueness uses separate partial unique indexes for district and church owners.
+- Candidate composite key `UNIQUE (id, currency_code)` named `uq_budgets_id_currency`. Budget code/period uniqueness uses separate partial unique indexes for district and church owners.
 - Budget approval, revision, categories, over-allocation, and variance treatment remain policy-blocked.
 
 #### `budget_lines`
@@ -416,7 +416,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - Unique `(notification_recipient_id, attempt_number)`. Do not mark delivered based only on provider acceptance.
 
 #### `outbox_messages`
-- `id uuid PK`, `event_id uuid NOT NULL UNIQUE`, `event_version integer NOT NULL CHECK (event_version > 0)`, `aggregate_type varchar(80) NOT NULL`, `aggregate_id uuid NOT NULL`, `event_type varchar(100) NOT NULL`, `payload jsonb NOT NULL`, `occurred_at timestamptz NOT NULL`
+- `id uuid PK`, `event_id uuid NOT NULL UNIQUE` named `uq_outbox_messages_event_id`, `event_version integer NOT NULL CHECK (event_version > 0)`, `aggregate_type varchar(80) NOT NULL`, `aggregate_id uuid NOT NULL`, `event_type varchar(100) NOT NULL`, `payload jsonb NOT NULL`, `occurred_at timestamptz NOT NULL`
 - `status varchar(20) NOT NULL`, `attempt_count integer NOT NULL DEFAULT 0 CHECK (attempt_count >= 0)`, `available_at timestamptz NOT NULL`, `locked_at timestamptz NULL`, `lock_owner text NULL`, `lease_expires_at timestamptz NULL`, `published_at timestamptz NULL`, `last_error_code text NULL`
 - Unique logical event key to be defined per aggregate/event identity. Payload is versioned, allowlisted, and contains references rather than unnecessary personal data or secrets.
 - Insert the outbox row in the same transaction as the business mutation. A worker claims rows with a concurrency-safe lock/lease and publishes at least once; consumers deduplicate.
@@ -841,7 +841,7 @@ Columns:
 
 Keys and indexes:
 - `UNIQUE (event_id, member_id)` ensures one attendance subject per member/event.
-- `UNIQUE (id, event_id, member_id)` supports composite child FKs.
+- `UNIQUE (id, event_id, member_id)` named `uq_event_attendance_subjects_id_event_member` supports composite child FKs.
 - Index `(event_id, mode)` for event attendance reconciliation.
 - Index `(member_id, created_at)` for member attendance history.
 
