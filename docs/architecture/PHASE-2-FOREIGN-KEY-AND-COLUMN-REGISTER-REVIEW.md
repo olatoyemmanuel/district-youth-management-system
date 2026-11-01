@@ -99,3 +99,7 @@ Results:
 This is a structural coverage check only. It does not prove that all indexes are necessary, optimal, non-redundant under every composite key, or performant against real workloads. Some partial predicates remain blocked until lifecycle states are approved. No PostgreSQL index was created and no query plan was run.
 
 **Updated result:** FK source-index coverage is addressed at proposal level. Final index redundancy/workload review remains open. Overall physical-design outcome remains further revision required.
+
+## 8. Owner decision dependencies
+
+The open policy and environment dependencies are consolidated in the [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md). In particular, retention source enrollment, lifecycle predicates, finance rules, scope exceptions and PostgreSQL capabilities remain decision-gated.
