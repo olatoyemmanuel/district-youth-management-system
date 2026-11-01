@@ -98,8 +98,24 @@ Results:
 
 This is a structural coverage check only. It does not prove that all indexes are necessary, optimal, non-redundant under every composite key, or performant against real workloads. Some partial predicates remain blocked until lifecycle states are approved. No PostgreSQL index was created and no query plan was run.
 
-**Updated result:** FK source-index coverage is addressed at proposal level. Final index redundancy/workload review remains open. Overall physical-design outcome remains further revision required.
+**Updated result:** The structural audit found a proposed left-prefix index for every listed FK source group. This does not prove complete ordered-tuple coverage for composite FKs, nor does it establish non-redundancy. The follow-up [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md) identifies specific tuple-coverage, duplication, and FK-inventory defects. Overall physical-design outcome remains further revision required.
 
 ## 8. Owner decision dependencies
 
 The open policy and environment dependencies are consolidated in the [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md). In particular, retention source enrollment, lifecycle predicates, finance rules, scope exceptions and PostgreSQL capabilities remain decision-gated.
+
+
+## 9. Follow-up FK constraint and index redundancy audit
+
+The [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md) adds seven findings:
+- FKI-01: several canonical FK-register rows contain column inventories instead of relationship declarations.
+- FKI-02: the role-permission composite unique key does not support the permission_id FK by left prefix.
+- FKI-03: two retention-subject standalone indexes duplicate wider indexes already in the catalogue.
+- FKI-04: several composite-FK workload indexes do not contain the full ordered FK tuple as their leading columns.
+- FKI-05: attendance_records has potentially redundant standalone event/member FKs alongside its mandatory subject composite FK.
+- FKI-06: shortened index names require a deterministic PostgreSQL-safe naming scheme.
+- FKI-07: the global FK action policy must be expanded and reviewed per relationship.
+
+These findings qualify the earlier source-index coverage result. A proposed index for a source column is not sufficient evidence of full composite-FK support or an efficient, non-redundant catalogue.
+
+**Current disposition:** Further revision required. The FK register and relational matrix must be reconciled against FKI-01 through FKI-07 before the physical design is ready for final review. No implementation is authorized.
