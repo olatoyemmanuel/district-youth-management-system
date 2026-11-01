@@ -414,6 +414,10 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_department_memberships_eligibility_rule_id` | `department_memberships` | `eligibility_rule_id` | `None` |
 | `ix_fk_appointments_appointing_authority_user_account_id` | `appointments` | `appointing_authority_user_account_id` | `None` |
 | `ix_fk_appointments_approved_by_user_account_id` | `appointments` | `approved_by_user_account_id` | ` WHERE approved_by_user_account_id IS NOT NULL` |
+| `ix_fk_positions_church_id` | `positions` | `church_id` | `None` |
+| `ix_fk_positions_department_id` | `positions` | `department_id` | `None` |
+| `ix_fk_positions_district_id` | `positions` | `district_id` | `None` |
+| `ix_fk_notification_recipients_user_account_id` | `notification_recipients` | `user_account_id` | `None` |
 | `ix_fk_role_permissions_permission_id` | `role_permissions` | `permission_id` | `None` |
 | `ix_fk_appointment_role_links_role_id` | `appointment_role_links` | `role_id` | `None` |
 | `ix_fk_appointment_role_links_created_by_user_account_id` | `appointment_role_links` | `created_by_user_account_id` | `None` |
