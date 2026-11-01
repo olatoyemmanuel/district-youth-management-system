@@ -460,10 +460,29 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `target_binding_id uuid NOT NULL` referencing the selected enforceable target-binding model, `action varchar(24) NOT NULL`, `reason text NOT NULL`, `executed_at timestamptz NULL`, `outcome varchar(24) NOT NULL`, `verification_reference text NULL`
 - No destructive action for a target covered by an active hold.
 
-#### `report_definitions`, `report_runs`, and `report_export_audits`
-- Definitions: `id uuid PK`, `code varchar(80) NOT NULL UNIQUE`, `version integer NOT NULL`, `classification varchar(24) NOT NULL`, `status varchar(20) NOT NULL`.
-- Runs: `id uuid PK`, `report_definition_id uuid NOT NULL FK report_definitions(id)`, `requested_by_user_account_id uuid NOT NULL FK user_accounts(id)`, explicit scope FKs, `status varchar(24) NOT NULL`, `requested_at timestamptz NOT NULL`, `completed_at timestamptz NULL`, `output_object_key text NULL`, `expires_at timestamptz NULL`.
-- Export audit: `id uuid PK`, `report_run_id uuid NOT NULL FK report_runs(id)`, `actor_user_account_id uuid NOT NULL FK user_accounts(id)`, `format varchar(20) NOT NULL`, `exported_at timestamptz NOT NULL`, `destination_classification varchar(24) NOT NULL`.
+#### `report_definitions`
+- `id uuid PK`, `code varchar(80) NOT NULL`, `version integer NOT NULL`, `name text NOT NULL`, `description text NULL`
+- `classification varchar(24) NOT NULL`, `definition_payload jsonb NOT NULL`, `status varchar(20) NOT NULL`
+- `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
+- `created_at timestamptz NOT NULL`, `effective_from timestamptz NULL`, `effective_to timestamptz NULL`
+- UNIQUE `(code, version)` and UNIQUE `(id, version)`; CHECK version > 0 and valid effective interval.
+- Definition payload is versioned declarative configuration, not executable SQL, arbitrary code, secrets, or unrestricted user expressions.
+
+#### `report_runs`
+- `id uuid PK`, `report_definition_id uuid NOT NULL`, `report_definition_version integer NOT NULL`, `requested_by_user_account_id uuid NOT NULL FK user_accounts(id)`
+- `scope_district_id uuid NULL FK districts(id)`, `scope_church_id uuid NULL FK churches(id)`, `scope_department_id uuid NULL FK departments(id)`, `scope_kind varchar(20) NOT NULL`
+- `parameters jsonb NOT NULL`, `status varchar(24) NOT NULL`, `requested_at timestamptz NOT NULL`, `started_at timestamptz NULL`, `completed_at timestamptz NULL`
+- `failure_code varchar(80) NULL`, `output_object_key text NULL`, `output_checksum text NULL`, `output_size_bytes bigint NULL`, `expires_at timestamptz NULL`
+- Composite FK `(report_definition_id, report_definition_version)` to `report_definitions(id, version)` preserves the exact definition version used by the run.
+- Scope shape is either one approved explicit scope FK or an explicit GLOBAL scope with all scope FKs null. scope_kind values remain proposed until owner approval.
+- CHECK output_size_bytes is null or >= 0. Authorization is rechecked at request, execution, and export retrieval. Report parameters cannot widen scope.
+
+#### `report_export_audits`
+- `id uuid PK`, `report_run_id uuid NOT NULL FK report_runs(id)`, `actor_user_account_id uuid NOT NULL FK user_accounts(id)`
+- `export_object_key text NOT NULL`, `format varchar(20) NOT NULL`, `destination_classification varchar(24) NOT NULL`
+- `exported_at timestamptz NOT NULL`, `download_expires_at timestamptz NULL`, `purpose text NOT NULL`, `correlation_id uuid NULL`
+- FK delete RESTRICT. Index by report run/time and actor/time.
+- Each export/download issuance is a separate append-only row. Store protected object keys, never permanent public URLs.
 - Every report execution rechecks authorization. Export objects use protected storage and approved retention.
 
 ## 6. Critical constraints and enforcement matrix
@@ -934,3 +953,12 @@ The remaining report-table proposal and retention-subject coverage are documente
 The canonical table inventory remains 65 tables. Position scope is now owned by positions and inherited by appointments. Attendance records reference the attendance-subject anchor. Reversal rows bind original and reversal transactions to one account and currency. Audit service actors reference service_principals.
 
 **Status:** canonical high-severity reconciliation is partial. No DDL, Prisma, migration, database object, seed, or application code is authorized.
+
+
+## 23. Medium-severity integrity decisions and named indexes
+
+The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) records the proposed idempotency scope-key strategy, lifecycle-dependent uniqueness blockers, named index register, FK action policy, nullability rules, separation-of-duties requirements, and PostgreSQL compatibility baseline.
+
+The canonical report table definitions now preserve the immutable report-definition version through a composite FK. The canonical position, appointment, attendance, finance reversal, budget, and audit definitions were reconciled in Section 5 and the preceding high-severity amendment.
+
+**Remaining limitation:** the named index register still requires reconciliation against every final column. The per-column nullability/default/FK-action matrix is not complete because several source table definitions remain abbreviated. Lifecycle predicates and production PostgreSQL compatibility remain open. No implementation is authorized.
