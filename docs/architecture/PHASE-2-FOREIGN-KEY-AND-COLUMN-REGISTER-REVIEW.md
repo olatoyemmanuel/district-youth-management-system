@@ -118,4 +118,22 @@ The [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX
 
 These findings qualify the earlier source-index coverage result. A proposed index for a source column is not sufficient evidence of full composite-FK support or an efficient, non-redundant catalogue.
 
-**Current disposition:** Further revision required. The FK register and relational matrix must be reconciled against FKI-01 through FKI-07 before the physical design is ready for final review. No implementation is authorized.
+**Current disposition:** The canonical FK register, physical database design and relational integrity matrix have been reconciled against FKI-01 through FKI-07 at document level. The independent acceptance review remains pending. No implementation is authorized.
+
+
+## 10. FKI-01 to FKI-07 remediation verification
+
+The follow-up corrections are recorded in the [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md).
+
+Document-level checks performed after remediation:
+- 65 canonical table rows remain present exactly once.
+- 54 rows contain one or more FK relationships and each records the proposed RESTRICT/RESTRICT action; 11 rows correctly have no parent FK.
+- The nine previously malformed rows now describe source-to-target relationships rather than column inventories.
+- 44 stable constraint names are recorded for the expanded relationship set. Names are unique and within the PostgreSQL 63-byte identifier limit.
+- 109 proposed unique/access and FK-support index names are unique and within the identifier limit.
+- The role_permissions permission_id index is explicit.
+- Redundant standalone retention_subject_id indexes are removed; wider indexes retain the left-prefix support.
+- Composite support indexes are recorded for departments church_id/district_id, finance account/currency, payment transaction/currency, budget line budget/currency, transaction reversal tuples, attendance tuples and report definition/version.
+- Attendance_records no longer proposes standalone event_id or member_id FKs; its mandatory subject composite FK binds those identities.
+
+These are source-document consistency checks only. They do not establish SQL validity, actual PostgreSQL constraint/index creation, query-plan quality or production compatibility. A fresh independent review is still required. The physical design remains unapproved for implementation.
