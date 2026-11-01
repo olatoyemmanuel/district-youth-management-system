@@ -19,7 +19,7 @@ This is not SQL DDL. The FK actions below are proposed defaults. The register do
 - Proposed `ON DELETE RESTRICT` and `ON UPDATE RESTRICT` for every relationship in this register. Historical records are preserved; lifecycle changes use explicit closure, revocation, reversal, or retention workflows.
 - No cascade delete is proposed.
 - Every FK column set must have a supporting B-tree index unless a primary-key or unique index with a suitable left-prefix already provides the access path. A composite FK requires an index beginning with the same source-column order.
-- Proposed supporting index names follow `ix_fk_<table>_<source_columns>`. Where several actor FKs point to the same target table, each independently queried actor column receives its own index unless workload review documents otherwise.
+- Proposed supporting index names follow `ix_fk_<table>_<source_columns>`. All names must be unique and remain within PostgreSQL's 63-byte identifier limit. If a readable logical name exceeds the limit, use a deterministic shortened table/column token plus a stable six-character hash derived from the full logical name. Do not use arbitrary ordinal suffixes or rely on silent PostgreSQL truncation. Where several actor FKs point to the same target table, each independently queried actor column receives its own index unless a wider suitable left-prefix index or workload review documents otherwise.
 - Composite FK targets must have a matching PK/UNIQUE candidate key with the exact ordered columns.
 - Nullable FK means the relationship is optional at the point represented. It does not authorize deletion of the referenced row.
 - The final DDL review must verify every index against query plans and avoid redundant indexes.
@@ -434,3 +434,14 @@ The follow-up [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT
 - global FK action defaults not yet expanded per relationship.
 
 The audit is a structural document review, not SQL or database validation. Its findings must be reconciled into this register and the relational integrity matrix before the FK inventory is considered complete. No implementation is authorized.
+
+
+## 5.9 Canonical index-name validation
+
+The current index-name inventory was checked after the FKI-06 cleanup:
+- 110 index names are present across the FK/column register's unique/access and FK-support proposals.
+- All 110 names are unique.
+- No proposed name exceeds PostgreSQL's 63-byte identifier limit.
+- No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
+
+This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
