@@ -277,3 +277,14 @@ The conceptual ERD approval authorizes physical design work only. This matrix do
 - Production or local database changes.
 
 Physical design requires explicit project-owner approval. Implementation requires a separate explicit authorization. DFR-001 through DFR-006 remain preserved. The repository's DFR-006 status discrepancy remains unresolved and must not be silently changed.
+
+
+---
+
+## 12. High-severity remediation addendum
+
+The proposed detailed resolutions for the high-severity findings are recorded in the [High-Severity Relational Integrity Remediation](./PHASE-2-HIGH-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md).
+
+The addendum completes proposed table-column inventories for budgets, budget lines, report definitions, report runs, and report export audits. It also specifies proposed normalized position/appointment scope, attendance subject locking, same-account/same-currency reversal references, retention-subject source binding, and exact audit actor identity combinations.
+
+These are proposed technical resolutions, not final approved constraints. The addendum explicitly preserves policy and environment blockers. Reconcile the addendum into the canonical per-column matrix before physical-design approval.
