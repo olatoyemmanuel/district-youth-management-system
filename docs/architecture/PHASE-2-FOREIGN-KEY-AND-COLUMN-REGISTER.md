@@ -488,6 +488,14 @@ A structural comparison was performed between the FK source-column register and 
 All names and predicates remain proposed. Before DDL, verify each source column exists, composite FK columns appear in exact source order, optional composite FKs use a predicate requiring every component to be non-NULL, and no equivalent index already covers the same access path. This index list does not claim performance benchmarking or database creation.
 
 
+## 5.7.1 Named target candidate-key indexes
+
+| `uq_churches_id_district` | `churches` | `id, district_id` | `None` |
+| `uq_event_attendance_subjects_id_event_member` | `event_attendance_subjects` | `id, event_id, member_id` | `None` |
+| `uq_event_registrations_id_event_member` | `event_registrations` | `id, event_id, member_id` | `None` |
+| `uq_financial_transactions_id_currency` | `financial_transactions` | `id, currency_code` | `None` |
+| `uq_budgets_id_currency` | `budgets` | `id, currency_code` | `None` |
+
 ## 5.8 FK constraint and index redundancy audit
 
 The follow-up [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md) records seven findings requiring correction before physical-design approval:
@@ -505,9 +513,9 @@ The audit is a structural document review, not SQL or database validation. Its f
 ## 5.9 Canonical index-name validation
 
 The current index-name inventory was checked after the FKI-06 cleanup:
-- 116 distinct index names are present across the FK/column register's unique/access and FK-support proposals.
-- All 116 names are unique.
+- 121 distinct index names are present across the FK/column register's unique/access and FK-support proposals.
+- All 121 names are unique.
 - No proposed name exceeds PostgreSQL's 63-byte identifier limit.
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 206 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 211 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
