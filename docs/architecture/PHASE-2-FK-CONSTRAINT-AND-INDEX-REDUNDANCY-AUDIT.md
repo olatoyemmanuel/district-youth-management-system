@@ -220,4 +220,4 @@ Current status:
 - FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 211 distinct names.
 - FKI-07: RESOLVED AT DOCUMENT LEVEL; all 155 FK relationships have explicit RESTRICT/RESTRICT actions.
 
-Do not treat the original finding headings or preliminary remediation labels as current status. The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) controls the current PIR disposition: PIR-01 through PIR-04 have document-level corrections, PIR-05 remains partially resolved, and PIR-06/PIR-07 remain open pending further work.
+Do not treat the original finding headings or preliminary remediation labels as current status. The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) controls the current PIR disposition: PIR-01 through PIR-04 are verified at document level, PIR-05 remains partially resolved, PIR-06 is verified at document level, and PIR-07 remains partially resolved.
