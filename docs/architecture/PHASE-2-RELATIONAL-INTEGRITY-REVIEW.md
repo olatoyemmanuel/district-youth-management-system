@@ -45,3 +45,27 @@ This is a document consistency review. No PostgreSQL DDL was compiled or execute
 **Result: Further revision required.** The relational-integrity matrix is ready for owner/technical review as a working artifact. The physical design remains unapproved for implementation until all High findings and the relevant Medium findings are closed, the PostgreSQL target is confirmed, and the project owner explicitly approves the complete physical design.
 
 DFR-001 through DFR-006 remain preserved. The repository's conflicting DFR-006 status statements remain unresolved and must not be silently altered.
+
+
+## 5. Follow-up: proposed remediation recorded
+
+A dedicated [High-Severity Relational Integrity Remediation](./PHASE-2-HIGH-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) has been added.
+
+| Finding | Follow-up result | Remaining acceptance condition |
+|---|---|---|
+| RIM-01 | Addressed: canonical inventory reconciles to 65 distinct tables. | Keep inventory synchronized with future table changes. |
+| RIM-02 | Proposed definitions supplied for budgets, budget lines, report definitions, report runs, and report export audits. | Reconcile every column into canonical matrix; confirm budget/report policy and scope. |
+| RIM-03 | Explicit FK/scope-binding approach and scope inventory supplied. | Produce final source-column/target-column FK map and delete/update actions for all scope-bearing columns. |
+| RIM-04 | Proposed normalization makes position own scope and appointment inherit through position. | Reconcile position columns, confirm department ownership policy, specify exact named constraints and overlap enforcement. |
+| RIM-05 | Attendance subject parent, composite relationships, mode checks, lock order, and concurrency acceptance test specified. | Choose deferred trigger or normalized child design; confirm PostgreSQL support and specify executable trigger behavior. |
+| RIM-06 | Full reversal model binds original and reversal transactions to same account and currency; partial reversal remains disabled. | Finance authority must confirm full-reversal-only MVP and transaction type/accounting semantics. |
+| RIM-07 | Retention subject source-link and shared-lock model specified. | Complete record-class enrollment inventory and verify exactly-one-source enforcement strategy. |
+| RIM-08 | Actor identity truth table and append-only runtime privilege model specified. | Reconcile service principal FK and exact CHECK/privilege grants; confirm audit access authority. |
+
+The follow-up closes the documentation gap by recording concrete proposals. It does not close the findings as implementation-ready constraints.
+
+## 6. Current review disposition
+
+**Result: Proposed remediation documented; canonical reconciliation and independent verification still required.** The next review must compare the remediation addendum against the full 65-table matrix, eliminate duplicate/conflicting definitions, produce the exact FK and index registers, and confirm PostgreSQL compatibility. RIM-09 through RIM-14 remain open.
+
+No PostgreSQL DDL was compiled or executed. No database concurrency tests were run. No Prisma schema, migration, SQL DDL, database object, generated client, or application code was created or changed.
