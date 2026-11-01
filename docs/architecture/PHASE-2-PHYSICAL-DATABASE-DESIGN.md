@@ -965,3 +965,10 @@ The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY
 The canonical report table definitions now preserve the immutable report-definition version through a composite FK. The canonical position, appointment, attendance, finance reversal, budget, and audit definitions were reconciled in Section 5 and the preceding high-severity amendment.
 
 **Remaining limitation:** the named index register still requires reconciliation against every final column. The per-column nullability/default/FK-action matrix is not complete because several source table definitions remain abbreviated. Lifecycle predicates and production PostgreSQL compatibility remain open. No implementation is authorized.
+
+
+## 24. Independent relational-integrity second review
+
+The [Phase 2 Relational Integrity Second Review](./PHASE-2-RELATIONAL-INTEGRITY-SECOND-REVIEW.md) verifies the revised 65-table matrix and canonical high-severity definitions. It identifies remaining work in the exact FK and column-level registers, attendance registration composite integrity, final attendance enforcement choice, retention source enrollment, index reconciliation, lifecycle predicates, finance policy, and PostgreSQL target confirmation.
+
+**Status:** further revision required. Physical design is not approved. No implementation is authorized.
