@@ -769,3 +769,106 @@ This is a design-level plan only. No SQL, migration, Prisma model or live databa
 This revision incorporates explicit design solutions for the twelve review findings. It remains a working proposal, not approved for implementation. PDB-R12 is partially open because each state-bearing table needs an approved lifecycle catalogue. PostgreSQL-version compatibility, concrete DDL proofs, query-plan validation, finance policy, retention schedule, child-account safeguarding policy and credential authority evidence also remain outstanding.
 
 Conceptual ERD approval remains in force. This revision authorizes no Prisma changes, migrations, SQL DDL, database objects, generated clients or application implementation. Separate project-owner approval of the physical design and separate implementation authorization remain mandatory.
+
+
+---
+
+## 18. Complete definitions for additional physical structures
+
+The following definitions promote the three structures introduced in Section 14 into the relational catalogue. They are candidate physical definitions and must be included in the final table-by-table key, FK, index, nullability and DDL review.
+
+### 18.1 `event_attendance_subjects`
+
+Purpose: establish one authoritative attendance mode for a member within one event, preventing event-level and session-level attendance from being mixed.
+
+Columns:
+- `id uuid PK NOT NULL`
+- `event_id uuid NOT NULL FK events(id)`
+- `member_id uuid NOT NULL FK members(id)`
+- `mode varchar(16) NOT NULL CHECK (mode IN ('EVENT','SESSION'))`
+- `created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP`
+- `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`
+
+Keys and indexes:
+- `UNIQUE (event_id, member_id)` ensures one attendance subject per member/event.
+- `UNIQUE (id, event_id, member_id)` supports composite child FKs.
+- Index `(event_id, mode)` for event attendance reconciliation.
+- Index `(member_id, created_at)` for member attendance history.
+
+Integrity:
+- The attendance subject is created in the same transaction as the first attendance record or through a controlled event-attendance initialization workflow.
+- `attendance_records` must reference the subject and match its event and member through a composite FK.
+- EVENT mode permits one event-level record with no session.
+- SESSION mode permits one record per event session and requires a session belonging to the same event.
+- A deferred constraint trigger or normalized subtype tables must enforce parent mode/child shape. The trigger locks the subject row and prevents concurrent mode changes or mismatched inserts.
+- A subject cannot change from EVENT to SESSION or vice versa after an attendance record exists. Corrections do not change its mode.
+- Registration prerequisite remains a policy gap. A nullable registration reference does not settle that policy.
+
+### 18.2 `retention_subjects`
+
+Purpose: provide a stable, enforceable anchor for holds and retention actions against one exact retained record.
+
+Columns:
+- `id uuid PK NOT NULL`
+- `record_class varchar(60) NOT NULL`
+- `lifecycle_state varchar(24) NOT NULL`
+- `created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP`
+- `disposal_eligible_at timestamptz NULL`
+- `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`
+
+Keys and indexes:
+- Primary key on `id`.
+- Index `(record_class, lifecycle_state, disposal_eligible_at)` for retention processing.
+- Each retained source record carries a `retention_subject_id uuid UNIQUE FK retention_subjects(id)` once its record class is activated for retention governance.
+- If a source table cannot carry that FK, use a dedicated target-specific link table with a real FK to the source record and a unique FK to the retention subject.
+
+Integrity:
+- A retention subject maps to exactly one source record. The mapping must be enforced by the target-specific link or controlled deferred integrity mechanism, not by a free-form target type/ID.
+- `retention_holds.retention_subject_id` is NOT NULL and references the exact subject.
+- `retention_actions.retention_subject_id` is NOT NULL and references the exact subject.
+- Hold creation/release and disposal lock the same subject row. The disposal transaction checks active holds and the approved schedule while holding that lock.
+- The anchor is not itself authority to delete data. No permanent deletion occurs without an approved retention schedule and authorized action.
+- Retention periods and record-class schedules remain unresolved policy evidence.
+
+### 18.3 `service_principals`
+
+Purpose: identify a stable software/service actor for audit attribution without storing authentication secrets.
+
+Columns:
+- `id uuid PK NOT NULL`
+- `code varchar(80) NOT NULL UNIQUE`
+- `display_name varchar(160) NOT NULL`
+- `description text NULL`
+- `status varchar(20) NOT NULL`
+- `created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP`
+- `updated_at timestamptz NOT NULL`
+
+Integrity:
+- No password, token, secret, signing key, credential, or connection string column is permitted.
+- `audit_events.actor_service_principal_id` references `service_principals(id)`.
+- Only registered and authorized service identities are used for SERVICE actor attribution.
+- Disabling a service principal prevents new authenticated service operations but does not rewrite historical audit events.
+- Service-principal lifecycle and provisioning authority require security-owner approval.
+
+### 18.4 Related catalogue amendments
+
+The following existing table definitions must be amended before DDL approval:
+
+- `positions`: add `allowed_scope_type varchar(16) NOT NULL`, with a controlled value set DISTRICT/CHURCH/DEPARTMENT. For DEPARTMENT positions, `department_id` is required. The appointment's exact scope must match.
+- `events`: add `reserved_count integer NOT NULL DEFAULT 0 CHECK (reserved_count >= 0)`. Capacity-consuming registration states must be approved before this counter is activated.
+- `attendance_records`: add `attendance_subject_id uuid NOT NULL`; enforce composite event/member linkage to `event_attendance_subjects`, plus the selected mode's uniqueness rule.
+- `audit_events`: add nullable `actor_service_principal_id uuid FK service_principals(id)`; add actor-type CHECK semantics and dedicated append-only writer permissions from Section 14.5.
+- `retention_holds`: replace category-only target description with `retention_subject_id uuid NOT NULL FK retention_subjects(id)`.
+- `retention_actions`: replace the unresolved `target_binding_id` with `retention_subject_id uuid NOT NULL FK retention_subjects(id)`.
+- `outbox_messages`: add stable `event_id uuid NOT NULL UNIQUE`, `event_version integer NOT NULL CHECK (event_version > 0)`, `lock_owner text NULL`, and `lease_expires_at timestamptz NULL`, as detailed in Section 14.10.
+- `financial_accounts`: declare `UNIQUE (id, currency_code)`.
+- `financial_transactions`: declare `UNIQUE (id, currency_code)` and the account/currency composite candidate key required by Section 14.3.
+- `transaction_reversals`: add the shared account/currency columns or equivalent composite relationship required to prove the original and reversal transaction belong to the same account and currency.
+
+The approved [Lifecycle and State Catalogue](./PHASE-2-LIFECYCLE-STATE-CATALOGUE.md) is the working source for proposed table-specific states and decision outcomes. It deliberately distinguishes derived states, proposed technical states, policy-blocked values and immutable history. No production CHECK constraint or seed should be generated from a PROPOSED or POLICY BLOCKED entry without the required approval.
+
+## 19. Physical-design completion status
+
+The physical table catalogue now includes explicit definitions for the three additional structures introduced by the first review. The lifecycle/state catalogue is a separate linked design artifact and covers the status-bearing and decision-bearing entities. It is not final approval: policy-blocked state vocabularies, authority assignments, exact DDL constraints, PostgreSQL compatibility, finance rules, retention periods and safeguarding/credential evidence remain outstanding.
+
+No Prisma schema, migration, SQL DDL, database object, generated client or application code has been created or changed.
