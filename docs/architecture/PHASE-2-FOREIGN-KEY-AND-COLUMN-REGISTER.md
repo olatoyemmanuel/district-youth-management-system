@@ -323,24 +323,11 @@ These are FK-maintenance and scoped-query candidates. A composite index may sati
 
 ## 5.7 Additional FK support-index coverage proposals
 
-| `ix_fk_role_permissions_permission_id` | `role_permissions` | `permission_id` | `None` |
 | `ix_fk_user_role_assignments_role_id` | `user_role_assignments` | `role_id` | `None` |
 | `ix_fk_user_role_assignments_granted_by_user_account_id` | `user_role_assignments` | `granted_by_user_account_id` | `None` |
-| `ix_fk_access_denies_permission_id` | `access_denies` | `permission_id` | `None` |
-| `ix_fk_access_denies_issued_by_user_account_id` | `access_denies` | `issued_by_user_account_id` | `None` |
-| `ix_fk_access_denies_reviewed_by_user_account_id` | `access_denies` | `reviewed_by_user_account_id` | `WHERE reviewed_by_user_account_id IS NOT NULL` |
 | `ix_fk_events_created_by_user_account_id` | `events` | `created_by_user_account_id` | `None` |
 | `ix_fk_audit_events_initiating_user_account_id` | `audit_events` | `initiating_user_account_id` | `WHERE initiating_user_account_id IS NOT NULL` |
-| `ix_fk_audit_events_district_id` | `audit_events` | `district_id` | `WHERE district_id IS NOT NULL` |
-| `ix_fk_audit_events_church_id` | `audit_events` | `church_id` | `WHERE church_id IS NOT NULL` |
-| `ix_fk_audit_events_department_id` | `audit_events` | `department_id` | `WHERE department_id IS NOT NULL` |
 | `ix_fk_audit_access_events_audit_event_id` | `audit_access_events` | `audit_event_id` | `WHERE audit_event_id IS NOT NULL` |
-| `ix_fk_audit_access_events_district_id` | `audit_access_events` | `district_id` | `WHERE district_id IS NOT NULL` |
-| `ix_fk_audit_access_events_church_id` | `audit_access_events` | `church_id` | `WHERE church_id IS NOT NULL` |
-| `ix_fk_audit_access_events_department_id` | `audit_access_events` | `department_id` | `WHERE department_id IS NOT NULL` |
-| `ix_fk_idempotency_records_district_id` | `idempotency_records` | `district_id` | `WHERE district_id IS NOT NULL` |
-| `ix_fk_idempotency_records_church_id` | `idempotency_records` | `church_id` | `WHERE church_id IS NOT NULL` |
-| `ix_fk_idempotency_records_department_id` | `idempotency_records` | `department_id` | `WHERE department_id IS NOT NULL` |
 | `ix_fk_retention_subjects_created_by_user_account_id` | `retention_subjects` | `created_by_user_account_id` | `None` |
 | `ix_fk_retention_holds_issued_by_user_account_id` | `retention_holds` | `issued_by_user_account_id` | `None` |
 | `ix_fk_retention_holds_approved_by_user_account_id` | `retention_holds` | `approved_by_user_account_id` | `WHERE approved_by_user_account_id IS NOT NULL` |
@@ -348,7 +335,7 @@ These are FK-maintenance and scoped-query candidates. A composite index may sati
 | `ix_fk_retention_actions_initiated_by_user_account_id` | `retention_actions` | `initiated_by_user_account_id` | `None` |
 | `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id` | `WHERE approved_by_user_account_id IS NOT NULL` |
 
-A structural comparison was performed between the FK source-column register and the named unique/access indexes in the medium-severity index catalogue, including the 21 named scope/retention indexes in Section 5.6. The comparison found 79 FK source-column groups without a matching left-prefix index proposal. The following additional indexes close those documented coverage gaps at the proposal level.
+A structural comparison was performed between the FK source-column register and the named unique/access indexes. The following proposals supplement the earlier catalogue. Composite FK coverage must be checked against the full ordered tuple, not merely the first source column. Entries already covered by Section 5.6 or a wider suitable index are not duplicated here.
 
 | Proposed index name | Table | Key columns | Predicate |
 |---|---|---|---|
