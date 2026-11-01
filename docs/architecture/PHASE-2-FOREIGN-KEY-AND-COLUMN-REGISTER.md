@@ -419,7 +419,6 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_positions_church_id` | `positions` | `church_id` | `None` |
 | `ix_fk_positions_department_id` | `positions` | `department_id` | `None` |
 | `ix_fk_positions_district_id` | `positions` | `district_id` | `None` |
-| `ix_fk_notification_recipients_user_account_id` | `notification_recipients` | `user_account_id` | `None` |
 | `ix_fk_role_permissions_permission_id` | `role_permissions` | `permission_id` | `None` |
 | `ix_fk_appointment_role_links_role_id` | `appointment_role_links` | `role_id` | `None` |
 | `ix_fk_appointment_role_links_created_by_user_account_id` | `appointment_role_links` | `created_by_user_account_id` | `None` |
@@ -513,9 +512,9 @@ The audit is a structural document review, not SQL or database validation. Its f
 ## 5.9 Canonical index-name validation
 
 The current index-name inventory was checked after the FKI-06 cleanup:
-- 121 distinct index names are present across the FK/column register's unique/access and FK-support proposals.
-- All 121 names are unique.
+- 120 distinct index names are present across the FK/column register's unique/access and FK-support proposals.
+- All 120 names are unique.
 - No proposed name exceeds PostgreSQL's 63-byte identifier limit.
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 216 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 214 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
