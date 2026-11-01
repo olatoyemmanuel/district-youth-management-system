@@ -290,7 +290,7 @@ The proposed detailed resolutions for the high-severity findings are recorded in
 
 The addendum completes proposed table-column inventories for budgets, budget lines, report definitions, report runs, and report export audits. It also specifies proposed normalized position/appointment scope, attendance subject locking, same-account/same-currency reversal references, retention-subject source binding, and exact audit actor identity combinations.
 
-These are proposed technical resolutions, not final approved constraints. The addendum explicitly preserves policy and environment blockers. The [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) now reconciles all 599 typed columns; default, CHECK and policy-dependent decisions remain open.
+These are proposed technical resolutions, not final approved constraints. The addendum explicitly preserves policy and environment blockers. The [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) now reconciles all 617 typed columns; default, CHECK and policy-dependent decisions remain open.
 
 
 ## 13. Medium-severity remediation and canonical design links
@@ -337,6 +337,6 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is t
 
 The 65 table rows still reconcile exactly with the FK register. This table-count match does not establish complete per-relationship FK declarations, target-key evidence, MATCH semantics, full index coverage or complete per-column definitions.
 
-PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level index review. PIR-06 has a document-level status reconciliation and awaits independent re-review. PIR-07 is partially resolved by the 599-column register, with defaults and CHECK definitions still open.
+PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level index review. PIR-06 has a document-level status reconciliation and awaits independent re-review. PIR-07 is partially resolved by the 617-column register, with defaults and CHECK definitions still open.
 
 **Current status:** Further revision required. No implementation is authorized.
