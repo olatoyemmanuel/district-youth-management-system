@@ -170,7 +170,7 @@ The document checks confirm that:
 - the canonical FK register contains 65 table rows;
 - each of the 54 FK-bearing table rows records the proposed RESTRICT/RESTRICT action for its listed relationships;
 - the remaining 11 rows have no parent FK;
-- the current index-name list contains 109 unique names, all within the PostgreSQL identifier limit;
+- the current FK-register index-name list contains 112 unique names, all within the PostgreSQL identifier limit;
 - 44 stable FK constraint names are recorded for the expanded relationship rows, with no duplicate or overlength names;
 - the attendance subject relationship is consistent across the physical design, FK register and integrity matrix.
 
@@ -183,7 +183,7 @@ The document-level corrections are complete for the seven findings, but this aud
 1. Every named FK target tuple is backed by an exact PK/UNIQUE candidate key with matching order.
 2. All 44 newly named constraints reconcile with the physical table definitions and relational matrix.
 3. All other existing FK relationships receive stable final constraint names in the DDL worksheet before implementation.
-4. The 109 current index names reconcile with all PK, unique, partial-unique, FK-supporting and workload index proposals across the complete design.
+4. The 202 distinct names in the canonical combined inventory reconcile the named unique, partial-unique, FK-supporting and workload index proposals from both source catalogues.
 5. Every composite FK has full ordered tuple support, including the departments church/district relationship.
 6. PostgreSQL target version, extension availability, partial-index semantics and all-null/all-present composite FK behavior are verified.
 7. No SQL compilation, live catalogue or query-plan result is claimed until those checks are actually run in an authorized environment.
@@ -200,8 +200,8 @@ Current status:
 - FKI-02: RESOLVED AT DOCUMENT LEVEL.
 - FKI-03: RESOLVED AT DOCUMENT LEVEL.
 - FKI-04: PARTIALLY RESOLVED.
-- FKI-05: RESOLVED AT DOCUMENT LEVEL, subject to attendance null-semantics correction PIR-02.
-- FKI-06: RESOLVED AT DOCUMENT LEVEL, subject to complete combined inventory reconciliation PIR-05.
+- FKI-05: RESOLVED AT DOCUMENT LEVEL; optional attendance composite FKs now specify MATCH SIMPLE and negative/positive integrity tests.
+- FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 202 distinct names.
 - FKI-07: PARTIALLY RESOLVED.
 
 Do not treat the original finding headings or the preliminary remediation table as final acceptance. PIR-01 through PIR-07 are the controlling open findings until corrected and independently re-reviewed.
