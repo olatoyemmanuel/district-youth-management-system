@@ -887,3 +887,16 @@ The initial independent review is recorded in [Phase 2 Relational Integrity Revi
 The matrix also records PostgreSQL-version-dependent choices, including exclusion constraints, `btree_gist`, deferred constraint triggers, and `NULLS NOT DISTINCT`. Production PostgreSQL version and extension support remain unconfirmed.
 
 **Status:** relational-integrity design is in progress and not approved for implementation. Column-by-column nullability/default/FK-action proof and named index inventory remain required. No Prisma schema, migration, SQL DDL, database object, generated client, or application code has been created or changed.
+
+
+---
+
+## 21. High-severity relational-integrity remediation
+
+The detailed proposed response to RIM-02 through RIM-08 is documented in the [High-Severity Relational Integrity Remediation](./PHASE-2-HIGH-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md).
+
+It specifies proposed complete column inventories for budget and reporting records; normalizes appointment scope through positions; defines the attendance subject serialization contract; specifies same-account and same-currency full reversal relationships; defines source-record binding and locking for retention subjects; and gives the audit actor identity truth table and append-only privilege requirements.
+
+This is a design amendment only. The proposals are not yet reconciled into executable DDL or a complete per-column physical specification. Policy blockers, retention schedule evidence, finance authority decisions, department ownership, report governance, and production PostgreSQL compatibility remain open.
+
+**Status:** high-severity findings have documented proposed resolutions. They are not marked closed pending canonical design reconciliation and independent review. No implementation is authorized.
