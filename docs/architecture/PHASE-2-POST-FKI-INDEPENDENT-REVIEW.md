@@ -46,9 +46,9 @@ Document-level checks:
 
 The table-level Section 3 summary remains grouped but is now explicitly designated as a table-coverage summary. The [Named Foreign-Key Relationship Register](./PHASE-2-NAMED-FOREIGN-KEY-RELATIONSHIP-REGISTER.md) provides 155 one-row-per-FK declarations across 54 FK-bearing tables, with 11 zero-FK tables retained in the 65-table coverage summary.
 
-All 155 rows record stable constraint names, ordered source/target tuples, source nullability, target PK/UNIQUE evidence, MATCH SIMPLE semantics, ON DELETE/UPDATE actions, and a named supporting index or documented left-prefix support.
+All 155 rows record stable constraint names, ordered source/target tuples, source nullability, target PK/UNIQUE evidence, MATCH SIMPLE semantics, ON DELETE/UPDATE actions, and a named supporting index. Independent verification confirms every support index begins with the complete ordered source tuple.
 
-**Correction recorded:** The relationship-level register supplies the one-row-per-FK inventory. Independent review must verify each relationship against the source design and confirm candidate-key and index definitions.
+**Correction recorded:** The relationship-level register supplies the one-row-per-FK inventory. The 2026-11-01 re-review verified the relationship rows, source support indexes and all composite target unique keys at document level.
 
 ### PIR-02 — Optional attendance composite-FK nullability is internally contradictory
 
@@ -68,7 +68,7 @@ Positive and negative integrity-test requirements cover valid references, absent
 
 The FK register and medium catalogue now name separate indexes for `access_denies.permission_id`, `issued_by_user_account_id`, and `reviewed_by_user_account_id`. The target-scope index is correctly described as supporting `target_user_account_id` only by left prefix. The `role_conflict_rules` row now states that the pair/version unique key supports `role_a_id`; `ix_fk_role_conflict_rules_role_b_id` supports `role_b_id`.
 
-**Correction recorded:** All three missing access-deny FK index proposals are included in the canonical combined inventory. Independent review must still verify the index definitions against final column and workload requirements.
+**Correction recorded:** All three missing access-deny FK index proposals are included in the canonical combined inventory. The re-review confirms their exact columns and the role-conflict role_a/role_b support distinction. Workload approval remains open.
 
 ### PIR-04 — Department FK row does not match its corrected composite-index catalogue
 
@@ -77,7 +77,7 @@ The FK register and medium catalogue now name separate indexes for `access_denie
 
 The table-level row now references `ix_fk_departments_church_district(church_id,district_id)` for the composite church/district relationship and `ix_fk_departments_district_id(district_id)` for the district FK. The redundant standalone church FK is not listed; the composite FK proves both church existence and same-district ownership.
 
-**Correction recorded:** The table summary, named relationship register and index catalogue now agree.
+**Correction recorded:** The table summary, named relationship register and index catalogue now agree. The composite source index and target candidate key both match their declared ordered tuples.
 
 ### PIR-05 — Total proposed index inventory is inconsistent
 
