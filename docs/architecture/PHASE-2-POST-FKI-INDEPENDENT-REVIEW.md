@@ -33,7 +33,7 @@ Document-level checks:
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
 - 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
-- The canonical inventory now contains 116 distinct FK-register names and 94 medium-catalogue names, with four shared names.
+- The canonical inventory now contains 121 distinct FK-register names and 94 medium-catalogue names, with four shared names.
 - The combined distinct proposed index-name count is 206. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
@@ -84,11 +84,11 @@ The table-level row now references `ix_fk_departments_church_district(church_id,
 **Severity:** Medium  
 **Status:** PARTIALLY RESOLVED, pending definition-level redundancy review
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 206 distinct proposed index names: 116 in the FK register, 94 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 211 distinct proposed index names: 121 in the FK register, 94 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
 
 Definition-level duplicate detection, final column/predicate verification, lifecycle-predicate approval and workload review remain outstanding.
 
-**Correction recorded:** The conflicting 190-, 199- and 202-name summaries have been superseded by the 206-name inventory. The remaining definition-level review keeps this finding partially resolved.
+**Correction recorded:** The conflicting 190-, 190-, 199- and 202-name summaries have been superseded by the 211-name inventory. The remaining definition-level review keeps this finding partially resolved.
 
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
@@ -123,14 +123,14 @@ The column-level register still records NOT SPECIFIED IN SOURCE for defaults not
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
 | FKI-04 | PARTIALLY RESOLVED | Several full composite proposals are present, but the complete 65-table composite FK/index pairing has not been independently proven. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 206 distinct names. |
+| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 211 distinct names. |
 | FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
 
 ## 5. Required next correction sequence
 
 1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 599-column register (PIR-07).
 2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
-3. Independently verify the 155-row FK relationship register and 206-name index inventory.
+3. Independently verify the 155-row FK relationship register and 211-name index inventory.
 4. Conduct a fresh acceptance review and update all dispositions.
 
 ## 6. Owner decisions and environment blockers retained
