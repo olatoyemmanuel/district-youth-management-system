@@ -21,7 +21,7 @@ It is the single document-level name inventory for those proposals. It does not 
 | Distinct names in FK/column register | 112 |
 | Distinct names in medium-severity catalogue | 94 |
 | Names shared by both catalogues | 4 |
-| **Combined distinct proposed index names** | **202** |
+| **Combined distinct proposed index names** | **206** |
 | Longest proposed identifier | 63 characters |
 | Names exceeding PostgreSQL's 63-byte identifier limit | 0 |
 
@@ -139,9 +139,13 @@ One row represents one distinct proposed index name. The definition column recor
 | `ix_fk_integration_failures_webhook_event_id` | `integration_failures` | `webhook_event_id WHERE  WHERE webhook_event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | FK support | FK register |
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | FK support | FK register |
+| `ix_fk_notification_recipients_user_account_id` | `notification_recipients` | `user_account_id` | FK support | FK register |
 | `ix_fk_notification_deliveries_provider_id` | `notification_deliveries` | `provider_id WHERE  WHERE provider_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_notification_preferences_user_account_id` | `notification_preferences` | `user_account_id` | FK support | FK register |
 | `ix_fk_notifications_template_id` | `notifications` | `template_id WHERE  WHERE template_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_positions_church_id` | `positions` | `church_id` | FK support | FK register |
+| `ix_fk_positions_department_id` | `positions` | `department_id` | FK support | FK register |
+| `ix_fk_positions_district_id` | `positions` | `district_id` | FK support | FK register |
 | `ix_fk_payments_financial_transaction_id_currency_code` | `payments` | `financial_transaction_id, currency_code` | FK support | FK register |
 | `ix_fk_payments_provider_id` | `payments` | `provider_id WHERE  WHERE provider_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_report_definitions_approved_by_user_account_id` | `report_definitions` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
