@@ -230,3 +230,7 @@ The follow-up review remains "further revision required". Source-record retentio
 ## 19. FK source-index coverage
 
 The proposed index catalogue now contains 190 unique names. A document-level left-prefix comparison found a proposed supporting index for every FK source-column group. This does not establish performance or eliminate index redundancy; workload review and PostgreSQL validation remain outstanding.
+
+## 20. Phase 2 owner decision register
+
+The [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md) consolidates open decisions and their impact on the physical design. The approved conceptual ERD remains unchanged; this register does not authorize implementation.
