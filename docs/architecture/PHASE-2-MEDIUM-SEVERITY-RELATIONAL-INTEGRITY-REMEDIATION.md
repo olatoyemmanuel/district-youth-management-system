@@ -281,3 +281,10 @@ Until the target version and managed-service capabilities are confirmed, do not 
 ## 10. Implementation boundary
 
 No SQL DDL, Prisma schema, migration, database object, seed, generated client, or application code is created or changed by this document. DFR-001 through DFR-006 remain preserved. Physical design requires explicit owner approval, and implementation requires separate explicit authorization.
+
+
+## 11. FK source-index coverage follow-up
+
+The canonical [Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) now supplements the 90 indexes in this document with 21 named scope/retention FK indexes and 79 additional FK source-index proposals. The combined catalogue contains 190 unique proposed index names.
+
+A document-level left-prefix comparison reports zero FK source-column groups without an index proposal. This does not establish index necessity or performance. Final redundancy analysis and EXPLAIN-based workload validation remain a pre-implementation task.
