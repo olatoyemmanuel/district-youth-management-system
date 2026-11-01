@@ -122,6 +122,7 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 
 | Proposed index name | Table | Key columns | Purpose |
 |---|---|---|---|
+| `ix_fk_role_permissions_permission_id` | role_permissions | permission_id | Permission-side FK lookup; required because the role_permissions unique key begins with role_id |
 | `ix_auth_sessions_account_expiry` | auth_sessions | user_account_id, absolute_expires_at | Active session lookup/expiry |
 | `ix_auth_session_tokens_session_generation` | auth_session_tokens | auth_session_id, token_generation DESC | Refresh token history |
 | `ix_password_reset_tokens_account_expiry` | password_reset_tokens | user_account_id, expires_at | Reset-token lookup and cleanup |
@@ -131,13 +132,13 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `ix_department_memberships_member_time` | department_memberships | member_id, requested_at DESC | Department history |
 | `ix_appointments_position_effective` | appointments | position_id, effective_from, effective_to | Appointment overlap checks |
 | `ix_appointments_appointee_effective` | appointments | appointee_member_id, effective_from DESC | Member appointment history |
-| `ix_user_role_assignments_user_scope` | user_role_assignments | user_account_id, role_id, effective_from DESC | Authorization evaluation |
-| `ix_access_denies_target_scope` | access_denies | target_user_account_id, permission_id, effective_from DESC | Explicit deny evaluation |
+| `ix_user_role_assignments_user_scope` | user_role_assignments | user_account_id, role_id, effective_from DESC | Authorization evaluation; covers user_account_id by left prefix, not role_id or granted_by_user_account_id |
+| `ix_access_denies_target_scope` | access_denies | target_user_account_id, permission_id, effective_from DESC | Explicit deny evaluation; covers target_user_account_id by left prefix, not permission_id, issuer or reviewer |
 | `ix_events_scope_start` | events | owner scope, starts_at | Scoped event calendar |
 | `ix_event_registrations_event_status` | event_registrations | event_id, status, registered_at | Registration administration |
 | `ix_event_sessions_event_start` | event_sessions | event_id, starts_at | Session listing |
-| `ix_attendance_records_event_member` | attendance_records | event_id, member_id | Event attendance lookup |
-| `ix_attendance_records_session_member` | attendance_records | event_session_id, member_id | Session attendance lookup |
+| `ix_attendance_records_event_member` | attendance_records | event_id, member_id | Event attendance lookup; query-supporting only, not a standalone FK index |
+| `ix_attendance_records_session_member` | attendance_records | event_session_id, member_id | Session attendance lookup; query-supporting only, not a complete composite-FK prefix because event_id is between tuple fields |
 | `ix_attendance_corrections_record_time` | attendance_corrections | attendance_record_id, requested_at DESC | Correction history |
 | `ix_financial_transactions_account_date` | financial_transactions | financial_account_id, transaction_date DESC | Account ledger |
 | `ix_financial_transactions_status_date` | financial_transactions | status, submitted_at DESC | Finance workflow queue |
@@ -157,8 +158,8 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `ix_audit_events_correlation` | audit_events | correlation_id | Cross-service tracing |
 | `ix_audit_access_events_actor_time` | audit_access_events | accessing_user_account_id, occurred_at DESC | Audit access review |
 | `ix_idempotency_records_actor_operation` | idempotency_records | actor_user_account_id, operation_code, created_at DESC | Retry lookup and expiry |
-| `ix_retention_holds_subject_status` | retention_holds | retention_subject_id, status | Hold check |
-| `ix_retention_actions_subject_time` | retention_actions | retention_subject_id, executed_at DESC | Disposal history |
+| `ix_retention_holds_subject_status` | retention_holds | retention_subject_id, status | Hold check; also supports retention_subject_id FK by left prefix |
+| `ix_retention_actions_subject_time` | retention_actions | retention_subject_id, executed_at DESC | Disposal history; also supports retention_subject_id FK by left prefix |
 | `ix_report_runs_requester_time` | report_runs | requested_by_user_account_id, requested_at DESC | User report history |
 | `ix_report_runs_status_time` | report_runs | status, requested_at | Report worker queue |
 | `ix_report_export_audits_run_time` | report_export_audits | report_run_id, exported_at DESC | Export history |
