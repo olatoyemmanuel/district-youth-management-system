@@ -289,3 +289,11 @@ No SQL DDL, Prisma schema, migration, database object, seed, generated client, o
 The canonical [Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) now supplements the 90 indexes in this document with 21 named scope/retention FK indexes and 79 additional FK source-index proposals. The combined catalogue contains 190 unique proposed index names.
 
 A document-level left-prefix comparison reports zero FK source-column groups without an index proposal. This does not establish index necessity or performance. Final redundancy analysis and EXPLAIN-based workload validation remain a pre-implementation task.
+
+## 12. Post-FKI independent review dependency
+
+The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) found that the medium-severity index catalogue and FK-support index register are not yet reconciled as one canonical inventory. It also identified missing named FK-support proposals for access-deny permission, issuer and reviewer relationships.
+
+The current distinct-name count is 91 in this document and 109 in the FK/column register, with one shared name. The combined distinct-name count is 199. This replaces earlier 190-index summaries. These counts do not establish index-definition correctness.
+
+PIR-01 through PIR-07 remain open. No index or database object has been created.
