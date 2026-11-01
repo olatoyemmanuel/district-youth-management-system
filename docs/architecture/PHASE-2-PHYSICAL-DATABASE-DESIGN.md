@@ -1000,3 +1000,9 @@ The canonical retention hold/action model now uses non-null `retention_subject_i
 See Sections 5.3–5.6 of the [Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) and its [review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md).
 
 **Status:** partial reconciliation. Full 65-table index redundancy review, source-side retention enrollment, column defaults, policy blockers, and PostgreSQL compatibility remain open.
+
+## 28. FK source-index coverage audit
+
+The combined proposed index catalogue contains 190 unique names: 90 existing unique/access proposals, 21 named scope/retention FK indexes, and 79 additional FK source-index proposals. A document-level left-prefix comparison found no FK source-column group without a proposed supporting index.
+
+This is structural coverage, not performance evidence. Index necessity, redundancy, partial-index predicates, and query plans still require workload review after the target PostgreSQL environment is known.
