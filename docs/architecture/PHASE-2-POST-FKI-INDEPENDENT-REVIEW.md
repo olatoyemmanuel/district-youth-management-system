@@ -8,9 +8,9 @@
 
 ## 1. Executive assessment
 
-The previous FKI-01 through FKI-07 remediation improved the source documents. The canonical FK register and relational integrity matrix still contain the same 65 table rows in the same order. The initial review confirmed 44 named expanded FKs and 109 FK-register index names. The corrected relationship register now contains 155 uniquely named FKs; the canonical index inventory contains 116 FK-register names.
+The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 116 FK-register names and 94 medium-catalogue names, with four shared names and 206 combined distinct names.
 
-However, the corrections do not yet satisfy the complete acceptance contract. Several relationships remain grouped rather than represented as individually named FK declarations. Some FK-support indexes are asserted but not named or are absent. Attendance optional-composite semantics are contradictory. The total index inventory is inconsistent across the source documents.
+The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 remains open because the full per-column physical specification is incomplete.
 
 The physical database design is therefore not ready for owner approval or implementation.
 
@@ -31,7 +31,7 @@ Document-level checks:
 - 65 relational-matrix table rows.
 - Table names and order match exactly.
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
-- 44 expanded FK constraint names are unique and within 63 bytes.
+- 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
 - The canonical inventory now contains 116 distinct FK-register names and 94 medium-catalogue names, with four shared names.
 - The combined distinct proposed index-name count is 206. All names remain within PostgreSQL's 63-byte identifier limit.
@@ -93,17 +93,13 @@ Definition-level duplicate detection, final column/predicate verification, lifec
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
 **Severity:** Medium  
-**Status:** OPEN
+**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
-The FKI audit's original finding headings FKI-01 through FKI-07 still say OPEN. Its remediation table later labels several findings addressed in documentation. The acceptance checklist remains unchecked even where the later verification section reports completion. The physical-design document also contains older status statements that say the full FK/column matrix and index reconciliation are still pending.
+The FKI audit now contains a current disposition summary at the top. Its original OPEN labels are explicitly identified as historical initial status. The current disposition table records the status and evidence for FKI-01 through FKI-07.
 
-This creates ambiguity about what was corrected, what remains open, and which status is authoritative.
+The acceptance checklist now marks the completed document-level items as checked and retains outstanding index-redundancy and cross-document verification items as open. The physical-design document and relational matrix now identify the Post-FKI Independent Review as the current status source. Historical status statements in earlier physical-design sections are explicitly superseded by Section 31.
 
-**Required correction:**
-- Keep the original finding descriptions as history, but add a current disposition at the top of the audit.
-- Mark each finding RESOLVED, PARTIALLY RESOLVED or OPEN based on the independent evidence, not merely on a change being committed.
-- Retain outstanding acceptance checklist items as open.
-- Update physical-design and matrix status summaries to reference this review as the current status source.
+**Correction recorded:** The status hierarchy, checklist and current review references are reconciled. Independent review remains necessary to confirm the updated evidence and remaining open items.
 
 ### PIR-07 — Column-level physical specification remains incomplete
 
@@ -134,11 +130,10 @@ The 65-row count proves table coverage, not complete column coverage. The curren
 
 ## 5. Required next correction sequence
 
-1. Complete the one-row-per-FK register and per-relationship action contract (PIR-01 and PIR-06).
-2. Reconcile historical finding statuses and acceptance evidence (PIR-06).
-3. Complete the per-column specification, preserving policy blockers (PIR-07).
-4. Finish definition-level duplicate/predicate/index validation (PIR-05).
-5. Conduct another independent review after the corrections.
+1. Complete the per-column physical specification while preserving policy blockers (PIR-07).
+2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
+3. Independently verify the 155-row FK relationship register and 206-name index inventory.
+4. Conduct a fresh acceptance review and update all dispositions.
 
 ## 6. Owner decisions and environment blockers retained
 
