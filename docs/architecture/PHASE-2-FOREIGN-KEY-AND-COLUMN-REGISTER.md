@@ -408,3 +408,17 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_report_runs_scope_department_id` | `report_runs` | `scope_department_id` | ` WHERE scope_department_id IS NOT NULL` |
 
 All names and predicates remain proposed. Before DDL, verify each source column exists, composite FK columns appear in exact source order, optional composite FKs use a predicate requiring every component to be non-NULL, and no equivalent index already covers the same access path. This index list does not claim performance benchmarking or database creation.
+
+
+## 5.8 FK constraint and index redundancy audit
+
+The follow-up [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md) records seven findings requiring correction before physical-design approval:
+- relationship rows mixed with column inventories;
+- incorrect claim that one ordered composite index supports both `role_permissions` FKs;
+- duplicate retention-subject support-index proposals;
+- incomplete composite-FK index coverage claims;
+- potentially redundant standalone event/member FKs on attendance records;
+- shortened index names requiring a canonical naming pass;
+- global FK action defaults not yet expanded per relationship.
+
+The audit is a structural document review, not SQL or database validation. Its findings must be reconciled into this register and the relational integrity matrix before the FK inventory is considered complete. No implementation is authorized.
