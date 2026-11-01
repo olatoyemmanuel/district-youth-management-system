@@ -1009,7 +1009,7 @@ See Sections 5.3–5.6 of the [Foreign-Key and Column Register](./PHASE-2-FOREIG
 
 ## 28. FK source-index coverage audit
 
-The former 190-name count is historical and superseded. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) for the current 216-name union and its source reconciliation. This document-level inventory does not establish that every proposed index is necessary or correctly defined.
+The former 190-name count is historical and superseded. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) for the current 214-name union and its source reconciliation. This document-level inventory does not establish that every proposed index is necessary or correctly defined.
 
 This is structural coverage, not performance evidence. Index necessity, redundancy, partial-index predicates, and query plans still require workload review after the target PostgreSQL environment is known.
 
@@ -1040,6 +1040,6 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is t
 
 The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. PIR-01 through PIR-04 are verified at document level; PIR-05 remains partially resolved pending definition-level review; PIR-06 is verified at document level; PIR-07 is partially resolved with the 617-column register, while defaults and constraint definitions remain open.
 
-The former 190-index count in Section 28 and subsequent 199-, 202- and 206-name summaries are historical and superseded. The current inventories contain 121 distinct names in the FK/column register and 99 in the medium-severity catalogue, with four shared names. The combined distinct-name count is 216. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md). This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
+The former 190-index count in Section 28 and subsequent 199-, 202- and 206-name summaries are historical and superseded. The current inventories contain 120 distinct names in the FK/column register and 98 in the medium-severity catalogue, with four shared names. The combined distinct-name count is 214. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md). This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
 
 **Current status:** Further revision required. Physical design is not approved for implementation. No Prisma, SQL, migration, database object, generated client, seed or application code is authorized.
