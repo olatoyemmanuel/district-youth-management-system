@@ -220,7 +220,7 @@ No SQL DDL, Prisma schema, migration, database object, seed, generated client, o
 
 ## 5.2 Explicit column declaration inventory
 
-The following inventory records the 599 typed column declarations across all 65 physical tables. The [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) expands these declarations into one row per column and records defaults, constraint participation, FK actions, supporting indexes and owner-decision status. PK columns are treated as NOT NULL by PostgreSQL semantics.
+The following inventory records the 617 typed column declarations across all 65 physical tables. The [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) expands these declarations into one row per column and records defaults, constraint participation, FK actions, supporting indexes and owner-decision status. PK columns are treated as NOT NULL by PostgreSQL semantics.
 
 | Table | Explicitly declared columns and source nullability |
 |---|---|
