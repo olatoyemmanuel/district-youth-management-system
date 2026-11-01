@@ -64,7 +64,7 @@ The position-scope normalization is the preferred model, but the final catalogue
 
 ### 4.2 Attendance registration relationship
 
-The attendance model retains nullable registration_id because the registration prerequisite is unresolved. If registration_id is populated, the physical design must prove it references a registration for the same event and member. A simple FK to event_registrations(id) does not prove both values match. Add a candidate unique key on event_registrations(id, event_id, member_id) and a composite FK from attendance_records, or explicitly document a different enforceable strategy.
+The attendance model retains nullable registration_id because the registration prerequisite is unresolved. The canonical physical design now proposes UNIQUE (id, event_id, member_id) on event_registrations and a composite FK from attendance_records (registration_id, event_id, member_id). This closes the cross-event/member reference gap at proposal level. The constraint still requires DDL compilation and negative tests after implementation is authorized.
 
 ### 4.3 Financial payment currency
 
@@ -86,7 +86,7 @@ The index register is a useful working inventory, but some proposed indexes refe
 
 1. Produce a complete 65-table FK register: source table/columns, target table/columns, nullability, ON DELETE, ON UPDATE, supporting index, and requirement/decision reference.
 2. Complete the column inventory for every table, then produce exact type, nullability, default, FK and index matrix.
-3. Add the attendance registration composite relationship for same event/member.
+3. Verify the attendance registration composite relationship through future DDL compilation and negative tests.
 4. Finalize one attendance mode-enforcement design and specify trigger timing, parent lock, lock order, stable error mapping, and executable concurrency tests.
 5. Complete the retention enrollment inventory with named source tables and source-specific FKs, but only for record classes approved for retention scheduling.
 6. Reconcile every named index against the final table columns and identify lifecycle-blocked predicates separately.
