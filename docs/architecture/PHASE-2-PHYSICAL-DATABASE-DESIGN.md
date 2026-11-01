@@ -191,17 +191,21 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 ### 5.3 Leadership and authorization
 
 #### `positions`
-- `id uuid PK`, `department_id uuid NULL FK departments(id)`, `code varchar(50) NOT NULL`, `title text NOT NULL`, `status varchar(20) NOT NULL`
-- Position code uniqueness must include department and scope if the same title occurs in different departments.
+- `id uuid PK`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`
+- `code varchar(50) NOT NULL`, `title text NOT NULL`, `status varchar(20) NOT NULL`
+- Exactly one of district_id, church_id, department_id is populated. A church scope must bind to its district through the church FK; a department scope inherits its district and optional church through the department.
+- Candidate composite keys: `UNIQUE (id, district_id)`, `UNIQUE (id, church_id)`, `UNIQUE (id, department_id)` where required by downstream scope binding.
+- Position code uniqueness uses separate partial unique indexes for district, church, and department scope.
+- Position scope is immutable after the first appointment. A scope change creates a new position and preserves prior appointment history.
 
 #### `appointments`
 - `id uuid PK`, `position_id uuid NOT NULL FK positions(id)`, `appointee_member_id uuid NOT NULL FK members(id)`
-- Explicit scope FKs: `district_id uuid NULL`, `church_id uuid NULL`, `department_id uuid NULL`; exactly one permitted scope FK must be populated and each FK must be valid.
 - `appointing_authority_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `term_start date NOT NULL`, `term_end date NOT NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`
 - `status varchar(24) NOT NULL`, `appointment_reason text NULL`, `termination_reason text NULL`, `approved_at timestamptz NOT NULL`
+- Appointment scope is inherited exclusively through position_id. Do not duplicate district_id, church_id, or department_id on appointments.
 - CHECK term_end >= term_start and effective interval valid.
-- Prevent overlapping active appointment for same position and exact scope. PostgreSQL exclusion constraints using `btree_gist` and a range expression are a candidate, subject to scope-specific implementation review. A partial unique index only prevents identical current rows, not arbitrary overlapping intervals.
+- Prevent overlapping active appointments for the same position using an exclusion constraint over position_id and the effective time range. PostgreSQL btree_gist support must be confirmed. If unavailable, use a transactionally locked position row and database trigger with a concurrency test.
 - Acting appointments and overlap exceptions are not enabled in this proposal.
 
 #### `roles`
@@ -272,14 +276,15 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `UNIQUE (id, event_id)`; CHECK ends_at > starts_at.
 
 #### `attendance_records`
-- `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `event_session_id uuid NULL`, `member_id uuid NOT NULL FK members(id)`
+- `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL FK events(id)`, `event_session_id uuid NULL`, `member_id uuid NOT NULL FK members(id)`
 - `registration_id uuid NULL FK event_registrations(id)`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `attendance_status varchar(24) NOT NULL`, `recorded_at timestamptz NOT NULL`, `method varchar(20) NOT NULL`, `note text NULL`
+- Composite FK `(attendance_subject_id, event_id, member_id)` to `event_attendance_subjects(id, event_id, member_id)`.
 - Composite FK `(event_session_id, event_id)` to `event_sessions(id, event_id)` ensures session belongs to event.
-- Event-level mode: `event_session_id IS NULL`, unique `(event_id, member_id)` among valid records.
-- Session-level mode: `event_session_id IS NOT NULL`, unique `(event_session_id, member_id)` among valid records.
-- The policy against mixing event-level and session-level attendance for the same member/event requires a transactionally serialized check or a normalized attendance-subject design. A pair of partial unique indexes alone cannot enforce cross-mode exclusion.
-- Registration prerequisite remains unresolved; nullable registration FK preserves the open policy.
+- Partial unique index on `attendance_subject_id` for event-level records where event_session_id IS NULL.
+- Partial unique index on `(attendance_subject_id, event_session_id)` for session-level records where event_session_id IS NOT NULL.
+- A deferred constraint trigger validates subject mode against session nullability and locks the attendance subject FOR UPDATE before validation. This serializes competing event-level/session-level attempts. The exact trigger implementation and SQLSTATE remain subject to PostgreSQL compatibility review.
+- Registration prerequisite remains unresolved; nullable registration_id preserves the open policy.
 
 #### `attendance_corrections`
 - `id uuid PK`, `attendance_record_id uuid NOT NULL FK attendance_records(id)`
@@ -325,15 +330,32 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - Add composite FK `(financial_transaction_id, currency_code)` to the transaction's unique `(id, currency_code)` key. Do not infer partial settlement or refund behavior. Store attempts distinctly; reconciliation required for uncertain outcomes.
 
 #### `transaction_reversals`
-- `id uuid PK`, `original_transaction_id uuid NOT NULL FK financial_transactions(id)`, `reversal_transaction_id uuid NOT NULL UNIQUE FK financial_transactions(id)`
+- `id uuid PK`, `original_transaction_id uuid NOT NULL`, `reversal_transaction_id uuid NOT NULL UNIQUE`
+- `financial_account_id uuid NOT NULL`, `currency_code char(3) NOT NULL`
 - `initiated_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
 - `reason text NOT NULL`, `status varchar(24) NOT NULL`, `created_at timestamptz NOT NULL`, `posted_at timestamptz NULL`
-- CHECK original and reversal transaction differ. Prevent duplicate full reversal. Cumulative partial reversal checks require approved partial-reversal policy and serialized transaction.
+- Composite FKs bind both original_transaction_id and reversal_transaction_id to the same `financial_transactions(id, financial_account_id, currency_code)` key.
+- CHECK original and reversal transaction differ. UNIQUE original_transaction_id permits one full reversal only. Partial reversal remains disabled pending finance policy.
+- Lock the original transaction during reversal creation and commit the reversal transaction plus relationship atomically.
 
-#### `budgets` and `budget_lines`
-- Budget: `id uuid PK`, explicit district or church owner FKs, `period_start date NOT NULL`, `period_end date NOT NULL`, `currency_code char(3) FK currencies`, `status varchar(20) NOT NULL`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`.
-- Lines: `id uuid PK`, `budget_id uuid NOT NULL FK budgets(id)`, `category_code varchar(50) NOT NULL`, `description text NOT NULL`, `allocated_amount numeric(19,4) NOT NULL`, `revised_amount numeric(19,4) NULL`.
-- Budget controls remain inactive until approved policy defines enforcement, revision authority, and variance treatment.
+#### `budgets`
+- `id uuid PK`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`
+- `budget_code varchar(60) NOT NULL`, `title text NOT NULL`, `period_start date NOT NULL`, `period_end date NOT NULL`
+- `currency_code char(3) NOT NULL FK currencies(code)`, `status varchar(24) NOT NULL`
+- `submitted_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `submitted_at timestamptz NOT NULL`
+- `approved_by_user_account_id uuid NULL FK user_accounts(id)`, `approved_at timestamptz NULL`
+- `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL`
+- Exactly one of district_id and church_id must be populated. CHECK period_end >= period_start.
+- Candidate composite key `UNIQUE (id, currency_code)`. Budget code/period uniqueness uses separate partial unique indexes for district and church owners.
+- Budget approval, revision, categories, over-allocation, and variance treatment remain policy-blocked.
+
+#### `budget_lines`
+- `id uuid PK`, `budget_id uuid NOT NULL FK budgets(id)`, `line_code varchar(60) NOT NULL`, `description text NOT NULL`
+- `allocated_amount numeric(19,4) NOT NULL`, `revised_amount numeric(19,4) NULL`, `currency_code char(3) NOT NULL`
+- `sort_order integer NOT NULL`, `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL`
+- Composite FK `(budget_id, currency_code)` to `budgets(id, currency_code)`.
+- UNIQUE `(budget_id, line_code)` and `(budget_id, sort_order)`; CHECK sort_order >= 0.
+- Amount sign, revision authority, budget-to-actual enforcement, and variance rules remain policy-blocked.
 
 ### 5.6 Credentials
 
@@ -404,11 +426,12 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `audit_events`
 - `id uuid PK`, `actor_type varchar(20) NOT NULL CHECK (actor_type IN ('USER','SYSTEM','SERVICE','ANONYMOUS'))`
-- `actor_user_account_id uuid NULL FK user_accounts(id)`, `initiating_user_account_id uuid NULL FK user_accounts(id)`
+- `actor_user_account_id uuid NULL FK user_accounts(id)`, `actor_service_principal_id uuid NULL FK service_principals(id)`, `initiating_user_account_id uuid NULL FK user_accounts(id)`
 - `action varchar(100) NOT NULL`, `target_type varchar(80) NOT NULL`, `target_id uuid NULL`
 - Explicit optional scope FKs: `district_id`, `church_id`, `department_id`, with zero or one populated; scope can be absent for truly global/system events.
 - `occurred_at timestamptz NOT NULL`, `reason text NULL`, `correlation_id uuid NULL`, `safe_change_summary jsonb NULL`
-- CHECK actor identity rules: USER actor requires actor user ID; SYSTEM/SERVICE/ANONYMOUS must not be misrepresented as a human actor. Delegated activity stores initiating user separately from represented subject.
+- CHECK actor identity truth table: USER requires actor_user_account_id and no service principal; SERVICE requires service principal and no actor user; SYSTEM and ANONYMOUS require neither. initiating_user_account_id is independent.
+- Runtime database role receives no UPDATE, DELETE, TRUNCATE, or ownership privileges on audit tables. Corrections append a new event.
 - Partitioning by time is a future operational choice. If partitioned, global uniqueness and FK limitations must be considered before adoption.
 
 #### `audit_access_events`
@@ -900,3 +923,14 @@ It specifies proposed complete column inventories for budget and reporting recor
 This is a design amendment only. The proposals are not yet reconciled into executable DDL or a complete per-column physical specification. Policy blockers, retention schedule evidence, finance authority decisions, department ownership, report governance, and production PostgreSQL compatibility remain open.
 
 **Status:** high-severity findings have documented proposed resolutions. They are not marked closed pending canonical design reconciliation and independent review. No implementation is authorized.
+
+
+## 22. Canonical reconciliation of high-severity findings
+
+The detailed high-severity remediation is now reconciled into the canonical table definitions for positions, appointments, attendance records, financial reversals, budgets, budget lines, and audit events.
+
+The remaining report-table proposal and retention-subject coverage are documented in the linked remediation addendum and remain subject to canonical column/FK reconciliation. The report proposal must use an immutable report-definition version reference. The current design does not add a 66th table by implication; any separate version table requires explicit inventory and ERD impact review.
+
+The canonical table inventory remains 65 tables. Position scope is now owned by positions and inherited by appointments. Attendance records reference the attendance-subject anchor. Reversal rows bind original and reversal transactions to one account and currency. Audit service actors reference service_principals.
+
+**Status:** canonical high-severity reconciliation is partial. No DDL, Prisma, migration, database object, seed, or application code is authorized.
