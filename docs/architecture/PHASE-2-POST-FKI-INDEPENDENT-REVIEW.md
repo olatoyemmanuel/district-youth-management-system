@@ -8,7 +8,7 @@
 
 ## 1. Executive assessment
 
-The previous FKI-01 through FKI-07 remediation improved the source documents. The canonical FK register and relational integrity matrix still contain the same 65 table rows in the same order. The review initially confirmed 44 unique names for the expanded FK set and 109 unique index names in the FK/column register; the post-review corrections now raise the FK-register total to 112.
+The previous FKI-01 through FKI-07 remediation improved the source documents. The canonical FK register and relational integrity matrix still contain the same 65 table rows in the same order. The initial review confirmed 44 named expanded FKs and 109 FK-register index names. The corrected relationship register now contains 155 uniquely named FKs; the canonical index inventory contains 116 FK-register names.
 
 However, the corrections do not yet satisfy the complete acceptance contract. Several relationships remain grouped rather than represented as individually named FK declarations. Some FK-support indexes are asserted but not named or are absent. Attendance optional-composite semantics are contradictory. The total index inventory is inconsistent across the source documents.
 
@@ -33,8 +33,8 @@ Document-level checks:
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
 - 44 expanded FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
-- The canonical inventory now contains 112 distinct FK-register names and 94 medium-catalogue names, with four shared names.
-- The combined distinct proposed index-name count is 202. All names remain within PostgreSQL's 63-byte identifier limit.
+- The canonical inventory now contains 116 distinct FK-register names and 94 medium-catalogue names, with four shared names.
+- The combined distinct proposed index-name count is 206. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
 ## 3. Findings
@@ -42,93 +42,53 @@ Document-level checks:
 ### PIR-01 — FK inventory is still not a complete one-relationship-per-entry register
 
 **Severity:** High  
-**Status:** OPEN
+**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
-The nine rows previously identified in FKI-01 now contain source-to-target mappings. However, Section 3 still groups several FKs into semicolon-separated source and target lists in a single table row. Section 3.1 names only 44 relationships in the expanded set. The remaining relationships across the other tables do not have individual stable constraint names in the register.
+The table-level Section 3 summary remains grouped but is now explicitly designated as a table-coverage summary. The [Named Foreign-Key Relationship Register](./PHASE-2-NAMED-FOREIGN-KEY-RELATIONSHIP-REGISTER.md) provides 155 one-row-per-FK declarations across 54 FK-bearing tables, with 11 zero-FK tables retained in the 65-table coverage summary.
 
-Examples:
-- `church_memberships` groups five FKs in one row.
-- `church_transfer_requests` groups six FKs in one row.
-- `department_memberships` groups six FKs in one row.
-- `financial_transactions` groups its account/currency composite relationship and actor relationships.
-- `credential_issuances` groups five relationships, including a self-reference.
+All 155 rows record stable constraint names, ordered source/target tuples, source nullability, target PK/UNIQUE evidence, MATCH SIMPLE semantics, ON DELETE/UPDATE actions, and a named supporting index or documented left-prefix support.
 
-The register also does not provide, for every FK, the exact target PK/UNIQUE evidence and explicit MATCH behavior. Generic text such as "one index per source FK column" is not a named index declaration.
-
-**Required correction:**
-1. Expand the canonical register to one row per FK constraint, not one row per table.
-2. Give every FK a stable name, exact ordered source and target tuples, nullability, MATCH behavior, ON DELETE and ON UPDATE actions.
-3. Identify the exact target PK/UNIQUE key supporting each referenced tuple.
-4. Name the supporting index or cite the exact existing left-prefix index.
-5. Preserve a separate 65-table coverage summary so zero-FK tables remain visible.
+**Correction recorded:** The relationship-level register supplies the one-row-per-FK inventory. Independent review must verify each relationship against the source design and confirm candidate-key and index definitions.
 
 ### PIR-02 — Optional attendance composite-FK nullability is internally contradictory
 
 **Severity:** High  
-**Status:** OPEN
+**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
-The attendance register describes:
-- `(registration_id,event_id,member_id)` as nullable only as a complete tuple;
-- `(event_session_id,event_id)` as nullable only as a complete tuple;
-- Section 3.1 calls both tuples "All NULL or all present".
+The canonical physical design, FK register and integrity matrix now agree: `event_id` and `member_id` are NOT NULL; `registration_id` and `event_session_id` are independently nullable. The optional registration and session composite FKs use MATCH SIMPLE, not MATCH FULL. A NULL optional identifier skips only its optional FK; the mandatory subject FK continues to enforce event/member identity.
 
-But `event_id` and `member_id` are required by the mandatory attendance-subject FK. They cannot be NULL when the optional registration or session reference is absent. Therefore an all-NULL tuple is impossible.
+Positive and negative integrity-test requirements cover valid references, absent optional references, mismatched event/member registration, mismatched event/session, and subject/context mismatch.
 
-The correct physical semantics must be explicitly designed. With required `event_id` and `member_id`, an optional `registration_id` or `event_session_id` normally relies on PostgreSQL MATCH SIMPLE behavior, where a NULL component skips the composite FK check. MATCH FULL would reject the partially NULL tuple. The design must not claim all-null/all-present semantics for these relationships.
-
-**Required correction:**
-- State the exact nullability of each source column.
-- Specify MATCH SIMPLE or an equivalent explicit CHECK/trigger contract for each optional composite relationship.
-- Ensure the registration and session context still matches the mandatory subject tuple.
-- Add negative tests for absent optional reference, mismatched event/member, partial nulls, and valid references.
+**Correction recorded:** The three canonical documents now state the same nullability and MATCH SIMPLE contract. PostgreSQL execution tests remain pending an approved implementation environment.
 
 ### PIR-03 — FK-support index declarations are incomplete or inaccurate for authorization relationships
 
 **Severity:** High  
 **Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
-The `access_denies` row says separate source indexes exist for every FK. The medium index catalogue provides `ix_access_denies_target_scope(target_user_account_id, permission_id, effective_from)`, which supports `target_user_account_id` by left prefix, but not `permission_id`, issuer or reviewer lookups. The FK register's Section 5.6/5.7 does not contain named proposals for:
-- `access_denies.permission_id`;
-- `access_denies.issued_by_user_account_id`;
-- `access_denies.reviewed_by_user_account_id`.
+The FK register and medium catalogue now name separate indexes for `access_denies.permission_id`, `issued_by_user_account_id`, and `reviewed_by_user_account_id`. The target-scope index is correctly described as supporting `target_user_account_id` only by left prefix. The `role_conflict_rules` row now states that the pair/version unique key supports `role_a_id`; `ix_fk_role_conflict_rules_role_b_id` supports `role_b_id`.
 
-The same row's generic "separate source indexes" statement is therefore not backed by a complete named index inventory.
-
-Additionally, `role_conflict_rules` says its canonical unique role-pair/version index supports both role FKs. An ordered unique index on `(role_a_id, role_b_id, version)` supports `role_a_id` by left prefix, not `role_b_id`. A separate `role_b_id)-leading index is present in the proposed FK support list, but the row's explanatory claim must be corrected.
-
-**Required correction:**
-- Add and name any missing FK-support indexes after checking all unique/access indexes for valid left-prefix coverage.
-- Correct the role-conflict statement to say the pair unique index supports role_a_id only; the separate role_b_id index supports the second FK.
-- Verify every index's table and columns against the explicit physical column inventory.
+**Correction recorded:** All three missing access-deny FK index proposals are included in the canonical combined inventory. Independent review must still verify the index definitions against final column and workload requirements.
 
 ### PIR-04 — Department FK row does not match its corrected composite-index catalogue
 
 **Severity:** Medium  
-**Status:** OPEN
+**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
-The department FK row still lists `ix_fk_departments_church_id` as the church FK index. That name is not present in the current index inventory. The corrected row now references the actual proposed indexes:
-- `ix_fk_departments_church_district(church_id,district_id)`, which begins with church_id and supports the composite hierarchy FK;
-- `ix_fk_departments_district_id(district_id)`, for the district FK.
+The table-level row now references `ix_fk_departments_church_district(church_id,district_id)` for the composite church/district relationship and `ix_fk_departments_district_id(district_id)` for the district FK. The redundant standalone church FK is not listed; the composite FK proves both church existence and same-district ownership.
 
-The stable constraint-name table correctly describes the composite FK, but Section 3's table-level row remains stale.
-
-**Required correction:** Update the row to name the exact two proposed indexes and explicitly identify the composite FK. Do not retain the removed single-column church index name.
+**Correction recorded:** The table summary, named relationship register and index catalogue now agree.
 
 ### PIR-05 — Total proposed index inventory is inconsistent
 
 **Severity:** Medium  
-**Status:** OPEN
+**Status:** PARTIALLY RESOLVED, pending definition-level redundancy review
 
-The current FK/column register contains 109 distinct index names. The medium-severity index catalogue contains 91 distinct names. One name is shared, giving 199 distinct proposed index names across both documents.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 206 distinct proposed index names: 116 in the FK register, 94 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
 
-Earlier documents contain historical 109-, 199- and 190-name summaries. The FK audit, physical design, medium catalogue and matrix now link to the canonical 202-name inventory.
+Definition-level duplicate detection, final column/predicate verification, lifecycle-predicate approval and workload review remain outstanding.
 
-**Required correction:**
-- Establish one canonical combined index inventory with one row per distinct index.
-- Classify every index as PK, UNIQUE, partial UNIQUE, FK-supporting, query-supporting or concurrency-supporting.
-- Identify duplicate definitions, not only duplicate names.
-- Recompute counts from the canonical combined inventory and update every summary.
-- Verify all proposed columns exist and all predicates are approved or explicitly blocked.
+**Correction recorded:** The conflicting 190-, 199- and 202-name summaries have been superseded by the 206-name inventory. The remaining definition-level review keeps this finding partially resolved.
 
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
@@ -164,20 +124,20 @@ The 65-row count proves table coverage, not complete column coverage. The curren
 
 | Original finding | Independent disposition | Reason |
 |---|---|---|
-| FKI-01 | PARTIALLY RESOLVED | Nine malformed rows corrected, but the complete register is not one row per named FK and lacks target-key/MATCH evidence for every relationship. |
+| FKI-01 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register records one row per declared FK, ordered tuples, source nullability, target-key evidence, MATCH semantics, actions and supporting index coverage. |
 | FKI-02 | RESOLVED AT DOCUMENT LEVEL | role_permissions permission_id index is explicitly proposed. |
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
 | FKI-04 | PARTIALLY RESOLVED | Several full composite proposals are present, but the complete 65-table composite FK/index pairing has not been independently proven. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 202 distinct names. |
-| FKI-07 | PARTIALLY RESOLVED | RESTRICT/RESTRICT is stated per FK-bearing table row and for 44 named constraints, but not as a complete per-relationship action register. |
+| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 206 distinct names. |
+| FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
 
 ## 5. Required next correction sequence
 
 1. Complete the one-row-per-FK register and per-relationship action contract (PIR-01 and PIR-06).
-2. Correct the department row and reconcile every composite FK/index pair (PIR-04).
-3. Create one canonical combined index inventory and correct all counts (PIR-05).
-4. Complete the per-column specification, preserving policy blockers (PIR-07).
+2. Reconcile historical finding statuses and acceptance evidence (PIR-06).
+3. Complete the per-column specification, preserving policy blockers (PIR-07).
+4. Finish definition-level duplicate/predicate/index validation (PIR-05).
 5. Conduct another independent review after the corrections.
 
 ## 6. Owner decisions and environment blockers retained
