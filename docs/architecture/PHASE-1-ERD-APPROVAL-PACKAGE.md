@@ -216,3 +216,7 @@ The review result is **Further revision required**. The physical design is not r
 The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) has been added as the detailed relational appendix. It covers all 65 physical table rows, FK source/target columns, proposed nullability and RESTRICT actions, composite scope contracts, and index support requirements.
 
 This does not close the physical-design review. The register marks incomplete column declarations, policy-dependent relationships, retention enrollment, and environment-dependent enforcement as open.
+
+## 17. Foreign-key and column register review
+
+The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) confirms 65 unique table rows in both the FK and explicit column declaration inventories. The review result is further revision required because several column declarations and policy/environment decisions remain open.
