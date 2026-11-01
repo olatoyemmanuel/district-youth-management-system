@@ -52,21 +52,32 @@ Priority:
 
 #### ODR-001 — Member category eligibility and progression
 
-**Status:** AWAITING AUTHORITATIVE MINISTRY GUIDANCE  
-**Responsible for supplying the rules:** The relevant Adventurer, Pathfinder, Senior Youth and Master Guide ministry authorities must provide the official eligibility, progression, class-completion and credentialing rules applicable to their respective ministries. Each authority should identify the governing source, issuing body, document/version and effective date. Where a rule crosses ministry categories, the relevant authorities should provide a coordinated interpretation.  
-**Decision authority:** The relevant recognized ministry authority confirms its official rules; the project owner records the resulting DYMS platform decision and any approved implementation implications.  
-**Related:** DDD-002, member category assignments, credential issuance.
+**Status:** GENERAL CONFERENCE SOURCES IDENTIFIED; LOCAL APPLICATION AND DYMS MAPPING TO CONFIRM  
+**Official baseline:** The General Conference Youth Ministries website publishes official Adventurer, Pathfinder, Ambassador and Young Adult ministry descriptions, Pathfinder membership requirements and curriculum/resource manuals. These are the starting sources for the platform rules, not a reason to ask local authorities to recreate existing standards.  
+**Responsible for confirmation:** The relevant West-Central Africa Division, Union, Nigeria Conference and district ministry authorities must identify which current General Conference materials and local adaptations govern Sango District, confirm their current versions/effective dates, and resolve any local administrative interpretation.  
+**Decision authority:** The recognized ministry authority confirms the applicable standard and any authorized adaptation; the project owner records the resulting DYMS platform rule and its approved implementation implications.  
+**Related:** DDD-002, member category assignments, DDD-011/ODR-009 for Master Guide credentialing.
 
-Required submission from the responsible ministry authorities:
-1. Official eligibility rules governing entry into and progression within Adventurer, Pathfinder and Senior Youth categories.
-2. Applicable age bands, class levels, completion requirements and other criteria, where formally defined.
-3. Required evidence, verification authority and any formally authorized exception process.
-4. The authority permitted to correct a historical category assignment, including required evidence and reason.
-5. Whether category changes require separate approval or may be completed after verification by an authorized scoped administrator.
+Official starting references:
+- General Conference Adventurer ministry: https://www.gcyouthministries.org/ministries/adventurers/
+- General Conference Pathfinder ministry and membership requirements: https://www.gcyouthministries.org/ministries/pathfinders/ and https://www.gcyouthministries.org/ministries/pathfinders/pathfinder-club-membership-requirements/
+- General Conference ministries overview, including Adventurers, Pathfinders, Ambassadors and Young Adults: https://www.gcyouthministries.org/ministries/
+- General Conference Ambassador membership and Senior Youth age-group description: https://www.gcyouthministries.org/ministries/ambassadors/membership/
+- General Conference resource manuals and Division-adaptation instruction: https://www.gcyouthministries.org/resources/resource-manuals/
 
-**Required output:** A documented rule set for each relevant ministry, with authoritative source, version/effective date, responsible issuer, evidence requirements and any approved exception process. If no official rule exists for an item, the authority must state that explicitly.  
+Required confirmation from the responsible ministry authorities:
+1. Identify the current General Conference curriculum, membership and eligibility documents applicable to each ministry.
+2. Confirm the applicable West-Central Africa Division, Union and Nigeria Conference adaptations, if any, including document/version and effective date.
+3. Confirm how the official ministry groups map to DYMS member categories. In particular, confirm whether the platform's single Senior Youth category represents both Ambassador and Young Adult ministries or requires a different domain model.
+4. Confirm required evidence, verification authority and any formally authorized exception process.
+5. Confirm the authority permitted to correct a historical category assignment, including required evidence and reason.
+6. Confirm whether category changes require separate approval or may be completed after verification by an authorized scoped administrator.
 
-**Do not assume:** age cut-offs, class completion rules, automatic promotion, or an exception authority.
+**Important distinction:** Master Guide is treated as a leadership credential/programme, not as a member category. Its candidate eligibility and investiture requirements belong in the credential standards work under ODR-009 and must be sourced from the applicable official Master Guide curriculum and local administration rules.
+
+**Required output:** A source-backed applicability record for each relevant ministry, listing the official source, issuing authority, version/effective date, applicable local adaptation, evidence requirements and any approved exception process. Where no local adaptation exists, record that confirmation rather than treating the General Conference material as absent.
+
+**Do not assume:** that a local adaptation exists, that a General Conference age band is automatically the DYMS category boundary, that class completion triggers automatic promotion, or that an exception authority exists.
 
 **Physical-design impact:** eligibility-rule references, evidence links, approval actors, effective dates, history and uniqueness of the current primary category.
 
