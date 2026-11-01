@@ -982,3 +982,11 @@ The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-
 This register supersedes abbreviated FK summaries where the two differ. In particular, position scope is held on positions and inherited by appointments; budgets and report entities now have explicit proposed FK sets; and attendance registration uses a composite event/member relationship.
 
 **Status:** the FK register is a proposal, not a verified DDL inventory. Full per-column completeness, lifecycle approval, retention source enrollment, and PostgreSQL implementation proof remain outstanding.
+
+## 26. Foreign-key and column register review
+
+The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) verifies that the FK register and explicit column declaration inventory each contain 65 unique table rows with matching table coverage.
+
+The review identifies remaining gaps in grouped scope/actor declarations, column type/nullability/default completeness, index reconciliation, retention source enrollment, and production PostgreSQL compatibility.
+
+**Result:** further revision required. Physical design remains unapproved for implementation.
