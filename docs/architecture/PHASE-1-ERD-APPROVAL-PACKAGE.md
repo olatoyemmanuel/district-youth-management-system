@@ -226,3 +226,7 @@ The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-RE
 The FK/column register now explicitly expands the scope and actor columns previously described only in prose, normalizes timestamp shorthand, and names 21 supporting-index proposals. Retention holds and actions now reference `retention_subjects(id)` through non-null `retention_subject_id` FKs.
 
 The follow-up review remains "further revision required". Source-record retention enrollment, complete index reconciliation, defaults, and production PostgreSQL compatibility remain open.
+
+## 19. FK source-index coverage
+
+The proposed index catalogue now contains 190 unique names. A document-level left-prefix comparison found a proposed supporting index for every FK source-column group. This does not establish performance or eliminate index redundancy; workload review and PostgreSQL validation remain outstanding.
