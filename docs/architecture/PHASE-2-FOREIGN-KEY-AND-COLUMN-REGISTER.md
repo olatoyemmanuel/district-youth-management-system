@@ -499,9 +499,9 @@ The audit is a structural document review, not SQL or database validation. Its f
 ## 5.9 Canonical index-name validation
 
 The current index-name inventory was checked after the FKI-06 cleanup:
-- 109 index names are present across the FK/column register's unique/access and FK-support proposals.
-- All 109 names are unique.
+- 112 distinct index names are present across the FK/column register's unique/access and FK-support proposals.
+- All 112 names are unique.
 - No proposed name exceeds PostgreSQL's 63-byte identifier limit.
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
-This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 202 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
