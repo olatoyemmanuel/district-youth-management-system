@@ -288,3 +288,12 @@ The proposed detailed resolutions for the high-severity findings are recorded in
 The addendum completes proposed table-column inventories for budgets, budget lines, report definitions, report runs, and report export audits. It also specifies proposed normalized position/appointment scope, attendance subject locking, same-account/same-currency reversal references, retention-subject source binding, and exact audit actor identity combinations.
 
 These are proposed technical resolutions, not final approved constraints. The addendum explicitly preserves policy and environment blockers. Reconcile the addendum into the canonical per-column matrix before physical-design approval.
+
+
+## 13. Medium-severity remediation and canonical design links
+
+The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) records the selected scope-specific idempotency index strategy, lifecycle-dependent uniqueness blockers, named index register, nullability/FK-action policy, separation-of-duties rules, and PostgreSQL compatibility baseline.
+
+The canonical physical table definitions now include the reconciled position/appointment scope model, attendance subject FK, same-account/same-currency full reversal binding, complete budget and reporting definitions, and service-principal audit actor reference.
+
+The matrix is still not a fully exact column-level register. Each FK must be reconciled to source and target columns, actions and supporting index; abbreviated source fields remain blockers.
