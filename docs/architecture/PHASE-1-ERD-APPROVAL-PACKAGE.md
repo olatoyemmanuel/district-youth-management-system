@@ -186,3 +186,14 @@ The inventory reconciles to 65 distinct physical tables. The 52-row lifecycle ca
 The review identifies unresolved design blockers. The matrix is a working proposal, not physical-design approval. In particular, the budget/reporting table definitions, full per-column nullability and FK actions, exact scope mapping, retention target coverage, finance reversal constraints, audit privilege enforcement, and PostgreSQL production compatibility remain open.
 
 The conceptual ERD remains approved at its exact recorded revision. Physical database design remains unapproved for implementation. No Prisma, migration, SQL DDL, database, generated client, or application implementation is authorized.
+
+
+## 13. High-severity relational-integrity remediation
+
+The [High-Severity Relational Integrity Remediation](./PHASE-2-HIGH-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) records concrete proposed technical responses to the initial review's high-severity findings.
+
+It completes proposed budget/reporting table definitions and details the position/appointment scope pattern, attendance mode enforcement, full reversal integrity, retention-subject binding, and audit actor/append-only controls.
+
+The proposals remain subject to reconciliation into the canonical physical table/column matrix, official finance and retention decisions, organizational ownership confirmation, production PostgreSQL compatibility, and independent review. They are not approved DDL.
+
+**Current Phase 2 status:** proposed resolutions are documented for RIM-02 through RIM-08. RIM-01 inventory count is addressed. Canonical per-column reconciliation and second independent review remain the next tasks. Physical design remains unapproved for implementation.
