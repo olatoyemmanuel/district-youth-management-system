@@ -272,7 +272,7 @@ Until the target version and managed-service capabilities are confirmed, do not 
 | RIM-09 | Proposed resolution: four scope-specific partial unique indexes, no PostgreSQL 15 null semantics |
 | RIM-10 | Partially open: lifecycle predicates explicitly blocked where status semantics are not approved |
 | RIM-11 | Proposed named index register supplied; column compatibility and workload validation remain |
-| RIM-12 | 599-column type/nullability register completed; defaults, CHECK naming/expressions and policy-dependent constraints remain incomplete |
+| RIM-12 | 617-column type/nullability register completed; defaults, CHECK naming/expressions and policy-dependent constraints remain incomplete |
 | RIM-13 | Approved finance self-approval and role-conflict independence specified; other actor inequalities remain policy-blocked |
 | RIM-14 | Portable baseline and compatibility-sensitive features identified; production target remains unconfirmed |
 
