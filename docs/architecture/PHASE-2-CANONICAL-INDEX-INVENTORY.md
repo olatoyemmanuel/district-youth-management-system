@@ -241,7 +241,7 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_report_definitions_code_version` | `report_definitions` | `code, version` | Unique / partial unique | Medium catalogue |
 | `uq_report_definitions_id_version` | `report_definitions` | `id, version` | Unique / partial unique | Medium catalogue |
 | `uq_retention_policies_category_version` | `retention_policies` | `record_category, version` | Unique / partial unique | Medium catalogue |
-| `uq_role_conflict_rules_pair_version` | `role_conflict_rules` | `canonical role_a_id, role_b_id, version` | Unique / partial unique | Medium catalogue |
+| `uq_role_conflict_rules_pair_version` | `role_conflict_rules` | `role_a_id, role_b_id, version` | Unique / partial unique | Medium catalogue |
 | `uq_role_permissions_role_permission` | `role_permissions` | `role_id, permission_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_reversals_original_full` | `transaction_reversals` | `original_transaction_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_reversals_reversal_transaction` | `transaction_reversals` | `reversal_transaction_id` | Unique / partial unique | Medium catalogue |
