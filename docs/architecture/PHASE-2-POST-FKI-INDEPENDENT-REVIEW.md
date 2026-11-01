@@ -10,7 +10,7 @@
 
 The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 120 FK-register names and 98 medium-catalogue names, with four shared names and 214 combined distinct names.
 
-The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
+The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 is verified at document level; six policy-blocked entries and production workload approval remain open. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
 The physical database design is therefore not ready for owner approval or implementation.
 
@@ -33,8 +33,8 @@ Document-level checks:
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
 - 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
-- The canonical inventory now contains 121 distinct FK-register names and 98 medium-catalogue names, with four shared names.
-- The combined distinct proposed index-name count is 216. All names remain within PostgreSQL's 63-byte identifier limit.
+- The canonical inventory now contains 120 distinct FK-register names and 98 medium-catalogue names, with four shared names.
+- The combined distinct proposed index-name count is 214. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
 ## 3. Findings
