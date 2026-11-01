@@ -201,7 +201,7 @@ No cascade delete is proposed. Soft deactivation, revocation, closure, and reten
 
 ### 5.3 Column-level completion status
 
-The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 599 one-row-per-column entries across all 65 tables. Type and nullability have been reconciled against the current physical definitions, and the register links PK/UNIQUE/CHECK, FK actions, supporting indexes and owner-decision blockers where declared.
+The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 617 one-row-per-column entries across all 65 tables. Type and nullability have been reconciled against the current physical definitions, and the register links PK/UNIQUE/CHECK, FK actions, supporting indexes and owner-decision blockers where declared.
 
 The register is a complete typed-column transcription, not a complete DDL contract. Defaults remain NOT SPECIFIED IN SOURCE for columns where the design makes no decision; CHECK constraints still need stable names and exact expressions; lifecycle, scope, retention and environment blockers remain open. The remaining reconciliation must:
 - table and column;
@@ -276,7 +276,7 @@ Until the target version and managed-service capabilities are confirmed, do not 
 
 1. Reconcile all named indexes against the canonical 65-table physical definitions.
 2. Complete every FK's exact source and target column list, ON DELETE, ON UPDATE, and supporting index.
-3. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 599-column register.
+3. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 617-column register.
 4. Obtain approval for lifecycle predicates before implementing partial unique indexes.
 5. Run separation-of-duties negative tests using the intended runtime database role.
 6. Confirm production PostgreSQL major version, extension policy, collation, UUID generation, trigger and privilege support.
