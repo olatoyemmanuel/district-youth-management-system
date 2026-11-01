@@ -195,7 +195,7 @@ These are source-document checks only. No PostgreSQL parser, database catalogue,
 
 ## 7. Remaining independent-review gates
 
-The document-level corrections are complete for the seven findings, but this audit is not an independent acceptance review. The next review must verify:
+The document-level corrections and dispositions are recorded for all seven findings, but this audit is not an independent acceptance review. FKI-04 remains partially resolved. The next review must verify:
 1. Every named FK target tuple is backed by an exact PK/UNIQUE candidate key with matching order.
 2. Independently verify all 155 named constraints against the physical table definitions and relational matrix.
 3. Verify the exact ordered target candidate keys and source index definitions before implementation.
