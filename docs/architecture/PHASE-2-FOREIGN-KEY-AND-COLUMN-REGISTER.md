@@ -518,4 +518,4 @@ The current index-name inventory was checked after the FKI-06 cleanup:
 - No proposed name exceeds PostgreSQL's 63-byte identifier limit.
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 211 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 216 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
