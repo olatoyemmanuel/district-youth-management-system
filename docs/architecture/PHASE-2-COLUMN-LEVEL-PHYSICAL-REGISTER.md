@@ -13,7 +13,7 @@ This register expands the 65-table column inventory into one row per column. It 
 - Explicit default expressions, where the source defines one.
 - Primary-key, unique-index and CHECK participation declared in the current design.
 - FK constraint participation and per-relationship actions from the 155-row named FK register.
-- Supporting index names from the 211-name canonical index inventory.
+- Supporting index names from the 216-name canonical index inventory.
 - Owner decision and approval status.
 
 The register is a design transcription and gap register. It is not executable DDL and does not imply approval of the physical database design.
@@ -27,7 +27,7 @@ The register is a design transcription and gap register. It is not executable DD
 | Tables with one or more FK relationships | 54 |
 | Tables with no parent FK | 11 |
 | Named FK relationships | 155 |
-| Named proposed indexes | 211 |
+| Named proposed indexes | 216 |
 | Columns with type and nullability specified in source | 617 |
 | Columns with explicit default in source | 6 |
 | Columns whose default is not specified in source | 611 |
