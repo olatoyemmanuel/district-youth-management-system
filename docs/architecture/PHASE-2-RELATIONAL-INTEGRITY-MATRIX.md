@@ -333,10 +333,10 @@ This is a design-document reconciliation only. It does not authorize SQL, Prisma
 
 ## 18. Post-FKI independent review status
 
-The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment after the FKI-01 through FKI-07 documentation changes.
+The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment after the FKI-01 through FKI-07 documentation changes. Historical status notes in earlier matrix sections are superseded by this section.
 
 The 65 table rows still reconcile exactly with the FK register. This table-count match does not establish complete per-relationship FK declarations, target-key evidence, MATCH semantics, full index coverage or complete per-column definitions.
 
-PIR-01 through PIR-07 remain subject to independent review. PIR-01 through PIR-04 have document-level corrections recorded; PIR-05 remains partially resolved pending definition-level index review; PIR-06 and PIR-07 remain open.
+PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level index review. PIR-06 has a document-level status reconciliation and awaits independent re-review. PIR-07 remains open.
 
 **Current status:** Further revision required. No implementation is authorized.
