@@ -210,3 +210,9 @@ The canonical physical-design document now contains expanded report table defini
 The [Phase 2 Relational Integrity Second Review](./PHASE-2-RELATIONAL-INTEGRITY-SECOND-REVIEW.md) has independently checked the updated physical-design documents. It confirms 65 unique table rows and the principal structural reconciliations, while retaining material blockers for FK/column completeness, attendance, retention mapping, lifecycle predicates, finance policy, and PostgreSQL compatibility.
 
 The review result is **Further revision required**. The physical design is not ready for project-owner approval or implementation.
+
+## 16. Foreign-key and column register
+
+The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) has been added as the detailed relational appendix. It covers all 65 physical table rows, FK source/target columns, proposed nullability and RESTRICT actions, composite scope contracts, and index support requirements.
+
+This does not close the physical-design review. The register marks incomplete column declarations, policy-dependent relationships, retention enrollment, and environment-dependent enforcement as open.
