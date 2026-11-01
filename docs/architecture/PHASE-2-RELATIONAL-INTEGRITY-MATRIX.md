@@ -307,3 +307,9 @@ Use that register as the current proposed FK source of truth. The summary rows a
 ## 15. Foreign-key and column register review
 
 The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) confirms structural coverage of all 65 table names in both the FK and column declaration inventories. It retains open findings for grouped/inferred FK declarations, unspecified column type/nullability, support-index reconciliation, retention source mapping, and PostgreSQL compatibility.
+
+## 16. Scope and retention FK reconciliation
+
+The detailed [Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) now lists explicit UUID scope columns for user role assignments, access denies, events, audit events, audit-access events, and idempotency records. It also defines exact non-null retention_subject_id FKs from retention_holds and retention_actions.
+
+The [register review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) records partial completion and keeps source-record retention enrollment, complete index reconciliation, and policy-dependent scope rules open.
