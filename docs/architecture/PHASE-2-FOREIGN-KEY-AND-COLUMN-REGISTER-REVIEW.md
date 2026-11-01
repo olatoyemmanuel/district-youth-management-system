@@ -59,3 +59,26 @@ The source inventory parser found 9 column declarations with type and nullabilit
 No SQL DDL, Prisma schema, migration, database object, seed, generated client, or application code has been created or changed. No database tests were run. DFR-001 through DFR-006 remain preserved. Physical design is not approved, and PR #53 must remain draft and unmerged.
 
 **Final assessment:** The FK and column inventories now cover all 65 table names structurally. They are not yet complete enough to authorize physical database implementation.
+
+
+## 6. Follow-up reconciliation: scope, actors, timestamps, retention
+
+The next design pass expanded the previously prose-only scope columns for user-role assignments, access denies, events, audit events, audit-access events, and idempotency records. It also normalized the four timestamp shorthand groups and named 21 support-index proposals for the newly explicit scope/retention FKs.
+
+The canonical retention relationships are now:
+- `retention_holds.retention_subject_id NOT NULL → retention_subjects(id)`
+- `retention_actions.retention_subject_id NOT NULL → retention_subjects(id)`
+
+The misleading generic `target_binding_id` proposal has been replaced by the exact retention-subject FK. The `retention_subjects` table itself does not contain a self-reference. Source-record enrollment remains open until the approved retention record-class inventory is known.
+
+### Updated finding disposition
+
+| ID | Severity | Finding | Updated status |
+|---|---|---|---|
+| FKC-02 | High | Grouped scope columns in the named leadership, event, audit and idempotency tables | Partially addressed; individual declarations now listed. Composite hierarchy and lifecycle checks remain open. |
+| FKC-03 | High | Support-index reconciliation | Partially addressed; 21 named indexes added for expanded scope/retention FKs. Full 65-table redundancy/workload review remains open. |
+| FKC-04 | High | Column type/nullability/default completeness | Partially addressed; timestamp shorthand and grouped scope columns expanded. Remaining source gaps and default authority remain open. |
+| FKC-05 | High | Retention subject source enrollment | Partially addressed; hold/action FK is exact. Enrolled source-table inventory and source-side one-to-one FKs remain open. |
+| FKC-06 | Medium | FK action baseline | Proposed RESTRICT/RESTRICT remains subject to table-by-table exception review. |
+
+**Current outcome remains: further revision required.** No SQL compilation, database test, or PostgreSQL compatibility test has been performed.
