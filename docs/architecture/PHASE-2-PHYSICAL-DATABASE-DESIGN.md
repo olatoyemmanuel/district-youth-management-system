@@ -872,3 +872,18 @@ The approved [Lifecycle and State Catalogue](./PHASE-2-LIFECYCLE-STATE-CATALOGUE
 The physical table catalogue now includes explicit definitions for the three additional structures introduced by the first review. The lifecycle/state catalogue is a separate linked design artifact and covers the status-bearing and decision-bearing entities. It is not final approval: policy-blocked state vocabularies, authority assignments, exact DDL constraints, PostgreSQL compatibility, finance rules, retention periods and safeguarding/credential evidence remain outstanding.
 
 No Prisma schema, migration, SQL DDL, database object, generated client or application code has been created or changed.
+
+
+---
+
+## 20. Relational integrity matrix and review
+
+The complete table-by-table key, FK, candidate uniqueness, CHECK, indexing, scope, nullability, enforcement, and concurrency review is maintained in the linked [Phase 2 Relational Integrity Matrix](./PHASE-2-RELATIONAL-INTEGRITY-MATRIX.md).
+
+The matrix reconciles the physical catalogue to 65 distinct tables. The source document has 58 definition headings because some headings group multiple tables. The 52-row lifecycle catalogue is a subset of state-bearing entities, not the complete physical table count.
+
+The initial independent review is recorded in [Phase 2 Relational Integrity Review](./PHASE-2-RELATIONAL-INTEGRITY-REVIEW.md). It identifies 14 findings. High-severity blockers include incomplete definitions for budgets and reporting, incomplete exact scope-FK mapping, appointment/position scope binding, attendance-mode trigger/subtype proof, finance reversal consistency, target-specific retention coverage, and audit actor/append-only enforcement.
+
+The matrix also records PostgreSQL-version-dependent choices, including exclusion constraints, `btree_gist`, deferred constraint triggers, and `NULLS NOT DISTINCT`. Production PostgreSQL version and extension support remain unconfirmed.
+
+**Status:** relational-integrity design is in progress and not approved for implementation. Column-by-column nullability/default/FK-action proof and named index inventory remain required. No Prisma schema, migration, SQL DDL, database object, generated client, or application code has been created or changed.
