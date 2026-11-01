@@ -990,3 +990,13 @@ The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-RE
 The review identifies remaining gaps in grouped scope/actor declarations, column type/nullability/default completeness, index reconciliation, retention source enrollment, and production PostgreSQL compatibility.
 
 **Result:** further revision required. Physical design remains unapproved for implementation.
+
+## 27. Scope, actor, timestamp and retention FK reconciliation
+
+The FK/column register now explicitly expands the previously prose-only scope columns, normalizes four timestamp shorthand groups, and names 21 support-index proposals for the expanded scope and retention relationships.
+
+The canonical retention hold/action model now uses non-null `retention_subject_id` FKs. The former generic `target_binding_id` wording is superseded. The source-side enrollment inventory remains open pending approval of retained record classes.
+
+See Sections 5.3–5.6 of the [Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) and its [review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md).
+
+**Status:** partial reconciliation. Full 65-table index redundancy review, source-side retention enrollment, column defaults, policy blockers, and PostgreSQL compatibility remain open.
