@@ -21,7 +21,7 @@ The original finding headings below retain their initial OPEN labels as historic
 | FKI-01 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | 155-row named FK relationship register, with 65-table coverage preserved |
 | FKI-02 | RESOLVED AT DOCUMENT LEVEL | Separate permission-side role_permissions index |
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant retention subject-only indexes removed |
-| FKI-04 | PARTIALLY RESOLVED | Composite tuple support is named; independent verification of every tuple remains open |
+| FKI-04 | RESOLVED AT DOCUMENT LEVEL, verified 2026-11-01 | All 10 composite target tuples match exact named UNIQUE keys; all 155 source support indexes begin with the complete ordered source tuple. Partial-index predicates cover every nullable FK component. SQL validation remains pending. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Attendance subject FK retained; duplicate event/member FKs removed; MATCH SIMPLE semantics recorded |
 | FKI-06 | RESOLVED AT DOCUMENT LEVEL | 211-name canonical index inventory; names within 63-byte limit |
 | FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | RESTRICT/RESTRICT is stated for all 155 FK relationships |
@@ -195,7 +195,7 @@ These are source-document checks only. No PostgreSQL parser, database catalogue,
 
 ## 7. Remaining independent-review gates
 
-The document-level corrections and dispositions are recorded for all seven findings, but this audit is not an independent acceptance review. FKI-04 remains partially resolved. The next review must verify:
+The document-level corrections and dispositions are recorded for all seven findings, but this audit is not an independent acceptance review. FKI-04 is now verified at document level. The next review must verify:
 1. Every named FK target tuple is backed by an exact PK/UNIQUE candidate key with matching order.
 2. Independently verify all 155 named constraints against the physical table definitions and relational matrix.
 3. Verify the exact ordered target candidate keys and source index definitions before implementation.
@@ -215,7 +215,7 @@ Current status:
 - FKI-01: RESOLVED AT DOCUMENT LEVEL, pending independent re-review.
 - FKI-02: RESOLVED AT DOCUMENT LEVEL.
 - FKI-03: RESOLVED AT DOCUMENT LEVEL.
-- FKI-04: PARTIALLY RESOLVED.
+- FKI-04: RESOLVED AT DOCUMENT LEVEL, pending SQL/index validation.
 - FKI-05: RESOLVED AT DOCUMENT LEVEL; optional attendance composite FKs now specify MATCH SIMPLE and negative/positive integrity tests.
 - FKI-06: RESOLVED AT DOCUMENT LEVEL; the canonical combined inventory reconciles 211 distinct names.
 - FKI-07: RESOLVED AT DOCUMENT LEVEL; all 155 FK relationships have explicit RESTRICT/RESTRICT actions.
