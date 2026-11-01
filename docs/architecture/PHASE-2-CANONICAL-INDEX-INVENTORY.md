@@ -21,7 +21,7 @@ It is the single document-level name inventory for those proposals. It does not 
 | Distinct names in FK/column register | 112 |
 | Distinct names in medium-severity catalogue | 94 |
 | Names shared by both catalogues | 4 |
-| **Combined distinct proposed index names** | **206** |
+| **Combined distinct proposed index names** | **211** |
 | Longest proposed identifier | 63 characters |
 | Names exceeding PostgreSQL's 63-byte identifier limit | 0 |
 
@@ -203,17 +203,22 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_budget_lines_budget_order` | `budget_lines` | `budget_id, sort_order` | Unique / partial unique | Medium catalogue |
 | `uq_church_memberships_current` | `church_memberships` | `member_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
 | `uq_church_transfer_requests_open_member` | `church_transfer_requests` | `member_id WHERE unresolved predicate` | Unique / partial unique | Medium catalogue |
+| `uq_churches_id_district` | `churches` | `id, district_id` | Unique / partial unique | FK register |
 | `uq_churches_district_code` | `churches` | `district_id, code` | Unique / partial unique | Medium catalogue |
 | `uq_credential_definition_versions` | `credential_definition_versions` | `credential_definition_id, version` | Unique / partial unique | Medium catalogue |
 | `uq_department_eligibility_rules_version` | `department_eligibility_rules` | `department_id, version` | Unique / partial unique | Medium catalogue |
 | `uq_department_memberships_current` | `department_memberships` | `member_id, department_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
 | `uq_departments_church_code` | `departments` | `church_id, code WHERE church_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_departments_district_code` | `departments` | `district_id, code WHERE church_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_event_attendance_subjects_id_event_member` | `event_attendance_subjects` | `id, event_id, member_id` | Unique / partial unique | FK register |
 | `uq_event_attendance_subject_event_member` | `event_attendance_subjects` | `event_id, member_id` | Unique / partial unique | Medium catalogue |
+| `uq_event_registrations_id_event_member` | `event_registrations` | `id, event_id, member_id` | Unique / partial unique | FK register |
 | `uq_event_registrations_current_member` | `event_registrations` | `event_id, member_id WHERE approved valid-registration predicate` | Unique / partial unique | Medium catalogue |
 | `uq_event_sessions_id_event` | `event_sessions` | `id, event_id` | Unique / partial unique | Medium catalogue |
 | `uq_events_scope_id` | `events` | `owner scope plus id` | Unique / partial unique | Medium catalogue |
+| `uq_budgets_id_currency` | `budgets` | `id, currency_code` | Unique / partial unique | FK register |
 | `uq_financial_accounts_id_currency` | `financial_accounts` | `id, currency_code` | Unique / partial unique | Medium catalogue |
+| `uq_financial_transactions_id_currency` | `financial_transactions` | `id, currency_code` | Unique / partial unique | FK register |
 | `uq_financial_accounts_owner_code` | `financial_accounts` | `owner-specific account code partial indexes` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_account_reference` | `financial_transactions` | `financial_account_id, reference` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_id_account_currency` | `financial_transactions` | `id, financial_account_id, currency_code` | Unique / partial unique | Medium catalogue |
