@@ -303,3 +303,7 @@ The matrix is still not a fully exact column-level register. Each FK must be rec
 The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) is the detailed relationship appendix for this matrix. It records source columns, target columns, proposed nullability, RESTRICT actions, and supporting-index requirements for all 65 table rows.
 
 Use that register as the current proposed FK source of truth. The summary rows above remain a concise integrity overview and must be reconciled where older shorthand or pre-remediation descriptions differ. The column-level register explicitly identifies fields whose type/nullability/default remains incomplete.
+
+## 15. Foreign-key and column register review
+
+The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) confirms structural coverage of all 65 table names in both the FK and column declaration inventories. It retains open findings for grouped/inferred FK declarations, unspecified column type/nullability, support-index reconciliation, retention source mapping, and PostgreSQL compatibility.
