@@ -1006,3 +1006,7 @@ See Sections 5.3–5.6 of the [Foreign-Key and Column Register](./PHASE-2-FOREIG
 The combined proposed index catalogue contains 190 unique names: 90 existing unique/access proposals, 21 named scope/retention FK indexes, and 79 additional FK source-index proposals. A document-level left-prefix comparison found no FK source-column group without a proposed supporting index.
 
 This is structural coverage, not performance evidence. Index necessity, redundancy, partial-index predicates, and query plans still require workload review after the target PostgreSQL environment is known.
+
+## 29. Owner decision register
+
+The consolidated [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md) identifies the outstanding ministry, governance, finance, audit, retention, reporting, notification and deployment decisions that affect this physical design. It distinguishes approved decisions from open policy questions and environment confirmations. No open item is assumed approved.
