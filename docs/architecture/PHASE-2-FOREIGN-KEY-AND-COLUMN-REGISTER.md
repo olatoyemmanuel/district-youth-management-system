@@ -220,7 +220,7 @@ No SQL DDL, Prisma schema, migration, database object, seed, generated client, o
 
 ## 5.2 Explicit column declaration inventory
 
-The following inventory records the typed field declarations currently present in the canonical physical-design sections. It is a transcription aid, not an inferred completion of missing columns. `NOT SPECIFIED` means the source text does not state nullability; `TYPE / NULLABILITY NOT SPECIFIED` means even the type is abbreviated. PK columns are treated as NOT NULL by PostgreSQL semantics.
+The following inventory records the 599 typed column declarations across all 65 physical tables. The [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) expands these declarations into one row per column and records defaults, constraint participation, FK actions, supporting indexes and owner-decision status. PK columns are treated as NOT NULL by PostgreSQL semantics.
 
 | Table | Explicitly declared columns and source nullability |
 |---|---|
