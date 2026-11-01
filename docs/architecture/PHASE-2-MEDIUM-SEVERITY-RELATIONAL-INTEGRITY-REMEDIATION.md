@@ -75,13 +75,13 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `uq_members_member_number` | members | member_number | Unique member number |
 | `uq_churches_district_code` | churches | district_id, code | Church code within district |
 | `uq_member_categories_code` | member_categories | code | Controlled category code |
-| `uq_member_category_assignments_current` | member_category_assignments | member_id WHERE approved current predicate | Blocked until current/approval predicate is approved |
-| `uq_church_memberships_current` | church_memberships | member_id WHERE approved current predicate | Blocked until current/approval predicate is approved |
-| `uq_church_transfer_requests_open_member` | church_transfer_requests | member_id WHERE unresolved predicate | Blocked until resolved/cancelled lifecycle columns are approved |
+| `uq_member_category_assignments_current` | member_category_assignments | member_id WHERE UNRESOLVED current-category predicate (ODR-001) | POLICY BLOCKED pending category lifecycle approval |
+| `uq_church_memberships_current` | church_memberships | member_id WHERE UNRESOLVED current-membership predicate (ODR-002) | POLICY BLOCKED pending transfer/membership lifecycle approval |
+| `uq_church_transfer_requests_open_member` | church_transfer_requests | member_id WHERE UNRESOLVED open-transfer predicate (ODR-002) | POLICY BLOCKED pending open-transfer state approval |
 | `uq_departments_district_code` | departments | district_id, code WHERE church_id IS NULL | District department code |
 | `uq_departments_church_code` | departments | church_id, code WHERE church_id IS NOT NULL | Church department code; only if church-owned departments approved |
 | `uq_department_eligibility_rules_version` | department_eligibility_rules | department_id, version | Rule version history |
-| `uq_department_memberships_current` | department_memberships | member_id, department_id WHERE approved current predicate | Blocked until lifecycle predicate approved |
+| `uq_department_memberships_current` | department_memberships | member_id, department_id WHERE UNRESOLVED current-membership predicate (ODR-007) | POLICY BLOCKED pending department membership lifecycle approval |
 | `uq_positions_district_code` | positions | district_id, code WHERE district_id IS NOT NULL | Position code per district scope |
 | `uq_positions_church_code` | positions | church_id, code WHERE church_id IS NOT NULL | Position code per church scope |
 | `uq_positions_department_code` | positions | department_id, code WHERE department_id IS NOT NULL | Position code per department scope |
@@ -91,7 +91,7 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `uq_events_id_church` | events | id, church_id WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL | Church-scoped event candidate key |
 | `uq_events_id_department` | events | id, department_id WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL | Department-scoped event candidate key |
 | `uq_events_id_district` | events | id, district_id WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL | District-scoped event candidate key |
-| `uq_event_registrations_current_member` | event_registrations | event_id, member_id WHERE approved valid-registration predicate | Blocked until registration states approved |
+| `uq_event_registrations_current_member` | event_registrations | event_id, member_id WHERE UNRESOLVED valid-registration predicate (ODR-008) | POLICY BLOCKED pending registration state approval |
 | `uq_event_sessions_id_event` | event_sessions | id, event_id | Composite session/event FK target |
 | `uq_event_attendance_subject_event_member` | event_attendance_subjects | event_id, member_id | One attendance subject per member/event |
 | `uq_attendance_records_event_subject` | attendance_records | attendance_subject_id WHERE event_session_id IS NULL | One event-level record |
@@ -152,7 +152,6 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `ix_financial_transactions_status_date` | financial_transactions | status, submitted_at DESC | Finance workflow queue |
 | `ix_transaction_approvals_transaction_time` | transaction_approvals | financial_transaction_id, decided_at DESC | Approval history |
 | `ix_payments_transaction_time` | payments | financial_transaction_id, initiated_at DESC | Payment attempts/reconciliation |
-| `ix_budget_lines_budget_order` | budget_lines | budget_id, sort_order | Budget line rendering |
 | `ix_credential_issuances_member_date` | credential_issuances | member_id, issued_at DESC | Member credential history |
 | `ix_credential_evidence_issuance` | credential_evidence | credential_issuance_id, submitted_at DESC | Evidence review |
 | `ix_notification_recipients_user_status` | notification_recipients | user_account_id, status | Recipient inbox |
@@ -302,6 +301,6 @@ A document-level left-prefix comparison reports zero FK source-column groups wit
 
 The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) found that the medium-severity index catalogue and FK-support index register are not yet reconciled as one canonical inventory. It also identified missing named FK-support proposals for access-deny permission, issuer and reviewer relationships.
 
-The current distinct-name count is 99 in this document and 121 in the FK/column register, with four shared names. The combined distinct-name count is 216. These counts do not establish index-definition correctness.
+The current distinct-name count is 98 in this document and 120 in the FK/column register, with four shared names. The combined distinct-name count is 214. These counts do not establish index-definition correctness.
 
 PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 and PIR-07 remain partially resolved pending definition-level completion. PIR-06 has a document-level status reconciliation. No index or database object has been created. No index or database object has been created.
