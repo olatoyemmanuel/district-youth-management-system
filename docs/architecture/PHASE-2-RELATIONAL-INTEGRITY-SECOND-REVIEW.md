@@ -105,3 +105,24 @@ The index register is a useful working inventory, but some proposed indexes refe
 - PR #53 must remain draft and unmerged unless the project owner explicitly instructs otherwise.
 
 **Final assessment:** The remediation has moved the design forward, but it is not ready for physical-design approval. Complete the FK and column-level matrices, resolve or explicitly retain policy blockers, then perform the next independent review.
+
+
+## 7. Foreign-key register follow-up
+
+A dedicated [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) has been added and linked from the canonical physical design, integrity matrix, and approval package.
+
+The register contains one FK inventory row for each of the 65 table names. It records source columns, target columns, proposed nullability, a uniform proposed RESTRICT/RESTRICT action policy, and supporting-index requirements. The integrity matrix summary rows for positions, appointments, budgets, budget lines, financial transactions, reversals, and reporting have been reconciled to the newer canonical definitions.
+
+### Follow-up findings
+
+| ID | Severity | Finding | Status |
+|---|---|---|---|
+| RIM2-01 | High | The FK register now has 65 table rows, but some scope and actor references are still grouped, and some support-index names are expressed as a naming rule rather than individually verified physical indexes. | Partially addressed |
+| RIM2-02 | High | The column register documents known incomplete groups but does not yet provide a fully expanded field-by-field type/nullability/default listing for all 65 tables. | Open |
+| RIM2-03 | High | Retention subject source enrollment is intentionally not asserted complete. No definitive approved source-table inventory and one-to-one FK mapping exists yet. | Open |
+| RIM2-04 | Medium | Several source definitions retain shorthand timestamps, scope columns, and grouped role-conflict table declarations. | Open |
+| RIM2-05 | Medium | Proposed ON DELETE/ON UPDATE RESTRICT policy is consistent with history preservation, but each final FK must be reviewed for exceptional lifecycle cases before DDL. | Proposed baseline |
+
+### Current result
+
+The register is a meaningful structural improvement, but it is not yet a complete column-level physical specification. It must not be used to generate migrations. Further work is required before approval.
