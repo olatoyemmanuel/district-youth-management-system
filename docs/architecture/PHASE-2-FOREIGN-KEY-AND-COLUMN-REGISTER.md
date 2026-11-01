@@ -339,6 +339,7 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_retention_actions_initiated_by_user_account_id` | `retention_actions` | `initiated_by_user_account_id` | `None` |
 | `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id` | `WHERE approved_by_user_account_id IS NOT NULL` |
 
+| `ix_fk_departments_church_district` | `departments` | `church_id, district_id` | `WHERE church_id IS NOT NULL` |
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | `None` |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | `None` |
 | `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id` | ` WHERE church_id IS NOT NULL` |
