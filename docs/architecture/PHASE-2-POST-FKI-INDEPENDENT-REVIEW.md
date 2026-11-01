@@ -93,7 +93,7 @@ Definition-level duplicate detection, final column/predicate verification, lifec
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
 **Severity:** Medium  
-**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; SQL/DDL validation pending
 
 The FKI audit now contains a current disposition summary at the top. Its original OPEN labels are explicitly identified as historical initial status. The current disposition table records the status and evidence for FKI-01 through FKI-07.
 
