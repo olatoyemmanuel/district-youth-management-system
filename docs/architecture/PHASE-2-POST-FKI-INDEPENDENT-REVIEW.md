@@ -42,7 +42,7 @@ Document-level checks:
 ### PIR-01 — FK inventory is still not a complete one-relationship-per-entry register
 
 **Severity:** High  
-**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; SQL/DDL validation pending
 
 The table-level Section 3 summary remains grouped but is now explicitly designated as a table-coverage summary. The [Named Foreign-Key Relationship Register](./PHASE-2-NAMED-FOREIGN-KEY-RELATIONSHIP-REGISTER.md) provides 155 one-row-per-FK declarations across 54 FK-bearing tables, with 11 zero-FK tables retained in the 65-table coverage summary.
 
@@ -53,7 +53,7 @@ All 155 rows record stable constraint names, ordered source/target tuples, sourc
 ### PIR-02 — Optional attendance composite-FK nullability is internally contradictory
 
 **Severity:** High  
-**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; SQL/DDL validation pending
 
 The canonical physical design, FK register and integrity matrix now agree: `event_id` and `member_id` are NOT NULL; `registration_id` and `event_session_id` are independently nullable. The optional registration and session composite FKs use MATCH SIMPLE, not MATCH FULL. A NULL optional identifier skips only its optional FK; the mandatory subject FK continues to enforce event/member identity.
 
@@ -64,7 +64,7 @@ Positive and negative integrity-test requirements cover valid references, absent
 ### PIR-03 — FK-support index declarations are incomplete or inaccurate for authorization relationships
 
 **Severity:** High  
-**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; SQL/DDL validation pending
 
 The FK register and medium catalogue now name separate indexes for `access_denies.permission_id`, `issued_by_user_account_id`, and `reviewed_by_user_account_id`. The target-scope index is correctly described as supporting `target_user_account_id` only by left prefix. The `role_conflict_rules` row now states that the pair/version unique key supports `role_a_id`; `ix_fk_role_conflict_rules_role_b_id` supports `role_b_id`.
 
@@ -73,7 +73,7 @@ The FK register and medium catalogue now name separate indexes for `access_denie
 ### PIR-04 — Department FK row does not match its corrected composite-index catalogue
 
 **Severity:** Medium  
-**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; SQL/DDL validation pending
 
 The table-level row now references `ix_fk_departments_church_district(church_id,district_id)` for the composite church/district relationship and `ix_fk_departments_district_id(district_id)` for the district FK. The redundant standalone church FK is not listed; the composite FK proves both church existence and same-district ownership.
 
@@ -121,7 +121,7 @@ The column-level register still records NOT SPECIFIED IN SOURCE for defaults not
 | FKI-01 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register records one row per declared FK, ordered tuples, source nullability, target-key evidence, MATCH semantics, actions and supporting index coverage. |
 | FKI-02 | RESOLVED AT DOCUMENT LEVEL | role_permissions permission_id index is explicitly proposed. |
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
-| FKI-04 | PARTIALLY RESOLVED | Several full composite proposals are present, but the complete 65-table composite FK/index pairing has not been independently proven. |
+| FKI-04 | RESOLVED AT DOCUMENT LEVEL, verified 2026-11-01 | All 10 composite target tuples match exact named UNIQUE keys; all 155 source support indexes begin with the complete ordered source tuple. All 57 partial support-index predicates cover nullable FK components without excluding valid references. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
 | FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 211 distinct names. |
 | FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
