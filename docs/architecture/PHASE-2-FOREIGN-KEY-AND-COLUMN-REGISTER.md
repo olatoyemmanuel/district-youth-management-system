@@ -288,3 +288,34 @@ The absence of a default is intentional in this proposal. A single trusted times
 - The prior generic `target_binding_id` wording is superseded by the exact retention_subject_id FK.
 - `retention_subjects` itself does not contain a self-referencing retention_subject_id column. Each enrolled source record must instead carry a unique FK to the subject, or use a typed one-to-one link table with a real FK.
 - The exact set of enrolled source tables is not yet approved. No source table is claimed to be enrolled until its source-specific FK/link is listed and reviewed.
+
+
+## 5.6 Named support-index proposals for expanded scope and retention FKs
+
+These names make the previously generic scope-index requirements concrete. They are proposed B-tree indexes on the FK source columns, filtered to non-NULL values where the column is optional. They must be reconciled with final uniqueness/index definitions before DDL; they are not asserted to exist in a database.
+
+| Table | FK source column | Proposed index name | Predicate |
+|---|---|---|---|
+| `departments` | `church_id` | `ix_departments_church_id` | `church_id IS NOT NULL` |
+| `user_role_assignments` | `district_id` | `ix_user_role_assignments_district_id` | `district_id IS NOT NULL` |
+| `user_role_assignments` | `church_id` | `ix_user_role_assignments_church_id` | `church_id IS NOT NULL` |
+| `user_role_assignments` | `department_id` | `ix_user_role_assignments_department_id` | `department_id IS NOT NULL` |
+| `access_denies` | `district_id` | `ix_access_denies_district_id` | `district_id IS NOT NULL` |
+| `access_denies` | `church_id` | `ix_access_denies_church_id` | `church_id IS NOT NULL` |
+| `access_denies` | `department_id` | `ix_access_denies_department_id` | `department_id IS NOT NULL` |
+| `events` | `district_id` | `ix_events_district_id` | `district_id IS NOT NULL` |
+| `events` | `church_id` | `ix_events_church_id` | `church_id IS NOT NULL` |
+| `events` | `department_id` | `ix_events_department_id` | `department_id IS NOT NULL` |
+| `audit_events` | `district_id` | `ix_audit_events_district_id` | `district_id IS NOT NULL` |
+| `audit_events` | `church_id` | `ix_audit_events_church_id` | `church_id IS NOT NULL` |
+| `audit_events` | `department_id` | `ix_audit_events_department_id` | `department_id IS NOT NULL` |
+| `audit_access_events` | `district_id` | `ix_audit_access_events_district_id` | `district_id IS NOT NULL` |
+| `audit_access_events` | `church_id` | `ix_audit_access_events_church_id` | `church_id IS NOT NULL` |
+| `audit_access_events` | `department_id` | `ix_audit_access_events_department_id` | `department_id IS NOT NULL` |
+| `idempotency_records` | `district_id` | `ix_idempotency_records_district_id` | `district_id IS NOT NULL` |
+| `idempotency_records` | `church_id` | `ix_idempotency_records_church_id` | `church_id IS NOT NULL` |
+| `idempotency_records` | `department_id` | `ix_idempotency_records_department_id` | `department_id IS NOT NULL` |
+| `retention_holds` | `retention_subject_id` | `ix_retention_holds_retention_subject_id` | None |
+| `retention_actions` | `retention_subject_id` | `ix_retention_actions_retention_subject_id` | None |
+
+These are FK-maintenance and scoped-query candidates. A composite index may satisfy a single-column FK lookup only when the FK column is the leftmost prefix. The final index review must remove redundant standalone indexes where a suitable unique/composite index already provides the needed prefix.
