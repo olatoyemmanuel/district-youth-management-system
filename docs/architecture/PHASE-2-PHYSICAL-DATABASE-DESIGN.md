@@ -298,6 +298,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `account_code varchar(50) NOT NULL`, `name text NOT NULL`
 - Exactly one owner FK: `district_id uuid NULL` or `church_id uuid NULL`; CHECK `num_nonnulls(district_id, church_id) = 1`.
 - `currency_code char(3) NOT NULL FK currencies(code)`, `status varchar(20) NOT NULL`, `opened_at timestamptz NOT NULL`, `closed_at timestamptz NULL`
+- Candidate key `UNIQUE (id, currency_code)` supports account/currency binding from transactions.
 - Unique account code within owning scope. Account currency is immutable after first posted transaction; changing currency requires a new account.
 
 #### `currencies`
@@ -310,7 +311,9 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `amount numeric(19,4) NOT NULL`, `currency_code char(3) NOT NULL`, `status varchar(24) NOT NULL`
 - `transaction_date date NOT NULL`, `submitted_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `submitted_at timestamptz NULL`, `rejection_reason text NULL`, `posted_at timestamptz NULL`, `posted_by_user_account_id uuid NULL FK user_accounts(id)`
-- Add `UNIQUE (id, currency_code)` on financial accounts and a composite FK `(financial_account_id, currency_code)` from transactions to enforce account/transaction currency equality. Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
+- Candidate keys: `UNIQUE (id, currency_code)` for payment currency binding and `UNIQUE (id, financial_account_id, currency_code)` for reversal binding.
+- Composite FK `(financial_account_id, currency_code)` references `financial_accounts(id, currency_code)`, enforcing account/transaction currency equality.
+- Amount sign convention remains blocked by accounting policy. Do not add a CHECK `amount > 0` until debit/credit semantics are approved.
 - Unique `(financial_account_id, reference)`.
 
 #### `transaction_revisions`
