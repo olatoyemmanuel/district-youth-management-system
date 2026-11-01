@@ -52,16 +52,19 @@ Priority:
 
 #### ODR-001 — Member category eligibility and progression
 
-**Status:** OPEN  
-**Decision authority:** Relevant Adventurer, Pathfinder, Senior Youth and Master Guide ministry authorities; project owner records the approved platform rule.  
+**Status:** AWAITING AUTHORITATIVE MINISTRY GUIDANCE  
+**Responsible for supplying the rules:** The relevant Adventurer, Pathfinder, Senior Youth and Master Guide ministry authorities must provide the official eligibility, progression, class-completion and credentialing rules applicable to their respective ministries. Each authority should identify the governing source, issuing body, document/version and effective date. Where a rule crosses ministry categories, the relevant authorities should provide a coordinated interpretation.  
+**Decision authority:** The relevant recognized ministry authority confirms its official rules; the project owner records the resulting DYMS platform decision and any approved implementation implications.  
 **Related:** DDD-002, member category assignments, credential issuance.
 
-Decisions required:
-1. What official eligibility rules govern entry into and progression between Adventurer, Pathfinder and Senior Youth categories?
-2. Which age bands, class levels, completion requirements or other criteria are defined by the recognized ministry authority?
-3. What evidence is required, who verifies it, and who approves an exception?
-4. Who may correct a historical category assignment, and what evidence/reason must be retained?
-5. Does a member's category change require a separate approval, or is verification by an authorized scoped administrator sufficient?
+Required submission from the responsible ministry authorities:
+1. Official eligibility rules governing entry into and progression within Adventurer, Pathfinder and Senior Youth categories.
+2. Applicable age bands, class levels, completion requirements and other criteria, where formally defined.
+3. Required evidence, verification authority and any formally authorized exception process.
+4. The authority permitted to correct a historical category assignment, including required evidence and reason.
+5. Whether category changes require separate approval or may be completed after verification by an authorized scoped administrator.
+
+**Required output:** A documented rule set for each relevant ministry, with authoritative source, version/effective date, responsible issuer, evidence requirements and any approved exception process. If no official rule exists for an item, the authority must state that explicitly.  
 
 **Do not assume:** age cut-offs, class completion rules, automatic promotion, or an exception authority.
 
