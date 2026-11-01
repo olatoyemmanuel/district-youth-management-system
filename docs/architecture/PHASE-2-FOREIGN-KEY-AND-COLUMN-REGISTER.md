@@ -234,3 +234,57 @@ The following inventory records the typed field declarations currently present i
 | `service_principals` | `id (uuid / NOT NULL)`; `code (varchar / NOT NULL)`; `display_name (varchar / NOT NULL)`; `description (text / NULL)`; `status (varchar / NOT NULL)`; `created_at (timestamptz / NOT NULL)`; `updated_at (timestamptz / NOT NULL)` |
 
 The table inventory contains 65 definition blocks after splitting the grouped role-conflict heading and adding the three Section 18 structures. It is not yet a one-to-one completed 65-table column matrix because some fields remain described only in prose, grouped scope clauses, or shorthand. Do not interpret omitted columns as absent from the intended model or as nullable. The next reconciliation must expand the remaining scope and actor fields, timestamps, and any missing operational metadata into explicit typed declarations.
+
+
+## 5.3 Explicit scope and actor column expansion
+
+The following columns were previously stated in prose as “explicit scope FKs” or “exactly one scope FK”. This appendix makes the proposed PostgreSQL declarations explicit. Each listed scope column is a nullable UUID FK individually; the table-level CHECK requires the approved scope shape. No polymorphic `scope_type + scope_id` pair is introduced.
+
+| Table | Column | Proposed type/nullability | Target | Constraint |
+|---|---|---|---|---|
+| `departments` | `church_id` | `uuid NULL` | `churches(id)` | Optional church ownership; if populated, composite `(church_id,district_id)` must reference `churches(id,district_id)` |
+| `user_role_assignments` | `district_id` | `uuid NULL` | `districts(id)` | Exactly one of district/church/department |
+| `user_role_assignments` | `church_id` | `uuid NULL` | `churches(id)` | Exactly one of district/church/department |
+| `user_role_assignments` | `department_id` | `uuid NULL` | `departments(id)` | Exactly one of district/church/department |
+| `access_denies` | `district_id` | `uuid NULL` | `districts(id)` | Exactly one of district/church/department |
+| `access_denies` | `church_id` | `uuid NULL` | `churches(id)` | Exactly one of district/church/department |
+| `access_denies` | `department_id` | `uuid NULL` | `departments(id)` | Exactly one of district/church/department |
+| `events` | `district_id` | `uuid NULL` | `districts(id)` | Exactly one event owner; allowed owner type still policy-bound |
+| `events` | `church_id` | `uuid NULL` | `churches(id)` | Exactly one event owner; church/district hierarchy bound where district also stored |
+| `events` | `department_id` | `uuid NULL` | `departments(id)` | Exactly one event owner; department ownership policy remains open |
+| `audit_events` | `district_id` | `uuid NULL` | `districts(id)` | Zero or one audit scope FK; NULL permitted for genuinely global/system event |
+| `audit_events` | `church_id` | `uuid NULL` | `churches(id)` | Zero or one audit scope FK |
+| `audit_events` | `department_id` | `uuid NULL` | `departments(id)` | Zero or one audit scope FK |
+| `audit_access_events` | `district_id` | `uuid NULL` | `districts(id)` | Zero or one access scope FK |
+| `audit_access_events` | `church_id` | `uuid NULL` | `churches(id)` | Zero or one access scope FK |
+| `audit_access_events` | `department_id` | `uuid NULL` | `departments(id)` | Zero or one access scope FK |
+| `idempotency_records` | `district_id` | `uuid NULL` | `districts(id)` | Global or exactly one resource scope; scope discriminator contract required |
+| `idempotency_records` | `church_id` | `uuid NULL` | `churches(id)` | Global or exactly one resource scope |
+| `idempotency_records` | `department_id` | `uuid NULL` | `departments(id)` | Global or exactly one resource scope |
+
+These are proposed physical columns, not claims of approved church-owned department or local event policies. Where a row carries both church and district identifiers, the composite hierarchy FK is mandatory. The district-only, church-only, and department-only shapes must be encoded by an explicit CHECK once the permitted scope values are approved.
+
+## 5.4 Timestamp shorthand normalization
+
+Four canonical table definitions previously used untyped `created_at` / `updated_at` shorthand. The proposed physical declarations are:
+
+| Table | Column | Proposed type | Nullability | Default |
+|---|---|---|---|---|
+| `user_accounts` | `created_at` | `timestamptz` | NOT NULL | No default selected |
+| `user_accounts` | `updated_at` | `timestamptz` | NOT NULL | No default selected |
+| `members` | `created_at` | `timestamptz` | NOT NULL | No default selected |
+| `members` | `updated_at` | `timestamptz` | NOT NULL | No default selected |
+| `church_memberships` | `created_at` | `timestamptz` | NOT NULL | No default selected |
+| `church_memberships` | `updated_at` | `timestamptz` | NOT NULL | No default selected |
+| `events` | `created_at` | `timestamptz` | NOT NULL | No default selected |
+| `events` | `updated_at` | `timestamptz` | NOT NULL | No default selected |
+
+The absence of a default is intentional in this proposal. A single trusted timestamp authority must be selected before implementation. Other already-typed timestamps retain their table-specific nullability.
+
+## 5.5 Retention relationship correction
+
+- `retention_holds.retention_subject_id uuid NOT NULL` references `retention_subjects(id)`.
+- `retention_actions.retention_subject_id uuid NOT NULL` references `retention_subjects(id)`.
+- The prior generic `target_binding_id` wording is superseded by the exact retention_subject_id FK.
+- `retention_subjects` itself does not contain a self-referencing retention_subject_id column. Each enrolled source record must instead carry a unique FK to the subject, or use a typed one-to-one link table with a real FK.
+- The exact set of enrolled source tables is not yet approved. No source table is claimed to be enrolled until its source-specific FK/link is listed and reviewed.
