@@ -1038,7 +1038,7 @@ No DDL or Prisma changes are authorized by these corrections.
 
 The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment of the corrected FK register, relational integrity matrix and index proposals.
 
-The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. PIR-01 through PIR-04 are verified at document level; PIR-05 remains partially resolved pending definition-level review; PIR-06 is verified at document level; PIR-07 is partially resolved with the 617-column register, while defaults and constraint definitions remain open.
+The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. PIR-01 through PIR-04 are verified at document level; PIR-05 is verified at document level; workload review and owner approval remain pending; PIR-06 is verified at document level; PIR-07 is partially resolved with the 617-column register, while defaults and constraint definitions remain open.
 
 The former 190-index count in Section 28 and subsequent 199-, 202- and 206-name summaries are historical and superseded. The current inventories contain 120 distinct names in the FK/column register and 98 in the medium-severity catalogue, with four shared names. The combined distinct-name count is 214. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md). This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
 
