@@ -89,3 +89,11 @@ A [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-R
 **Result: Further canonical reconciliation and independent review required.** RIM-09 has a concrete portable uniqueness proposal. RIM-10 remains policy-blocked where lifecycle semantics are not approved. RIM-11 is a proposed named index register. RIM-12 remains open because column-level coverage is incomplete. RIM-13 is partially resolved. RIM-14 remains environment-blocked.
 
 No PostgreSQL DDL was compiled or executed. No database tests were run. No Prisma schema, migration, database object, generated client, seed, or application code was created or changed.
+
+## 9. Independent second review
+
+The follow-up independent document review is recorded in [Phase 2 Relational Integrity Second Review](./PHASE-2-RELATIONAL-INTEGRITY-SECOND-REVIEW.md).
+
+The second review confirms 65 unique matrix table rows and verifies the canonical high-severity structural changes. It retains RIM-03, RIM-05, RIM-07, RIM-10, RIM-12 and RIM-14 as open, and records partial completion for RIM-04, RIM-08, RIM-11 and RIM-13. It also identifies the need for a composite attendance registration FK proving event and member identity.
+
+**Result:** Further revision required. This is document-level verification only. No DDL compilation or database concurrency testing was performed.
