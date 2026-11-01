@@ -222,7 +222,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `user_role_assignments`
 - `id uuid PK`, `user_account_id uuid NOT NULL FK user_accounts(id)`, `role_id uuid NOT NULL FK roles(id)`
-- Explicit nullable `district_id`, `church_id`, `department_id` FKs; exactly one valid scope target.
+- `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`; exactly one valid scope target.
 - `granted_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`, `status varchar(20) NOT NULL`, `reason text NULL`
 - Prevent self-grant in the service transaction and audit it. Use constraints for scope and interval.
 
@@ -233,7 +233,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `access_denies`
 - `id uuid PK`, `target_user_account_id uuid NOT NULL FK user_accounts(id)`, `permission_id uuid NOT NULL FK permissions(id)`
-- Exactly one of `district_id`, `church_id`, `department_id` populated as valid scope FKs.
+- `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`; exactly one scope FK is populated.
 - `issued_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `reviewed_by_user_account_id uuid NULL FK user_accounts(id)`
 - `reason text NOT NULL`, `effective_from timestamptz NOT NULL`, `expires_at timestamptz NULL`, `review_due_at timestamptz NULL`, `status varchar(20) NOT NULL`, `revoked_at timestamptz NULL`, `revocation_reason text NULL`
 - Service-level checks prevent target actor from issuing, approving, modifying, or revoking own deny. Review and audit are mandatory.
@@ -250,7 +250,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `events`
 - `id uuid PK`, `title text NOT NULL`, `description text NULL`, `event_type varchar(40) NOT NULL`, `status varchar(24) NOT NULL`
-- Explicit owner FKs: exactly one of `district_id`, `church_id`, `department_id` as permitted by event type and approved policy.
+- Explicit owner FKs: `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`. Exactly one owner scope is selected subject to event type and approved policy.
 - `venue text NULL`, `starts_at timestamptz NOT NULL`, `ends_at timestamptz NOT NULL`, `timezone text NOT NULL`
 - `registration_opens_at timestamptz NULL`, `registration_closes_at timestamptz NULL`, `capacity integer NULL CHECK (capacity IS NULL OR capacity >= 0)`, `reserved_count integer NOT NULL DEFAULT 0 CHECK (reserved_count >= 0)`
 - `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected), `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
@@ -436,7 +436,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `actor_type varchar(20) NOT NULL CHECK (actor_type IN ('USER','SYSTEM','SERVICE','ANONYMOUS'))`
 - `actor_user_account_id uuid NULL FK user_accounts(id)`, `actor_service_principal_id uuid NULL FK service_principals(id)`, `initiating_user_account_id uuid NULL FK user_accounts(id)`
 - `action varchar(100) NOT NULL`, `target_type varchar(80) NOT NULL`, `target_id uuid NULL`
-- Explicit optional scope FKs: `district_id`, `church_id`, `department_id`, with zero or one populated; scope can be absent for truly global/system events.
+- Explicit optional scope FKs: `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, with zero or one populated; scope can be absent for truly global/system events.
 - `occurred_at timestamptz NOT NULL`, `reason text NULL`, `correlation_id uuid NULL`, `safe_change_summary jsonb NULL`
 - CHECK actor identity truth table: USER requires actor_user_account_id and no service principal; SERVICE requires service principal and no actor user; SYSTEM and ANONYMOUS require neither. initiating_user_account_id is independent.
 - Runtime database role receives no UPDATE, DELETE, TRUNCATE, or ownership privileges on audit tables. Corrections append a new event.
@@ -444,12 +444,12 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `audit_access_events`
 - `id uuid PK`, `accessing_user_account_id uuid NOT NULL FK user_accounts(id)`, `audit_event_id uuid NULL FK audit_events(id)`
-- `access_action varchar(30) NOT NULL`, `purpose text NOT NULL`, explicit scope FKs, `occurred_at timestamptz NOT NULL`, `exceptional_access boolean NOT NULL DEFAULT false`.
+- `access_action varchar(30) NOT NULL`, `purpose text NOT NULL`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, `occurred_at timestamptz NOT NULL`, `exceptional_access boolean NOT NULL DEFAULT false`.
 - Audit access is itself auditable. Restrict read permissions separately from write path.
 
 #### `idempotency_records`
 - `id uuid PK`, `key_digest text NOT NULL`, `actor_user_account_id uuid NOT NULL FK user_accounts(id)`
-- `operation_code varchar(100) NOT NULL`, explicit resource scope FKs, `request_fingerprint text NOT NULL`
+- `operation_code varchar(100) NOT NULL`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, `request_fingerprint text NOT NULL`
 - `status varchar(20) NOT NULL`, `created_at timestamptz NOT NULL`, `lease_expires_at timestamptz NULL`, `completed_at timestamptz NULL`, `safe_result_reference text NULL`
 - Unique composite over actor, operation, scope identity, and key digest. A normalized scope identity strategy is required because nullable columns behave specially in ordinary unique constraints; use PostgreSQL 15+ `NULLS NOT DISTINCT` only if confirmed version support, or separate partial unique indexes per scope shape.
 - Store safe response reference, not raw headers, cookies, tokens, or sensitive response bodies.
