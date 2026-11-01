@@ -972,7 +972,7 @@ The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY
 
 The canonical report table definitions now preserve the immutable report-definition version through a composite FK. The canonical position, appointment, attendance, finance reversal, budget, and audit definitions were reconciled in Section 5 and the preceding high-severity amendment.
 
-**Remaining limitation:** the named index register requires definition-level redundancy and predicate review. The 617-column register reconciles type/nullability and declared FK/index participation, but defaults not stated in the source remain unresolved, CHECK constraints need stable names/expressions, and lifecycle predicates and production PostgreSQL compatibility remain open. No implementation is authorized.
+**Remaining limitation:** the 214-entry canonical index inventory has no remaining exact duplicate definitions. Six entries remain POLICY BLOCKED pending owner decisions, and production workload/maintenance review is outstanding. The 617-column register reconciles type/nullability and declared FK/index participation, but 611 defaults are not specified in the source, CHECK constraints need stable names/expressions, and production PostgreSQL compatibility remains open. No implementation is authorized.
 
 
 ## 24. Independent relational-integrity second review
