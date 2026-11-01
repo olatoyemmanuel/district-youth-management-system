@@ -8,7 +8,7 @@
 
 ## 1. Executive assessment
 
-The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 121 FK-register names and 94 medium-catalogue names, with four shared names and 211 combined distinct names.
+The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 121 FK-register names and 99 medium-catalogue names, with four shared names and 216 combined distinct names.
 
 The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
@@ -33,7 +33,7 @@ Document-level checks:
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
 - 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
-- The canonical inventory now contains 121 distinct FK-register names and 94 medium-catalogue names, with four shared names.
+- The canonical inventory now contains 121 distinct FK-register names and 99 medium-catalogue names, with four shared names.
 - The combined distinct proposed index-name count is 211. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
@@ -84,11 +84,11 @@ The table-level row now references `ix_fk_departments_church_district(church_id,
 **Severity:** Medium  
 **Status:** PARTIALLY RESOLVED, pending definition-level redundancy review
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 211 distinct proposed index names: 121 in the FK register, 94 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 216 distinct proposed index names: 121 in the FK register, 99 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
 
 Definition-level duplicate detection, final column/predicate verification, lifecycle-predicate approval and workload review remain outstanding.
 
-**Correction recorded:** The conflicting 190-, 199-, 202- and 206-name summaries have been superseded by the 211-name inventory. The remaining definition-level review keeps this finding partially resolved.
+**Correction recorded:** The conflicting 190-, 199-, 202- and 206-name summaries have been superseded by the 216-name inventory. The remaining definition-level review keeps this finding partially resolved.
 
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
@@ -123,14 +123,14 @@ The column-level register still records NOT SPECIFIED IN SOURCE for defaults not
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
 | FKI-04 | RESOLVED AT DOCUMENT LEVEL, verified 2026-11-01 | All 10 composite target tuples match exact named UNIQUE keys; all 155 source support indexes begin with the complete ordered source tuple. All 57 partial support-index predicates cover nullable FK components without excluding valid references. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 211 distinct names. |
+| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 216 distinct names. |
 | FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
 
 ## 5. Required next correction sequence
 
 1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 617-column register (PIR-07).
 2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
-3. Independently verify the 155-row FK relationship register and 211-name index inventory.
+3. Independently verify the 155-row FK relationship register and 216-name index inventory.
 4. Conduct a fresh acceptance review and update all dispositions.
 
 ## 6. Owner decisions and environment blockers retained
