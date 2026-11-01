@@ -94,6 +94,59 @@ This is not SQL DDL. The FK actions below are proposed defaults. The register do
 | `report_runs` | `report_definition_id,report_definition_version`; `requested_by_user_account_id`; `scope_district_id`; `scope_church_id`; `scope_department_id` | `report_definitions(id,version)`; `user_accounts(id)`; `districts(id)`; `churches(id)`; `departments(id)` | Definition/requester NOT NULL; exactly one scope FK or explicit GLOBAL; scope_kind values pending approval | Composite definition FK index; requester/time index; one index per scope FK; RESTRICT/RESTRICT for every listed FK |
 | `report_export_audits` | `report_run_id`; `actor_user_account_id` | `report_runs(id)`; `user_accounts(id)` | Both NOT NULL | `ix_fk_report_export_audits_report_run_id`; `ix_fk_report_export_audits_actor_user_account_id`; RESTRICT/RESTRICT for every listed FK |
 
+## 3.1 Stable constraint names for expanded FK rows
+
+The following names are the proposed stable PostgreSQL FK constraint identifiers for the rows expanded after FKI-01. Every relationship uses `ON DELETE RESTRICT ON UPDATE RESTRICT`. Nullable relationships remain nullable as stated; a nullable FK does not make its target optional when a value is present.
+
+| Table | Proposed constraint name | Ordered source columns | Ordered target columns | Nullability |
+|---|---|---|---|---|
+| `user_role_assignments` | `fk_ura_user_account` | user_account_id | user_accounts(id) | NOT NULL |
+| `user_role_assignments` | `fk_ura_role` | role_id | roles(id) | NOT NULL |
+| `user_role_assignments` | `fk_ura_granted_by_user` | granted_by_user_account_id | user_accounts(id) | NOT NULL |
+| `user_role_assignments` | `fk_ura_district` | district_id | districts(id) | NULL, exactly-one scope CHECK |
+| `user_role_assignments` | `fk_ura_church` | church_id | churches(id) | NULL, exactly-one scope CHECK |
+| `user_role_assignments` | `fk_ura_department` | department_id | departments(id) | NULL, exactly-one scope CHECK |
+| `access_denies` | `fk_access_denies_target_user` | target_user_account_id | user_accounts(id) | NOT NULL |
+| `access_denies` | `fk_access_denies_permission` | permission_id | permissions(id) | NOT NULL |
+| `access_denies` | `fk_access_denies_district` | district_id | districts(id) | NULL, exactly-one scope CHECK |
+| `access_denies` | `fk_access_denies_church` | church_id | churches(id) | NULL, exactly-one scope CHECK |
+| `access_denies` | `fk_access_denies_department` | department_id | departments(id) | NULL, exactly-one scope CHECK |
+| `access_denies` | `fk_access_denies_issuer` | issued_by_user_account_id | user_accounts(id) | NOT NULL |
+| `access_denies` | `fk_access_denies_reviewer` | reviewed_by_user_account_id | user_accounts(id) | NULL |
+| `events` | `fk_events_district` | district_id | districts(id) | NULL, exactly-one owner CHECK |
+| `events` | `fk_events_church` | church_id | churches(id) | NULL, exactly-one owner CHECK |
+| `events` | `fk_events_department` | department_id | departments(id) | NULL, exactly-one owner CHECK |
+| `events` | `fk_events_creator` | created_by_user_account_id | user_accounts(id) | NOT NULL |
+| `audit_events` | `fk_audit_events_actor_user` | actor_user_account_id | user_accounts(id) | NULL, actor-type CHECK |
+| `audit_events` | `fk_audit_events_actor_service` | actor_service_principal_id | service_principals(id) | NULL, actor-type CHECK |
+| `audit_events` | `fk_audit_events_initiating_user` | initiating_user_account_id | user_accounts(id) | NULL |
+| `audit_events` | `fk_audit_events_district` | district_id | districts(id) | NULL, zero-or-one scope CHECK |
+| `audit_events` | `fk_audit_events_church` | church_id | churches(id) | NULL, zero-or-one scope CHECK |
+| `audit_events` | `fk_audit_events_department` | department_id | departments(id) | NULL, zero-or-one scope CHECK |
+| `audit_access_events` | `fk_audit_access_user` | accessing_user_account_id | user_accounts(id) | NOT NULL |
+| `audit_access_events` | `fk_audit_access_event` | audit_event_id | audit_events(id) | NULL |
+| `audit_access_events` | `fk_audit_access_district` | district_id | districts(id) | NULL, zero-or-one scope CHECK |
+| `audit_access_events` | `fk_audit_access_church` | church_id | churches(id) | NULL, zero-or-one scope CHECK |
+| `audit_access_events` | `fk_audit_access_department` | department_id | departments(id) | NULL, zero-or-one scope CHECK |
+| `idempotency_records` | `fk_idempotency_actor_user` | actor_user_account_id | user_accounts(id) | NOT NULL |
+| `idempotency_records` | `fk_idempotency_district` | district_id | districts(id) | NULL, zero-or-one resource-scope CHECK |
+| `idempotency_records` | `fk_idempotency_church` | church_id | churches(id) | NULL, zero-or-one resource-scope CHECK |
+| `idempotency_records` | `fk_idempotency_department` | department_id | departments(id) | NULL, zero-or-one resource-scope CHECK |
+| `retention_subjects` | `fk_retention_subjects_creator` | created_by_user_account_id | user_accounts(id) | NOT NULL |
+| `retention_holds` | `fk_retention_holds_subject` | retention_subject_id | retention_subjects(id) | NOT NULL |
+| `retention_holds` | `fk_retention_holds_issuer` | issued_by_user_account_id | user_accounts(id) | NOT NULL |
+| `retention_holds` | `fk_retention_holds_approver` | approved_by_user_account_id | user_accounts(id) | NULL |
+| `retention_actions` | `fk_retention_actions_policy` | retention_policy_id | retention_policies(id) | NOT NULL |
+| `retention_actions` | `fk_retention_actions_subject` | retention_subject_id | retention_subjects(id) | NOT NULL |
+| `retention_actions` | `fk_retention_actions_initiator` | initiated_by_user_account_id | user_accounts(id) | NOT NULL |
+| `retention_actions` | `fk_retention_actions_approver` | approved_by_user_account_id | user_accounts(id) | NULL |
+| `departments` | `fk_departments_church_district` | church_id, district_id | churches(id, district_id) | Composite relationship present only when church_id is NOT NULL |
+| `attendance_records` | `fk_attendance_records_subject_event_member` | attendance_subject_id, event_id, member_id | event_attendance_subjects(id, event_id, member_id) | NOT NULL |
+| `attendance_records` | `fk_attendance_records_registration_event_member` | registration_id, event_id, member_id | event_registrations(id, event_id, member_id) | All NULL or all present |
+| `attendance_records` | `fk_attendance_records_session_event` | event_session_id, event_id | event_sessions(id, event_id) | All NULL or all present |
+
+Source-record FKs from `retention_subjects` to retained business records are intentionally not named or invented. They remain blocked until ODR-011 identifies the approved record classes and source mapping. The scope CHECK constraints listed above are not foreign keys and require their own stable CHECK names in the final DDL worksheet.
+
 ## 4. Composite scope contracts
 
 1. **Church within district:** where a child stores both `church_id` and `district_id`, bind `(church_id,district_id)` to `churches(id,district_id)`. Do not rely on independent FKs to prove the church belongs to that district.
