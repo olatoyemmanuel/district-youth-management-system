@@ -297,3 +297,9 @@ The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY
 The canonical physical table definitions now include the reconciled position/appointment scope model, attendance subject FK, same-account/same-currency full reversal binding, complete budget and reporting definitions, and service-principal audit actor reference.
 
 The matrix is still not a fully exact column-level register. Each FK must be reconciled to source and target columns, actions and supporting index; abbreviated source fields remain blockers.
+
+## 14. Canonical FK and column register
+
+The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) is the detailed relationship appendix for this matrix. It records source columns, target columns, proposed nullability, RESTRICT actions, and supporting-index requirements for all 65 table rows.
+
+Use that register as the current proposed FK source of truth. The summary rows above remain a concise integrity overview and must be reconciled where older shorthand or pre-remediation descriptions differ. The column-level register explicitly identifies fields whose type/nullability/default remains incomplete.
