@@ -10,7 +10,7 @@
 
 The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 121 FK-register names and 94 medium-catalogue names, with four shared names and 211 combined distinct names.
 
-The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 599 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
+The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
 The physical database design is therefore not ready for owner approval or implementation.
 
@@ -106,7 +106,7 @@ The acceptance checklist now marks the completed document-level items as checked
 **Severity:** High  
 **Status:** PARTIALLY RESOLVED, pending definition-level completion and independent re-review
 
-The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 599 one-row-per-column entries across all 65 physical tables. The type and nullability entries have been reconciled against the current physical table definitions. The register also records explicit defaults where stated, PK/UNIQUE/CHECK participation found in the source, FK participation/actions from the 155-row relationship register, supporting indexes from the canonical index inventory, and owner-decision blockers.
+The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 617 one-row-per-column entries across all 65 physical tables. The type and nullability entries have been reconciled against the current physical table definitions. The register also records explicit defaults where stated, PK/UNIQUE/CHECK participation found in the source, FK participation/actions from the 155-row relationship register, supporting indexes from the canonical index inventory, and owner-decision blockers.
 
 The reconciliation corrected 129 generic type declarations to the exact proposed PostgreSQL types and aligned the remaining timestamp, retention, scope and outbox fields. The three Section 18 table additions and the role_conflict_reviews table now have separate column definitions.
 
@@ -128,7 +128,7 @@ The column-level register still records NOT SPECIFIED IN SOURCE for defaults not
 
 ## 5. Required next correction sequence
 
-1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 599-column register (PIR-07).
+1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 617-column register (PIR-07).
 2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
 3. Independently verify the 155-row FK relationship register and 211-name index inventory.
 4. Conduct a fresh acceptance review and update all dispositions.
