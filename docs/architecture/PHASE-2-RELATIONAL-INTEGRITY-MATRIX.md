@@ -337,6 +337,6 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is t
 
 The 65 table rows still reconcile exactly with the FK register. This table-count match does not establish complete per-relationship FK declarations, target-key evidence, MATCH semantics, full index coverage or complete per-column definitions.
 
-PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level index review. PIR-06 has a document-level status reconciliation and awaits independent re-review. PIR-07 is partially resolved by the 617-column register, with defaults and CHECK definitions still open.
+PIR-01 through PIR-04 are verified at document level. PIR-05 remains partially resolved pending definition-level index review. PIR-06 is verified at document level. PIR-07 is partially resolved by the 617-column register, with defaults and CHECK definitions still open.
 
 **Current status:** Further revision required. No implementation is authorized.
