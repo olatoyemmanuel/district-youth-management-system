@@ -1024,3 +1024,14 @@ Corrections incorporated into this physical proposal:
 - FK actions are proposed as RESTRICT/RESTRICT per relationship unless a reviewed, documented exception is approved. This is a design baseline, not database-tested behavior.
 
 No DDL or Prisma changes are authorized by these corrections.
+
+
+## 31. Post-FKI independent review status
+
+The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) is the current assessment of the corrected FK register, relational integrity matrix and index proposals.
+
+The independent review found that the 65-table coverage is consistent, but the physical specification is not complete. Open findings PIR-01 through PIR-07 cover one-row-per-FK declarations, optional attendance composite-FK null semantics, authorization FK index gaps, department index reconciliation, the combined index inventory, conflicting historical status statements, and incomplete column-level definitions.
+
+The former 190-index count in Section 28 is historical and superseded. The current document inventories contain 109 distinct index names in the FK/column register and 91 in the medium-severity catalogue, with one shared name. The combined distinct name count is 199. This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
+
+**Current status:** Further revision required. Physical design is not approved for implementation. No Prisma, SQL, migration, database object, generated client, seed or application code is authorized.
