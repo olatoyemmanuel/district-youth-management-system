@@ -34,7 +34,7 @@ Document-level checks:
 - 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
 - The canonical inventory now contains 121 distinct FK-register names and 99 medium-catalogue names, with four shared names.
-- The combined distinct proposed index-name count is 211. All names remain within PostgreSQL's 63-byte identifier limit.
+- The combined distinct proposed index-name count is 216. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
 ## 3. Findings
