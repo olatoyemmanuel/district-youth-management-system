@@ -416,8 +416,8 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - Unique `(notification_recipient_id, attempt_number)`. Do not mark delivered based only on provider acceptance.
 
 #### `outbox_messages`
-- `id uuid PK`, `aggregate_type varchar(80) NOT NULL`, `aggregate_id uuid NOT NULL`, `event_type varchar(100) NOT NULL`, `payload jsonb NOT NULL`, `occurred_at timestamptz NOT NULL`
-- `status varchar(20) NOT NULL`, `attempt_count integer NOT NULL DEFAULT 0 CHECK (attempt_count >= 0)`, `available_at timestamptz NOT NULL`, `locked_at timestamptz NULL`, `published_at timestamptz NULL`, `last_error_code text NULL`
+- `id uuid PK`, `event_id uuid NOT NULL UNIQUE`, `event_version integer NOT NULL CHECK (event_version > 0)`, `aggregate_type varchar(80) NOT NULL`, `aggregate_id uuid NOT NULL`, `event_type varchar(100) NOT NULL`, `payload jsonb NOT NULL`, `occurred_at timestamptz NOT NULL`
+- `status varchar(20) NOT NULL`, `attempt_count integer NOT NULL DEFAULT 0 CHECK (attempt_count >= 0)`, `available_at timestamptz NOT NULL`, `locked_at timestamptz NULL`, `lock_owner text NULL`, `lease_expires_at timestamptz NULL`, `published_at timestamptz NULL`, `last_error_code text NULL`
 - Unique logical event key to be defined per aggregate/event identity. Payload is versioned, allowlisted, and contains references rather than unnecessary personal data or secrets.
 - Insert the outbox row in the same transaction as the business mutation. A worker claims rows with a concurrency-safe lock/lease and publishes at least once; consumers deduplicate.
 
