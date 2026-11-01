@@ -161,3 +161,14 @@ The conceptual ERD approval gate is now closed for the exact approved revision. 
 - Do not merge this draft PR as an implementation authorization.
 
 **Current status: Conceptual ERD approved. The Phase 2 physical-design proposal has been revised against all 12 first-review findings and has passed a second document-level review with limitations. PDB-R12 remains partially open, and lifecycle catalogues, exact DDL-level scope proofs, PostgreSQL compatibility, finance policy, retention schedules, safeguarding policy and credential authority evidence remain outstanding. The physical design is not approved for implementation. Application/Prisma/migration/database implementation remains unauthorized.**
+
+
+## 11. Phase 2 lifecycle catalogue and relational catalogue completion
+
+The Phase 2 physical-design proposal now includes full definitions for `event_attendance_subjects`, `retention_subjects` and `service_principals` in Section 18.
+
+The linked [Phase 2 Lifecycle and State Catalogue](./PHASE-2-LIFECYCLE-STATE-CATALOGUE.md) contains 52 unique table rows. It distinguishes derived workflow states, proposed technical states, unresolved policy-dependent states and immutable history records. The follow-up review is recorded in [Phase 2 Physical Database Design Second Review](./PHASE-2-PHYSICAL-DATABASE-DESIGN-SECOND-REVIEW.md).
+
+PDB-R12 is now addressed as a documentation deliverable. This does not mean all state vocabularies are approved. PROPOSED values require project-owner/relevant-authority confirmation; POLICY BLOCKED values must remain unresolved until the appropriate policy is supplied. No production CHECK constraints or seed values should be generated from unapproved entries.
+
+**Current Phase 2 status:** the relational catalogue and lifecycle/state catalogue are materially more complete, but the physical design remains unapproved. The final named constraint/index/nullability matrix, PostgreSQL compatibility and concurrency proofs, finance policy, retention schedules, safeguarding/onboarding policy, credential authority evidence, and formal project-owner physical-design approval remain outstanding. No Prisma, migration, SQL DDL, database or application implementation is authorized.
