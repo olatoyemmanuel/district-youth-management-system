@@ -974,3 +974,11 @@ The canonical report table definitions now preserve the immutable report-definit
 The [Phase 2 Relational Integrity Second Review](./PHASE-2-RELATIONAL-INTEGRITY-SECOND-REVIEW.md) verifies the revised 65-table matrix and canonical high-severity definitions. It identifies remaining work in the exact FK and column-level registers, attendance registration composite integrity, final attendance enforcement choice, retention source enrollment, index reconciliation, lifecycle predicates, finance policy, and PostgreSQL target confirmation.
 
 **Status:** further revision required. Physical design is not approved. No implementation is authorized.
+
+## 25. Canonical foreign-key and column register
+
+The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) provides the current source-column to target-column map, proposed FK actions, index support policy, composite scope contracts, and explicit column-definition gaps.
+
+This register supersedes abbreviated FK summaries where the two differ. In particular, position scope is held on positions and inherited by appointments; budgets and report entities now have explicit proposed FK sets; and attendance registration uses a composite event/member relationship.
+
+**Status:** the FK register is a proposal, not a verified DDL inventory. Full per-column completeness, lifecycle approval, retention source enrollment, and PostgreSQL implementation proof remain outstanding.
