@@ -18,7 +18,7 @@ It is the single document-level name inventory for those proposals. It does not 
 
 | Measure | Count |
 |---|---:|
-| Distinct names in FK/column register | 112 |
+| Distinct names in FK/column register | 121 |
 | Distinct names in medium-severity catalogue | 94 |
 | Names shared by both catalogues | 4 |
 | **Combined distinct proposed index names** | **211** |
