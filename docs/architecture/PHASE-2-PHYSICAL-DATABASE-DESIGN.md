@@ -268,7 +268,8 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `event_registrations`
 - `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `member_id uuid NOT NULL FK members(id)`
 - `status varchar(24) NOT NULL`, `registered_at timestamptz NOT NULL`, `registration_channel varchar(24) NOT NULL`, `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
-- Unique active registration per event/member via partial unique index. Capacity enforcement must lock or atomically update an event capacity counter to avoid oversubscription.
+- Candidate key `UNIQUE (id, event_id, member_id)` supports attendance registration binding.
+- Unique active registration per event/member via partial unique index, with the predicate blocked until registration lifecycle values are approved. Capacity enforcement must lock or atomically update an event capacity counter to avoid oversubscription.
 
 #### `event_sessions`
 - `id uuid PK`, `event_id uuid NOT NULL FK events(id)`, `name text NOT NULL`
@@ -277,9 +278,10 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `attendance_records`
 - `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL FK events(id)`, `event_session_id uuid NULL`, `member_id uuid NOT NULL FK members(id)`
-- `registration_id uuid NULL FK event_registrations(id)`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`
+- `registration_id uuid NULL`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `attendance_status varchar(24) NOT NULL`, `recorded_at timestamptz NOT NULL`, `method varchar(20) NOT NULL`, `note text NULL`
 - Composite FK `(attendance_subject_id, event_id, member_id)` to `event_attendance_subjects(id, event_id, member_id)`.
+- When registration_id is present, composite FK `(registration_id, event_id, member_id)` references `event_registrations(id, event_id, member_id)`, proving the registration belongs to the same event and member.
 - Composite FK `(event_session_id, event_id)` to `event_sessions(id, event_id)` ensures session belongs to event.
 - Partial unique index on `attendance_subject_id` for event-level records where event_session_id IS NULL.
 - Partial unique index on `(attendance_subject_id, event_session_id)` for session-level records where event_session_id IS NOT NULL.
