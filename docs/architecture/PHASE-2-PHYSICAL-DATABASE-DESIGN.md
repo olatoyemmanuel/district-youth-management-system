@@ -88,7 +88,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `password_hash text NOT NULL`
 - `status varchar(24) NOT NULL`, CHECK against proposed states `PENDING`, `ACTIVE`, `SUSPENDED`, `CLOSED`
 - `email_verified_at timestamptz NULL`, `phone_verified_at timestamptz NULL`
-- `last_login_at timestamptz NULL`, `created_at`, `updated_at`
+- `last_login_at timestamptz NULL`, `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected)
 - Do not place access/refresh/reset tokens in this table.
 
 #### `members`
@@ -98,7 +98,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `first_name text NOT NULL`, `last_name text NOT NULL`, `other_names text NULL`
 - `date_of_birth date NULL` until collection is justified and policy approved
 - `status varchar(24) NOT NULL`
-- `created_at`, `updated_at`
+- `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected)
 - Enforce exactly one account per member and at most one member per account. No guardian relationship table and no account delegation fields.
 
 #### `auth_sessions`
@@ -152,7 +152,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `status varchar(24) NOT NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`
 - `initiated_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `accepted_by_user_account_id uuid NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
-- `created_at`, `updated_at`
+- `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected)
 - CHECK effective interval.
 - Partial unique index: one current approved membership per member where status/effective interval marks current.
 - Transfer approval must close old and create new membership in one transaction.
@@ -170,7 +170,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `departments`
 - `id uuid PK`, `district_id uuid NOT NULL FK districts(id)`
-- `church_id uuid NULL FK churches(id)` only for formally church-owned department instances
+- `church_id uuid NULL` only for formally church-owned department instances; the optional composite FK `(church_id,district_id) → churches(id,district_id)` enforces same-district ownership. Do not add a redundant standalone church FK.
 - `code varchar(50) NOT NULL`, `name text NOT NULL`, `status varchar(20) NOT NULL`
 - Use separate uniqueness rules for district-level and church-level department codes. Validate church belongs to district.
 
@@ -192,7 +192,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `positions`
 - `id uuid PK`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`
-- `code varchar(50) NOT NULL`, `title text NOT NULL`, `status varchar(20) NOT NULL`
+- `code varchar(50) NOT NULL`, `title text NOT NULL`, `status varchar(20) NOT NULL`, `allowed_scope_type varchar(16) NOT NULL CHECK (allowed_scope_type IN ('DISTRICT','CHURCH','DEPARTMENT'))`
 - Exactly one of district_id, church_id, department_id is populated. A church scope must bind to its district through the church FK; a department scope inherits its district and optional church through the department.
 - Candidate composite keys: `UNIQUE (id, district_id)`, `UNIQUE (id, church_id)`, `UNIQUE (id, department_id)` where required by downstream scope binding.
 - Position code uniqueness uses separate partial unique indexes for district, church, and department scope.
@@ -238,10 +238,12 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `reason text NOT NULL`, `effective_from timestamptz NOT NULL`, `expires_at timestamptz NULL`, `review_due_at timestamptz NULL`, `status varchar(20) NOT NULL`, `revoked_at timestamptz NULL`, `revocation_reason text NULL`
 - Service-level checks prevent target actor from issuing, approving, modifying, or revoking own deny. Review and audit are mandatory.
 
-#### `role_conflict_rules` and `role_conflict_reviews`
-- Rules: `id uuid PK`, `role_a_id uuid NOT NULL FK roles(id)`, `role_b_id uuid NOT NULL FK roles(id)`, `outcome varchar(24) NOT NULL`, `version varchar(40) NOT NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`, `rationale text NOT NULL`.
+#### `role_conflict_rules`
+- `id uuid PK`, `role_a_id uuid NOT NULL FK roles(id)`, `role_b_id uuid NOT NULL FK roles(id)`, `outcome varchar(24) NOT NULL`, `version varchar(40) NOT NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`, `rationale text NOT NULL`.
 - Canonicalize role pair ordering and enforce unique `(role_a_id, role_b_id, version)`. This ordered key supports the `role_a_id` FK by left prefix only; retain a separate index beginning with `role_b_id` for the second FK. Disallow role_a = role_b unless an explicit self-conflict rule is approved.
-- Reviews: `id uuid PK`, `user_account_id uuid NOT NULL FK user_accounts(id)`, `role_conflict_rule_id uuid NOT NULL FK role_conflict_rules(id)`, `reviewed_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `decision varchar(24) NOT NULL`, `reason text NOT NULL`, `reviewed_at timestamptz NOT NULL`, `effective_from timestamptz NULL`, `effective_to timestamptz NULL`.
+
+#### `role_conflict_reviews`
+- `id uuid PK`, `user_account_id uuid NOT NULL FK user_accounts(id)`, `role_conflict_rule_id uuid NOT NULL FK role_conflict_rules(id)`, `reviewed_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `decision varchar(24) NOT NULL`, `reason text NOT NULL`, `reviewed_at timestamptz NOT NULL`, `effective_from timestamptz NULL`, `effective_to timestamptz NULL`.
 - A review-required role combination is not effective until an independent authorized review exists.
 
 ### 5.4 Events and attendance
@@ -250,8 +252,8 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `title text NOT NULL`, `description text NULL`, `event_type varchar(40) NOT NULL`, `status varchar(24) NOT NULL`
 - Explicit owner FKs: exactly one of `district_id`, `church_id`, `department_id` as permitted by event type and approved policy.
 - `venue text NULL`, `starts_at timestamptz NOT NULL`, `ends_at timestamptz NOT NULL`, `timezone text NOT NULL`
-- `registration_opens_at timestamptz NULL`, `registration_closes_at timestamptz NULL`, `capacity integer NULL CHECK (capacity IS NULL OR capacity >= 0)`
-- `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `created_at`, `updated_at`, `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
+- `registration_opens_at timestamptz NULL`, `registration_closes_at timestamptz NULL`, `capacity integer NULL CHECK (capacity IS NULL OR capacity >= 0)`, `reserved_count integer NOT NULL DEFAULT 0 CHECK (reserved_count >= 0)`
+- `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected), `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
 - CHECK ends_at > starts_at; registration close >= open when both exist.
 - District event publication requires approved district decision. Local event approval remains open.
 
