@@ -297,6 +297,6 @@ A document-level left-prefix comparison reports zero FK source-column groups wit
 
 The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) found that the medium-severity index catalogue and FK-support index register are not yet reconciled as one canonical inventory. It also identified missing named FK-support proposals for access-deny permission, issuer and reviewer relationships.
 
-The current distinct-name count is 94 in this document and 112 in the FK/column register, with four shared names. The combined distinct-name count is 202. These counts do not establish index-definition correctness.
+The current distinct-name count is 94 in this document and 116 in the FK/column register, with four shared names. The combined distinct-name count is 206. These counts do not establish index-definition correctness.
 
-PIR-02, PIR-03, PIR-04 and PIR-05 have document-level corrections recorded and await independent re-review. PIR-01, PIR-06 and PIR-07 remain open. No index or database object has been created.
+PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level review. PIR-06 and PIR-07 remain open. No index or database object has been created.
