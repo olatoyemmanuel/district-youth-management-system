@@ -83,8 +83,8 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `user_accounts`
 - `id uuid PK`
 - `login_identifier text NOT NULL`, normalized consistently; unique
-- `email text NULL`, normalized; unique when present
-- `phone_e164 varchar(20) NULL`, unique when present
+- `email text NULL`, normalized; unique when present is POLICY BLOCKED until the normalized-email storage/expression is specified. Do not index an undeclared normalized_email column.
+- `phone_e164 varchar(20) NULL`, unique when present using `uq_user_accounts_phone_present` on `phone_e164 WHERE phone_e164 IS NOT NULL`.
 - `password_hash text NOT NULL`
 - `status varchar(24) NOT NULL`, CHECK against proposed states `PENDING`, `ACTIVE`, `SUSPENDED`, `CLOSED`
 - `email_verified_at timestamptz NULL`, `phone_verified_at timestamptz NULL`
@@ -251,6 +251,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `events`
 - `id uuid PK`, `title text NOT NULL`, `description text NULL`, `event_type varchar(40) NOT NULL`, `status varchar(24) NOT NULL`
 - Explicit owner FKs: `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`. Exactly one owner scope is selected subject to event type and approved policy.
+- Proposed partial unique candidate keys: `uq_events_id_district(id,district_id)`, `uq_events_id_church(id,church_id)`, and `uq_events_id_department(id,department_id)`, each filtered to its sole non-NULL owner scope. Calendar indexes: `ix_events_district_start(district_id,starts_at)`, `ix_events_church_start(church_id,starts_at)`, and `ix_events_department_start(department_id,starts_at)`, each filtered to the matching owner scope.
 - `venue text NULL`, `starts_at timestamptz NOT NULL`, `ends_at timestamptz NOT NULL`, `timezone text NOT NULL`
 - `registration_opens_at timestamptz NULL`, `registration_closes_at timestamptz NULL`, `capacity integer NULL CHECK (capacity IS NULL OR capacity >= 0)`, `reserved_count integer NOT NULL DEFAULT 0 CHECK (reserved_count >= 0)`
 - `created_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `created_at timestamptz NOT NULL`, `updated_at timestamptz NOT NULL` (no default selected), `cancelled_at timestamptz NULL`, `cancellation_reason text NULL`
@@ -304,7 +305,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - Exactly one owner FK: `district_id uuid NULL` or `church_id uuid NULL`; CHECK `num_nonnulls(district_id, church_id) = 1`.
 - `currency_code char(3) NOT NULL FK currencies(code)`, `status varchar(20) NOT NULL`, `opened_at timestamptz NOT NULL`, `closed_at timestamptz NULL`
 - Candidate key `UNIQUE (id, currency_code)` named `uq_financial_accounts_id_currency` supports account/currency binding from transactions.
-- Unique account code within owning scope. Account currency is immutable after first posted transaction; changing currency requires a new account.
+- Unique account code within owning scope uses `uq_financial_accounts_district_account_code(district_id,account_code) WHERE district_id IS NOT NULL AND church_id IS NULL` and `uq_financial_accounts_church_account_code(church_id,account_code) WHERE church_id IS NOT NULL AND district_id IS NULL`. Account currency is immutable after first posted transaction; changing currency requires a new account.
 
 #### `currencies`
 - `code char(3) PK`, `name text NOT NULL`, `minor_unit smallint NOT NULL CHECK (minor_unit BETWEEN 0 AND 4)`, `is_active boolean NOT NULL`.
@@ -451,7 +452,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `id uuid PK`, `key_digest text NOT NULL`, `actor_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `operation_code varchar(100) NOT NULL`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, `request_fingerprint text NOT NULL`
 - `status varchar(20) NOT NULL`, `created_at timestamptz NOT NULL`, `lease_expires_at timestamptz NULL`, `completed_at timestamptz NULL`, `safe_result_reference text NULL`
-- Unique composite over actor, operation, scope identity, and key digest. A normalized scope identity strategy is required because nullable columns behave specially in ordinary unique constraints; use PostgreSQL 15+ `NULLS NOT DISTINCT` only if confirmed version support, or separate partial unique indexes per scope shape.
+- Four named partial unique indexes define the scope shapes without a scope_kind column: global `(actor_user_account_id,operation_code,key_digest)` where all three scope columns are NULL; district `(actor_user_account_id,operation_code,district_id,key_digest)` where district_id alone is non-NULL; church `(actor_user_account_id,operation_code,church_id,key_digest)` where church_id alone is non-NULL; department `(actor_user_account_id,operation_code,department_id,key_digest)` where department_id alone is non-NULL. The exact names and predicates are listed in the canonical index inventory. The scope exclusivity CHECK remains subject to approved scope semantics.
 - Store safe response reference, not raw headers, cookies, tokens, or sensitive response bodies.
 
 #### `retention_policies`
