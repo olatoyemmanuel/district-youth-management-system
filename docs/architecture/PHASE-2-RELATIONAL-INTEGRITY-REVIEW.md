@@ -69,3 +69,23 @@ The follow-up closes the documentation gap by recording concrete proposals. It d
 **Result: Proposed remediation documented; canonical reconciliation and independent verification still required.** The next review must compare the remediation addendum against the full 65-table matrix, eliminate duplicate/conflicting definitions, produce the exact FK and index registers, and confirm PostgreSQL compatibility. RIM-09 through RIM-14 remain open.
 
 No PostgreSQL DDL was compiled or executed. No database concurrency tests were run. No Prisma schema, migration, SQL DDL, database object, generated client, or application code was created or changed.
+
+
+## 7. Medium-severity follow-up
+
+A [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) has been added.
+
+| Finding | Follow-up result | Remaining acceptance condition |
+|---|---|---|
+| RIM-09 | Proposed four-way partial unique index strategy avoids nullable-scope uniqueness ambiguity and does not require PostgreSQL 15. | Approve scope_kind values and reconcile named indexes. |
+| RIM-10 | Explicitly blocks partial unique predicates that rely on unapproved lifecycle strings. | Approve table-specific state transitions and predicates. |
+| RIM-11 | Named unique and access index register supplied. | Reconcile every index to final columns and validate workload/non-redundancy. |
+| RIM-12 | Global nullability and RESTRICT FK action policy supplied. | Complete exact per-column type/nullability/default/FK-action matrix for all 65 tables. |
+| RIM-13 | Financial submitter/approver and role-conflict reviewer separation rules specified. | Confirm whether credential, retention, and appointment workflows require additional actor inequality rules. |
+| RIM-14 | Portable baseline and compatibility-sensitive PostgreSQL features identified. | Confirm production PostgreSQL version, extension and managed-role support. |
+
+## 8. Current review disposition
+
+**Result: Further canonical reconciliation and independent review required.** RIM-09 has a concrete portable uniqueness proposal. RIM-10 remains policy-blocked where lifecycle semantics are not approved. RIM-11 is a proposed named index register. RIM-12 remains open because column-level coverage is incomplete. RIM-13 is partially resolved. RIM-14 remains environment-blocked.
+
+No PostgreSQL DDL was compiled or executed. No database tests were run. No Prisma schema, migration, database object, generated client, seed, or application code was created or changed.
