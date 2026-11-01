@@ -349,7 +349,6 @@ These names make the previously generic scope-index requirements concrete. They 
 
 | Table | FK source column | Proposed index name | Predicate |
 |---|---|---|---|
-| `departments` | `church_id` | `ix_departments_church_id` | `church_id IS NOT NULL` |
 | `user_role_assignments` | `district_id` | `ix_user_role_assignments_district_id` | `district_id IS NOT NULL` |
 | `user_role_assignments` | `church_id` | `ix_user_role_assignments_church_id` | `church_id IS NOT NULL` |
 | `user_role_assignments` | `department_id` | `ix_user_role_assignments_department_id` | `department_id IS NOT NULL` |
@@ -368,8 +367,6 @@ These names make the previously generic scope-index requirements concrete. They 
 | `idempotency_records` | `district_id` | `ix_idempotency_records_district_id` | `district_id IS NOT NULL` |
 | `idempotency_records` | `church_id` | `ix_idempotency_records_church_id` | `church_id IS NOT NULL` |
 | `idempotency_records` | `department_id` | `ix_idempotency_records_department_id` | `department_id IS NOT NULL` |
-| `retention_holds` | `retention_subject_id` | `ix_retention_holds_retention_subject_id` | None |
-| `retention_actions` | `retention_subject_id` | `ix_retention_actions_retention_subject_id` | None |
 
 These are FK-maintenance and scoped-query candidates. A composite index may satisfy a single-column FK lookup only when the FK column is the leftmost prefix. The final index review must remove redundant standalone indexes where a suitable unique/composite index already provides the needed prefix.
 
@@ -393,6 +390,7 @@ A structural comparison was performed between the FK source-column register and 
 | `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id` | `WHERE approved_by_user_account_id IS NOT NULL` |
 
 | `ix_fk_departments_church_district` | `departments` | `church_id, district_id` | `WHERE church_id IS NOT NULL` |
+| `ix_fk_departments_district_id` | `departments` | `district_id` | `None` |
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | `None` |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | `None` |
 | `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id` | ` WHERE church_id IS NOT NULL` |
@@ -493,8 +491,8 @@ The audit is a structural document review, not SQL or database validation. Its f
 ## 5.9 Canonical index-name validation
 
 The current index-name inventory was checked after the FKI-06 cleanup:
-- 110 index names are present across the FK/column register's unique/access and FK-support proposals.
-- All 110 names are unique.
+- 112 index names are present across the FK/column register's unique/access and FK-support proposals.
+- All 112 names are unique.
 - No proposed name exceeds PostgreSQL's 63-byte identifier limit.
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
