@@ -8,7 +8,7 @@
 
 ## 1. Executive assessment
 
-The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 116 FK-register names and 94 medium-catalogue names, with four shared names and 206 combined distinct names.
+The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 121 FK-register names and 94 medium-catalogue names, with four shared names and 211 combined distinct names.
 
 The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 599 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
@@ -34,7 +34,7 @@ Document-level checks:
 - 155 FK constraint names are unique and within 63 bytes.
 - At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
 - The canonical inventory now contains 121 distinct FK-register names and 94 medium-catalogue names, with four shared names.
-- The combined distinct proposed index-name count is 206. All names remain within PostgreSQL's 63-byte identifier limit.
+- The combined distinct proposed index-name count is 211. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
 ## 3. Findings
@@ -88,7 +88,7 @@ The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains
 
 Definition-level duplicate detection, final column/predicate verification, lifecycle-predicate approval and workload review remain outstanding.
 
-**Correction recorded:** The conflicting 190-, 190-, 199- and 202-name summaries have been superseded by the 211-name inventory. The remaining definition-level review keeps this finding partially resolved.
+**Correction recorded:** The conflicting 190-, 199-, 202- and 206-name summaries have been superseded by the 211-name inventory. The remaining definition-level review keeps this finding partially resolved.
 
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
