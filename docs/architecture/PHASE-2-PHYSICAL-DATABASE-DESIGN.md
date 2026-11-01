@@ -218,7 +218,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 #### `role_permissions`
 - `id uuid PK`, `role_id uuid NOT NULL FK roles(id)`, `permission_id uuid NOT NULL FK permissions(id)`
 - `effect varchar(10) NOT NULL CHECK (effect = 'ALLOW')`, `created_at timestamptz NOT NULL`
-- `UNIQUE (role_id, permission_id)`. Explicit DENY remains a separate scoped entity, not a role permission effect.
+- `UNIQUE (role_id, permission_id)` prevents duplicate role grants and supports the `role_id` FK by left prefix only. Add a separate B-tree index beginning with `permission_id` to support the permission FK. Explicit DENY remains a separate scoped entity, not a role permission effect.
 
 #### `user_role_assignments`
 - `id uuid PK`, `user_account_id uuid NOT NULL FK user_accounts(id)`, `role_id uuid NOT NULL FK roles(id)`
@@ -277,10 +277,10 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `UNIQUE (id, event_id)`; CHECK ends_at > starts_at.
 
 #### `attendance_records`
-- `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL FK events(id)`, `event_session_id uuid NULL`, `member_id uuid NOT NULL FK members(id)`
+- `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL`, `event_session_id uuid NULL`, `member_id uuid NOT NULL`. `event_id` and `member_id` are identity columns in the subject composite relationship, not separate standalone FKs.
 - `registration_id uuid NULL`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `attendance_status varchar(24) NOT NULL`, `recorded_at timestamptz NOT NULL`, `method varchar(20) NOT NULL`, `note text NULL`
-- Composite FK `(attendance_subject_id, event_id, member_id)` to `event_attendance_subjects(id, event_id, member_id)`.
+- Mandatory composite FK `(attendance_subject_id, event_id, member_id)` to `event_attendance_subjects(id, event_id, member_id)` is the authoritative event/member integrity relationship. Do not add duplicate standalone FKs from `event_id` to `events` or `member_id` to `members`; the referenced subject already binds both identities.
 - When registration_id is present, composite FK `(registration_id, event_id, member_id)` references `event_registrations(id, event_id, member_id)`, proving the registration belongs to the same event and member.
 - Composite FK `(event_session_id, event_id)` to `event_sessions(id, event_id)` ensures session belongs to event.
 - Partial unique index on `attendance_subject_id` for event-level records where event_session_id IS NULL.
@@ -1010,3 +1010,17 @@ This is structural coverage, not performance evidence. Index necessity, redundan
 ## 29. Owner decision register
 
 The consolidated [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md) identifies the outstanding ministry, governance, finance, audit, retention, reporting, notification and deployment decisions that affect this physical design. It distinguishes approved decisions from open policy questions and environment confirmations. No open item is assumed approved.
+
+
+## 30. FK constraint and index redundancy corrections
+
+The canonical FK register and the [FK Constraint and Index Redundancy Audit](./PHASE-2-FK-CONSTRAINT-AND-INDEX-REDUNDANCY-AUDIT.md) govern the detailed relationship inventory.
+
+Corrections incorporated into this physical proposal:
+- `role_permissions(role_id, permission_id)` remains unique, but only supports the role_id FK by left prefix. A separate permission_id index is required.
+- `attendance_records.event_id` and `member_id` remain non-null columns in the mandatory subject composite FK, but do not carry duplicate standalone FKs. The composite subject FK proves both values belong to the referenced event/member subject.
+- Composite FK support indexes must begin with the complete ordered source tuple. A workload index with only the first component followed by another column is not accepted as complete composite-FK support.
+- Wider retention subject indexes support their subject FKs by left prefix. Separate one-column retention_subject_id indexes are not proposed.
+- FK actions are proposed as RESTRICT/RESTRICT per relationship unless a reviewed, documented exception is approved. This is a design baseline, not database-tested behavior.
+
+No DDL or Prisma changes are authorized by these corrections.
