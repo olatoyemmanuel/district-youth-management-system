@@ -201,9 +201,9 @@ No cascade delete is proposed. Soft deactivation, revocation, closure, and reten
 
 ### 5.3 Column-level completion status
 
-The current source documents do not provide a complete column inventory for all 65 tables. In particular, some auth tables, role/permission support tables, notification integration tables, retention subject source links, and reporting fields still have abbreviated or grouped definitions.
+The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 599 one-row-per-column entries across all 65 tables. Type and nullability have been reconciled against the current physical definitions, and the register links PK/UNIQUE/CHECK, FK actions, supporting indexes and owner-decision blockers where declared.
 
-Therefore a fully exact per-column nullability/default/FK-action matrix cannot be truthfully marked complete yet. The next reconciliation must expand every field and record:
+The register is a complete typed-column transcription, not a complete DDL contract. Defaults remain NOT SPECIFIED IN SOURCE for columns where the design makes no decision; CHECK constraints still need stable names and exact expressions; lifecycle, scope, retention and environment blockers remain open. The remaining reconciliation must:
 - table and column;
 - PostgreSQL type;
 - nullability;
@@ -268,7 +268,7 @@ Until the target version and managed-service capabilities are confirmed, do not 
 | RIM-09 | Proposed resolution: four scope-specific partial unique indexes, no PostgreSQL 15 null semantics |
 | RIM-10 | Partially open: lifecycle predicates explicitly blocked where status semantics are not approved |
 | RIM-11 | Proposed named index register supplied; column compatibility and workload validation remain |
-| RIM-12 | Global nullability/FK-action rules supplied; exact per-column matrix remains incomplete because source definitions are abbreviated |
+| RIM-12 | 599-column type/nullability register completed; defaults, CHECK naming/expressions and policy-dependent constraints remain incomplete |
 | RIM-13 | Approved finance self-approval and role-conflict independence specified; other actor inequalities remain policy-blocked |
 | RIM-14 | Portable baseline and compatibility-sensitive features identified; production target remains unconfirmed |
 
@@ -276,7 +276,7 @@ Until the target version and managed-service capabilities are confirmed, do not 
 
 1. Reconcile all named indexes against the canonical 65-table physical definitions.
 2. Complete every FK's exact source and target column list, ON DELETE, ON UPDATE, and supporting index.
-3. Complete the per-column type/nullability/default register for every table.
+3. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 599-column register.
 4. Obtain approval for lifecycle predicates before implementing partial unique indexes.
 5. Run separation-of-duties negative tests using the intended runtime database role.
 6. Confirm production PostgreSQL major version, extension policy, collation, UUID generation, trigger and privilege support.
@@ -299,4 +299,4 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) foun
 
 The current distinct-name count is 94 in this document and 116 in the FK/column register, with four shared names. The combined distinct-name count is 206. These counts do not establish index-definition correctness.
 
-PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 remains partially resolved pending definition-level review. PIR-06 and PIR-07 remain open. No index or database object has been created.
+PIR-01 through PIR-04 have document-level corrections recorded and await independent re-review. PIR-05 and PIR-07 remain partially resolved pending definition-level completion. PIR-06 has a document-level status reconciliation. No index or database object has been created. No index or database object has been created.
