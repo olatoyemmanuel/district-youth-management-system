@@ -456,14 +456,14 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - A policy with unknown/unapproved duration must not drive permanent deletion.
 
 #### `retention_holds`
-- `id uuid PK`, `record_category varchar(60) NOT NULL`, `reason text NOT NULL`, `issued_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
+- `id uuid PK`, `retention_subject_id uuid NOT NULL FK retention_subjects(id)`, `reason text NOT NULL`, `issued_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
 - `created_at timestamptz NOT NULL`, `released_at timestamptz NULL`, `release_reason text NULL`, `status varchar(20) NOT NULL`
-- Target binding must be enforceable. Do not implement a free-form `target_type + target_id` as if it were a real FK. Physical implementation must select either (a) target-specific link tables for each covered record class or (b) a shared retention-subject anchor with real FKs from retained records.
+- The record class is obtained from the referenced retention subject. Do not duplicate an independently mutable record_category on the hold. Do not use a free-form target_type + target_id.
 
 #### `retention_actions`
-- `id uuid PK`, `retention_policy_id uuid NOT NULL FK retention_policies(id)`, `initiated_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
-- `target_binding_id uuid NOT NULL` referencing the selected enforceable target-binding model, `action varchar(24) NOT NULL`, `reason text NOT NULL`, `executed_at timestamptz NULL`, `outcome varchar(24) NOT NULL`, `verification_reference text NULL`
-- No destructive action for a target covered by an active hold.
+- `id uuid PK`, `retention_policy_id uuid NOT NULL FK retention_policies(id)`, `retention_subject_id uuid NOT NULL FK retention_subjects(id)`, `initiated_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `approved_by_user_account_id uuid NULL FK user_accounts(id)`
+- `action varchar(24) NOT NULL`, `reason text NOT NULL`, `executed_at timestamptz NULL`, `outcome varchar(24) NOT NULL`, `verification_reference text NULL`
+- No destructive action for a target covered by an active hold. The subject row is the serialization anchor for hold checks and retention execution.
 
 #### `report_definitions`
 - `id uuid PK`, `code varchar(80) NOT NULL`, `version integer NOT NULL`, `name text NOT NULL`, `description text NULL`
