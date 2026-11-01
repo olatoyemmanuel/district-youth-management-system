@@ -8,7 +8,7 @@
 
 ## 1. Executive assessment
 
-The previous FKI-01 through FKI-07 remediation improved the source documents. The canonical FK register and relational integrity matrix still contain the same 65 table rows in the same order. The review also confirms 44 unique names for the expanded FK set and 109 unique index names in the FK/column register.
+The previous FKI-01 through FKI-07 remediation improved the source documents. The canonical FK register and relational integrity matrix still contain the same 65 table rows in the same order. The review initially confirmed 44 unique names for the expanded FK set and 109 unique index names in the FK/column register; the post-review corrections now raise the FK-register total to 112.
 
 However, the corrections do not yet satisfy the complete acceptance contract. Several relationships remain grouped rather than represented as individually named FK declarations. Some FK-support indexes are asserted but not named or are absent. Attendance optional-composite semantics are contradictory. The total index inventory is inconsistent across the source documents.
 
@@ -32,9 +32,9 @@ Document-level checks:
 - Table names and order match exactly.
 - 54 rows declare one or more FKs; 11 tables have no parent FK.
 - 44 expanded FK constraint names are unique and within 63 bytes.
-- 109 proposed index names in the FK/column register are unique and within 63 bytes.
-- The medium-severity index catalogue contains 91 unique/access index names, including the permission-side role_permissions index.
-- One index name is shared between the two inventories. The combined distinct proposed index-name count is therefore 199, not 109 or 190.
+- At the time of the initial review, 109 FK-register names and 91 medium-catalogue names were counted. Subsequent PIR-03 corrections added three named access-deny FK indexes to both inventories.
+- The canonical inventory now contains 112 distinct FK-register names and 94 medium-catalogue names, with four shared names.
+- The combined distinct proposed index-name count is 202. All names remain within PostgreSQL's 63-byte identifier limit.
 - No live PostgreSQL parser, database catalogue, SQL execution, query plan, migration or application test was run.
 
 ## 3. Findings
@@ -121,7 +121,7 @@ The stable constraint-name table correctly describes the composite FK, but Secti
 
 The current FK/column register contains 109 distinct index names. The medium-severity index catalogue contains 91 distinct names. One name is shared, giving 199 distinct proposed index names across both documents.
 
-The FKI audit currently describes 109 as the current index-name list, while the physical database design Section 28 and older matrix follow-up language still describe 190 names (90 + 21 + 79). Those counts describe earlier catalogue revisions and are no longer reliable.
+Earlier documents contain historical 109-, 199- and 190-name summaries. The FK audit, physical design, medium catalogue and matrix now link to the canonical 202-name inventory.
 
 **Required correction:**
 - Establish one canonical combined index inventory with one row per distinct index.
@@ -168,8 +168,8 @@ The 65-row count proves table coverage, not complete column coverage. The curren
 | FKI-02 | RESOLVED AT DOCUMENT LEVEL | role_permissions permission_id index is explicitly proposed. |
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
 | FKI-04 | PARTIALLY RESOLVED | Several full composite proposals are present, but the complete 65-table composite FK/index pairing has not been independently proven. |
-| FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite nullability still requires PIR-02 correction. |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Current register names are unique and within 63 bytes; full combined inventory still needs reconciliation under PIR-05. |
+| FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
+| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 202 distinct names. |
 | FKI-07 | PARTIALLY RESOLVED | RESTRICT/RESTRICT is stated per FK-bearing table row and for 44 named constraints, but not as a complete per-relationship action register. |
 
 ## 5. Required next correction sequence
