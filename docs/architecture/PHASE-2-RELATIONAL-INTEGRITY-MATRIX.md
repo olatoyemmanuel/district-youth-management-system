@@ -321,7 +321,7 @@ The matrix is reconciled with the [FK Constraint and Index Redundancy Audit](./P
 - Every relationship in the canonical FK register is proposed with ON DELETE RESTRICT and ON UPDATE RESTRICT. Any exception requires an explicit business justification and review before physical-design approval.
 - The `role_permissions(role_id, permission_id)` unique key supports only the role_id FK by left prefix. A separate permission_id index is required.
 - `attendance_records` uses the mandatory attendance-subject composite FK to bind event and member. Duplicate standalone event/member FKs are removed from the proposal; the columns remain part of the composite tuple.
-- Composite FK support indexes must begin with the full ordered source tuple. Workload indexes that merely share the first column are not counted as full tuple support.
+- Composite FK support indexes must begin with the full ordered source tuple. This includes the optional departments `(church_id,district_id)` → churches `(id,district_id)` hierarchy FK, supported by a composite source index, plus a separate `district_id` FK index. Workload indexes that merely share the first column are not counted as full tuple support.
 - `retention_holds(retention_subject_id,status)` and `retention_actions(retention_subject_id,executed_at)` already support the retention_subject_id FKs by left prefix. Separate single-column indexes are removed.
 - FK-support indexes and query-support indexes are classified separately. No performance claim is made without workload and query-plan evidence.
 
