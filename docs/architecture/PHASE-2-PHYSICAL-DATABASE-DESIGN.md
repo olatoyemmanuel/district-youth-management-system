@@ -1008,7 +1008,7 @@ See Sections 5.3–5.6 of the [Foreign-Key and Column Register](./PHASE-2-FOREIG
 
 ## 28. FK source-index coverage audit
 
-The former 190-name count is historical and superseded. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) for the current 202-name union and its source reconciliation. This document-level inventory does not establish that every proposed index is necessary or correctly defined.
+The former 190-name count is historical and superseded. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) for the current 211-name union and its source reconciliation. This document-level inventory does not establish that every proposed index is necessary or correctly defined.
 
 This is structural coverage, not performance evidence. Index necessity, redundancy, partial-index predicates, and query plans still require workload review after the target PostgreSQL environment is known.
 
