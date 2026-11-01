@@ -133,7 +133,10 @@ All indexes must have stable names and a recorded purpose. Names below are propo
 | `ix_appointments_position_effective` | appointments | position_id, effective_from, effective_to | Appointment overlap checks |
 | `ix_appointments_appointee_effective` | appointments | appointee_member_id, effective_from DESC | Member appointment history |
 | `ix_user_role_assignments_user_scope` | user_role_assignments | user_account_id, role_id, effective_from DESC | Authorization evaluation; covers user_account_id by left prefix, not role_id or granted_by_user_account_id |
-| `ix_access_denies_target_scope` | access_denies | target_user_account_id, permission_id, effective_from DESC | Explicit deny evaluation; covers target_user_account_id by left prefix, not permission_id, issuer or reviewer |
+| `ix_access_denies_target_scope` | access_denies | target_user_account_id, permission_id, effective_from DESC | Explicit deny evaluation; covers target_user_account_id by left prefix only |
+| `ix_fk_access_denies_permission_id` | access_denies | permission_id | Permission-side FK lookup; the target-scope index does not begin with permission_id |
+| `ix_fk_access_denies_issued_by_user_account_id` | access_denies | issued_by_user_account_id | Issuer-side FK lookup |
+| `ix_fk_access_denies_reviewed_by_user_account_id` | access_denies | reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL | Optional reviewer FK lookup; partial because the source column is nullable |
 | `ix_events_scope_start` | events | owner scope, starts_at | Scoped event calendar |
 | `ix_event_registrations_event_status` | event_registrations | event_id, status, registered_at | Registration administration |
 | `ix_event_sessions_event_start` | event_sessions | event_id, starts_at | Session listing |
