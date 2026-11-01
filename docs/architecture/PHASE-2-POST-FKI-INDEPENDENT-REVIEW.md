@@ -106,7 +106,7 @@ Additionally, `role_conflict_rules` says its canonical unique role-pair/version 
 **Severity:** Medium  
 **Status:** OPEN
 
-The department FK row still lists `ix_fk_departments_church_id` as the church FK index. That name is not present in the current index inventory. The corrected proposal instead has:
+The department FK row still lists `ix_fk_departments_church_id` as the church FK index. That name is not present in the current index inventory. The corrected row now references the actual proposed indexes:
 - `ix_fk_departments_church_district(church_id,district_id)`, which begins with church_id and supports the composite hierarchy FK;
 - `ix_fk_departments_district_id(district_id)`, for the district FK.
 
