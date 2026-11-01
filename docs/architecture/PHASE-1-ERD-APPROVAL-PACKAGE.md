@@ -197,3 +197,10 @@ It completes proposed budget/reporting table definitions and details the positio
 The proposals remain subject to reconciliation into the canonical physical table/column matrix, official finance and retention decisions, organizational ownership confirmation, production PostgreSQL compatibility, and independent review. They are not approved DDL.
 
 **Current Phase 2 status:** proposed resolutions are documented for RIM-02 through RIM-08. RIM-01 inventory count is addressed. Canonical per-column reconciliation and second independent review remain the next tasks. Physical design remains unapproved for implementation.
+
+
+## 14. Medium-severity relational-integrity remediation
+
+The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) documents RIM-09 through RIM-14 responses, including four scope-specific idempotency unique indexes, lifecycle-dependent uniqueness blockers, a named index register, global nullability/FK-action rules, separation-of-duties decisions, and PostgreSQL compatibility requirements.
+
+The canonical physical-design document now contains expanded report table definitions and reconciled high-severity relational structures. The per-column nullability/default/FK-action matrix and full index-to-column reconciliation remain incomplete. The physical design remains unapproved for implementation.
