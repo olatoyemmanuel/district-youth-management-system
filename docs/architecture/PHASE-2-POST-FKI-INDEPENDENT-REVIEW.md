@@ -82,13 +82,17 @@ The table-level row now references `ix_fk_departments_church_district(church_id,
 ### PIR-05 — Total proposed index inventory is inconsistent
 
 **Severity:** Medium  
-**Status:** PARTIALLY RESOLVED, pending definition-level redundancy review
+**Status:** VERIFIED AT DOCUMENT LEVEL, 2026-11-01; workload and owner approval pending
 
-The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 214 distinct proposed index names: 121 in the FK register, 99 in the medium-severity catalogue, and four shared names. It contains one row per distinct proposed name and classifies each as FK support, unique/partial unique, or access/workload. Primary-key indexes are excluded because PostgreSQL generates them.
+The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) contains 214 distinct named entries: 120 in the FK register, 98 in the medium-severity catalogue, and four shared names. It has one row per distinct name. Six entries are explicitly POLICY BLOCKED and are not DDL-ready: five lifecycle-dependent partial unique indexes and the unresolved normalized-email expression.
 
-Definition-level duplicate detection, final column/predicate verification, lifecycle-predicate approval and workload review remain outstanding.
+The definition-level review found no remaining exact duplicate index definitions. It removed the redundant non-unique budget-lines index because the unique index has the same key and predicate. It also removed the standalone notification-recipient FK index and reused the wider user_account_id/status index, whose leading column supports the FK. Two transaction-reversal prefix pairs remain intentionally: the wider indexes provide complete ordered composite-FK support, while the single-column unique indexes enforce separate reversal uniqueness rules.
 
-**Correction recorded:** The conflicting 190-, 199-, 202- and 206-name summaries have been superseded by the 214-name inventory. The remaining definition-level review keeps this finding partially resolved.
+All 208 executable index entries have key columns that exist in the 617-column register. Their declared predicates reference existing table columns. The 57 partial FK-support indexes include every nullable FK component in their IS NOT NULL predicates and do not exclude valid references. The six blocked entries preserve unresolved policy decisions rather than inventing predicates.
+
+Production workload, write amplification, maintenance cost and owner approval remain outside this document-level verification.
+
+**Correction recorded:** The combined inventory is reconciled, exact duplicate definitions are removed, redundant prefix indexes are addressed, and unresolved predicates are explicitly blocked. PIR-05 is verified at document level.
 
 ### PIR-06 — FKI finding statuses and historical summaries are inconsistent
 
@@ -104,13 +108,13 @@ The acceptance checklist now marks the completed document-level items as checked
 ### PIR-07 — Column-level physical specification remains incomplete
 
 **Severity:** High  
-**Status:** PARTIALLY RESOLVED, pending definition-level completion and independent re-review
+**Status:** PARTIALLY RESOLVED; owner and technical decisions pending
 
 The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 617 one-row-per-column entries across all 65 physical tables. The type and nullability entries have been reconciled against the current physical table definitions. The register also records explicit defaults where stated, PK/UNIQUE/CHECK participation found in the source, FK participation/actions from the 155-row relationship register, supporting indexes from the canonical index inventory, and owner-decision blockers.
 
 The reconciliation corrected 129 generic type declarations to the exact proposed PostgreSQL types and aligned the remaining timestamp, retention, scope and outbox fields. The three Section 18 table additions and the role_conflict_reviews table now have separate column definitions.
 
-The column-level register still records NOT SPECIFIED IN SOURCE for defaults not declared in the design. Most columns do not yet have an explicit default decision. CHECK constraints need stable names and exact expressions. UUID generation, timestamp defaults, lifecycle state constraints, policy-dependent scope rules, retention-source enrollment, and production PostgreSQL compatibility remain open.
+The column-level register records NOT SPECIFIED IN SOURCE for 611 columns whose defaults are not declared in the design. CHECK constraints need stable names and exact expressions. UUID generation, timestamp defaults, lifecycle state constraints, policy-dependent scope rules, retention-source enrollment, and production PostgreSQL compatibility remain open.
 
 **Correction recorded:** The typed-column transcription gap is closed at document level. The complete physical design is not yet DDL-ready, so this finding remains partially resolved.
 
@@ -118,20 +122,20 @@ The column-level register still records NOT SPECIFIED IN SOURCE for defaults not
 
 | Original finding | Independent disposition | Reason |
 |---|---|---|
-| FKI-01 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register records one row per declared FK, ordered tuples, source nullability, target-key evidence, MATCH semantics, actions and supporting index coverage. |
+| FKI-01 | VERIFIED AT DOCUMENT LEVEL, 2026-11-01 | The 155-row named FK relationship register records one row per declared FK, ordered tuples, source nullability, target-key evidence, MATCH semantics, actions and supporting index coverage. Independent verification confirms all source indexes begin with the complete ordered source tuple. |
 | FKI-02 | RESOLVED AT DOCUMENT LEVEL | role_permissions permission_id index is explicitly proposed. |
 | FKI-03 | RESOLVED AT DOCUMENT LEVEL | Redundant standalone retention-subject indexes removed. |
 | FKI-04 | RESOLVED AT DOCUMENT LEVEL, verified 2026-11-01 | All 10 composite target tuples match exact named UNIQUE keys; all 155 source support indexes begin with the complete ordered source tuple. All 57 partial support-index predicates cover nullable FK components without excluding valid references. |
 | FKI-05 | RESOLVED AT DOCUMENT LEVEL | Duplicate standalone attendance event/member FKs removed; optional composite null semantics now explicitly use MATCH SIMPLE and have positive/negative test requirements. |
-| FKI-06 | RESOLVED AT DOCUMENT LEVEL | Names are unique and within 63 bytes; the canonical combined inventory contains 216 distinct names. |
-| FKI-07 | RESOLVED AT DOCUMENT LEVEL, pending independent re-review | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
+| FKI-06 | VERIFIED AT DOCUMENT LEVEL, 2026-11-01 | Names are unique and within 63 bytes; the canonical combined inventory contains 214 named entries. |
+| FKI-07 | VERIFIED AT DOCUMENT LEVEL, 2026-11-01 | The 155-row named FK relationship register states RESTRICT/RESTRICT for every relationship. SQL validation remains outside this document review. |
 
 ## 5. Required next correction sequence
 
-1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 617-column register (PIR-07).
-2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
-3. Independently verify the 155-row FK relationship register and 214-name index inventory.
-4. Conduct a fresh acceptance review and update all dispositions.
+1. Resolve the six POLICY BLOCKED index predicates through ODR-001, ODR-002, ODR-007, ODR-008 and the normalized-email policy.
+2. Complete default decisions and CHECK names/expressions in the 617-column register, preserving ODR-ENV-003/005 and other policy blockers.
+3. Obtain query-workload and index-maintenance review before implementation approval.
+4. Confirm production PostgreSQL compatibility and close the remaining owner decisions.
 
 ## 6. Owner decisions and environment blockers retained
 
