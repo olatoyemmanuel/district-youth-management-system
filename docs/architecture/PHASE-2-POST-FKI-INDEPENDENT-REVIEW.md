@@ -85,7 +85,7 @@ The correct physical semantics must be explicitly designed. With required `event
 ### PIR-03 — FK-support index declarations are incomplete or inaccurate for authorization relationships
 
 **Severity:** High  
-**Status:** OPEN
+**Status:** RESOLVED AT DOCUMENT LEVEL, pending independent re-review
 
 The `access_denies` row says separate source indexes exist for every FK. The medium index catalogue provides `ix_access_denies_target_scope(target_user_account_id, permission_id, effective_from)`, which supports `target_user_account_id` by left prefix, but not `permission_id`, issuer or reviewer lookups. The FK register's Section 5.6/5.7 does not contain named proposals for:
 - `access_denies.permission_id`;
@@ -174,13 +174,11 @@ The 65-row count proves table coverage, not complete column coverage. The curren
 
 ## 5. Required next correction sequence
 
-1. Correct attendance optional composite-FK semantics (PIR-02).
-2. Complete the one-row-per-FK register and per-relationship action contract (PIR-01 and PIR-06).
-3. Complete authorization FK index coverage and correct role-conflict index wording (PIR-03).
-4. Correct the department row and reconcile every composite FK/index pair (PIR-04).
-5. Create one canonical combined index inventory and correct all counts (PIR-05).
-6. Complete the per-column specification, preserving policy blockers (PIR-07).
-7. Conduct another independent review after the corrections.
+1. Complete the one-row-per-FK register and per-relationship action contract (PIR-01 and PIR-06).
+2. Correct the department row and reconcile every composite FK/index pair (PIR-04).
+3. Create one canonical combined index inventory and correct all counts (PIR-05).
+4. Complete the per-column specification, preserving policy blockers (PIR-07).
+5. Conduct another independent review after the corrections.
 
 ## 6. Owner decisions and environment blockers retained
 
