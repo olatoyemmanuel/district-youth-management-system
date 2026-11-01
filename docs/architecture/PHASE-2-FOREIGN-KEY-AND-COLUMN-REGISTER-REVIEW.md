@@ -82,3 +82,20 @@ The misleading generic `target_binding_id` proposal has been replaced by the exa
 | FKC-06 | Medium | FK action baseline | Proposed RESTRICT/RESTRICT remains subject to table-by-table exception review. |
 
 **Current outcome remains: further revision required.** No SQL compilation, database test, or PostgreSQL compatibility test has been performed.
+
+
+## 7. FK source-index coverage audit
+
+A document-level structural audit compared every FK source-column group in the canonical FK register with the proposed unique/access index catalogue and the new named support-index proposals.
+
+Results:
+- 90 proposed indexes in the existing medium-severity catalogue.
+- 21 named indexes for expanded scope and retention FKs.
+- 79 additional FK support-index proposals.
+- 190 total proposed index names, all unique.
+- 56 table rows in the FK register contain one or more FK source groups; the remaining nine tables have no parent FK.
+- The cross-reference audit found zero FK source-column groups without a matching left-prefix index proposal.
+
+This is a structural coverage check only. It does not prove that all indexes are necessary, optimal, non-redundant under every composite key, or performant against real workloads. Some partial predicates remain blocked until lifecycle states are approved. No PostgreSQL index was created and no query plan was run.
+
+**Updated result:** FK source-index coverage is addressed at proposal level. Final index redundancy/workload review remains open. Overall physical-design outcome remains further revision required.
