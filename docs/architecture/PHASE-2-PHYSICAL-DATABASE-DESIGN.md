@@ -278,15 +278,16 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `attendance_records`
 - `id uuid PK`, `attendance_subject_id uuid NOT NULL`, `event_id uuid NOT NULL`, `event_session_id uuid NULL`, `member_id uuid NOT NULL`. `event_id` and `member_id` are identity columns in the subject composite relationship, not separate standalone FKs.
-- `registration_id uuid NULL`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`
+- `registration_id uuid NULL`, `recorded_by_user_account_id uuid NOT NULL FK user_accounts(id)`. `event_id` and `member_id` are NOT NULL; the two optional identifiers are independently nullable.
 - `attendance_status varchar(24) NOT NULL`, `recorded_at timestamptz NOT NULL`, `method varchar(20) NOT NULL`, `note text NULL`
 - Mandatory composite FK `(attendance_subject_id, event_id, member_id)` to `event_attendance_subjects(id, event_id, member_id)` is the authoritative event/member integrity relationship. Do not add duplicate standalone FKs from `event_id` to `events` or `member_id` to `members`; the referenced subject already binds both identities.
-- When registration_id is present, composite FK `(registration_id, event_id, member_id)` references `event_registrations(id, event_id, member_id)`, proving the registration belongs to the same event and member.
-- Composite FK `(event_session_id, event_id)` to `event_sessions(id, event_id)` ensures session belongs to event.
+- Optional composite FK `(registration_id, event_id, member_id)` references `event_registrations(id, event_id, member_id)` using PostgreSQL MATCH SIMPLE. A NULL `registration_id` skips this optional FK; when non-NULL, the registration must belong to the same event and member.
+- Optional composite FK `(event_session_id, event_id)` references `event_sessions(id, event_id)` using PostgreSQL MATCH SIMPLE. A NULL `event_session_id` skips this optional FK; when non-NULL, the session must belong to the same event.
 - Partial unique index on `attendance_subject_id` for event-level records where event_session_id IS NULL.
 - Partial unique index on `(attendance_subject_id, event_session_id)` for session-level records where event_session_id IS NOT NULL.
 - A deferred constraint trigger validates subject mode against session nullability and locks the attendance subject FOR UPDATE before validation. This serializes competing event-level/session-level attempts. The exact trigger implementation and SQLSTATE remain subject to PostgreSQL compatibility review.
-- Registration prerequisite remains unresolved; nullable registration_id preserves the open policy.
+- Do not use MATCH FULL for either optional composite FK: required event/member context columns make an all-NULL tuple impossible. MATCH SIMPLE is intentional and does not weaken the mandatory subject FK.
+- Negative tests must reject a registration from another event, a registration for another member, a session from another event, and a subject/event/member mismatch. Positive tests must accept NULL optional identifiers and valid same-context references. Registration prerequisite remains unresolved; nullable registration_id preserves the open policy.
 
 #### `attendance_corrections`
 - `id uuid PK`, `attendance_record_id uuid NOT NULL FK attendance_records(id)`
@@ -844,11 +845,13 @@ Keys and indexes:
 
 Integrity:
 - The attendance subject is created in the same transaction as the first attendance record or through a controlled event-attendance initialization workflow.
-- `attendance_records` must reference the subject and match its event and member through a composite FK.
+- `attendance_records` must reference the subject and match its event and member through a mandatory composite FK. `event_id` and `member_id` are NOT NULL.
 - EVENT mode permits one event-level record with no session.
 - SESSION mode permits one record per event session and requires a session belonging to the same event.
 - A deferred constraint trigger or normalized subtype tables must enforce parent mode/child shape. The trigger locks the subject row and prevents concurrent mode changes or mismatched inserts.
 - A subject cannot change from EVENT to SESSION or vice versa after an attendance record exists. Corrections do not change its mode.
+- `registration_id` and `event_session_id` are independently nullable optional references. Their composite FKs use PostgreSQL MATCH SIMPLE, not MATCH FULL: NULL in the optional identifier skips only that optional FK; the required event/member context remains enforced by the mandatory subject FK.
+- Negative integrity tests reject mismatched event/member registration references, mismatched event/session references, and subject/event/member mismatch. Positive tests cover absent optional references and valid same-context references.
 - Registration prerequisite remains a policy gap. A nullable registration reference does not settle that policy.
 
 ### 18.2 `retention_subjects`
