@@ -303,4 +303,4 @@ The [Post-FKI Independent Review](./PHASE-2-POST-FKI-INDEPENDENT-REVIEW.md) foun
 
 The current distinct-name count is 98 in this document and 120 in the FK/column register, with four shared names. The combined distinct-name count is 214. These counts do not establish index-definition correctness.
 
-PIR-01 through PIR-04 are verified at document level. PIR-05 is verified at document level, with six POLICY BLOCKED entries and production workload approval still open. PIR-07 remains partially resolved pending default and CHECK decisions. PIR-06 is verified at document level. No index or database object has been created. No index or database object has been created.
+PIR-01 through PIR-04 are verified at document level. PIR-05 is verified at document level, with six POLICY BLOCKED entries and production workload approval still open. PIR-07 remains partially resolved pending default and CHECK decisions. PIR-06 is verified at document level. No index or database object has been created.
