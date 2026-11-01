@@ -18,10 +18,10 @@ It is the single document-level name inventory for those proposals. It does not 
 
 | Measure | Count |
 |---|---:|
-| Distinct names in FK/column register | 121 |
-| Distinct names in medium-severity catalogue | 99 |
+| Distinct names in FK/column register | 120 |
+| Distinct names in medium-severity catalogue | 98 |
 | Names shared by both catalogues | 4 |
-| **Combined distinct proposed index names** | **216** |
+| **Combined distinct proposed index names** | **214** |
 | Longest proposed identifier | 63 characters |
 | Names exceeding PostgreSQL's 63-byte identifier limit | 0 |
 
@@ -61,7 +61,6 @@ One row represents one distinct proposed index name. The definition column recor
 | `ix_audit_events_target_time` | `audit_events` | `target_type, target_id, occurred_at DESC` | Access / workload | Medium catalogue |
 | `ix_auth_session_tokens_session_generation` | `auth_session_tokens` | `auth_session_id, token_generation DESC` | Access / workload | Medium catalogue |
 | `ix_auth_sessions_account_expiry` | `auth_sessions` | `user_account_id, absolute_expires_at` | Access / workload | Medium catalogue |
-| `ix_budget_lines_budget_order` | `budget_lines` | `budget_id, sort_order` | Access / workload | Medium catalogue |
 | `ix_church_memberships_member_time` | `church_memberships` | `member_id, effective_from DESC` | Access / workload | Medium catalogue |
 | `ix_church_transfer_requests_member_time` | `church_transfer_requests` | `member_id, requested_at DESC` | Access / workload | Medium catalogue |
 | `ix_credential_evidence_issuance` | `credential_evidence` | `credential_issuance_id, submitted_at DESC` | Access / workload | Medium catalogue |
@@ -141,7 +140,6 @@ One row represents one distinct proposed index name. The definition column recor
 | `ix_fk_integration_failures_webhook_event_id` | `integration_failures` | `webhook_event_id WHERE  WHERE webhook_event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | FK support | FK register |
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | FK support | FK register |
-| `ix_fk_notification_recipients_user_account_id` | `notification_recipients` | `user_account_id` | FK support | FK register |
 | `ix_fk_notification_deliveries_provider_id` | `notification_deliveries` | `provider_id WHERE  WHERE provider_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_notification_preferences_user_account_id` | `notification_preferences` | `user_account_id` | FK support | FK register |
 | `ix_fk_notifications_template_id` | `notifications` | `template_id WHERE  WHERE template_id IS NOT NULL` | FK support | FK register |
@@ -203,19 +201,19 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_attendance_records_session_subject` | `attendance_records` | `attendance_subject_id, event_session_id WHERE event_session_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_budget_lines_budget_code` | `budget_lines` | `budget_id, line_code` | Unique / partial unique | Medium catalogue |
 | `uq_budget_lines_budget_order` | `budget_lines` | `budget_id, sort_order` | Unique / partial unique | Medium catalogue |
-| `uq_church_memberships_current` | `church_memberships` | `member_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
-| `uq_church_transfer_requests_open_member` | `church_transfer_requests` | `member_id WHERE unresolved predicate` | Unique / partial unique | Medium catalogue |
+| `uq_church_memberships_current` | `church_memberships` | `member_id WHERE UNRESOLVED current-membership predicate (ODR-002)` | POLICY BLOCKED | Medium catalogue |
+| `uq_church_transfer_requests_open_member` | `church_transfer_requests` | `member_id WHERE UNRESOLVED open-transfer predicate (ODR-002)` | POLICY BLOCKED | Medium catalogue |
 | `uq_churches_id_district` | `churches` | `id, district_id` | Unique / partial unique | FK register |
 | `uq_churches_district_code` | `churches` | `district_id, code` | Unique / partial unique | Medium catalogue |
 | `uq_credential_definition_versions` | `credential_definition_versions` | `credential_definition_id, version` | Unique / partial unique | Medium catalogue |
 | `uq_department_eligibility_rules_version` | `department_eligibility_rules` | `department_id, version` | Unique / partial unique | Medium catalogue |
-| `uq_department_memberships_current` | `department_memberships` | `member_id, department_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
+| `uq_department_memberships_current` | `department_memberships` | `member_id, department_id WHERE UNRESOLVED current-membership predicate (ODR-007)` | POLICY BLOCKED | Medium catalogue |
 | `uq_departments_church_code` | `departments` | `church_id, code WHERE church_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_departments_district_code` | `departments` | `district_id, code WHERE church_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_event_attendance_subjects_id_event_member` | `event_attendance_subjects` | `id, event_id, member_id` | Unique / partial unique | FK register |
 | `uq_event_attendance_subject_event_member` | `event_attendance_subjects` | `event_id, member_id` | Unique / partial unique | Medium catalogue |
 | `uq_event_registrations_id_event_member` | `event_registrations` | `id, event_id, member_id` | Unique / partial unique | FK register |
-| `uq_event_registrations_current_member` | `event_registrations` | `event_id, member_id WHERE approved valid-registration predicate` | Unique / partial unique | Medium catalogue |
+| `uq_event_registrations_current_member` | `event_registrations` | `event_id, member_id WHERE UNRESOLVED valid-registration predicate (ODR-008)` | POLICY BLOCKED | Medium catalogue |
 | `uq_event_sessions_id_event` | `event_sessions` | `id, event_id` | Unique / partial unique | Medium catalogue |
 | `uq_events_id_church` | `events` | `id, church_id WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_events_id_department` | `events` | `id, department_id WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | Unique / partial unique | Medium catalogue |
@@ -232,7 +230,7 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_idempotency_district_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, district_id, key_digest WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_idempotency_global_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, key_digest WHERE district_id IS NULL AND church_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_member_categories_code` | `member_categories` | `code` | Unique / partial unique | Medium catalogue |
-| `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
+| `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE UNRESOLVED current-category predicate (ODR-001)` | POLICY BLOCKED | Medium catalogue |
 | `uq_members_member_number` | `members` | `member_number` | Unique / partial unique | Medium catalogue |
 | `uq_members_user_account` | `members` | `user_account_id` | Unique / partial unique | Medium catalogue |
 | `uq_notification_deliveries_attempt` | `notification_deliveries` | `notification_recipient_id, attempt_number` | Unique / partial unique | Medium catalogue |
