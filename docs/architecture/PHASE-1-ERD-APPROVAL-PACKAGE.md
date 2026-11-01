@@ -204,3 +204,9 @@ The proposals remain subject to reconciliation into the canonical physical table
 The [Medium-Severity Relational Integrity Remediation](./PHASE-2-MEDIUM-SEVERITY-RELATIONAL-INTEGRITY-REMEDIATION.md) documents RIM-09 through RIM-14 responses, including four scope-specific idempotency unique indexes, lifecycle-dependent uniqueness blockers, a named index register, global nullability/FK-action rules, separation-of-duties decisions, and PostgreSQL compatibility requirements.
 
 The canonical physical-design document now contains expanded report table definitions and reconciled high-severity relational structures. The per-column nullability/default/FK-action matrix and full index-to-column reconciliation remain incomplete. The physical design remains unapproved for implementation.
+
+## 15. Independent relational-integrity second review
+
+The [Phase 2 Relational Integrity Second Review](./PHASE-2-RELATIONAL-INTEGRITY-SECOND-REVIEW.md) has independently checked the updated physical-design documents. It confirms 65 unique table rows and the principal structural reconciliations, while retaining material blockers for FK/column completeness, attendance, retention mapping, lifecycle predicates, finance policy, and PostgreSQL compatibility.
+
+The review result is **Further revision required**. The physical design is not ready for project-owner approval or implementation.
