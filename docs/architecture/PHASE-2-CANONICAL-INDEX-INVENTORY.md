@@ -19,9 +19,9 @@ It is the single document-level name inventory for those proposals. It does not 
 | Measure | Count |
 |---|---:|
 | Distinct names in FK/column register | 121 |
-| Distinct names in medium-severity catalogue | 94 |
+| Distinct names in medium-severity catalogue | 99 |
 | Names shared by both catalogues | 4 |
-| **Combined distinct proposed index names** | **211** |
+| **Combined distinct proposed index names** | **216** |
 | Longest proposed identifier | 63 characters |
 | Names exceeding PostgreSQL's 63-byte identifier limit | 0 |
 
@@ -72,7 +72,9 @@ One row represents one distinct proposed index name. The definition column recor
 | `ix_events_church_id` | `events` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
 | `ix_events_department_id` | `events` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
 | `ix_events_district_id` | `events` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
-| `ix_events_scope_start` | `events` | `owner scope, starts_at` | Access / workload | Medium catalogue |
+| `ix_events_church_start` | `events` | `church_id, starts_at WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_events_department_start` | `events` | `department_id, starts_at WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_events_district_start` | `events` | `district_id, starts_at WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
 | `ix_financial_transactions_account_date` | `financial_transactions` | `financial_account_id, transaction_date DESC` | Access / workload | Medium catalogue |
 | `ix_financial_transactions_status_date` | `financial_transactions` | `status, submitted_at DESC` | Access / workload | Medium catalogue |
 | `ix_fk_access_denies_issued_by_user_account_id` | `access_denies` | `issued_by_user_account_id` | FK support | FK register + Medium catalogue |
@@ -215,17 +217,20 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_event_registrations_id_event_member` | `event_registrations` | `id, event_id, member_id` | Unique / partial unique | FK register |
 | `uq_event_registrations_current_member` | `event_registrations` | `event_id, member_id WHERE approved valid-registration predicate` | Unique / partial unique | Medium catalogue |
 | `uq_event_sessions_id_event` | `event_sessions` | `id, event_id` | Unique / partial unique | Medium catalogue |
-| `uq_events_scope_id` | `events` | `owner scope plus id` | Unique / partial unique | Medium catalogue |
+| `uq_events_id_church` | `events` | `id, church_id WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_events_id_department` | `events` | `id, department_id WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_events_id_district` | `events` | `id, district_id WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_budgets_id_currency` | `budgets` | `id, currency_code` | Unique / partial unique | FK register |
 | `uq_financial_accounts_id_currency` | `financial_accounts` | `id, currency_code` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_id_currency` | `financial_transactions` | `id, currency_code` | Unique / partial unique | FK register |
-| `uq_financial_accounts_owner_code` | `financial_accounts` | `owner-specific account code partial indexes` | Unique / partial unique | Medium catalogue |
+| `uq_financial_accounts_church_account_code` | `financial_accounts` | `church_id, account_code WHERE church_id IS NOT NULL AND district_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_financial_accounts_district_account_code` | `financial_accounts` | `district_id, account_code WHERE district_id IS NOT NULL AND church_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_account_reference` | `financial_transactions` | `financial_account_id, reference` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_id_account_currency` | `financial_transactions` | `id, financial_account_id, currency_code` | Unique / partial unique | Medium catalogue |
-| `uq_idempotency_church_actor_operation_key` | `idempotency_records` | `actor, operation, church, key WHERE CHURCH` | Unique / partial unique | Medium catalogue |
-| `uq_idempotency_department_actor_operation_key` | `idempotency_records` | `actor, operation, department, key WHERE DEPARTMENT` | Unique / partial unique | Medium catalogue |
-| `uq_idempotency_district_actor_operation_key` | `idempotency_records` | `actor, operation, district, key WHERE DISTRICT` | Unique / partial unique | Medium catalogue |
-| `uq_idempotency_global_actor_operation_key` | `idempotency_records` | `actor, operation, key WHERE GLOBAL` | Unique / partial unique | Medium catalogue |
+| `uq_idempotency_church_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, church_id, key_digest WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_idempotency_department_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, department_id, key_digest WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_idempotency_district_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, district_id, key_digest WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_idempotency_global_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, key_digest WHERE district_id IS NULL AND church_id IS NULL AND department_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_member_categories_code` | `member_categories` | `code` | Unique / partial unique | Medium catalogue |
 | `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE approved current predicate` | Unique / partial unique | Medium catalogue |
 | `uq_members_member_number` | `members` | `member_number` | Unique / partial unique | Medium catalogue |
@@ -246,9 +251,9 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_transaction_reversals_original_full` | `transaction_reversals` | `original_transaction_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_reversals_reversal_transaction` | `transaction_reversals` | `reversal_transaction_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_revisions_transaction_number` | `transaction_revisions` | `financial_transaction_id, revision_number` | Unique / partial unique | Medium catalogue |
-| `uq_user_accounts_email_present` | `user_accounts` | `normalized_email WHERE normalized_email IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_user_accounts_email_present` | `user_accounts` | `UNRESOLVED: normalized email expression; no stored normalized_email column is declared WHERE email IS NOT NULL` | POLICY BLOCKED | Medium catalogue |
 | `uq_user_accounts_login_identifier` | `user_accounts` | `login_identifier` | Unique / partial unique | Medium catalogue |
-| `uq_user_accounts_phone_present` | `user_accounts` | `normalized_phone WHERE normalized_phone IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_user_accounts_phone_present` | `user_accounts` | `phone_e164 WHERE phone_e164 IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_webhook_events_provider_event` | `webhook_events` | `provider_id, provider_event_id` | Unique / partial unique | Medium catalogue |
 
 ## 4. Reconciliation rules and limitations
