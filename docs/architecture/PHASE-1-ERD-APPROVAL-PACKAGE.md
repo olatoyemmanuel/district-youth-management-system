@@ -220,3 +220,9 @@ This does not close the physical-design review. The register marks incomplete co
 ## 17. Foreign-key and column register review
 
 The [Foreign-Key and Column Register Review](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER-REVIEW.md) confirms 65 unique table rows in both the FK and explicit column declaration inventories. The review result is further revision required because several column declarations and policy/environment decisions remain open.
+
+## 18. Scope and retention FK reconciliation
+
+The FK/column register now explicitly expands the scope and actor columns previously described only in prose, normalizes timestamp shorthand, and names 21 supporting-index proposals. Retention holds and actions now reference `retention_subjects(id)` through non-null `retention_subject_id` FKs.
+
+The follow-up review remains "further revision required". Source-record retention enrollment, complete index reconciliation, defaults, and production PostgreSQL compatibility remain open.
