@@ -240,7 +240,7 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 
 #### `role_conflict_rules` and `role_conflict_reviews`
 - Rules: `id uuid PK`, `role_a_id uuid NOT NULL FK roles(id)`, `role_b_id uuid NOT NULL FK roles(id)`, `outcome varchar(24) NOT NULL`, `version varchar(40) NOT NULL`, `effective_from timestamptz NOT NULL`, `effective_to timestamptz NULL`, `rationale text NOT NULL`.
-- Canonicalize role pair ordering and enforce unique `(role_a_id, role_b_id, version)`; disallow role_a = role_b unless an explicit self-conflict rule is approved.
+- Canonicalize role pair ordering and enforce unique `(role_a_id, role_b_id, version)`. This ordered key supports the `role_a_id` FK by left prefix only; retain a separate index beginning with `role_b_id` for the second FK. Disallow role_a = role_b unless an explicit self-conflict rule is approved.
 - Reviews: `id uuid PK`, `user_account_id uuid NOT NULL FK user_accounts(id)`, `role_conflict_rule_id uuid NOT NULL FK role_conflict_rules(id)`, `reviewed_by_user_account_id uuid NOT NULL FK user_accounts(id)`, `decision varchar(24) NOT NULL`, `reason text NOT NULL`, `reviewed_at timestamptz NOT NULL`, `effective_from timestamptz NULL`, `effective_to timestamptz NULL`.
 - A review-required role combination is not effective until an independent authorized review exists.
 
@@ -1021,6 +1021,8 @@ The canonical FK register and the [FK Constraint and Index Redundancy Audit](./P
 
 Corrections incorporated into this physical proposal:
 - `role_permissions(role_id, permission_id)` remains unique, but only supports the role_id FK by left prefix. A separate permission_id index is required.
+- `access_denies(target_user_account_id, permission_id, effective_from)` supports target_user_account_id by left prefix only. Separate permission_id, issuer and optional reviewer FK indexes are explicitly proposed.
+- `role_conflict_rules(role_a_id, role_b_id, version)` supports role_a_id by left prefix only. A separate role_b_id FK index is explicitly proposed.
 - `attendance_records.event_id` and `member_id` remain non-null columns in the mandatory subject composite FK, but do not carry duplicate standalone FKs. The composite subject FK proves both values belong to the referenced event/member subject.
 - Composite FK support indexes must begin with the complete ordered source tuple. A workload index with only the first component followed by another column is not accepted as complete composite-FK support.
 - Wider retention subject indexes support their subject FKs by left prefix. Separate one-column retention_subject_id indexes are not proposed.
