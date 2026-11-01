@@ -172,3 +172,17 @@ The linked [Phase 2 Lifecycle and State Catalogue](./PHASE-2-LIFECYCLE-STATE-CAT
 PDB-R12 is now addressed as a documentation deliverable. This does not mean all state vocabularies are approved. PROPOSED values require project-owner/relevant-authority confirmation; POLICY BLOCKED values must remain unresolved until the appropriate policy is supplied. No production CHECK constraints or seed values should be generated from unapproved entries.
 
 **Current Phase 2 status:** the relational catalogue and lifecycle/state catalogue are materially more complete, but the physical design remains unapproved. The final named constraint/index/nullability matrix, PostgreSQL compatibility and concurrency proofs, finance policy, retention schedules, safeguarding/onboarding policy, credential authority evidence, and formal project-owner physical-design approval remain outstanding. No Prisma, migration, SQL DDL, database or application implementation is authorized.
+
+
+## 12. Phase 2 relational-integrity specification
+
+The next design deliverables are now included:
+
+- [Phase 2 Relational Integrity Matrix](./PHASE-2-RELATIONAL-INTEGRITY-MATRIX.md), table-by-table keys, foreign keys, unique constraints, checks, indexes, scope integrity, nullability conventions, enforcement methods and concurrency tests.
+- [Phase 2 Relational Integrity Review](./PHASE-2-RELATIONAL-INTEGRITY-REVIEW.md), independent review findings and blockers.
+
+The inventory reconciles to 65 distinct physical tables. The 52-row lifecycle catalogue covers state-bearing entities only. Four grouped headings in the source physical-design document explain why heading count is lower than actual table count.
+
+The review identifies unresolved design blockers. The matrix is a working proposal, not physical-design approval. In particular, the budget/reporting table definitions, full per-column nullability and FK actions, exact scope mapping, retention target coverage, finance reversal constraints, audit privilege enforcement, and PostgreSQL production compatibility remain open.
+
+The conceptual ERD remains approved at its exact recorded revision. Physical database design remains unapproved for implementation. No Prisma, migration, SQL DDL, database, generated client, or application implementation is authorized.
