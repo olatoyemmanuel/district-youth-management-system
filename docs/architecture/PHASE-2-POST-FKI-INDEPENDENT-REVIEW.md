@@ -10,7 +10,7 @@
 
 The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 116 FK-register names and 94 medium-catalogue names, with four shared names and 206 combined distinct names.
 
-The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 remains open because the full per-column physical specification is incomplete.
+The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 remains partially resolved because definition-level duplicate/predicate review is outstanding. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 599 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
 The physical database design is therefore not ready for owner approval or implementation.
 
@@ -104,17 +104,15 @@ The acceptance checklist now marks the completed document-level items as checked
 ### PIR-07 — Column-level physical specification remains incomplete
 
 **Severity:** High  
-**Status:** OPEN
+**Status:** PARTIALLY RESOLVED, pending definition-level completion and independent re-review
 
-The medium-severity remediation Section 5.3 explicitly says the complete column inventory for all 65 tables is not available and that an exact per-column nullability/default/FK-action matrix cannot be marked complete. The FK/column register also identifies abbreviated declarations and unresolved source-record enrollment for retention subjects.
+The new [Column-Level Physical Register](./PHASE-2-COLUMN-LEVEL-PHYSICAL-REGISTER.md) provides 599 one-row-per-column entries across all 65 physical tables. The type and nullability entries have been reconciled against the current physical table definitions. The register also records explicit defaults where stated, PK/UNIQUE/CHECK participation found in the source, FK participation/actions from the 155-row relationship register, supporting indexes from the canonical index inventory, and owner-decision blockers.
 
-The 65-row count proves table coverage, not complete column coverage. The current column declaration inventory is a transcription aid and cannot yet serve as a DDL-ready specification.
+The reconciliation corrected 129 generic type declarations to the exact proposed PostgreSQL types and aligned the remaining timestamp, retention, scope and outbox fields. The three Section 18 table additions and the role_conflict_reviews table now have separate column definitions.
 
-**Required correction:**
-- Complete every table's column inventory from the canonical physical definitions.
-- For every column, record type, nullability, default or explicit no-default, PK/UNIQUE/CHECK/FK participation, FK action, supporting index, and approval/source status.
-- Keep unresolved policy-dependent fields visibly blocked rather than inventing defaults or nullability.
-- Reconcile the completed column inventory with the FK register and matrix.
+The column-level register still records NOT SPECIFIED IN SOURCE for defaults not declared in the design. Most columns do not yet have an explicit default decision. CHECK constraints need stable names and exact expressions. UUID generation, timestamp defaults, lifecycle state constraints, policy-dependent scope rules, retention-source enrollment, and production PostgreSQL compatibility remain open.
+
+**Correction recorded:** The typed-column transcription gap is closed at document level. The complete physical design is not yet DDL-ready, so this finding remains partially resolved.
 
 ## 4. FKI-01 through FKI-07 disposition after independent review
 
@@ -130,7 +128,7 @@ The 65-row count proves table coverage, not complete column coverage. The curren
 
 ## 5. Required next correction sequence
 
-1. Complete the per-column physical specification while preserving policy blockers (PIR-07).
+1. Complete default decisions, CHECK names/expressions and policy-dependent constraints in the 599-column register (PIR-07).
 2. Finish definition-level index duplicate, predicate and workload validation (PIR-05).
 3. Independently verify the 155-row FK relationship register and 206-name index inventory.
 4. Conduct a fresh acceptance review and update all dispositions.
