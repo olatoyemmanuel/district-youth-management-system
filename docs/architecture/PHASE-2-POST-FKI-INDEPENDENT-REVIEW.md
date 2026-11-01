@@ -10,7 +10,7 @@
 
 The canonical FK table-coverage summary and relational integrity matrix contain the same 65 table rows in the same order. The new named relationship register contains 155 uniquely named FKs across 54 FK-bearing tables, while preserving 11 zero-FK tables. The canonical index inventory contains 120 FK-register names and 98 medium-catalogue names, with four shared names and 214 combined distinct names.
 
-The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 is verified at document level; six policy-blocked entries and production workload approval remain open. PIR-06 status reconciliation is now recorded. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
+The document-level corrections address the grouped FK inventory, attendance MATCH semantics, authorization index coverage, department composite-index row, and combined index-name count. PIR-05 is verified at document level; six policy-blocked entries and production workload approval remain open. PIR-06 is verified at document level. PIR-07 is partially resolved: all 617 declared columns now have typed, nullability-reconciled entries, while defaults, CHECK naming and policy-dependent constraints remain open.
 
 The physical database design is therefore not ready for owner approval or implementation.
 
