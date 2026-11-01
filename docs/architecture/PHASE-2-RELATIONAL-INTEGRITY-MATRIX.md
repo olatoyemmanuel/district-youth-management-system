@@ -303,7 +303,7 @@ The matrix is still not a fully exact column-level register. Each FK must be rec
 
 ## 14. Canonical FK and column register
 
-The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) is the detailed relationship appendix for this matrix. It records source columns, target columns, proposed nullability, RESTRICT actions, and supporting-index requirements for all 65 table rows.
+The [65-Table Foreign-Key and Column Register](./PHASE-2-FOREIGN-KEY-AND-COLUMN-REGISTER.md) is the detailed relationship appendix for this matrix. The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) is the single combined name inventory for unique, FK-supporting and workload/access index proposals. It records source columns, target columns, proposed nullability, RESTRICT actions, and supporting-index requirements for all 65 table rows.
 
 Use that register as the current proposed FK source of truth. The summary rows above remain a concise integrity overview and must be reconciled where older shorthand or pre-remediation descriptions differ. The column-level register explicitly identifies fields whose type/nullability/default remains incomplete.
 
