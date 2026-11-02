@@ -327,3 +327,18 @@ ODR-REC-01 was approved as proposed by the project owner on 2026-11-02. The v1 d
 The reporting requirements are now part of the canonical 107-ID testable requirements catalogue. This does not approve a specific report catalogue, classification matrix or disclosure policy.
 
 This approval does not approve the final physical ERD or authorize implementation. DFR-001–DFR-006 remain preserved; the DFR-006 repository discrepancy must still be reconciled through a dated governance record. No Prisma schema, migration, SQL DDL, database object, seed, API or application code is authorized.
+
+
+## 15. Detailed Phase 3 design artifacts (2026-11-02)
+
+The following companion documents expand this system design baseline:
+
+1. `PHASE-3-BOUNDED-CONTEXT-MAP.md` — context ownership, aggregate candidates, dependencies, integration contracts and domain events.
+2. `PHASE-3-MODULE-INTERACTION-DESIGN.md` — module dependencies, transaction boundaries, key workflow sequences, outbox/worker behavior, concurrency and failure handling.
+3. `PHASE-3-AUTHENTICATION-AUTHORIZATION-DESIGN.md` — DFR-001/004 authentication controls, session flows, permission evaluation, scope, deny precedence, separation of duties, rate limiting and audit.
+4. `PHASE-3-API-CONTRACT-DESIGN.md` — complete proposed v1 route catalogue, response envelopes, error codes, authorization expectations, pagination and idempotency boundaries.
+5. `PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md` — source hierarchy, physical design workstreams, known blockers, traceability requirements and approval gates.
+
+These artifacts are design proposals. The route catalogue is not a final OpenAPI contract, aggregate candidates are not final physical aggregates, and the ERD reconciliation plan does not approve physical schema. They preserve all existing policy and implementation gates.
+
+**Milestone status:** Detailed architecture artifacts created on the working branch. They require review and reconciliation. Final physical ERD approval remains NOT GRANTED. Implementation remains NOT AUTHORIZED.
