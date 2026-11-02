@@ -4,7 +4,7 @@
 - Date: 2026-11-02
 - Product: District Youth Management System (DYMS)
 - Release: v1.0, Sango District
-- Status: **SYSTEM DESIGN BASELINE FOR OWNER REVIEW**
+- Status: **SYSTEM DESIGN BASELINE; ODR-REC-01 PROJECT-OWNER APPROVED 2026-11-02; DELEGATED-AUTHORITY CONFIRMATION PENDING**
 - Logical source: Approved conceptual ERD and DDD-001–DDD-015
 - Physical source: Phase 2 Physical Database Design plus TBR-01, subject to final approval
 - Implementation: **NOT AUTHORIZED**
@@ -289,22 +289,22 @@ Role accumulation never widens scope. Department membership does not grant leade
 
 No concurrency or PostgreSQL DDL test is claimed as passed until run against an authorized test database.
 
-## 12. Policy-gated features
+## 12. Owner-approved v1 defaults and policy-gated features
 
-The following workflows remain disabled or limited until the relevant ODR decisions are approved:
+The project owner approved ODR-REC-01 as proposed on 2026-11-02. The following v1 defaults are therefore the accepted project design baseline, subject to confirmation by the delegated authorities named in the canonical ODR register. Features that exceed these defaults remain disabled until the relevant authority decisions are recorded:
 - member eligibility and category progression (ODR-001);
 - transfer cancellation, rejection, appeal, backdating and pending-request cardinality (ODR-002);
 - acting appointments and exceptional appointment transitions (ODR-003);
-- department/event owner exceptions and cross-scope roles (ODR-004);
-- finance thresholds, partial payments, refunds, FX and budget exceptions (ODR-005);
-- attendance mode interpretation, self-check-in, offline capture and QR exceptions (ODR-006);
+- department instances are district-owned; events have one district or local-church owner; departments may organize but do not own events in v1. Additional owner types and cross-scope roles remain disabled pending district governance confirmation (ODR-004);
+- finance uses the owner-approved conservative workflow defaults; partial payments, multiple successful payments per transaction, FX, refunds, budget exceptions and amount-based approval thresholds remain disabled pending finance authority confirmation (ODR-005);
+- attendance follows the owner-approved EVENT or SESSION subject-mode proposal and requires registration or a documented authorized exception; self-check-in and offline capture remain disabled pending attendance authority confirmation (ODR-006);
 - department eligibility, renewal and appeal (ODR-007);
-- waitlists, late registration and capacity exceptions (ODR-008);
+- only confirmed registrations consume capacity; waitlists are disabled; late registration and capacity overrides require recorded event-authority approval (ODR-008);
 - credential issuance until official issuer/evidence rules are mapped (ODR-009);
-- expanded audit investigation and break-glass roles (ODR-010);
-- automated permanent deletion (ODR-011);
-- optional communication channels/providers (ODR-012);
-- report catalogue, classification and export policy (ODR-013).
+- audit access is separated from system administration; temporary investigation and break-glass access remain disabled pending governance/security authority approval (ODR-010);
+- automated permanent deletion remains disabled until approved record-class schedules, holds and disposal authority are supplied (ODR-011);
+- in-app notifications are the baseline; email requires verified addresses and approved templates; SMS/WhatsApp remain disabled until consent and provider decisions are approved (ODR-012);
+- report requirements REPORT-001–REPORT-010 are included in the 107-ID testable baseline; report catalogue, classification, disclosure matrix and export permissions remain pending delegated data/security authority confirmation (ODR-013).
 
 ## 13. Design sequence
 
@@ -318,3 +318,12 @@ The following workflows remain disabled or limited until the relevant ODR decisi
 DFR-001–DFR-006 remain preserved. The conflicting DFR-006 repository statements must be reconciled through a dated owner governance record before any implementation gate is reconsidered.
 
 **Current gate:** System design may proceed. Physical design approval and implementation authorization remain outstanding.
+
+
+## 14. Project-owner approval update (2026-11-02)
+
+ODR-REC-01 was approved as proposed by the project owner on 2026-11-02. The v1 defaults described in §12 are the accepted project-design baseline. The canonical ODR register records the approval and identifies each delegated authority whose confirmation remains pending.
+
+The reporting requirements are now part of the canonical 107-ID testable requirements catalogue. This does not approve a specific report catalogue, classification matrix or disclosure policy.
+
+This approval does not approve the final physical ERD or authorize implementation. DFR-001–DFR-006 remain preserved; the DFR-006 repository discrepancy must still be reconciled through a dated governance record. No Prisma schema, migration, SQL DDL, database object, seed, API or application code is authorized.
