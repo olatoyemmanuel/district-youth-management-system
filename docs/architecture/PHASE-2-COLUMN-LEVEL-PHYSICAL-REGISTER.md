@@ -674,3 +674,8 @@ NOT SPECIFIED IN SOURCE means the source does not declare a default expression. 
 This register closes the typed-column transcription gap: all 65 tables and 617 declared columns now have explicit type and nullability entries reconciled with the physical table definitions. It does not close the complete physical-design approval gate. Defaults, CHECK naming, policy-dependent state constraints, index redundancy, PostgreSQL compatibility and owner decisions remain open.
 
 No SQL DDL, Prisma schema, migration, database object, generated client, seed, or application code has been created or changed. DFR-001 through DFR-006 and the approved conceptual ERD remain preserved.
+
+
+## DDD-013 authentication idempotency revision overlay
+
+The idempotency rows in this register describe the earlier physical proposal and are **superseded for authentication idempotency** by [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md). Do not implement the old mandatory `actor_user_account_id`, district/church/department scope columns, or four organizational-scope unique indexes for authentication idempotency. The revision proposes nullable authenticated identity references, a pre-authentication context FK, explicit `scope_mode`, server-derived `scope_fingerprint`, two mode-specific unique indexes, HMAC key-version and fencing/retention/recovery metadata, plus outbox linkage. The exact rows in this register must be regenerated from D13-PDR-01 after independent review and owner approval; this overlay does not authorize implementation.
