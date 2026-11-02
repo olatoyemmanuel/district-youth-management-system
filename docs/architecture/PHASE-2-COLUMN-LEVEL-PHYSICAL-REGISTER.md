@@ -1,4 +1,6 @@
 # DYMS Phase 2 Column-Level Physical Register
+> **Phase 2 baseline notice:** This 617-column register is retained as historical source material. For the current reconciled candidate, use [Phase 3 Canonical Physical Column Register](./PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md), which contains 70 tables and 675 column declarations. Where the two differ, Phase 3 is the current review candidate, not implementation authorization.
+
 
 **Status:** Complete transcription of the 65-table typed column baseline; definition-level gaps remain open  
 **Scope:** DYMS v1.0, Sango District  
