@@ -3,13 +3,13 @@
 - Review date: 2026-11-02
 - Domain decision: DDD-013, idempotency and safe mutation replay
 - Scope: Authentication idempotency follow-up approvals and PostgreSQL fencing/version counter
-- Review status: PARTIAL RECOVERY; POLICY DETAILS RECOVERED; SOURCE/VARIANT GAPS REMAIN
+- Review status: PARTIAL RECOVERY; POLICY DETAILS RECOVERED; AUTH-IDEM-016 OVERFLOW CONFLICT RESOLVED
 - Physical database design approval: NOT GRANTED
 - Implementation authorization: NOT AUTHORIZED
 
 ## 1. Purpose
 
-This record corrects the earlier statement that no DDD-013 follow-up approval evidence had been located in the reviewed branch. Repository pull-request history contains explicit product-owner approval records dated 2026-10-30. The records are not all merged into the default branch, and the fencing-counter record has two competing versions under the same decision ID. This document records what the evidence supports and does not silently resolve the conflict.
+This record corrects the earlier statement that no DDD-013 follow-up approval evidence had been located in the reviewed branch. Repository pull-request history contains explicit product-owner approval records dated 2026-10-30. The records are not all merged into the default branch. The fencing-counter record has two historical versions under the same decision ID; the project owner resolved their overflow wording conflict on 2026-11-02. This document preserves the historical difference and records the clarification.
 
 ## 2. Recovered BIGINT fencing/version counter approval
 
@@ -31,22 +31,22 @@ Both records explicitly support this common decision:
 
 The decision authority is the product owner. The PR bodies explicitly state that the user's approval occurred on 2026-10-30. The formal decision file identifies AUTH-IDEM-016 and status APPROVED.
 
-### 2.2 Material version conflict requiring owner confirmation
+### 2.2 Historical version difference and owner resolution
 
-PR #25 and PR #52 add the same decision ID but do not have identical boundaries.
+PR #25 and PR #52 use AUTH-IDEM-016 but differ on overflow treatment. PR #25 treats overflow as an integrity failure and prohibits wrap/reset; PR #52 leaves overflow handling open. PR #52 does not explicitly supersede PR #25.
 
-| Subject | PR #25, earlier version | PR #52, later version |
-|---|---|---|
-| Overflow | Explicitly treats overflow as an exceptional integrity failure and prohibits wrap/reset | Explicitly leaves overflow handling open |
-| Exact column nullability/default constraints | Not specified in the decision boundary | Explicitly left open |
-| Locking | Atomic claim/increment and current-version validation | Transactional coordination with approved row-level locking |
-| Counter reuse | Stale worker must not commit | Counter must not be reset or reused during an operation's lifetime |
+The project owner resolved this difference on **2026-11-02**, explicitly approving the PR #25 treatment. The formal clarification is [AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md](AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md).
 
-Both pull requests remain OPEN and UNMERGED in the repository at review time. PR #52 is a later revision but does not explicitly state that it supersedes PR #25. No supersession statement or owner clarification was found in the inspected PR bodies and patches.
+The binding clarified rule is:
+1. Counter overflow is an integrity failure.
+2. The counter must never wrap, reset, or silently reuse a prior value.
+3. If the next increment would exceed the supported BIGINT range, fail closed. The recovery claim/state transition must not proceed.
+4. Route the affected operation to controlled recovery or manual intervention.
+5. Record and surface the integrity event to authorized operators without exposing secrets.
 
-**Safe conclusion:** PostgreSQL BIGINT, initial value 0, increment-by-one on successful recovery claim, atomic coordination, and stale-value rejection are recovered as approved. The precise approval status of overflow handling is not settled by the conflicting AUTH-IDEM-016 records. Do not silently select either version. Ask the product owner whether overflow must be treated as an integrity failure with no wrap/reset, or remains an implementation-level integrity rule to be specified separately.
+The common approved core remains PostgreSQL BIGINT, initial value 0, increment-by-one per successful recovery claim, atomic claim/counter coordination, and stale fencing-value rejection. The historical PR wording is preserved; the 2026-11-02 owner clarification resolves the overflow question without rewriting either PR.
 
-The consolidated DDD-013 specification in PR #35 includes overflow-as-integrity-failure language, matching PR #25. Because PR #52 later leaves overflow open, that consolidated statement must be treated as requiring owner reconciliation before DDD-013 is marked complete.
+PR #52 also leaves exact column nullability/default constraints open. Those remain physical-design questions, not policy approvals.
 
 ## 3. Recovered AUTH-IDEM decision series
 
@@ -120,11 +120,11 @@ The PR #35 DDD-013 specification records these approved authentication idempoten
 - Atomic endpoint transaction boundaries and transactional outbox for password-reset delivery.
 - Current authorization/context validation before replay.
 
-These are the terms recorded by the consolidated specification. Their approval status is bounded by the individual decision records and the unresolved AUTH-IDEM-016 overflow discrepancy above.
+These are the terms recorded by the consolidated specification. The AUTH-IDEM-016 overflow treatment is clarified by the explicit owner decision dated 2026-11-02.
 
 ## 5. Remaining gaps and required actions
 
-1. **AUTH-IDEM-016 variant reconciliation:** Owner must confirm whether overflow handling is part of the approved decision or remains open. Preserve both PR references; do not silently overwrite.
+1. **AUTH-IDEM-016 overflow:** RESOLVED on 2026-11-02. Overflow is an integrity failure; wrapping/reset/reuse is prohibited; fail closed and route to controlled recovery/manual intervention. See AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md.
 2. **AUTH-IDEM-001–025 provenance:** PR #35 says the range is approved and incorporated, but exact individual source records were not independently recovered in this pass. Link/recover them before claiming complete per-decision provenance.
 3. **PR merge state:** PR #25, #35, and #36–#52 were found open and unmerged during this review. The decision text is evidence of recorded owner approval, but the files are not all present on the default branch. Do not claim the records are merged/canonical on main.
 4. **DDD-013 completion:** The consolidated spec and consistency review still say the authentication idempotency ERD slice is NOT READY. Physical uniqueness, exact columns/index predicates, secret-store integration, retention enforcement, transaction/lock behavior, and endpoint test evidence remain to be validated.
@@ -146,3 +146,5 @@ This recovery changes the evidence assessment, not the implementation gate.
 - [PR #35 — consolidated DDD-013 specification and consistency review](https://github.com/olatoyemmanuel/district-youth-management-system/pull/35)
 - [PR #36–#51 — AUTH-IDEM-026 through AUTH-IDEM-041](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+AUTH-IDEM)
 - [PR #52 — AUTH-IDEM-016 fencing counter, later record](https://github.com/olatoyemmanuel/district-youth-management-system/pull/52)
+
+- [AUTH-IDEM-016 overflow clarification — project-owner approval, 2026-11-02](AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md)
