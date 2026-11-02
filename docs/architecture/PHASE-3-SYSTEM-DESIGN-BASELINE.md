@@ -348,9 +348,9 @@ These artifacts are design proposals. The route catalogue is not a final OpenAPI
 
 The Phase 3 physical-design candidate has been assembled. The master artifact is [PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md](./PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md). Its supporting canonical registers are:
 
-- [PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md](./PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md): 70 tables and 675 column declarations.
-- [PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md](./PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md): 164 named FK candidates.
-- [PHASE-3-CANONICAL-INDEX-INVENTORY.md](./PHASE-3-CANONICAL-INDEX-INVENTORY.md): 222 distinct named index candidates.
+- [PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md](./PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md): 70 tables and 679 column declarations.
+- [PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md](./PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md): 166 named FK candidates.
+- [PHASE-3-CANONICAL-INDEX-INVENTORY.md](./PHASE-3-CANONICAL-INDEX-INVENTORY.md): 228 distinct named index candidates.
 - [PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md](./PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md): structural CHECKs, trigger/transaction boundaries and concurrency tests.
 - [PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md](./PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md): all 107 requirement IDs mapped.
 - [PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md](./PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md): internal engineering review of all ten DDD-013 review questions.
