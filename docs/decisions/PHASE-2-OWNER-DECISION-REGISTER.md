@@ -1,27 +1,28 @@
 # DYMS Phase 2: Owner Decision Register
 
-**Status:** Working decision register for owner and delegated-authority review  
+**Status:** Project-owner decision register and design baseline  
 **Scope:** DYMS v1.0, Sango District  
 **Branch:** `phase-1/requirements-consolidation`  
-**Purpose:** Consolidate policy, governance, and environment decisions that prevent completion and approval of the physical database design.  
+**Purpose:** Record approved DYMS product decisions, configurable policy boundaries, technical design choices and deployment-time selections.  
 **Implementation status:** NOT AUTHORIZED
 
 ## 1. How to use this register
 
-This register separates decisions already approved from decisions still requiring an authorized answer. It does not treat silence, a technical proposal, or the creation of this register as approval.
+This register distinguishes DYMS product decisions from external institutional policy and deployment choices. The project owner is the final decision-maker for DYMS product behavior, scope and design. External committee or church confirmation is not a prerequisite for deciding how the software works.
 
-For each open item:
-1. The named authority confirms the decision or identifies the correct decision-maker.
-2. The decision is recorded with date, approver, rationale, and any supporting policy source.
-3. The physical design, requirements, lifecycle catalogue, and tests are updated together.
-4. An independent review verifies that the decision is reflected consistently.
+For each decision:
+1. Record the exact DYMS rule, owner decision date and rationale.
+2. Record any external source separately when the software represents an official credential, standard or institutional decision.
+3. Keep policy-bearing values configurable and versioned where no authoritative value has been selected.
+4. Reconcile affected requirements, lifecycle states, physical tables and tests.
 
-Where no official rule or evidence exists, retain the item as unresolved. Do not invent age thresholds, eligibility rules, retention periods, financial limits, or church policy.
+Do not invent age thresholds, credential validity periods, financial limits or official church policy. When an external value is unknown, leave it configurable or unset rather than blocking the system design.
 
-Priority:
-- **P0:** Must be resolved before physical-design approval because it changes core integrity or authorization rules.
-- **P1:** Required to finalize the affected domain design; it may be handled in a later decision batch if isolated from P0 constraints.
-- **ENV:** Requires a deployment or technical-owner confirmation, not a ministry-policy decision.
+Disposition:
+- **OWNER DECISION:** Project-owner choice governs DYMS product behavior.
+- **CONFIGURABLE:** The platform supports a versioned rule; values are set by authorized DYMS roles when needed.
+- **IMPLEMENTATION VALIDATION:** Must be tested after separate implementation authorization.
+- **DEPLOYMENT:** Requires a real provider/environment selection before deployment, not before design closure.
 
 ## 2. Decisions already approved: do not reopen without a change request
 
@@ -46,13 +47,13 @@ Priority:
 | DDD-015 | Provider-independent notifications/integrations; consent/preferences; idempotent callbacks; payment verification; provider acceptance is not delivery | Provider selection, retry limits and operational monitoring remain open. |
 | Individual member account rule | Every member has an individual USER account linked 1:1 to MEMBER; no shared, guardian-owned or guardian-managed accounts; no guardian relationship entities | Younger-member onboarding/safeguarding requirements require official policy; no age threshold is assumed. |
 
-## 3. Open owner and delegated-authority decisions
+## 3. Domain decisions and configurable policy boundaries
 
-### P0: Core integrity and governance blockers
+The following ODR items are design decisions, not external-evidence blockers. The operative DYMS dispositions are recorded in the Phase 4 Governance and Design Closure Register. Detailed values that depend on official standards remain configurable.
 
 #### ODR-001 — Member category eligibility and progression
 
-**Status:** GENERAL CONFERENCE SOURCES IDENTIFIED; LOCAL APPLICATION AND DYMS MAPPING TO CONFIRM  
+**Status:** CONFIGURABLE ELIGIBILITY MODEL DECIDED  
 **Official baseline:** The General Conference Youth Ministries website publishes official Adventurer, Pathfinder, Ambassador and Young Adult ministry descriptions, Pathfinder membership requirements and curriculum/resource manuals. These are the starting sources for the platform rules, not a reason to ask local authorities to recreate existing standards.  
 **Responsible for confirmation:** The relevant West-Central Africa Division, Union, Nigeria Conference and district ministry authorities must identify which current General Conference materials and local adaptations govern Sango District, confirm their current versions/effective dates, and resolve any local administrative interpretation.  
 **Decision authority:** The recognized ministry authority confirms the applicable standard and any authorized adaptation; the project owner records the resulting DYMS platform rule and its approved implementation implications.  
@@ -83,8 +84,8 @@ Required confirmation from the responsible ministry authorities:
 
 #### ODR-002 — Church transfer completion, rejection and cancellation
 
-**Status:** OPEN  
-**Decision authority:** District/church membership governance authority; project owner confirms the DYMS workflow.  
+**Status:** DYMS WORKFLOW DECIDED; EDGE RULES CONFIGURABLE  
+**Decision authority:** Project owner for DYMS behavior.  
 **Related:** DDD-003, church memberships, church transfer requests.
 
 Decisions required:
@@ -103,8 +104,7 @@ Decisions required:
 
 #### ODR-003 — Appointment lifecycle exceptions and authority
 
-**Status:** OPEN  
-**Decision authority:** District/church appointing authorities and project owner.  
+**Status:** STANDARD LIFECYCLE DECIDED; EXCEPTIONS DISABLED IN V1  
 **Related:** DDD-004, positions, appointments, role assignments.
 
 Decisions required:
@@ -188,8 +188,8 @@ Decisions required:
 
 #### ODR-007 — Department eligibility and membership lifecycle
 
-**Status:** OPEN  
-**Decision authority:** Departmental ministry coordinators and district governance authority.  
+**Status:** REQUEST/APPROVAL LIFECYCLE DECIDED; ELIGIBILITY CONFIGURABLE  
+**Decision authority:** Project owner for DYMS behavior.  
 **Related:** DDD-006, department eligibility rules and department memberships.
 
 Decisions required:
@@ -331,9 +331,9 @@ Decisions required:
 
 **Physical-design impact:** report scope discriminator, composite scope FKs, classification catalogue, approval actors, export expiry and retention.
 
-## 4. Environment and technical-owner confirmations
+## 4. Technical baseline and deployment-time selections
 
-These are not ministry-policy choices. The responsible technical/deployment owner must provide evidence or an explicit decision.
+The following engineering baseline is sufficient to complete physical design. Production provider-specific checks remain deployment gates.
 
 | ID | Status | Confirmation required | Why it matters |
 |---|---|---|---|
@@ -357,7 +357,7 @@ The following can proceed as design work while owner decisions are pending, prov
 - Reconcile the role-conflict and audit actor CHECK contracts with approved policy.
 - Prepare a test traceability matrix for each approved integrity rule and each policy-dependent blocker.
 
-## 6. Recommended decision sequence
+## 6. Phase 2 design sequence
 
 | Sequence | Decision group | Why this order |
 |---|---|---|
@@ -382,11 +382,11 @@ For every approved or rejected item, add:
 - Whether a formal design change request is required under DFR-006.
 - Implementation authorization status (must remain NOT AUTHORIZED until separately granted).
 
-## 8. Approval boundary
+## 8. Project-owner decision and implementation boundary
 
-This register does not itself approve any open policy question. A reply approving one package must be mapped to the exact decision IDs and recorded before changing the canonical physical design.
+The project owner's explicit DYMS decisions are sufficient to approve product behavior and system design. Do not request committee or third-party evidence as a prerequisite for accepting those decisions. Record external standards as source metadata when the system claims official recognition, and keep unselected values configurable.
 
-DFR-001 through DFR-006 remain preserved. The approved conceptual ERD remains the logical source. Physical database design is not approved for implementation. No Prisma schema, SQL DDL, migration, database object, generated client, seed, or application code is authorized by this register.
+DFR-001 through DFR-006 remain preserved. The approved conceptual ERD and CPERD-01 remain the logical and physical design baselines. Physical design approval does not authorize implementation. No Prisma schema, SQL DDL, migration, database object, generated client, seed, API or application code is authorized by this register.
 
 
 ## 9. Technical blocker resolution reference (2026-11-02)
@@ -428,8 +428,8 @@ This addendum supersedes earlier status wording in this register where later pro
 - CPERD-01 is project-owner approved at exact master blob SHA `6d0b47973f4e24c73409832a4986f00817805638`. This approval is for physical design, not implementation.
 - DDD-013's ten-area detailed physical design review is project-owner approved under D13-POA-01. External independent technical assurance has not been performed and is not represented as complete. Required PostgreSQL, concurrency, security and operational tests remain implementation-time validation.
 - ODR-REC-01 approval remains limited to project-owner v1 defaults for ODR-004/005/006/008/010/011/012/013. All named delegated-authority confirmations remain pending until evidence is recorded.
-- ODR-001/002/003/007/009 remain open for official ministry, membership, appointment and credential authority evidence.
-- ODR-ENV-001–007 remain open for technical/deployment-owner confirmation.
+- ODR-001/002/003/007/009 are closed at the DYMS design level using configurable standards, explicit lifecycle controls and conservative v1 defaults. Official source metadata remains attachable to individual policy/credential versions.
+- ODR-ENV-001–006 have design-level engineering dispositions in TBR-01; ODR-ENV-007 and provider-specific capability checks remain deployment-time selections.
 - ODR-013 refers to reporting governance. It is distinct from DDD-013, which concerns idempotency and safe mutation replay.
 - REPORT-001–REPORT-010 remain part of the 107-ID testable requirements baseline. Report catalogue, classification, disclosure and export authority remain pending under ODR-013.
 
