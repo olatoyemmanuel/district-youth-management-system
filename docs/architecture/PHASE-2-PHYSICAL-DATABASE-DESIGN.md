@@ -448,7 +448,10 @@ The table list below is the proposed physical mapping. Columns marked nullable a
 - `access_action varchar(30) NOT NULL`, `purpose text NOT NULL`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, `occurred_at timestamptz NOT NULL`, `exceptional_access boolean NOT NULL DEFAULT false`.
 - Audit access is itself auditable. Restrict read permissions separately from write path.
 
-#### `idempotency_records`
+#### `idempotency_records` — superseded proposal
+
+> **Revision notice:** The following initial table/index proposal is superseded for authentication idempotency by [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md). Do not treat the old mandatory actor FK or four organizational-scope unique indexes below as current. The revised proposal supports mutually exclusive authenticated and pre-authentication modes. This is a proposed revision for independent review, not approved physical schema.
+
 - `id uuid PK`, `key_digest text NOT NULL`, `actor_user_account_id uuid NOT NULL FK user_accounts(id)`
 - `operation_code varchar(100) NOT NULL`, `district_id uuid NULL FK districts(id)`, `church_id uuid NULL FK churches(id)`, `department_id uuid NULL FK departments(id)`, `request_fingerprint text NOT NULL`
 - `status varchar(20) NOT NULL`, `created_at timestamptz NOT NULL`, `lease_expires_at timestamptz NULL`, `completed_at timestamptz NULL`, `safe_result_reference text NULL`
