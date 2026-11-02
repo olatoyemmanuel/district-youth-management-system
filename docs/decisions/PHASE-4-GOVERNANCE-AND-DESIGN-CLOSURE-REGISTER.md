@@ -141,3 +141,18 @@ This register does not authorize Prisma, SQL DDL, migrations, database objects, 
 3. Keep official-policy references configurable and distinguish them from DYMS product decisions.
 4. Record deployment provider and operational evidence when the deployment phase begins.
 5. Present the Phase 1 closure record and Phase 2 entry baseline to the project owner.
+
+
+## 12. Superseding project-owner authority clarification (2026-11-02)
+
+This section is the current status authority and supersedes any earlier wording in this register that describes third-party confirmation as a mandatory DYMS design blocker.
+
+- The project owner is the final decision-maker for DYMS product scope, workflow and system design.
+- ODR-001, ODR-002, ODR-003, ODR-007 and ODR-009 are closed at the DYMS design level using the configurable models and conservative defaults in §4.
+- ODR-004, ODR-005, ODR-006, ODR-008, ODR-010, ODR-011, ODR-012 and ODR-013 use the project-owner-approved ODR-REC-01 defaults in §5.
+- External church, ministry, finance, privacy, records or committee confirmation is not required to accept the project owner's DYMS product decisions. External standards remain source metadata or configuration inputs where the platform claims official recognition.
+- ODR-ENV-001–006 have design-level engineering dispositions. Provider-specific capability checks and ODR-ENV-007 are deployment gates.
+- DDD-013 and CPERD-01 remain project-owner approved. PostgreSQL execution, concurrency, security and operational tests remain post-authorization implementation validation.
+- No item in this clarification authorizes application implementation.
+
+The prior generic closure criteria in §9 are superseded for DYMS design decisions: a design decision is closed when the project owner has selected the exact product rule, its scope and assumptions are recorded, and affected requirements/design documents are reconciled. External source evidence is attached when the product asserts an official external standard. Deployment decisions close when the actual environment is selected. Neither category changes the implementation authorization boundary.
