@@ -2,7 +2,7 @@
 
 - Product: District Youth Management System (DYMS)
 - Release scope: DYMS v1.0, Sango District
-- Status: Working consolidation for project-owner review; not a final PRD or ERD approval
+- Status: Working requirements baseline; REPORT-001–REPORT-010 added with project-owner approval on 2026-11-02; not a final PRD or ERD approval
 - Decision baseline: DDD-001 through DDD-015, including project-owner approvals recorded through 2026-10-31
 - Implementation gate: No application code, Prisma domain models, migrations, or physical database schema changes before explicit approval of the consolidated ERD.
 - Related frozen decisions: DFR-001 through DFR-006, subject to the repository discrepancy recorded in §11.
@@ -341,11 +341,20 @@ The following ranges are checked against the current detailed testable requireme
 | Idempotency and sensitive mutation controls | SEC-005 to SEC-006 | DDD-013 |
 | Retention and disposal | RET-001 to RET-004 | DDD-014 |
 | Notifications, webhooks and payment integration | NOTIF-001 to NOTIF-006 | DDD-015 |
+| Reporting and protected exports | REPORT-001 to REPORT-010 | ODR-004, ODR-011, ODR-013; project-owner approval of ODR-REC-01 on 2026-11-02; delegated-authority confirmation pending |
 | Cross-cutting security/data integrity | SEC-001 to SEC-012 | DFR-001 to DFR-006; DDD-005; DDD-012 to DDD-015 |
 
-The current detailed file enumerates 97 testable requirement IDs. This table is maintained against the actual IDs in `PHASE-1-TESTABLE-REQUIREMENTS.md`. It does not imply that every policy question is closed. DDD-013 and DDD-015 details are mapped to SEC and NOTIF requirement groups respectively; additional independent IDs should be added only if the acceptance criteria are expanded.
+The detailed testable requirements file now enumerates 107 requirement IDs: the prior 97 plus REPORT-001–REPORT-010, approved for inclusion by the project owner on 2026-11-02. The report catalogue, classification, disclosure and export rules remain subject to ODR-013 delegated-authority confirmation. This count does not imply that every policy question is closed. DDD-013 and DDD-015 details remain mapped to SEC and NOTIF requirement groups respectively.
 
-## 11. Open decisions, evidence gaps, and repository reconciliation
+## 11. Project-owner approval of ODR-REC-01 (2026-11-02)
+
+The project owner approved ODR-REC-01 as proposed. The approved v1 design defaults cover organizational ownership, finance workflow boundaries, attendance, event registration/capacity, audit access, retention safeguards, notifications and reporting.
+
+The approval is recorded in the canonical [Phase 2 Owner Decision Register](../decisions/PHASE-2-OWNER-DECISION-REGISTER.md). It approves the project-owner portion of those product/design decisions only. District/church governance, finance, ministry, credential, records, privacy, data-owner and other delegated-authority confirmations remain pending where named. ODR-001, ODR-002, ODR-003, ODR-007 and ODR-009 remain open for source-backed decisions. ODR-ENV-001–ODR-ENV-007 remain open.
+
+REPORT-001–REPORT-010 have been added to the testable requirements catalogue, bringing the count from 97 to 107. The approved requirement IDs do not mean the report catalogue, classification matrix or export policy has been approved by the relevant data/security authorities.
+
+## 12. Open decisions, evidence gaps, and repository reconciliation
 
 The following are deliberately not invented or silently resolved:
 
@@ -365,7 +374,7 @@ The following are deliberately not invented or silently resolved:
 14. **Historical PRD evidence:** The expected product requirements baseline file was not present at the repository audit point. A previously approved working baseline was referenced in project history, but its source artifact must be recovered or its contents reconstructed and explicitly labelled. This document does not claim to replace a missing approved PRD.
 15. **DFR-006 status conflict:** README states the formal design freeze was lifted on 2026-10-29 and implementation authorized. The decision register still marks DFR-006 APPROVED and describes the design as frozen. The project owner's later explicit instruction for this Phase 1 work requires preserving DFR-001–DFR-006 and prohibits implementation before explicit ERD approval. Do not infer implementation permission from README. Resolve the documentation conflict through a recorded owner decision/change record before any implementation gate is reconsidered.
 
-## 12. ERD preparation and approval gate
+## 13. ERD preparation and approval gate
 
 The conceptual ERD must represent, at minimum, the following domain concepts and their historical relationships:
 
@@ -388,7 +397,7 @@ This is a conceptual coverage checklist, not a physical schema proposal. Entity 
 
 **Approval gate:** The project owner must explicitly approve the complete consolidated ERD. Until then, do not create Prisma domain models, migrations, physical database schema, or application code.
 
-## 13. Phase 1 completion criteria
+## 14. Phase 1 completion criteria
 
 Phase 1 is complete only when:
 
