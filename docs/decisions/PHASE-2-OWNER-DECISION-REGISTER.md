@@ -390,3 +390,8 @@ The following remain OPEN until the responsible authority confirms them: ministr
 The [Reporting Requirements Proposal RPT-PR-01](../product/PHASE-2-REPORTING-REQUIREMENTS-PROPOSAL.md) addresses the missing REPORT traceability group with proposed REPORT-001–REPORT-010. The IDs remain outside the approved 97-row count pending approval.
 
 TBR-01 is a design baseline, not implementation authorization. DFR-001–DFR-006 and the separate physical-design and implementation approval gates remain unchanged.
+
+
+## 10. Owner recommendation package
+
+[Phase 2 Owner Decision Recommendations ODR-REC-01](./PHASE-2-OWNER-DECISION-RECOMMENDATIONS.md) contains proposed v1 decisions for organizational scope, finance, attendance, events, audit, retention, notifications and reporting. It does not change the OPEN status of any ODR item. Record the authority, source, effective date and exact decision before updating the canonical register.
