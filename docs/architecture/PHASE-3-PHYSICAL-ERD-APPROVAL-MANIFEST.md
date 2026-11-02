@@ -39,7 +39,7 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
 | PHASE-3-SYSTEM-DESIGN-BASELINE.md | 43e4a26fdb40ff2bd4cad7dbce6ae303752796e5 |
 
-The Phase 2 source records and DFR/DDD/ODR decision registers remain referenced by the master ERD. Phase 2 physical registers have been marked as historical where the Phase 3 candidate supersedes them.
+The Phase 2 source records and DFR/DDD/ODR decision registers remain referenced by the master ERD. The DDD-013 project-owner approval is recorded separately in [PHASE-3-DDD-013-PROJECT-OWNER-APPROVAL-RECORD.md](./PHASE-3-DDD-013-PROJECT-OWNER-APPROVAL-RECORD.md). Phase 2 physical registers have been marked as historical where the Phase 3 candidate supersedes them.
 
 ## 3. Reconciled package counts
 
@@ -103,7 +103,9 @@ The five new tables and appointment scope additions are physical design proposal
 | DFR-001–DFR-006 preserved | YES |
 | ODR-REC-01 project-owner approval recorded | YES, 2026-11-02 |
 | DDD-013 internal engineering review | COMPLETE |
-| DDD-013 independent technical reviewer | PENDING |
+| DDD-013 project-owner review | APPROVED — ALL TEN AREAS, 2026-11-02 |
+| DDD-013 project-owner review of all ten areas | APPROVED — D13-POA-01, 2026-11-02 |
+| DDD-013 external independent technical assurance | NOT PERFORMED; separate assurance consideration |
 | Delegated authority confirmation | PENDING where identified |
 | DFR-006 governance discrepancy | OPEN |
 | Production PostgreSQL provider/version confirmation | OPEN |
