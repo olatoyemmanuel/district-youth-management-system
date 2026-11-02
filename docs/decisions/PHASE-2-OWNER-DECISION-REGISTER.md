@@ -122,7 +122,8 @@ Decisions required:
 
 #### ODR-004 — Organizational ownership and scope boundaries
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: District governance authority.
 **Decision authority:** District governance authority and project owner.  
 **Related:** DDD-005, DDD-006, DDD-007, positions, departments, events, accounts, reports.
 
@@ -141,7 +142,8 @@ Decisions required:
 
 #### ODR-005 — Finance approval, payment and budget policy
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: Authorized district/church finance authority.
 **Decision authority:** Authorized district/church finance authority and project owner.  
 **Related:** DDD-009, DDD-010, financial accounts, transactions, payments, reversals, budgets.
 
@@ -163,7 +165,8 @@ Decisions required:
 
 #### ODR-006 — Attendance registration and correction rules
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: Event/attendance ministry authority.
 **Decision authority:** Event/attendance ministry authority and project owner.  
 **Related:** DDD-007, DDD-008, event registrations, attendance records, attendance corrections.
 
@@ -205,7 +208,8 @@ Decisions required:
 
 #### ODR-008 — Event registration, capacity and schedule exceptions
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: Event authority for the event's scope.
 **Decision authority:** Event authority for the event's scope.  
 **Related:** DDD-007, events, event approvals, event registrations and event sessions.
 
@@ -245,7 +249,8 @@ Decisions required:
 
 #### ODR-010 — Audit access and investigation authority
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: District governance/security authority.
 **Decision authority:** District governance/security authority and project owner.  
 **Related:** DDD-012, audit events and audit-access events.
 
@@ -264,7 +269,8 @@ Decisions required:
 
 #### ODR-011 — Retention record classes, legal basis and disposal authority
 
-**Status:** OPEN — P0 for retention implementation  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: Records/administrative, district/church governance, finance and privacy/legal authorities.
 **Decision authority:** Records/administrative authority, district/church governance, finance authority for financial records, and qualified legal/privacy advice where applicable.  
 **Related:** DDD-014, retention policies, subjects, holds and actions.
 
@@ -285,7 +291,8 @@ Decisions required:
 
 #### ODR-012 — Notifications, consent and provider operations
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: Communications/content, privacy/consent and integration authorities.
 **Decision authority:** Project owner, communications/content authority, privacy/consent authority and integration administrator.  
 **Related:** DDD-015, notification preferences, templates, deliveries, providers and webhooks.
 
@@ -305,7 +312,8 @@ Decisions required:
 
 #### ODR-013 — Reporting scope, classification and export governance
 
-**Status:** OPEN  
+**Status:** PROJECT OWNER APPROVED AS PROPOSED (2026-11-02); DELEGATED-AUTHORITY CONFIRMATION PENDING  
+**Project-owner decision:** ODR-REC-01 approved as proposed on 2026-11-02. This approves the DYMS v1 product/design defaults only. It does not represent approval by the delegated authority: District reporting owner, domain data owners and security/privacy authority.
 **Decision authority:** District reporting owner, data owners for each domain, security/privacy authority and project owner.  
 **Related:** report definitions, report runs and report export audits.
 
@@ -395,3 +403,18 @@ TBR-01 is a design baseline, not implementation authorization. DFR-001–DFR-006
 ## 10. Owner recommendation package
 
 [Phase 2 Owner Decision Recommendations ODR-REC-01](./PHASE-2-OWNER-DECISION-RECOMMENDATIONS.md) contains proposed v1 decisions for organizational scope, finance, attendance, events, audit, retention, notifications and reporting. It does not change the OPEN status of any ODR item. Record the authority, source, effective date and exact decision before updating the canonical register.
+
+
+## 11. Project-owner approval record: ODR-REC-01 (2026-11-02)
+
+**Decision:** APPROVED AS PROPOSED by the project owner.
+
+**Approved recommendation packages:** ODR-004, ODR-005, ODR-006, ODR-008, ODR-010, ODR-011, ODR-012 and ODR-013, exactly as written in ODR-REC-01 on the approval date.
+
+**Approval scope:** The recommendations are accepted as DYMS v1.0 product/design defaults and may be used to continue detailed system design and physical-design reconciliation. Where a recommendation names a delegated authority, that authority's formal confirmation remains pending. This project-owner approval must not be represented as a finance committee approval, ministry standards approval, district/church governance resolution, records/privacy approval or other delegated-authority sign-off.
+
+**Not approved by this decision:** ODR-001, ODR-002, ODR-003, ODR-007 and ODR-009 remain open for official ministry, membership, appointing or credential authority evidence. ODR-ENV-001–ODR-ENV-007 remain subject to technical/deployment-owner confirmation. The DFR-006 repository conflict remains unresolved.
+
+**Reporting:** Candidate REPORT-001–REPORT-010 are approved for inclusion in the canonical testable requirements catalogue. Their data classification, initial report catalogue, disclosure permissions and export policy remain subject to ODR-013 delegated-authority confirmation.
+
+**Governance boundary:** DFR-001–DFR-006 and all previously approved DDD decisions remain preserved. This approval does not approve the final physical ERD, does not satisfy independent review, and does not authorize Prisma models, SQL DDL, migrations, database objects, seeds, APIs or application code.
