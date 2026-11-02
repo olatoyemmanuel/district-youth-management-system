@@ -376,8 +376,8 @@ The following structural CHECK names are the proposed baseline:
 | `event_attendance_subjects` | `ck_event_attendance_subjects_mode` | Mode is EVENT or SESSION |
 | `financial_accounts` | `ck_financial_accounts_exactly_one_owner` | Exactly one of district_id and church_id is populated |
 | `currencies` | `ck_currencies_minor_unit_range` | Minor unit is between zero and four |
-| `financial_transaction_reversals` | `ck_financial_transaction_reversals_not_self` | Original and reversal transaction differ |
-| `budget_revisions` | `ck_budget_revisions_number_positive` | Revision number is greater than zero |
+| `transaction_reversals` | `ck_transaction_reversals_not_self` | Original and reversal transaction differ |
+| `transaction_revisions` | `ck_transaction_revisions_number_positive` | Revision number is greater than zero |
 | `budgets` | `ck_budgets_exactly_one_owner` | Exactly one of district_id and church_id is populated |
 | `budgets` | `ck_budgets_period_order` | Period end is not before period start |
 | `budget_lines` | `ck_budget_lines_sort_order_nonnegative` | Sort order is nonnegative |
