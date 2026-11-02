@@ -210,7 +210,7 @@ The canonical session table is `auth_sessions`. Add candidate UNIQUE `(id,user_a
 ### 10.2 Scope fingerprint binary contract
 
 - Store exactly 32 bytes in `scope_fingerprint` and a `scope_fingerprint_version smallint NOT NULL`.
-- Compute SHA-256 over the domain separator `DYMS/AUTH-IDEM/SCOPE/v1\0` followed by a deterministic length-prefixed binary encoding.
+- Compute SHA-256 over the exact version-1 byte sequence in §12.1: ASCII `DYMS/AUTH-IDEM/SCOPE`, one zero byte, then the version byte `0x01`, scope-kind byte, component-count byte and tagged UUID components. The literal `/v1` suffix is not part of the domain-separator bytes; version is encoded as a dedicated byte.
 - Encode the scope kind explicitly: GLOBAL, DISTRICT, CHURCH or DEPARTMENT.
 - Encode each UUID as its 16-byte network-order representation. For child scopes, include the canonical parent district UUID where the authorization scope requires it.
 - GLOBAL is an explicit tagged value, never an all-NULL representation.
