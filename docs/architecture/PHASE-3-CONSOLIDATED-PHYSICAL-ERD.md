@@ -53,9 +53,9 @@ Preserved boundaries:
 | Measure | Phase 2 baseline | Phase 3 candidate |
 |---|---:|---:|
 | Tables | 65 | 70 |
-| Column declarations | 617 | 675 |
-| Named FK relationships | 155 | 164 |
-| Distinct named index candidates | 216 enumerated in Phase 2 source (its summary incorrectly stated 214) | 222 |
+| Column declarations | 617 | 679 |
+| Named FK relationships | 155 | 166 |
+| Distinct named index candidates | 216 enumerated in Phase 2 source (its summary incorrectly stated 214) | 228 |
 | Testable requirements | 97 historical | 107 current |
 
 Counts refer to the reconciled candidate registers, not a live database. The Phase 3 index count is the number of distinct named candidate indexes after removing superseded entries and adding Phase 3 indexes. PK indexes are not listed unless separately named composite candidate keys are required.
@@ -388,7 +388,7 @@ The six policy-blocked indexes remain excluded from DDL.
 |---|---|---|
 | Columns | 70 tables / 679 column declarations | DDD-013 23-column record; pre-auth/recovery; organizer association; category-rule provenance; report data owner; attendance exception; remove obsolete owner columns |
 | Foreign keys | 166 named relationships | Session-owner composite FK; pre-auth/recovery/outbox FKs; organizer composite FKs; category eligibility and report-owner FKs; remove obsolete scope FKs |
-| Indexes | 222 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain six policy blockers as blocked |
+| Indexes | 228 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain six policy blockers as blocked |
 | Integrity/triggers | Structural CHECK and concurrency register | Exact structural names, trigger/transaction boundaries and test requirements |
 | Traceability | 107 / 107 requirements mapped | Explicit platform-only and policy-gated requirements |
 
@@ -412,7 +412,7 @@ The Phase 3 canonical registers supersede conflicting Phase 2 inventory statemen
 
 - [ ] Approve the five new physical entities and their ownership.
 - [ ] Approve removal of departments.church_id and events.department_id under ODR-004.
-- [ ] Approve district-bound event and report scope composite-key model.
+- [ ] Approve district-bound event/report scope and district-bound position/appointment composite-key model.
 - [ ] Approve the 70-table / 679-column candidate inventory.
 - [ ] Approve the 166 named FK candidate register.
 - [ ] Approve the 228 named index candidate inventory, including six blocked entries remaining excluded.
