@@ -22,7 +22,7 @@ It is not executable DDL. Every row remains a design proposal pending exact phys
 | Added tables | 5 |
 | Removed columns | 2 |
 | Replaced DDD-013 columns | 13 old / 23 revised |
-| Additional columns beyond the 23-column revised idempotency record | 58 |
+| Additional columns beyond the 23-column revised idempotency record | 54 |
 | Explicit defaults | Existing source defaults plus documented technical defaults only |
 
 New tables: `pre_auth_contexts`, `idempotency_recovery_events`, `event_organizing_departments`, `member_category_eligibility_rules`, and `report_data_owners`.
