@@ -341,7 +341,7 @@ The exception actor FK is:
 - source `attendance_records.registration_exception_granted_by_user_account_id`;
 - target `user_accounts(id)`;
 - ON DELETE RESTRICT / ON UPDATE RESTRICT;
-- candidate source support index `ix_attendance_records_registration_exception_granted_by_user_account_id`.
+- candidate source support index `ix_attendance_records_reg_exception_actor`.
 
 This CHECK proves that an unregistered attendance row carries a complete exception record. Authorization still verifies that the granting user is an event coordinator with authority for the event scope. A database CHECK cannot prove that role/scope authorization.
 
