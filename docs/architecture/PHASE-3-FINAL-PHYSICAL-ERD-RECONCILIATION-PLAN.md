@@ -304,9 +304,9 @@ The documentation reconciliation pass has produced a consolidated candidate pack
 
 The current candidate registers were fetched back from the working branch and cross-checked:
 
-- 675 column rows across 70 distinct tables.
-- 164 named foreign-key rows.
-- 222 distinct index rows.
+- 679 column rows across 70 distinct tables.
+- 166 named foreign-key rows.
+- 228 distinct index rows.
 - Every FK source table and source column exists in the column register.
 - Every FK target table and target column exists in the column register.
 - Every FK supporting source index exists in the canonical index inventory.
