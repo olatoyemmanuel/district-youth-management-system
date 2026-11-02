@@ -182,3 +182,15 @@ This recovery changes the evidence assessment, not the implementation gate.
 - [PR #52 — AUTH-IDEM-016 fencing counter, later record](https://github.com/olatoyemmanuel/district-youth-management-system/pull/52)
 
 - [AUTH-IDEM-016 overflow clarification — project-owner approval, 2026-11-02](AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md)
+
+
+## 8. Follow-up physical ERD-slice validation
+
+After recovering AUTH-IDEM-001–025 provenance, a document-level validation was completed in [PHASE-2-DDD-013-ERD-SLICE-VALIDATION.md](../architecture/PHASE-2-DDD-013-ERD-SLICE-VALIDATION.md).
+
+- The conceptual ERD represents the authenticated/pre-authentication modes, PRE_AUTH_CONTEXT, OUTBOX_MESSAGE, and external protected reset-secret boundary.
+- The current physical proposal remains inconsistent: its mandatory actor_user_account_id cannot represent pre-authentication-only operations; its four proposed global/district/church/department unique indexes do not demonstrate the approved authenticated/pre-authentication uniqueness modes; and it omits required HMAC key-version, BIGINT fencing, tombstone, recovery, and response-retention mapping.
+- The password-reset outbox/token/idempotency relationship is not fully represented in the physical proposal.
+- DDD-013 remains APPROVED POLICY / PHYSICAL ERD REMEDIATION REQUIRED. Physical design approval and implementation authorization remain NOT GRANTED.
+
+This validation is document-level only. It does not constitute SQL validation, runtime testing, physical schema approval, or implementation authorization.
