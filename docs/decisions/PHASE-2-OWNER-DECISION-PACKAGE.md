@@ -210,3 +210,12 @@ This is a sequencing recommendation, not an approval request for every item at o
 **Package maintainer:** DYMS Engineering  
 **Decision register:** [PHASE-2-OWNER-DECISION-REGISTER.md](./PHASE-2-OWNER-DECISION-REGISTER.md)  
 **Implementation status:** NOT AUTHORIZED
+
+
+## 10. Technical blocker resolution update (2026-11-02)
+
+The engineering blockers that do not require a ministry, church, finance, safeguarding, privacy or records-policy decision are now consolidated in [Phase 2 Technical Blocker Resolution TBR-01](../architecture/PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md). It establishes the PostgreSQL 15 minimum design baseline, extension-free enforcement direction, UUID/timestamp/collation conventions, appointment overlap guard, attendance concurrency design, audit role separation, DDD-013 technical refinement and safe boundaries for policy-blocked modules.
+
+A dedicated [Reporting Requirements Proposal RPT-PR-01](../product/PHASE-2-REPORTING-REQUIREMENTS-PROPOSAL.md) supplies candidate REPORT-001–REPORT-010 requirements. They are not counted in the approved 97-row requirements baseline until the owner approves and the catalogue/crosswalk are updated together.
+
+This update does not close ODR-001–ODR-013 or ODR-ENV-001–007 where a competent authority or deployment owner must supply evidence. It does not change DFR-001–DFR-006 or authorize implementation.
