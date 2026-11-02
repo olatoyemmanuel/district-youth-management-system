@@ -184,3 +184,12 @@ The proposal is intentionally not treated as approved. The prior physical defini
 **Physical design approval: NOT GRANTED.**
 **DDD-013 final approval: NOT GRANTED.**
 **Implementation: NOT AUTHORIZED.**
+
+
+## 9. Technical refinement and current disposition
+
+The internal engineering refinement is recorded in [Phase 2 Technical Blocker Resolution TBR-01](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md) and incorporated into the revised [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md).
+
+The refined DDD-013 candidate now gives exact session-owner composite FK semantics, versioned scope-fingerprint encoding, append-only recovery-event history, same-row tombstone compaction and external reset-secret transaction choreography. The five prior physical findings are addressed at proposal level; this is not independent reviewer acceptance or PostgreSQL execution evidence.
+
+**Current disposition:** DDD-013 technical proposal refined; independent review pending; owner physical approval not granted; DDD-013 final physical approval not granted; implementation not authorized.
