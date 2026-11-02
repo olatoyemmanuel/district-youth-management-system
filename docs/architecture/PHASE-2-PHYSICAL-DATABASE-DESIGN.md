@@ -1046,3 +1046,14 @@ The independent review found that the 65-table coverage is consistent, but the p
 The former 190-index count in Section 28 and subsequent 199-, 202- and 206-name summaries are historical and superseded. The current inventories contain 120 distinct names in the FK/column register and 98 in the medium-severity catalogue, with four shared names. The combined distinct-name count is 214. See the [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md). This is a document count only, not proof that all index definitions are complete, non-redundant or executable.
 
 **Current status:** Further revision required. Physical design is not approved for implementation. No Prisma, SQL, migration, database object, generated client, seed or application code is authorized.
+
+
+## 32. Technical blocker resolution baseline
+
+The engineering decisions and exact PostgreSQL contracts in [Phase 2 Technical Blocker Resolution TBR-01](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md) are the current technical design supplement for this document. TBR-01 resolves, at design level, schema naming, PostgreSQL 15 minimum compatibility, extension-free UUID generation, timestamp authority, normalized identifier storage, FK action baseline, appointment overlap enforcement, attendance concurrency strategy, audit privilege separation and the DDD-013 physical contract.
+
+TBR-01 does not approve unresolved ministry, church, finance, safeguarding, credential, retention or reporting policy. It also does not claim PostgreSQL DDL execution, workload validation or production provider compatibility. The exact owner-gated decisions remain in the Owner Decision Register.
+
+The six POLICY BLOCKED index entries in the Canonical Index Inventory remain blocked where their predicates depend on unresolved category, transfer, department-membership, event-registration or email-identity policy. Do not substitute guessed status strings.
+
+**Current disposition:** Engineering design work can proceed against TBR-01. Final physical-design approval and separate implementation authorization remain outstanding. DFR-001 through DFR-006 remain preserved; no implementation permission is inferred.
