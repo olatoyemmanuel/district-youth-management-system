@@ -337,7 +337,7 @@ OR
 Proposed stable name: `ck_attendance_records_registration_evidence`.
 
 The exception actor FK is:
-- `fk_attendance_records_registration_exception_granted_by_user_account_id`;
+- `fk_attendance_records_reg_exception_actor`;
 - source `attendance_records.registration_exception_granted_by_user_account_id`;
 - target `user_accounts(id)`;
 - ON DELETE RESTRICT / ON UPDATE RESTRICT;
