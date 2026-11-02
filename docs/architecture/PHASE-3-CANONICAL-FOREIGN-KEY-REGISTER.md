@@ -18,7 +18,7 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 |---|---:|
 | Phase 2 named FK relationships | 155 |
 | Phase 3 candidate named FK relationships | 164 |
-| Phase 3 additions / replacements | 13 new named rows, with superseded scope relationships removed |
+| Phase 3 additions / replacements | 14 new named rows, with superseded scope relationships removed |
 | Delete/update action baseline | RESTRICT / RESTRICT |
 | Implementation | NOT AUTHORIZED |
 
