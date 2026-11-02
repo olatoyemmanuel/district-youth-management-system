@@ -8,12 +8,13 @@ reporting, and auditability.
 ## Project Status
 
 - Product requirements: approved baseline
-- Architecture and design specification: baseline reopened following owner approval on 2026-10-29
-- DFR-006 formal design freeze: LIFTED; implementation authorized
-- Engineering foundation: in progress
-- Application implementation: in progress only as work is explicitly completed and verified
+- Architecture and design specification: approved design baseline under controlled design closure
+- DFR-006 formal design freeze: PRESERVED; change control remains in force
+- Physical ERD CPERD-01: project-owner approved
+- DDD-013 detailed physical design: project-owner approved
+- Application implementation: NOT AUTHORIZED; separate explicit authorization required
 
-The project owner lifted the formal design freeze on 2026-10-29 and authorized implementation. This does not mean that software has been implemented, tested, or deployed. Unresolved requirements remain unresolved; material design changes must be documented and reviewed, and the approved security, authorization, audit, migration, testing, and production-readiness controls remain mandatory.
+The project owner has authorized continued design and governance closure work. This does not authorize Prisma schemas, migrations, SQL DDL, database objects, seeds, API/backend/frontend implementation, infrastructure changes, or deployment. DFR-001–DFR-006 remain preserved. Material changes to the frozen specification require a documented change request and impact review. See [DFR-006 Governance Clarification](docs/decisions/DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md) and the [Phase 4 Governance and Design Closure Register](docs/decisions/PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md).
 
 ## Technology Stack
 
