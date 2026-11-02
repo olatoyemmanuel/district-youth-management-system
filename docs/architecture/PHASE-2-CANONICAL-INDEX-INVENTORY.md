@@ -279,3 +279,15 @@ This inventory does not approve the physical database design or authorize SQL DD
 ## DDD-013 authentication idempotency index revision notice
 
 The four historical `uq_idempotency_*_actor_operation_key` entries for global/district/church/department scope are superseded and must not be implemented for authentication idempotency. D13-PDR-01 proposes two partial unique indexes: authenticated identity and pre-authentication identity. They are proposals pending independent review and explicit project-owner approval. The previous `ix_idempotency_records_actor_operation` and organizational-scope FK indexes also require re-evaluation because the revised identity uses nullable principal/session/pre-authentication references and a server-derived `scope_fingerprint`, not district/church/department columns on this table. See [DDD-013 Physical Design Revision](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md).
+
+
+## DDD-013 and TBR-01 review boundary
+
+The current technical baseline is supplemented by [Phase 2 Technical Blocker Resolution TBR-01](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md). The six POLICY BLOCKED index entries remain non-executable:
+- current church membership and open transfer request predicates depend on ODR-002;
+- department membership predicate depends on ODR-007;
+- active event registration predicate depends on ODR-008;
+- current member category predicate depends on ODR-001;
+- email uniqueness/canonicalization depends on the approved login/email identity policy and ODR-ENV-004.
+
+Do not create guessed status predicates to make the index count appear complete. DDD-013's two revised authentication identity indexes replace the superseded four organizational-scope indexes only after the revised DDD-013 package is independently reviewed, reconciled into this inventory and approved. The current register does not yet contain a regenerated canonical index list for D13-PDR-01.
