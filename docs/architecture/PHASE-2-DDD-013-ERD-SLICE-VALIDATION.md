@@ -163,3 +163,24 @@ No SQL or Prisma artifact is to be generated as part of these documentation corr
 | Implementation authorized | **NO** |
 
 **Disposition:** Keep DDD-013 at **APPROVED POLICY / PHYSICAL ERD REMEDIATION REQUIRED**. The physical design proposal must be reconciled before final DDD-013 approval. No implementation gate changes.
+
+
+## 8. Remediation proposal submitted for independent review
+
+A candidate response to PDB-D13-01 through PDB-D13-06 is documented in [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md).
+
+The revision proposes:
+- An explicit AUTHENTICATED/PRE_AUTHENTICATION scope mode with mutually exclusive principal/session versus pre-auth context references.
+- Two mode-specific unique identity indexes. Request fingerprint remains outside the uniqueness key so AUTH-IDEM-041 conflict detection remains possible.
+- Server-derived scope fingerprint rather than carrying unresolved district/church/department scope columns on the authentication idempotency table.
+- HMAC key-version, fixed lease, BIGINT fencing, safe result, response-retention, tombstone and recovery metadata.
+- An optional append-only recovery-attempt ledger for independent review.
+- Explicit password-reset outbox links to the idempotency record and reset-token record, with an opaque external secret reference only.
+- Authentication-only domain boundary.
+
+The proposal is intentionally not treated as approved. The prior physical definition and four organizational-scope indexes are marked superseded for authentication idempotency. The column and FK registers now carry revision overlays requiring regeneration after reviewer/owner acceptance; they are not falsely represented as fully reconciled canonical registers yet.
+
+**Independent review status: SUBMITTED / AWAITING REVIEW.**
+**Physical design approval: NOT GRANTED.**
+**DDD-013 final approval: NOT GRANTED.**
+**Implementation: NOT AUTHORIZED.**
