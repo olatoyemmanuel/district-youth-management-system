@@ -676,3 +676,16 @@ For every new or amended DDD decision:
 **Reporting traceability gap resolved:** No; corrective action remains open.  
 **Physical database design approved:** No.  
 **Application implementation authorized:** **No.**
+
+
+## 10. DDD-013 project-owner approval and current status reconciliation (2026-11-02)
+
+The historical DDD-013 physical-design findings and evidence limitations above describe the status at the time those reviews were written. They are superseded for current project-owner approval status by the Phase 3 consolidated physical design and the following records:
+
+- CPERD-01 physical ERD approved by the project owner at exact master blob SHA `6d0b47973f4e24c73409832a4986f00817805638`.
+- DDD-013 detailed physical slice reviewed across all ten areas and approved by the project owner under [D13-POA-01](../architecture/PHASE-3-DDD-013-PROJECT-OWNER-APPROVAL-RECORD.md).
+- The current DDD-013 physical candidate is documented in [PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md](../architecture/PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md).
+
+**Current status:** DDD-013 policy and detailed physical design are PROJECT-OWNER APPROVED. External independent technical assurance has not been performed and is not represented as completed. Secret-store/key-management provider selection and implementation-time PostgreSQL DDL, concurrency, failure-recovery and security validation remain open.
+
+The project-owner approval does not authorize Prisma, SQL DDL, migrations, database objects, seeds, API or application code. Implementation remains NOT AUTHORIZED until a separate explicit project-owner authorization is recorded. See [DFR-006-GOV-CLAR-01](./DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md).
