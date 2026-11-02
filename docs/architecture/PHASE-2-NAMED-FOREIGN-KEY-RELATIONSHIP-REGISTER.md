@@ -1,4 +1,6 @@
 # DYMS Phase 2 Named Foreign-Key Relationship Register
+> **Phase 2 baseline notice:** This 155-relationship register is retained as historical source material. For the current reconciled candidate, use [Phase 3 Canonical Foreign-Key Register](./PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md), which contains 164 named FK candidates. Where the two differ, Phase 3 is the current review candidate, not implementation authorization.
+
 
 **Status:** Complete document-level relationship inventory, pending independent review and owner approval  
 **Scope:** DYMS v1.0, Sango District, 65 proposed physical tables  
