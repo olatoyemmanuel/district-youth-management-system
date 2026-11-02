@@ -518,3 +518,8 @@ The current index-name inventory was checked after the FKI-06 cleanup:
 - No shortened name uses an opaque ordinal suffix or doubled-underscore collision workaround.
 
 The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolidates this register with the medium-severity catalogue and records 214 distinct proposed names. This validates naming structure only. It does not prove index necessity, query performance, or successful creation on a target PostgreSQL server.
+
+
+## DDD-013 authentication idempotency revision overlay
+
+The idempotency rows in this register describe the earlier physical proposal and are **superseded for authentication idempotency** by [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md). Do not implement the old mandatory `actor_user_account_id`, district/church/department scope columns, or four organizational-scope unique indexes for authentication idempotency. The revision proposes nullable authenticated identity references, a pre-authentication context FK, explicit `scope_mode`, server-derived `scope_fingerprint`, two mode-specific unique indexes, HMAC key-version and fencing/retention/recovery metadata, plus outbox linkage. The exact rows in this register must be regenerated from D13-PDR-01 after independent review and owner approval; this overlay does not authorize implementation.
