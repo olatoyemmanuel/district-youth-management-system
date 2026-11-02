@@ -17,8 +17,8 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | Measure | Count |
 |---|---:|
 | Phase 2 named FK relationships | 155 |
-| Phase 3 candidate named FK relationships | 164 |
-| Phase 3 additions / replacements | 14 new named rows, with superseded scope relationships removed |
+| Phase 3 candidate named FK relationships | 166 |
+| Phase 3 additions / replacements | 14 new named rows, with eight superseded relationships removed |
 | Delete/update action baseline | RESTRICT / RESTRICT |
 | Implementation | NOT AUTHORIZED |
 
@@ -38,7 +38,9 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_appointments_appointee_member_id` | `appointments` | `appointee_member_id` | `members(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_appointments_appointee_effective` |
 | `fk_appointments_appointing_authority_user_account_id` | `appointments` | `appointing_authority_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_appointments_appointing_authority_user_account_id` |
 | `fk_appointments_approved_by_user_account_id` | `appointments` | `approved_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_appointments_approved_by_user_account_id` |
-| `fk_appointments_position_id` | `appointments` | `position_id` | `positions(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_appointments_position_effective` |
+| `fk_appointments_position_church_scope` | `appointments` | `position_id,church_id` | `positions(id,church_id)` | NOT NULL / NULL | UNIQUE(id,church_id), `uq_positions_id_church` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_appointments_position_church_scope` |
+| `fk_appointments_position_department_scope` | `appointments` | `position_id,department_id` | `positions(id,department_id)` | NOT NULL / NULL | UNIQUE(id,department_id), `uq_positions_id_department` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_appointments_position_department_scope` |
+| `fk_appointments_position_district_scope_type` | `appointments` | `position_id,district_id,scope_type` | `positions(id,district_id,allowed_scope_type)` | NOT NULL / NOT NULL / NOT NULL | UNIQUE(id,district_id,allowed_scope_type), `uq_positions_id_district_scope_type` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_appointments_position_district_scope_type` |
 | `fk_attendance_corrections_approved_by_user_account_id` | `attendance_corrections` | `approved_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_corrections_approved_by_user_account_id` |
 | `fk_attendance_corrections_attendance_record_id` | `attendance_corrections` | `attendance_record_id` | `attendance_records(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_attendance_corrections_record_time` |
 | `fk_attendance_corrections_requested_by_user_account_id` | `attendance_corrections` | `requested_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_corrections_requested_by_user_account_id` |
@@ -145,9 +147,9 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_password_reset_tokens_user_account_id` | `password_reset_tokens` | `user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_password_reset_tokens_account_expiry` |
 | `fk_payments_financial_transaction_id_currency_code` | `payments` | `financial_transaction_id,currency_code` | `financial_transactions(id,currency_code)` | NOT NULL / NOT NULL | UNIQUE(id,currency_code), `uq_financial_transactions_id_currency` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_payments_financial_transaction_id_currency_code` |
 | `fk_payments_provider_id` | `payments` | `provider_id` | `integration_providers(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_payments_provider_id` |
-| `fk_positions_church_id` | `positions` | `church_id` | `churches(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_positions_church_id` |
-| `fk_positions_department_id` | `positions` | `department_id` | `departments(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_positions_department_id` |
-| `fk_positions_district_id` | `positions` | `district_id` | `districts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_positions_district_id` |
+| `fk_positions_church_district` | `positions` | `church_id,district_id` | `churches(id,district_id)` | NULL / NOT NULL | UNIQUE(id,district_id), `uq_churches_id_district` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_positions_church_district` |
+| `fk_positions_department_district` | `positions` | `department_id,district_id` | `departments(id,district_id)` | NULL / NOT NULL | UNIQUE(id,district_id), `uq_departments_id_district` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_positions_department_district` |
+| `fk_positions_district_id` | `positions` | `district_id` | `districts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_positions_district_id` |
 | `fk_report_data_owners_approved_by` | `report_data_owners` | `approved_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_report_data_owners_approver` |
 | `fk_report_definitions_approved_by_user_account_id` | `report_definitions` | `approved_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_report_definitions_approved_by_user_account_id` |
 | `fk_report_definitions_created_by_user_account_id` | `report_definitions` | `created_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_report_definitions_created_by_user_account_id` |
@@ -189,7 +191,6 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_ura_role` | `user_role_assignments` | `role_id` | `roles(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_user_role_assignments_role_id` |
 | `fk_ura_user_account` | `user_role_assignments` | `user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_user_role_assignments_user_scope` |
 | `fk_webhook_events_provider_id` | `webhook_events` | `provider_id` | `integration_providers(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `uq_webhook_events_provider_event` |
-
 ## 4. Critical composite relationship contracts
 
 ### 4.1 User account and member
