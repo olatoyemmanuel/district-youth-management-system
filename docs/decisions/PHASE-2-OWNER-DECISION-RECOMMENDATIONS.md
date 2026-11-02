@@ -53,14 +53,14 @@ Nothing in this document is approved merely because it is written here. Official
 1. Preserve the current physical ERD shape: each event-member attendance subject selects one mode, EVENT or SESSION, and cannot mix modes after its first attendance record.
 2. EVENT mode records one attendance result for that member/event subject.
 3. SESSION mode records one attendance result per member per session. Overall event attendance is derived from session records, not stored as a duplicate attendance row.
-4. If the district authority intends one mode for the entire event rather than per member/event subject, approve that change explicitly before the ERD is frozen.
 4. Confirmed registration is the normal check-in prerequisite.
 5. A walk-in/registration exception requires an authorized coordinator, reason, actor and timestamp.
 6. Self-check-in and offline synchronization are disabled in v1 until identity, anti-replay and conflict-resolution controls are approved.
 7. QR check-in tokens are short-lived and single-use. Expiry and replay controls are enforced server-side.
 8. Corrections after event completion require an authorized correction request, reason, approver and immutable before/after history.
+9. If the district authority intends one mode for the entire event rather than per member/event subject, approve that change explicitly before the ERD is frozen.
 
-**Rationale:** One attendance mode per event prevents double-counting. The registration exception preserves the existing approved exception path without making NULL registration an unrestricted bypass.
+**Rationale:** One mode per member/event subject prevents mixed event-level and session-level double-counting. The registration exception preserves the documented exception path without making NULL registration an unrestricted bypass.
 
 **Approval required:** District event/attendance authority and project owner.
 
