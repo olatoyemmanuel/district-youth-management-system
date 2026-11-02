@@ -27,7 +27,7 @@ Priority:
 
 | Reference | Approved decision | Current effect |
 |---|---|---|
-| DFR-001–DFR-006 | Frozen architecture/security/database/operations baseline and formal design-change governance | Preserve all six decisions. The repository's conflicting DFR-006 statements remain unresolved; do not silently alter them. |
+| DFR-001–DFR-006 | Frozen architecture/security/database/operations baseline and formal design-change governance | Preserve all six decisions. Current DFR-006 status is clarified by DFR-006-GOV-CLAR-01: freeze/change control remains in force; implementation is NOT AUTHORIZED pending separate explicit owner authorization. |
 | Conceptual ERD approval | Exact conceptual ERD revision `25f2813e0256d9472daded45657dfb7ac9f70a43` approved | Physical design may progress; this is not physical-design or implementation approval. |
 | DDD-002 | One active primary member category; preserve category history; Adventurer, Pathfinder and Senior Youth are categories; Master Guide is a separate credential; authorized scoped administration | Eligibility criteria, age/class rules, evidence and exceptions remain open. |
 | DDD-003 | Member-initiated church transfer; receiving church acceptance; final district approval; effective on approval; cancellation before effective date | Detailed cancellation, rejection, appeal and backdating rules remain open. |
@@ -41,7 +41,7 @@ Priority:
 | DDD-010 | Submit/approve/pay/post separation; submitter cannot approve own transaction; reasoned rejection; revisions before posting; linked reversal after posting | Approval thresholds, payment/posting sequence, partial payments, returned payments and budget checks remain open. |
 | DDD-011 | Controlled versioned credential catalogue; recognized issuer authority; evidence verification; linked renewals/reissues; reasoned revocation; blockchain deferred | Credential standards, eligibility, validity and disclosure authority remain open. |
 | DDD-012 | Append-only audit; actor types USER/SYSTEM/SERVICE/ANONYMOUS; protected audit access; no secrets in logs | Audit access authority, security investigator roles and retention remain open. |
-| DDD-013 | Idempotency for sensitive mutations; actor/operation/scope binding; same-key retry behavior; conflict on changed payload; authorization rechecked | Key format, expiry, lease and provider reconciliation details remain technical design work. |
+| DDD-013 | Idempotency for sensitive mutations; actor/operation/scope binding; same-key retry behavior; conflict on changed payload; authorization rechecked | Detailed physical design approved by project owner under CPERD-01 and D13-POA-01. Implementation-time PostgreSQL/concurrency/security validation and secret-store deployment selection remain open. |
 | DDD-014 | Retention schedules require an approved basis, duration, trigger, authority, action and holds; unknown periods disable automated permanent deletion | Official retention schedules and enrolled record classes remain open. |
 | DDD-015 | Provider-independent notifications/integrations; consent/preferences; idempotent callbacks; payment verification; provider acceptance is not delivery | Provider selection, retry limits and operational monitoring remain open. |
 | Individual member account rule | Every member has an individual USER account linked 1:1 to MEMBER; no shared, guardian-owned or guardian-managed accounts; no guardian relationship entities | Younger-member onboarding/safeguarding requirements require official policy; no age threshold is assumed. |
@@ -418,3 +418,19 @@ TBR-01 is a design baseline, not implementation authorization. DFR-001–DFR-006
 **Reporting:** Candidate REPORT-001–REPORT-010 are approved for inclusion in the canonical testable requirements catalogue. Their data classification, initial report catalogue, disclosure permissions and export policy remain subject to ODR-013 delegated-authority confirmation.
 
 **Governance boundary:** DFR-001–DFR-006 and all previously approved DDD decisions remain preserved. This approval does not approve the final physical ERD, does not satisfy independent review, and does not authorize Prisma models, SQL DDL, migrations, database objects, seeds, APIs or application code.
+
+
+## 12. Current status reconciliation (2026-11-02)
+
+This addendum supersedes earlier status wording in this register where later project-owner approvals or the DFR-006 governance clarification have changed the operative status. Historical decision text is retained for auditability.
+
+- DFR-001–DFR-006 remain preserved. DFR-006 remains an approved formal design-freeze/change-control decision. The current operative implementation gate is NOT AUTHORIZED until a separate explicit project-owner implementation authorization is recorded. See [DFR-006-GOV-CLAR-01](./DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md).
+- CPERD-01 is project-owner approved at exact master blob SHA `6d0b47973f4e24c73409832a4986f00817805638`. This approval is for physical design, not implementation.
+- DDD-013's ten-area detailed physical design review is project-owner approved under D13-POA-01. External independent technical assurance has not been performed and is not represented as complete. Required PostgreSQL, concurrency, security and operational tests remain implementation-time validation.
+- ODR-REC-01 approval remains limited to project-owner v1 defaults for ODR-004/005/006/008/010/011/012/013. All named delegated-authority confirmations remain pending until evidence is recorded.
+- ODR-001/002/003/007/009 remain open for official ministry, membership, appointment and credential authority evidence.
+- ODR-ENV-001–007 remain open for technical/deployment-owner confirmation.
+- ODR-013 refers to reporting governance. It is distinct from DDD-013, which concerns idempotency and safe mutation replay.
+- REPORT-001–REPORT-010 remain part of the 107-ID testable requirements baseline. Report catalogue, classification, disclosure and export authority remain pending under ODR-013.
+
+The current consolidated closure queue is [PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md](./PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md).
