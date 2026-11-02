@@ -76,47 +76,65 @@ The earlier guardian-managed membership proposal is rejected and superseded. Do 
 
 ### 4.1 Church transfer
 
-- A member initiates a transfer request.
-- Receiving church acceptance is required.
-- District approval is required for the transfer to complete.
-- The effective date is the district-approved date; backdating is not permitted.
-- A member has only one current primary church and one pending transfer request at a time.
-- A member may withdraw a pending request before district approval.
-- Receiving church and district rejection require recorded reasons.
-- An approved transfer may be cancelled before its effective date only with district authorization and a recorded reason.
-- A rejected or cancelled request requires a new request if the member still wants to transfer.
-- Transfer completion updates current church and history atomically. Historical church assignments remain preserved.
+**Approved core workflow (DDD-003):**
+- A member initiates a church transfer request.
+- Acceptance by the receiving church is required before district completion.
+- Final approval by the district authority is required.
+- The transfer becomes effective on the approved date under the recorded baseline.
+- A member has one current primary church.
+- Transfer completion updates the current church assignment while preserving the prior assignment and transfer history.
+
+**Policy-dependent details, not yet approved:**
+- Whether backdating is prohibited in every circumstance and the exact effective-date rules.
+- Whether only one unresolved transfer request may exist per member.
+- Whether and when a member may withdraw a pending request.
+- Who may reject a request at the receiving-church or district stage, and the required reason/evidence.
+- Who may cancel an approved transfer, the permitted cancellation window, and the required district authorization/reason.
+- Whether an appeal or reconsideration process exists.
+- Whether a rejected or cancelled request must always be replaced by a new request.
+
+The requirements consolidation previously stated several of these details as settled. The Owner Decision Register and ORG-007 identify them as unresolved. Until the competent district and local church membership authorities confirm them, these clauses must not be used as approved lifecycle rules, uniqueness predicates, or database constraints. Preserve the approved member initiation, receiving-church acceptance, district final approval, approved-date effective rule, and historical membership principle.
 
 ### 4.2 Leadership appointments
 
-- Only designated higher authority may approve an appointment.
+**Approved core workflow (DDD-004):**
+- Only the designated higher authority may approve an appointment.
 - A person cannot approve their own appointment.
-- Appointment statuses: Draft, Pending Approval, Active, Rejected, Expired, Terminated, and Cancelled.
-- Acting appointments are permitted with approval, reason, start date, and end date. They do not erase the substantive appointment.
 - Renewal requires fresh approval and is never automatic.
-- The normal annual term is January 1 to December 31.
-- A mid-year replacement normally serves through December 31 unless a different term is formally authorized.
-- The appointing authority or a higher authority may terminate an appointment early with a recorded reason and effective date.
-- A replacement takes effect on its approved effective date.
-- Two people must not hold the same active position in the same organizational scope at the same time.
-- Appointment, approval, renewal, acting, rejection, cancellation, expiry, and termination history must be retained.
+- The normal annual appointment term is January 1 to December 31.
+- A mid-year replacement normally serves through December 31 unless a formally authorized exception applies.
+- Concurrent active appointments for the same position and organizational scope are not permitted under the approved baseline.
+- Appointment decisions, terms, effective dates, and reasoned termination history must be preserved.
+- Appointment-derived permissions cease when the appointment expires or ends; this does not automatically deactivate the member account.
+
+**Policy-dependent details, not yet approved:**
+- Acting appointments are not an approved or enabled capability. APP-007 and ODR-003 leave their availability, authorizing authority, duration, scope, overlap, and termination rules unresolved. Do not model acting appointments as an available workflow unless the competent appointing authority explicitly approves them.
+- The exact appointment status vocabulary and transition rules require lifecycle review; labels in working catalogues are proposals, not approved policy.
+- The exact authority and procedure for early termination, exceptional term changes, and any proposed overlap exception require confirmation. No exception to the approved no-overlap rule is implied.
+
+The previous statement that acting appointments are permitted overstated the available approval evidence. It is withdrawn as an approved requirement and retained only as a policy proposal pending authority confirmation.
 
 ### 4.3 Department membership
 
+**Approved core workflow (DDD-006):**
 - A member requests department membership.
-- The designated department coordinator approves or rejects the request.
-- Members may belong to multiple departments.
-- Members may request withdrawal.
+- The designated department coordinator approves membership within the coordinator's authority and scope.
+- A member may belong to multiple departments at the same time.
+- Department participation does not change the member's primary category.
+- Department membership does not itself grant leadership authority or permissions.
+- A member may withdraw from a department.
 - An authorized coordinator may terminate membership with a recorded reason.
-- Department transfer ends the old membership and creates a new membership while preserving history.
-- Department membership alone does not grant leadership authority.
-- Each department must have documented eligibility requirements approved by the appropriate authority.
-- Rejection requires a reason.
-- A member may appeal rejection or termination to district authority.
-- Membership is reviewed annually; renewal confirms continued eligibility.
-- A primary church transfer triggers a review, not automatic deletion, of department membership.
-- District authority may authorize an eligibility exception with a recorded reason and approval.
-- Application, approval, rejection, renewal, withdrawal, transfer, and termination history must be retained.
+- Department membership history is preserved.
+
+**Policy-dependent details, not yet approved:**
+- Department-specific eligibility criteria, evidence, and exception rules.
+- Whether and how a rejected request or termination may be appealed.
+- Whether membership is reviewed or renewed annually, including timing and approval authority.
+- Whether a primary church transfer triggers a department membership review or another action.
+- Whether district authority may grant eligibility exceptions and under what conditions.
+- The detailed workflow for changing departments, including whether it ends one membership and creates another.
+
+The previous requirements consolidation presented several of these matters as settled. The Owner Decision Register and DEPT-006 leave eligibility, appeals, renewal, and transfer effects unresolved. Until the competent departmental and district authorities confirm them, treat these clauses as proposals, not approved lifecycle transitions, database predicates, or constraints.
 
 ## 5. Authorization and security requirements
 
@@ -357,7 +375,7 @@ The conceptual ERD must represent, at minimum, the following domain concepts and
 - District, local church, department, and organizational scope.
 - Church membership/assignment history and transfer requests/approvals.
 - Department membership history and application workflow.
-- Appointment positions, appointments, acting appointments, terms, approvals, and lifecycle history.
+- Appointment positions, approved appointments, terms, approvals, and lifecycle history. Acting appointments are excluded unless separately approved by the competent appointing authority.
 - Role catalogue, permission catalogue, scoped role assignments, grants, explicit denies, role-conflict review, and authorization audit.
 - Events, event sessions, registration, capacity exceptions, event changes, cancellation, and attendance.
 - Attendance records, correction requests, approvals, and history.
