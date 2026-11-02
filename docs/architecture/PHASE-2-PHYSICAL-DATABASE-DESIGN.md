@@ -1,4 +1,6 @@
 # DYMS Phase 2 Physical Database Design
+> **Phase 2 baseline notice:** This is a historical physical-design proposal. The current reconciled review candidate is [Phase 3 Consolidated Physical ERD](./PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md) and its linked canonical registers. Phase 2 sections superseded by Phase 3 must not be treated as current physical design. Implementation remains NOT AUTHORIZED.
+
 
 **Status:** Working physical-design proposal for project-owner review  
 **Scope:** DYMS v1.0, Sango District  
