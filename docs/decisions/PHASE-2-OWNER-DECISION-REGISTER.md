@@ -379,3 +379,14 @@ For every approved or rejected item, add:
 This register does not itself approve any open policy question. A reply approving one package must be mapped to the exact decision IDs and recorded before changing the canonical physical design.
 
 DFR-001 through DFR-006 remain preserved. The approved conceptual ERD remains the logical source. Physical database design is not approved for implementation. No Prisma schema, SQL DDL, migration, database object, generated client, seed, or application code is authorized by this register.
+
+
+## 9. Technical blocker resolution reference (2026-11-02)
+
+[Phase 2 Technical Blocker Resolution TBR-01](../architecture/PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md) records engineering decisions that can proceed without a policy vote. These include the PostgreSQL 15 minimum design target, no required extensions, UUID/timestamp/canonical-identifier conventions, extension-free appointment overlap enforcement, attendance integrity strategy, audit role separation, and refined DDD-013 physical contracts.
+
+The following remain OPEN until the responsible authority confirms them: ministry eligibility/credential standards; transfer exceptions; appointment lifecycle exceptions; department/event ownership; finance accounting/payment/budget policy; attendance operational modes and exceptions; department lifecycle; event capacity/waitlist exceptions; credential issuer/evidence/disclosure; audit investigation authority; retention classes/schedules/disposal; notification consent/providers; reporting catalogue/classification/exports; and production deployment/backup evidence.
+
+The [Reporting Requirements Proposal RPT-PR-01](../product/PHASE-2-REPORTING-REQUIREMENTS-PROPOSAL.md) addresses the missing REPORT traceability group with proposed REPORT-001–REPORT-010. The IDs remain outside the approved 97-row count pending approval.
+
+TBR-01 is a design baseline, not implementation authorization. DFR-001–DFR-006 and the separate physical-design and implementation approval gates remain unchanged.
