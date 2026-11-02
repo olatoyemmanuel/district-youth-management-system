@@ -356,3 +356,17 @@ The Phase 3 physical-design candidate has been assembled. The master artifact is
 - [PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md](./PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md): internal engineering review of all ten DDD-013 review questions.
 
 This package is a consolidated candidate for project-owner review, not an approved physical schema. Five physical entities and two removed ownership columns are explicitly identified as conceptual-to-physical amendments. External DDD-013 review, delegated authority confirmations, DFR-006 governance clarification and final project-owner approval remain outstanding. Implementation remains NOT AUTHORIZED.
+
+
+## 17. Current approval and governance status reconciliation (2026-11-02)
+
+This addendum supersedes earlier milestone status statements in §§13–16 where those statements predate later project-owner approvals. The earlier text is retained as historical context.
+
+- CPERD-01 is approved by the project owner at exact master blob SHA `6d0b47973f4e24c73409832a4986f00817805638`.
+- DDD-013's ten detailed physical review areas are approved by the project owner under D13-POA-01.
+- DFR-006 remains approved and its formal design-freeze/change-control requirements remain in force. The README discrepancy is addressed by DFR-006-GOV-CLAR-01.
+- Project-owner approval of physical design is not implementation authorization.
+- Delegated authority confirmations and ODR-ENV-001–007 remain open as listed in the Phase 4 Governance and Design Closure Register.
+- **Implementation remains NOT AUTHORIZED** pending a separate explicit project-owner authorization.
+
+See [PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md](../decisions/PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md) for the current closure queue.
