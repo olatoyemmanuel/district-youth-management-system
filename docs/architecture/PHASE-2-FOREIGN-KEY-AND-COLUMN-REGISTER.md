@@ -1,4 +1,6 @@
 # DYMS Phase 2 Foreign-Key and Column Register
+> **Phase 2 baseline notice:** This file is retained as historical source material. Use the Phase 3 Canonical Physical Column Register and Phase 3 Canonical Foreign-Key Register for the reconciled review candidate. Do not use this historical register as an implementation source where it conflicts with Phase 3.
+
 
 **Status:** Canonical reconciliation proposal, incomplete where source definitions are abbreviated or policy-blocked  
 **Scope:** 65 physical tables, DYMS v1.0, Sango District  
