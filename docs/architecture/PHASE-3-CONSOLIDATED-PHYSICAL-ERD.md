@@ -297,6 +297,20 @@ The diagrams show logical cardinality and ownership. The canonical FK register i
 - GLOBAL and cross-district report scopes are prohibited in v1.
 - Each report definition references one approved report_data_owners record and a classification.
 
+### 6.4 Position and appointment scope
+
+Positions are always bound to a district boundary. A position has a required district_id, an allowed_scope_type and an optional church_id or department_id:
+- DISTRICT: church_id and department_id are NULL.
+- CHURCH: church_id is NOT NULL and department_id is NULL.
+- DEPARTMENT: department_id is NOT NULL and church_id is NULL.
+
+The position's church/department composite FK must match the same district. Appointments persist district_id and scope_type and copy the relevant child scope reference. The appointment scope-shape CHECK validates the child columns. Composite FKs bind:
+- (position_id,district_id,scope_type) to positions(id,district_id,allowed_scope_type);
+- (position_id,church_id) to positions(id,church_id) when church scope is present;
+- (position_id,department_id) to positions(id,department_id) when department scope is present.
+
+This prevents an appointment from being assigned under a different district, church, department or scope type than its position. The overlap trigger still locks the position parent row and checks approved half-open effective intervals. Position identity/scope is immutable once an approved appointment depends on it.
+
 ## 7. Critical composite relationships and invariants
 
 | Invariant | Physical design |
@@ -306,7 +320,7 @@ The diagrams show logical cardinality and ownership. The canonical FK register i
 | Department belongs to district | Required district FK and UNIQUE departments(id,district_id) |
 | Church-owned event belongs to district | Composite FK events(church_id,district_id) to churches(id,district_id) |
 | Event organizer belongs to same district | Composite FKs from event_organizing_departments to events and departments |
-| Appointment scope matches position | Scope-specific composite FKs and parent-position lock |
+| Appointment scope matches position | Required district/scope_type plus three scope-specific composite FKs and parent-position lock |
 | Attendance subject is one event/member | UNIQUE subject(event_id,member_id) and attendance composite FK |
 | Attendance mode cannot mix | Subject row lock plus trigger/constraint enforcement and mode-specific unique indexes |
 | Financial account and transaction currency match | Composite candidate keys/FKs across account, transaction and payment |
