@@ -3,7 +3,7 @@
 - Revision: ODR-REC-01
 - Date: 2026-11-02
 - Scope: DYMS v1.0, Sango District
-- Status: **RECOMMENDATIONS FOR PROJECT-OWNER AND COMPETENT-AUTHORITY APPROVAL**
+- Status: **PROJECT OWNER APPROVED AS PROPOSED ON 2026-11-02; DELEGATED-AUTHORITY CONFIRMATION PENDING**
 - Governing records: DFR-001–DFR-006, DDD-001–DDD-015, ODR-001–ODR-013
 - Implementation: NOT AUTHORIZED
 
@@ -11,7 +11,7 @@
 
 TBR-01 resolves engineering questions that do not require a policy vote. This document proposes conservative v1 defaults for the remaining product and operational decisions so that the owner and competent authorities can approve or reject exact wording rather than answer broad questions from scratch.
 
-Nothing in this document is approved merely because it is written here. Official ministry, finance, safeguarding, privacy and records authorities retain their decision rights. Existing approved rules are not reopened.
+The project owner approved all recommendations in this document as proposed on 2026-11-02. This approval establishes the recommended DYMS v1 product/design defaults. It does not replace the formal decision rights of district/church governance, finance, ministry, credential, safeguarding, records, privacy or reporting authorities. Where those authorities are named below, their confirmation remains pending. Existing approved rules are not reopened.
 
 ## 2. Recommended v1 decisions
 
@@ -161,4 +161,4 @@ For each ODR item above, the project owner should record one of:
 
 Any authority decision must include the authority, evidence/source, effective date and exact approved rule. The canonical ODR register and affected requirements/physical registers must then be updated.
 
-**This recommendation package does not change DFR-001–DFR-006, approve the physical design, or authorize implementation.**
+**Project-owner approval recorded 2026-11-02.** Delegated-authority confirmations remain pending as identified above. This approval does not change DFR-001–DFR-006, approve the final physical design, or authorize implementation.
