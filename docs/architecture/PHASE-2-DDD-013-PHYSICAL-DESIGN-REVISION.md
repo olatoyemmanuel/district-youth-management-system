@@ -2,7 +2,7 @@
 
 - Revision: D13-PDR-01
 - Date: 2026-11-02
-- Status: **PROPOSED FOR INDEPENDENT REVIEW**
+- Status: **REVISED FOR INDEPENDENT REVIEW AND PROJECT-OWNER REVIEW**
 - Applies to: Authentication idempotency persistence only
 - Governing policy: DDD-013 AUTH-IDEM-001–041; AUTH-IDEM-016 overflow clarification dated 2026-11-02
 - Supersedes: The `idempotency_records` definition and four-index scope proposal in §5.8 of `PHASE-2-PHYSICAL-DATABASE-DESIGN.md`, and matching idempotency rows in the column/FK/index registers, only where they conflict with this revision.
@@ -197,3 +197,60 @@ Reviewers should return a finding for each item: ACCEPT, REVISE, or BLOCK, with 
 This revision is submitted for independent review only. Reviewer acceptance does not itself approve the physical design. The project owner must explicitly approve the final reconciled physical design and DDD-013 package before implementation.
 
 **Prisma schema, SQL DDL, migrations, database objects, seeds, API implementation and application code remain NOT AUTHORIZED.**
+
+
+## 10. Engineering refinement TBR-01
+
+The following exact contracts supersede any less-specific candidate wording in this document. They are recorded in [Phase 2 Technical Blocker Resolution TBR-01](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md).
+
+### 10.1 Session ownership
+
+The canonical session table is `auth_sessions`. Add candidate UNIQUE `(id,user_account_id)`. For authenticated idempotency rows, replace the standalone session FK with a composite FK `(session_id,actor_user_account_id) → auth_sessions(id,user_account_id)`. This proves that the referenced session belongs to the actor. Session-bound operations require `session_id`; principal-scoped operations may omit it only where the AUTH-IDEM endpoint contract permits. PRE_AUTHENTICATION rows require `pre_auth_context_id` and prohibit actor/session references.
+
+### 10.2 Scope fingerprint binary contract
+
+- Store exactly 32 bytes in `scope_fingerprint` and a `scope_fingerprint_version smallint NOT NULL`.
+- Compute SHA-256 over the domain separator `DYMS/AUTH-IDEM/SCOPE/v1\0` followed by a deterministic length-prefixed binary encoding.
+- Encode the scope kind explicitly: GLOBAL, DISTRICT, CHURCH or DEPARTMENT.
+- Encode each UUID as its 16-byte network-order representation. For child scopes, include the canonical parent district UUID where the authorization scope requires it.
+- GLOBAL is an explicit tagged value, never an all-NULL representation.
+- The server resolves the authorized scope and computes the digest. Clients cannot supply or override it.
+- Domain separation and a version field prevent the scope digest from being confused with request fingerprints or key digests. SHA-256 collision resistance is relied on; raw scope identifiers are not exposed in a client-controlled digest.
+
+### 10.3 PostgreSQL 15 unique index
+
+The authenticated unique expression index remains valid as a PostgreSQL 15 expression/partial unique index. The reserved zero UUID is permitted only as the COALESCE representation of an absent session; a CHECK prohibits it as a real `auth_sessions.id` reference. The expression index must be paired with the scope-mode CHECK and the composite session-owner FK above. The request fingerprint remains excluded from the unique identity key so same-key/different-request attempts resolve to AUTH-IDEM-041 rather than create another row.
+
+### 10.4 Append-only recovery evidence
+
+Adopt `idempotency_recovery_events` as the recovery audit ledger. It records immutable events such as CLAIMED, COMPLETED, FAILED and STALE_WORKER_REJECTED with idempotency record, fencing counter, worker reference, timestamp and safe failure code. Insert CLAIMED in the same database transaction as the successful fencing increment. Subsequent outcomes are new rows, not updates to earlier evidence. A partial unique index permits at most one CLAIMED event per `(idempotency_record_id,fencing_counter)`. The ledger does not create new idempotency operation states.
+
+### 10.5 Tombstone lifecycle
+
+The same `idempotency_records` row becomes the compact tombstone. At `response_expires_at` (24 hours after terminal completion), clear replayable safe-result fields. Retain identity mode, actor/pre-auth identity, operation, scope fingerprint/version, key digest, request fingerprint, HMAC key version, fencing value and tombstone expiry through the 30-day protection period. Delete only after tombstone expiry and only when no hold, active recovery, unresolved outcome or dependent recovery/outbox evidence remains. Do not split identity uniqueness between a response row and a second tombstone table.
+
+### 10.6 Password-reset external secret choreography
+
+PostgreSQL and an external secret store cannot participate in one atomic ACID transaction. Use this failure-safe sequence:
+
+1. Generate the reset secret and store it in an envelope-encrypted external secret store under an opaque reference with a TTL no longer than the 30-minute reset-token lifetime.
+2. In one PostgreSQL transaction, persist the reset-token hash, terminal idempotency result and outbox row containing only the opaque reference.
+3. If the transaction definitively rolls back, delete the external secret. If commit outcome is uncertain, query the idempotency identity before cleanup; do not delete a secret referenced by a committed outbox row.
+4. The delivery worker resolves the secret using its dedicated identity, sends the message, and erases the secret after successful delivery. TTL is the final cleanup boundary.
+5. Never place raw reset secret material in PostgreSQL, queue payloads, logs, traces, metrics or audit details.
+
+The external secret store vendor remains an ODR-012/deployment selection. The database transaction remains atomic for all database-owned records.
+
+### 10.7 Overflow
+
+The owner-approved AUTH-IDEM-016 clarification controls: if the next fencing increment exceeds signed BIGINT maximum, fail closed. Do not claim recovery, change operation state, wrap, reset, truncate or reuse a value. Emit a safe integrity event and require controlled recovery/manual intervention.
+
+## 11. Revised review disposition
+
+TBR-01 closes the previously underspecified session ownership, scope fingerprint encoding, recovery event history, tombstone representation and external-secret transaction choreography at design level. It is an internal engineering refinement, not an independent reviewer acceptance.
+
+**Status:** REVISED FOR INDEPENDENT REVIEW AND PROJECT-OWNER REVIEW.  
+**Independent review:** Pending; no external reviewer response is recorded.  
+**Physical design approval:** NOT GRANTED.  
+**DDD-013 final physical approval:** NOT GRANTED.  
+**Implementation:** NOT AUTHORIZED.
