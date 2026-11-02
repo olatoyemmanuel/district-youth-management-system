@@ -95,7 +95,7 @@ Use two partial unique indexes:
 - Event-level record: unique `attendance_subject_id` where `event_session_id IS NULL`.
 - Session-level record: unique `(attendance_subject_id, event_session_id)` where `event_session_id IS NOT NULL`.
 
-An event must select one recording mode: EVENT or SESSION. The database trigger locks the parent event row before inserting/updating attendance and rejects a record whose event/session shape does not match the event's configured mode. In SESSION mode, event-level summary attendance is derived from session records; it is not stored as a second attendance row. This avoids double-counting and prevents mixed-mode duplicates.
+Each event-member attendance subject selects one mode, EVENT or SESSION, in the existing `event_attendance_subjects.mode` column. Do not add a second `events.attendance_mode` column. A subject cannot mix modes after its first attendance record. The database trigger locks the subject row before inserting/updating attendance and rejects a record whose event/session shape does not match the subject mode. In SESSION mode, event-level summary attendance is derived from session records; it is not stored as a second attendance row. This avoids double-counting and prevents mixed-mode duplicates.
 
 ### 4.3 Registration exception
 
@@ -287,7 +287,7 @@ The trigger does not use a lifecycle status string. The `approved_at IS NOT NULL
 
 ### 14.2 Attendance mode and registration exception columns
 
-The event row must expose `attendance_mode varchar(16) NOT NULL`, with candidate values `EVENT` and `SESSION`. The event mode becomes immutable after the first attendance record is inserted.
+The existing `event_attendance_subjects.mode varchar(16) NOT NULL` is the authoritative mode for one member within one event, with candidate values `EVENT` and `SESSION`. Do not add `events.attendance_mode` in this revision. The subject mode becomes immutable after the first attendance record is inserted. This preserves the current physical ERD shape; ODR-006 must confirm whether the final business rule is per member-event subject or one mode for the entire event before final approval.
 
 For `attendance_records`, add:
 - `registration_exception_granted_by_user_account_id uuid NULL` FK to `user_accounts(id)`;
@@ -298,7 +298,7 @@ A CHECK enforces one of two shapes:
 - registered attendance: `registration_id IS NOT NULL` and all three exception columns are NULL;
 - approved exception: `registration_id IS NULL` and all three exception columns are NOT NULL.
 
-A BEFORE INSERT/UPDATE trigger locks the parent `events` row before checking the event's configured mode and referenced session. EVENT mode requires `event_session_id IS NULL`; SESSION mode requires `event_session_id IS NOT NULL` and the session must belong to the same event. The event-level and session-level partial unique indexes prevent duplicate rows. In SESSION mode, an event-level summary is derived and not stored as a duplicate attendance row.
+A BEFORE INSERT/UPDATE trigger locks the referenced `event_attendance_subjects` row before checking its mode and the referenced session. EVENT mode requires `event_session_id IS NULL`; SESSION mode requires `event_session_id IS NOT NULL` and the session must belong to the same event. The event-level and session-level partial unique indexes prevent duplicate rows. In SESSION mode, an event-level summary is derived and not stored as a duplicate attendance row.
 
 Attendance identity fields (`attendance_subject_id`, `event_id`, `member_id`) are immutable after insert. Corrections are represented by the approved correction workflow, not by moving an attendance row to another member/event.
 
