@@ -468,12 +468,12 @@ These clauses appear in the requirements consolidation but remain unresolved in 
 
 ### DDD-013 — Idempotency and safe mutation replay
 
-**Status:** APPROVED PRINCIPLE / TECHNICAL FOLLOW-UP EVIDENCE GAP  
+**Status:** APPROVED PRINCIPLE / AUTHENTICATION POLICY DECISIONS RECOVERED / ERD VALIDATION OPEN  
 **Decision authority:** Project owner for platform behavior; DYMS Engineering for technical specification  
-**Approver/date:** Original principle approval metadata and exact dates for detailed follow-ups are not established in the reviewed canonical DDD evidence  
+**Approval evidence:** Product-owner approval records dated 2026-10-30 are recovered for AUTH-IDEM-016 and AUTH-IDEM-026 through AUTH-IDEM-041. The consolidated DDD-013 specification in PR #35 records AUTH-IDEM-001 through AUTH-IDEM-041 as approved. Exact individual provenance for AUTH-IDEM-001 through AUTH-IDEM-025 was not independently recovered in this review.  
 **Scope:** Retry-safe processing of sensitive mutations and external callbacks
 
-**Recorded decision**
+**Recorded domain decision**
 1. Sensitive mutations are idempotent.
 2. An idempotency key is bound to the authenticated actor, operation, and applicable resource/organizational scope.
 3. Repeating the same key with the same request payload returns the previously established outcome rather than duplicating the mutation.
@@ -481,20 +481,41 @@ These clauses appear in the requirements consolidation but remain unresolved in 
 5. Authorization is rechecked when processing a replay; a prior successful result does not bypass current authorization.
 6. External callbacks and payment/integration notifications must be processed idempotently and protected against replay, consistent with DDD-015.
 
-**Open technical detail and evidence gap**
-- Exact key format, uniqueness namespace, expiry/retention, lease behavior, concurrency control, response persistence, provider reconciliation, and operational recovery must be finalized in technical design.
-- Project history is reported to contain follow-up decisions concerning a BIGINT fencing/version counter and AUTH-IDEM. The reviewed branch does not contain a canonical record with exact approved wording, date, approver, and scope.
-- Until the original evidence is recovered, those specific values must not be represented as formally approved. A mention in a physical-design proposal is not approval evidence.
-- The implementation of any key/fencing mechanism remains outside the current authorization gate.
+**Recovered technical approval evidence**
 
-**Evidence:** Owner Decision Register §2; SEC-005 and SEC-006; traceability crosswalk DDD-013 mapping; reconciliation REC-006 and §5.5; related physical-design review.  
+- **AUTH-IDEM-016:** PostgreSQL BIGINT fencing/version counter, initial value 0, increment by exactly 1 for each successful recovery claim, atomic claim/counter coordination, and stale fencing-value rejection. See [PR #25](https://github.com/olatoyemmanuel/district-youth-management-system/pull/25) and [PR #52](https://github.com/olatoyemmanuel/district-youth-management-system/pull/52).
+- **AUTH-IDEM-026–035:** Individually recorded in [PRs #36–#45](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+AUTH-IDEM), covering pre-authentication binding, request canonicalization, HMAC encoding, failed-record retention/tombstones, endpoint-specific replay, HTTP 409 in-progress behavior, retry-budget boundary, endpoint transaction map, HMAC key rotation, and logical database identity/constraints.
+- **AUTH-IDEM-036–041:** Individually recorded in [PRs #46–#51](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+AUTH-IDEM), covering pre-auth cookie lifecycle, HMAC key-version selection, PostgreSQL scope uniqueness, protected reset-delivery secret handling, replay authorization context, and fingerprint-conflict response.
+- **CR-01–CR-06:** The DDD-013 consistency review in PR #35 records all six recommendations as explicitly approved by the product owner on 2026-10-30 and maps them to AUTH-IDEM-036–041.
+
+The consolidated DDD-013 specification and consistency review are in [PR #35](https://github.com/olatoyemmanuel/district-youth-management-system/pull/35). The specification records UUID v4 keys, SHA-256 fingerprints with RFC 8785 JSON canonicalization, HMAC-SHA-256 sensitive-field handling, IN_PROGRESS/COMPLETED/FAILED states, a two-minute processing lease, PostgreSQL row-level locking, READ COMMITTED isolation, bounded contention retries, no blind re-execution after uncertain outcomes, PostgreSQL as source of truth, BullMQ/Redis for scheduling only, endpoint-specific safe replay, retention/tombstones, and atomic endpoint transaction boundaries.
+
+**Material evidence conflict requiring owner clarification**
+
+PR #25 and PR #52 both use decision ID AUTH-IDEM-016 and both state that the product owner explicitly approved the decision on 2026-10-30. They are not identical:
+- PR #25 explicitly treats counter overflow as an exceptional integrity failure and prohibits wrap/reset.
+- PR #52 leaves overflow handling open, while adding that counter values must not be reset or reused during the operation's lifetime.
+- The consolidated DDD-013 specification in PR #35 includes overflow-as-integrity-failure language, matching PR #25.
+- PR #52 is later but does not explicitly state that it supersedes PR #25.
+
+Therefore the common approved core (BIGINT, initial 0, increment-by-one per successful recovery claim, atomic coordination, stale-value rejection) is recovered. The precise approval boundary for overflow handling remains unresolved. Do not silently choose a variant. The owner must confirm whether overflow failure/no-wrap is part of AUTH-IDEM-016 approval or remains a separate technical integrity requirement.
+
+**Open technical detail and evidence limits**
+- Exact physical columns, scope-mode constraints, partial unique-index predicates, foreign keys, nullability/defaults, and transaction/locking enforcement remain physical-design work.
+- Protected reset-secret storage has an approved security pattern, but vendor/deployment integration remains open.
+- Endpoint transaction and replay rules require ERD consistency validation and test evidence.
+- AUTH-IDEM-001 through AUTH-IDEM-025 are stated as approved in the consolidated PR #35 specification, but exact individual source approval records for each were not independently recovered in this pass.
+- PR #25, PR #35, and PR #36–#52 were found OPEN and UNMERGED during this review. The PRs and their patches are approval evidence, but their contents are not yet part of the default branch.
+- The consolidated DDD-013 specification itself remains a draft for consistency review and says the authentication idempotency ERD slice is NOT READY. Final DDD-013 approval remains outstanding.
+
+**Evidence:** docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md; PR #25; PR #35 (DDD-013 specification and consistency review); PRs #36–#51; PR #52; SEC-005 and SEC-006; ODR-013.  
 **Related:** DDD-005, DDD-010, DDD-012, DDD-015; ODR-013.  
 **Bounded contexts:** Platform Reliability/Security; Finance; Notifications and Integrations; all sensitive mutation workflows.  
-**Conceptual design impact:** Idempotency operation/key record or equivalent technical construct, request fingerprint, actor/operation/scope binding, result/replay metadata. Exact storage remains undecided.  
-**Lifecycle impact:** In-progress, completed, conflict, expired/failed recovery states require technical specification; no final state catalogue is approved here.  
-**Test coverage:** SEC-005, SEC-006; additional concurrency, replay, changed-payload, authorization-revocation, and provider-callback tests should be specified during technical design.  
-**Open owner:** DYMS Engineering to recover source approval evidence and propose technical contract; project owner confirms any policy-level choice.  
-**Change history:** Core idempotency principle preserved. BIGINT fencing/version counter and AUTH-IDEM details remain evidence-gated, not reconstructed.
+**Conceptual design impact:** Idempotency operation/key record or equivalent technical construct, request fingerprint, actor/operation/scope binding, result/replay metadata. Exact storage remains subject to physical design.  
+**Lifecycle impact:** IN_PROGRESS, COMPLETED, and FAILED are the persisted states in the consolidated authentication specification; recovery classifications are not additional persisted states.  
+**Test coverage:** SEC-005, SEC-006; additional concurrency, replay, changed-payload, authorization-revocation, fencing, tombstone, and provider-callback tests are required in technical validation.  
+**Open owner:** DYMS Engineering to complete physical ERD/technical validation and recover AUTH-IDEM-001–025 source provenance; project owner to resolve the AUTH-IDEM-016 overflow boundary and approve the final DDD-013 specification.  
+**Change history:** 2026-11-02: Exact DDD-013 follow-up evidence recovered from PR #25, PR #35, and PR #36–#52. AUTH-IDEM-016 variant conflict and unmerged-source limitation recorded; no implementation gate changed.
 
 ### DDD-014 — Records retention and disposal
 
@@ -587,7 +608,7 @@ The following are not approvals. They are the current closure obligations.
 | ODR-010 | Audit roles, investigation and emergency access | Project owner/security/audit authority | Named roles, permitted scope, independent review and break-glass policy |
 | ODR-011 | Retention schedules and enrolled record classes | Records, finance, privacy and district administrative authorities | Approved record-class schedule, basis, duration, trigger, authority, action and holds |
 | ODR-012 | Channels, providers, consent operations, retry limits, monitoring | Project owner and integration owners | Provider/channel decision, consent rules, retry and operational policy |
-| ODR-013 | Reporting definitions, classification, exports, and idempotency technical details | Project owner, reporting/security authority, DYMS Engineering | Testable report requirements and recovered exact DDD-013 follow-up approval records |
+| ODR-013 | Reporting definitions, classification, exports, and remaining DDD-013 technical details | Project owner, reporting/security authority, DYMS Engineering | Testable report requirements; resolve AUTH-IDEM-016 overflow variant; recover AUTH-IDEM-001–025 individual provenance; complete physical ERD validation and final DDD-013 approval |
 | ODR-ENV-001–007 | Deployment/environment confirmations | Technical/project owner | Explicit environment and operations confirmations |
 
 ## 6. Requirements and traceability controls
@@ -596,12 +617,12 @@ The following are not approvals. They are the current closure obligations.
 2. The current requirement-to-ERD crosswalk maps these 97 IDs to DDD decisions and conceptual ERD areas.
 3. There is no dedicated REPORT requirement group, despite reporting definitions, report runs, classification, and export audit appearing in the owner decision package and physical-design materials.
 4. The preliminary ranges in the requirements consolidation do not consistently match the IDs actually present in the detailed testable requirements file.
-5. DDD-013 follow-up approval evidence for the reported BIGINT fencing/version counter and AUTH-IDEM decisions is not present as a complete canonical record in the reviewed branch.
+5. DDD-013 follow-up approval evidence is now recovered from PR #25, PR #35, and PR #36–#52. AUTH-IDEM-016 has two conflicting versions concerning overflow handling; exact individual provenance for AUTH-IDEM-001–025 remains incomplete. See docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md.
 
 **Required corrective work**
 - Add testable report requirements and update the crosswalk, or document an explicit, testable mapping to existing requirements. Do not invent IDs in this register.
 - Reconcile the preliminary ID ranges against the detailed requirements file.
-- Recover the exact DDD-013 follow-up approval wording, date, approver, and scope from the originating source before recording those details as approved.
+- Preserve the recovered DDD-013 approval records and resolve the AUTH-IDEM-016 overflow boundary with the project owner. Recover exact individual provenance for AUTH-IDEM-001–025 where available.
 - Update requirements, lifecycle catalogue, traceability, conceptual/physical design, and tests together when a competent authority closes a policy item.
 
 ## 7. Physical design and implementation boundary
@@ -641,7 +662,7 @@ For every new or amended DDD decision:
 **Approved principles preserved:** Yes, subject to the stated evidence metadata gaps and open details.  
 **DDD-005 follow-up approval preserved exactly in scope:** Yes, dated 2026-10-31.  
 **DDD-003/004/006 conflicts identified and constrained:** Yes.  
-**DDD-013 technical follow-up evidence recovered:** No; evidence gap remains open.  
+**DDD-013 technical follow-up evidence recovered:** Partially. AUTH-IDEM-016 common core and AUTH-IDEM-026–041/CR-01–CR-06 evidence recovered; overflow variant and AUTH-IDEM-001–025 individual provenance remain open.  
 **Reporting traceability gap resolved:** No; corrective action remains open.  
 **Physical database design approved:** No.  
 **Application implementation authorized:** **No.**
