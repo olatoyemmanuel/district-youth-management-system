@@ -10,7 +10,9 @@
 
 ## 1. Purpose and operating rule
 
-This register is the working closure queue for the remaining design, policy-evidence and environment confirmations. It consolidates existing open decisions without treating technical proposals or project-owner defaults as delegated-authority approvals.
+This register records project-owner design decisions, engineering defaults, and deployment-time selections. The project owner is the final decision-maker for DYMS product behavior and v1 scope. External committee, church, ministry or departmental confirmation is not a prerequisite for deciding how DYMS operates.
+
+Official ministry standards and external policies remain relevant when DYMS represents a credential, eligibility status or institutional decision as officially recognized. Where an official rule is not yet selected, DYMS will use versioned, configurable rules and will not invent age thresholds, credential validity periods or exceptions. Such references are policy configuration inputs, not a general blocker to completing the software design.
 
 The project owner has authorized continued design and governance closure work. This is not implementation authorization.
 
@@ -26,7 +28,7 @@ The project owner has authorized continued design and governance closure work. T
 | REPORT-001–REPORT-010 | Included in canonical 107-ID requirements baseline | Requirements and Phase 3 traceability registers |
 | DFR-006 current status clarification | Recorded; no implementation authorization | `DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md` |
 
-These approvals do not replace delegated authority, official policy evidence, deployment-owner confirmation or the separate implementation authorization.
+These approvals govern DYMS product and system design. They do not claim to issue official church credentials, change church governance outside DYMS, or select a production hosting provider. Those external matters are represented as configurable policy references or deployment-time decisions.
 
 ## 3. DFR-006 governance closure
 
@@ -36,38 +38,40 @@ The README previously claimed DFR-006 was lifted and implementation authorized o
 
 The README is being aligned with that operative status. This clarification does not rewrite the historical DFR-006 decision. Future material changes to the frozen design require a documented change request and impact review.
 
-## 4. Ministry, membership and appointment authority evidence
+## 4. Owner-controlled domain configuration and lifecycle rules
 
-| Decision | Status | Competent authority | Closure evidence required |
-|---|---|---|---|
-| ODR-001 — Category eligibility/progression | OPEN | Recognized Adventurer, Pathfinder, Senior Youth/Ambassador and Master Guide ministry authorities | Current official standards, issuing authority, version/effective date, applicable Division/Union/Conference adaptations, DYMS category mapping, evidence and exception authority |
-| ODR-002 — Church transfers | OPEN | District and local church membership authorities | Written decisions for cancellation stages/actors, receiving-church and district rejection, reason requirements, appeal, backdating and one-open-request rule |
-| ODR-003 — Appointments | OPEN | Higher appointing authorities at district/church scope | Exact state transitions, termination authority, acting appointments, overlap exceptions, future/retroactive dates, replacement term and dispute route |
-| ODR-007 — Department membership | OPEN | District departmental coordinators and district governance authority | Department-specific eligibility, source/version, rejection and appeal, renewal/expiry, church-transfer effects and exception authority |
-| ODR-009 — Credentials | OPEN | Recognized ministry credentialing/investiture authorities | Credential catalogue, standards/version, evidence, issuer/approver authority, validity, revocation, correction/reissue and disclosure rules |
+The following items are no longer blocked on third-party confirmation. DYMS will model the rules explicitly, keep policy values versioned, and restrict privileged decisions to the approved DYMS role and scope. The system must not present an internally configured rule as an official denomination-wide standard unless its source is recorded.
 
-No age threshold, eligibility exception, credential validity period, transfer appeal rule or appointment exception is to be invented by engineering.
-
-## 5. Delegated authority confirmations for owner-approved v1 defaults
-
-The project owner approved ODR-REC-01 as proposed. The following are still not represented as approvals by the named delegated authorities.
-
-| Decision | Project-owner default | Delegated confirmation still required |
+| Decision | DYMS design disposition | Configuration rule |
 |---|---|---|
-| ODR-004 — Organization/scope | District-owned departments; events owned by district or one church; department may organize but not own | District governance authority |
-| ODR-005 — Finance | Conservative account, approval, payment, reversal and budget defaults; advanced payment/FX features disabled | Authorized district/church finance authority |
-| ODR-006 — Attendance | EVENT or SESSION subject mode; confirmed registration normally required; documented authorized exception; self-check-in/offline disabled | District event/attendance ministry authority |
-| ODR-008 — Event registration | Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval; material changes reapproved | District and local event authorities; finance authority for fee/refund effects |
-| ODR-010 — Audit access | Separate Audit Officer role; system administrator does not automatically receive audit-read; exceptional access independently approved; break-glass disabled pending procedure | District governance/security/audit authority |
-| ODR-011 — Retention | No automated permanent deletion without approved schedule; holds suspend disposal; DFR-005 backup retention remains separate | Records/administrative, district/church governance, finance and privacy/legal authorities |
-| ODR-012 — Notifications | In-app baseline; email only after verification/templates; SMS/WhatsApp optional with consent; provider-independent adapters | Communications/content, privacy/consent and integration authorities |
-| ODR-013 — Reporting | District/church/department scope; versioned/classified reports; request/execution/retrieval authorization; CSV/PDF proposal; private exports | District reporting owner, domain data owners and security/privacy authority |
+| ODR-001 — Category eligibility/progression | Close as a configurable eligibility model. Preserve the approved single active primary category and category history. | Store rule source, version, effective dates, required evidence and authorized verifier. Do not hardcode age thresholds or automatic promotion. Master Guide remains a credential. |
+| ODR-002 — Church transfers | Close the core workflow around member initiation, receiving-church acceptance, district final approval and effective-on-approval. | Preserve decision/cancellation history and reason fields. One unresolved request per member. Cancellation/rejection and appeal transitions must be explicit, auditable and configurable before they are enabled. No backdating by default. |
+| ODR-003 — Appointments | Close the standard annual appointment lifecycle. | Higher-authority approval, fresh renewal approval, one active holder per position/scope, 1 January–31 December term, reasoned early termination. Acting, overlap and retroactive exceptions remain disabled in v1. |
+| ODR-007 — Department membership | Close the request/approval/withdrawal lifecycle. | Coordinator approval; multiple department memberships; reasoned termination; preserve history. Eligibility criteria are versioned per department and must be configured before enforcement. No automatic expiry or renewal assumption. |
+| ODR-009 — Credentials | Close the credential catalogue and issuance-control design. | Versioned definitions, recognized issuer role, evidence review, linked reissue/renewal, reasoned revocation and disclosure permissions. Only configured credentials may be issued. Unknown validity periods remain unset, not invented. |
 
-For each delegated confirmation, retain the authority's title/name, decision date, exact rule, source/resolution, effective date and any conditions. A project-owner approval must not be relabelled as committee, church, ministry, finance, privacy or records approval.
+These dispositions are DYMS product decisions. Official source references can be attached to individual rule versions when available. Their absence does not prevent the platform from supporting controlled configuration.
 
-## 6. Environment and technical-owner confirmations
+## 5. Owner-approved v1 product defaults
 
-All seven items remain OPEN in the canonical ODR register. TBR-01 provides design-level recommendations but does not prove the production environment supports them.
+The project owner approved ODR-REC-01 as proposed. These are the operative DYMS v1 product defaults. No additional delegated confirmation is required to represent them as DYMS behavior. Where a rule concerns official finance, privacy, records or ministry policy outside the software, the system records the responsible authority/source separately and does not claim the project decision changes that external policy.
+
+| Decision | Operative DYMS v1 product default | External policy boundary (not a DYMS design blocker) |
+|---|---|---|
+| ODR-004 — Organization/scope | District-owned departments; events owned by district or one church; department may organize but not own | External church governance remains outside the software's authority |
+| ODR-005 — Finance | Conservative account, approval, payment, reversal and budget defaults; advanced payment/FX features disabled | Official accounting and finance policy remains externally governed |
+| ODR-006 — Attendance | EVENT or SESSION subject mode; confirmed registration normally required; documented authorized exception; self-check-in/offline disabled | Event organizers remain accountable for event-specific authorization |
+| ODR-008 — Event registration | Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval; material changes reapproved | Event-specific approvals and financial obligations remain the responsibility of the relevant organizer |
+| ODR-010 — Audit access | Separate Audit Officer role; system administrator does not automatically receive audit-read; exceptional access independently approved; break-glass disabled pending procedure | Any external audit mandate remains outside the platform's authority |
+| ODR-011 — Retention | No automated permanent deletion without approved schedule; holds suspend disposal; DFR-005 backup retention remains separate | Applicable records, financial and privacy obligations must be configured when identified |
+| ODR-012 — Notifications | In-app baseline; email only after verification/templates; SMS/WhatsApp optional with consent; provider-independent adapters | Applicable consent and communications requirements remain configuration inputs |
+| ODR-013 — Reporting | District/church/department scope; versioned/classified reports; request/execution/retrieval authorization; CSV/PDF proposal; private exports | Report data owners remain responsible for the source data and permitted disclosures |
+
+Where an external policy or institutional approval is relevant, record its source, issuing authority, version/effective date and conditions. Keep this separate from the project-owner decision. Do not represent a DYMS product decision as an external committee, church, ministry, finance, privacy or records resolution.
+
+## 6. Environment and deployment selections
+
+The engineering design baseline is PostgreSQL 15, extension-free core features, deterministic identifier normalization, database-authoritative persistence timestamps and separated database roles. These choices are sufficient for design closure. Production provider, exact service tier, hostnames, credentials and topology are deployment-time selections, not Phase 1 or Phase 2 logical-design blockers.
 
 | ID | Confirmation | Existing design direction | Evidence required to close |
 |---|---|---|---|
@@ -122,7 +126,7 @@ A policy/delegated decision is closed only when all are present:
 6. Affected requirements, DDD decisions, lifecycle states, physical design and tests reconciled.
 7. A consistency review confirms no contradictory status remains.
 
-An environment item is closed only when the selected environment and its supporting capability evidence are recorded.
+A deployment item is closed only when the actual provider and its capabilities are selected and verified. This is a deployment gate, not a Phase 1 requirements or Phase 2 physical-design gate.
 
 ## 10. Implementation boundary
 
@@ -132,10 +136,8 @@ This register does not authorize Prisma, SQL DDL, migrations, database objects, 
 
 ## 11. Current next sequence
 
-1. Correct and formally record the DFR-006 README discrepancy.
-2. Reconcile governance and authority statuses across canonical registers.
-3. Prepare evidence/decision sheets for ODR-001/002/003/007/009.
-4. Prepare delegated confirmation sheets for ODR-004/005/006/008/010/011/012/013.
-5. Prepare ODR-ENV-001–007 technical confirmation package.
-6. Complete documentation-only cross-register consistency review.
-7. Present the remaining decisions and evidence gaps for project-owner review; do not claim delegated approvals without their evidence.
+1. Reconcile all Phase 1 requirements, domain decisions and traceability records.
+2. Complete Phase 2 physical-design consistency and integrity documentation.
+3. Keep official-policy references configurable and distinguish them from DYMS product decisions.
+4. Record deployment provider and operational evidence when the deployment phase begins.
+5. Present the Phase 1 closure record and Phase 2 entry baseline to the project owner.
