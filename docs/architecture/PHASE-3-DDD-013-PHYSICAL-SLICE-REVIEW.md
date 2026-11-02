@@ -7,7 +7,8 @@
 - Design inputs: D13-PDR-01 and TBR-01
 - Review type: **Internal engineering consistency review**
 - External independent review: **PENDING**
-- Physical approval: **NOT GRANTED**
+- Project-owner physical DDD-013 approval: **APPROVED — D13-POA-01 (2026-11-02)**
+- External independent technical assurance: **NOT PERFORMED; separate optional assurance consideration**
 - Implementation: **NOT AUTHORIZED**
 
 ## 1. Review result
@@ -194,18 +195,20 @@ The revised identity indexes and separate workload/FK indexes are retained where
 23. Runtime database roles cannot update/delete recovery events.
 24. Queue loss does not lose the durable outbox operation.
 
-## 4. Remaining external review and approval gates
+## 4. Project-owner approval and remaining dependencies
+
+The project owner approved all ten review areas on 2026-11-02. The decision is recorded in [PHASE-3-DDD-013-PROJECT-OWNER-APPROVAL-RECORD.md](./PHASE-3-DDD-013-PROJECT-OWNER-APPROVAL-RECORD.md).
 
 | Gate | State |
 |---|---|
 | Internal DDD-013 design consistency | ADDRESSED IN PHASE 3 CANDIDATE |
 | Exact byte encoding normalized | COMPLETE IN DOCUMENTATION |
 | Canonical column/FK/index registers include D13 fields | COMPLETE IN PHASE 3 CANDIDATE |
-| Independent technical reviewer response | PENDING |
-| Project-owner physical DDD-013 approval | NOT GRANTED |
-| Final physical ERD approval | NOT GRANTED |
+| Project-owner review of all ten DDD-013 areas | APPROVED — D13-POA-01 |
+| CPERD-01 final physical ERD approval | APPROVED |
+| External independent technical assurance | NOT PERFORMED; separate assurance consideration |
 | Implementation authorization | NOT AUTHORIZED |
 
 ## 5. Approval boundary
 
-This is an internal engineering review record. It is not represented as an external independent review. It does not approve DDL, Prisma, migrations, database objects, seeds, API or application code.
+This document records the internal engineering review and the subsequent project-owner approval. It is not represented as an external independent review or certification. Project-owner approval does not approve DDL, Prisma, migrations, database objects, seeds, API or application code.
