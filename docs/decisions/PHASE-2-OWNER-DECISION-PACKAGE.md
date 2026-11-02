@@ -224,3 +224,14 @@ This update does not close ODR-001–ODR-013 or ODR-ENV-001–007 where a compet
 ## 11. Recommended owner decisions
 
 The detailed [Phase 2 Owner Decision Recommendations ODR-REC-01](./PHASE-2-OWNER-DECISION-RECOMMENDATIONS.md) provides exact conservative v1 recommendations for ODR-004 through ODR-013, while preserving the authority requirements for ODR-001, ODR-002, ODR-003, ODR-007, ODR-009 and ODR-ENV-007. These are proposed decisions, not approvals. The owner may approve, amend or defer each item to the competent authority.
+
+
+## 12. Project-owner approval update (2026-11-02)
+
+The project owner approved ODR-REC-01 as proposed on 2026-11-02. The approval is recorded in the canonical Owner Decision Register. ODR-004, ODR-005, ODR-006, ODR-008, ODR-010, ODR-011, ODR-012 and ODR-013 are now marked PROJECT OWNER APPROVED AS PROPOSED; DELEGATED-AUTHORITY CONFIRMATION PENDING where applicable.
+
+This approval permits the accepted v1 product/design defaults to be used in continued system and physical design. It does not replace the decision rights of district/church governance, finance, ministry, credential, records, privacy, data-owner or other named authorities. ODR-001, ODR-002, ODR-003, ODR-007 and ODR-009 remain open. ODR-ENV-001–ODR-ENV-007 remain subject to technical/deployment-owner confirmation.
+
+REPORT-001–REPORT-010 have been promoted into the canonical testable requirements catalogue. The count is now 107 (previously 97). The report requirements are approved for traceability and design; report catalogue, data classification, disclosure permissions, export policy and retention remain subject to ODR-013/ODR-011 authority confirmation.
+
+DFR-001–DFR-006 remain preserved. The DFR-006 repository discrepancy remains unresolved. The final physical ERD is not approved and implementation remains NOT AUTHORIZED.
