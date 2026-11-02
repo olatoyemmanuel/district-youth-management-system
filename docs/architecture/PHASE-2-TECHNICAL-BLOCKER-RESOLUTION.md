@@ -311,3 +311,40 @@ The existing `user_accounts.login_identifier` column is the canonical stored ide
 ### 14.4 No implicit status defaults
 
 All lifecycle-bearing values remain explicit command inputs after authorization and transition validation. Do not default an account, appointment, transfer, registration, attendance, finance, credential, notification or report status to an assumed active/pending value. Database defaults are limited to technical IDs, creation timestamps, update timestamps and explicitly approved counters.
+
+
+## 15. Attendance exception integrity and register delta
+
+The registration exception columns in §14.2 are governed by this exact candidate CHECK:
+
+```sql
+(
+  registration_id IS NOT NULL
+  AND registration_exception_granted_by_user_account_id IS NULL
+  AND registration_exception_reason IS NULL
+  AND registration_exception_granted_at IS NULL
+)
+OR
+(
+  registration_id IS NULL
+  AND registration_exception_granted_by_user_account_id IS NOT NULL
+  AND registration_exception_reason IS NOT NULL
+  AND length(btrim(registration_exception_reason)) > 0
+  AND registration_exception_granted_at IS NOT NULL
+)
+```
+
+Proposed stable name: `ck_attendance_records_registration_evidence`.
+
+The exception actor FK is:
+- `fk_attendance_records_registration_exception_granted_by_user_account_id`;
+- source `attendance_records.registration_exception_granted_by_user_account_id`;
+- target `user_accounts(id)`;
+- ON DELETE RESTRICT / ON UPDATE RESTRICT;
+- candidate source support index `ix_attendance_records_registration_exception_granted_by_user_account_id`.
+
+This CHECK proves that an unregistered attendance row carries a complete exception record. Authorization still verifies that the granting user is an event coordinator with authority for the event scope. A database CHECK cannot prove that role/scope authorization.
+
+The attendance subject mode remains the existing `event_attendance_subjects.mode` column. The prior draft sentence that said the event itself chooses a mode is superseded. The event/member subject locks itself before checking child attendance shape. ODR-006 must confirm whether the mode should be per member-event subject (the current ERD shape) or a single setting for the entire event before the final schema is frozen.
+
+The candidate column, FK, CHECK and index above must be added to the canonical column/FK/index registers during final register regeneration. They are not represented as already present in the 617-column/155-FK/214-index source inventories.
