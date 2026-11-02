@@ -470,7 +470,7 @@ These clauses appear in the requirements consolidation but remain unresolved in 
 
 ### DDD-013 — Idempotency and safe mutation replay
 
-**Status:** APPROVED PRINCIPLE / AUTHENTICATION POLICY DECISIONS RECOVERED / ERD VALIDATION OPEN  
+**Status:** APPROVED POLICY / PHYSICAL ERD REMEDIATION REQUIRED  
 **Decision authority:** Project owner for platform behavior; DYMS Engineering for technical specification  
 **Approval evidence:** Individual owner-authored formal decision records and PRs #10–#34 establish AUTH-IDEM-001 through AUTH-IDEM-025, each marked APPROVED (AUTH-IDEM-001 as an approved requirement) with approval date 2026-10-30. Individual records for AUTH-IDEM-026 through AUTH-IDEM-041 are in PRs #36–#51. PR #35 consolidates the series. All these PRs remain open/unmerged at review time; their decision files are evidence of recorded owner approval, not content merged to the default branch.  
 **Scope:** Retry-safe processing of sensitive mutations and external callbacks
@@ -485,6 +485,7 @@ These clauses appear in the requirements consolidation but remain unresolved in 
 
 **Recovered technical approval evidence**
 
+- **AUTH-IDEM-001–025:** Individually recorded in [PRs #10–#34](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+idempotency). Each PR adds a formal decision file with the matching ID, APPROVED status (AUTH-IDEM-001 is an approved requirement), and approval date 2026-10-30.
 - **AUTH-IDEM-001–025:** Individually recorded in [PRs #10–#34](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+idempotency). Each PR adds a separate formal decision file with its decision ID, APPROVED status (AUTH-IDEM-001 is an approved requirement), and approval date 2026-10-30. The files cover key requirement, generation/reuse, UUID v4 format, scope, SHA-256 fingerprint, RFC 8785 canonicalization, HMAC sensitive-field handling, HMAC versioning/key size, 24-hour retention, operation states, FAILED retry behavior, two-minute fixed lease, recovery locking/fencing, BIGINT counter, READ COMMITTED isolation, five-second lock timeout, retry backoff, transaction duration, lock ordering, safe response replay, failure classification, recovery outcomes, and BullMQ scheduling.
 - **AUTH-IDEM-016:** PostgreSQL BIGINT fencing/version counter, initial value 0, increment by exactly 1 for each successful recovery claim, atomic claim/counter coordination, and stale fencing-value rejection. See [PR #25](https://github.com/olatoyemmanuel/district-youth-management-system/pull/25) and [PR #52](https://github.com/olatoyemmanuel/district-youth-management-system/pull/52).
 - **AUTH-IDEM-026–035:** Individually recorded in [PRs #36–#45](https://github.com/olatoyemmanuel/district-youth-management-system/pulls?q=is%3Apr+AUTH-IDEM), covering pre-authentication binding, request canonicalization, HMAC encoding, failed-record retention/tombstones, endpoint-specific replay, HTTP 409 in-progress behavior, retry-budget boundary, endpoint transaction map, HMAC key rotation, and logical database identity/constraints.
@@ -502,6 +503,10 @@ PR #25 and PR #52 both use decision ID AUTH-IDEM-016 and both state that the pro
 - PR #52 is later but does not explicitly state that it supersedes PR #25.
 
 Therefore the common approved core (BIGINT, initial 0, increment-by-one per successful recovery claim, atomic coordination, stale-value rejection) is recovered. The project owner resolved this discrepancy on 2026-11-02 by explicitly approving the PR #25 treatment: overflow is an integrity failure; wrapping, resetting, or reusing values is prohibited; the operation must fail closed and route to controlled recovery or manual intervention. See AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md. The historical difference between PR #25 and PR #52 remains documented.
+
+**Physical ERD validation findings**
+
+The document-level validation in [PHASE-2-DDD-013-ERD-SLICE-VALIDATION.md](../architecture/PHASE-2-DDD-013-ERD-SLICE-VALIDATION.md) finds the conceptual ERD directionally consistent but the current physical proposal not ready. Blocking issues include a mandatory authenticated-user FK that cannot represent pre-authentication operations, unique indexes that do not implement authenticated/pre-authentication modes, missing HMAC key-version/fencing/tombstone/recovery/retention mapping, and an unreconciled password-reset outbox/secret-reference relationship. The physical design must be revised and independently reviewed.
 
 **Open technical detail and evidence limits**
 - Exact physical columns, scope-mode constraints, partial unique-index predicates, foreign keys, nullability/defaults, and transaction/locking enforcement remain physical-design work.
