@@ -24,11 +24,11 @@ This is a review candidate, not a final schema. Exact naming, type limits, const
 | `id` | uuid | PK, NOT NULL | Internal record identity |
 | `scope_mode` | varchar(20) | NOT NULL; AUTHENTICATED or PRE_AUTHENTICATION | Explicit identity mode |
 | `actor_user_account_id` | uuid | NULL; FK user_accounts(id) | Authenticated principal only |
-| `session_id` | uuid | NULL; FK auth_sessions(id), subject to actual canonical session table name | Optional authenticated session binding |
+| `session_id` | uuid | NULL; composite FK `(session_id,actor_user_account_id) → auth_sessions(id,user_account_id)` | Optional authenticated session binding; proves session belongs to actor |
 | `pre_auth_context_id` | uuid | NULL; FK pre_auth_contexts(id) | Pre-authentication context only |
 | `operation_code` | varchar(100) | NOT NULL | Stable operation/endpoint identifier |
-| `scope_fingerprint` | bytea | NOT NULL | Server-derived digest of canonical operation resource/organizational scope, including an explicit global-scope representation |
-| `key_digest` | bytea | NOT NULL | Server-protected digest of the client UUID v4 key; raw key is not stored |
+| `scope_fingerprint` | bytea | NOT NULL; exactly 32 bytes | Server-derived SHA-256 digest of canonical operation resource/organizational scope, including an explicit global-scope representation |
+| `scope_fingerprint_version` | smallint | NOT NULL; currently 1 | Identifies the canonical binary scope encoding used to calculate the digest |\n| `key_digest` | bytea | NOT NULL; exactly 32 bytes | SHA-256 digest of the client UUID v4 key; raw key is not stored |
 | `request_fingerprint` | bytea | NOT NULL | Server-calculated SHA-256/HMAC fingerprint under AUTH-IDEM canonicalization rules |
 | `hmac_key_version` | varchar(40) | NULL only where operation has no sensitive HMAC inputs; otherwise NOT NULL | Key version required to reproduce the original fingerprint on retry |
 | `status` | varchar(20) | NOT NULL; IN_PROGRESS, COMPLETED, FAILED | Persisted operation lifecycle |
@@ -53,7 +53,7 @@ Exactly one identity mode is permitted:
 - AUTHENTICATED: `actor_user_account_id` is NOT NULL, `pre_auth_context_id` is NULL. `session_id` is optional only for operations whose approved contract is principal-scoped; session-bound operations must supply it.
 - PRE_AUTHENTICATION: `pre_auth_context_id` is NOT NULL, `actor_user_account_id` and `session_id` are NULL.
 
-The row must reject every other combination. The CHECK must also reject a session reference without an authenticated principal. The FK to pre-auth context must use RESTRICT semantics while a record/tombstone depends on it. Auth-session ownership must be validated so the session belongs to the same authenticated user; use a composite candidate key/FK or a transaction-safe invariant backed by a database-enforceable constraint. Do not couple Session ownership to User–Member cardinality.
+The row must reject every other combination. The CHECK must also reject a session reference without an authenticated principal. The FK to pre-auth context must use RESTRICT semantics while a record/tombstone depends on it. Auth-session ownership is enforced by UNIQUE `auth_sessions(id,user_account_id)` and the composite FK `(session_id,actor_user_account_id)` to that exact tuple. Do not couple Session ownership to User–Member cardinality.
 
 The `scope_fingerprint` is calculated by the server from the canonical resource/organizational scope for the operation. It has a deterministic explicit representation for global scope. Clients cannot supply or override it. This keeps authentication idempotency independent of unresolved business-domain idempotency policies.
 
@@ -84,9 +84,9 @@ FK-support indexes are required for `actor_user_account_id`, `session_id`, and `
 - No automatic lease renewal. The approved fixed lease is two minutes.
 - Use PostgreSQL as source of truth. BullMQ/Redis only schedules recovery work.
 
-### 2.5 Recovery attempt history (proposed related entity)
+### 2.5 Recovery attempt history (superseded proposal)
 
-Propose `idempotency_recovery_attempts` if reviewers confirm an immutable attempt ledger is needed:
+The earlier optional `idempotency_recovery_attempts` mutable-outcome proposal below is superseded by the append-only `idempotency_recovery_events` contract in §10.4. It is retained here only as revision history and must not be implemented:
 
 | Column | Type | Rule |
 |---|---|---|
