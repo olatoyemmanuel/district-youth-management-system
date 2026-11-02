@@ -219,3 +219,8 @@ The engineering blockers that do not require a ministry, church, finance, safegu
 A dedicated [Reporting Requirements Proposal RPT-PR-01](../product/PHASE-2-REPORTING-REQUIREMENTS-PROPOSAL.md) supplies candidate REPORT-001–REPORT-010 requirements. They are not counted in the approved 97-row requirements baseline until the owner approves and the catalogue/crosswalk are updated together.
 
 This update does not close ODR-001–ODR-013 or ODR-ENV-001–007 where a competent authority or deployment owner must supply evidence. It does not change DFR-001–DFR-006 or authorize implementation.
+
+
+## 11. Recommended owner decisions
+
+The detailed [Phase 2 Owner Decision Recommendations ODR-REC-01](./PHASE-2-OWNER-DECISION-RECOMMENDATIONS.md) provides exact conservative v1 recommendations for ODR-004 through ODR-013, while preserving the authority requirements for ODR-001, ODR-002, ODR-003, ODR-007, ODR-009 and ODR-ENV-007. These are proposed decisions, not approvals. The owner may approve, amend or defer each item to the competent authority.
