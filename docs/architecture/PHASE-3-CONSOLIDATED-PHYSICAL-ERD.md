@@ -406,7 +406,7 @@ The Phase 3 canonical registers supersede conflicting Phase 2 inventory statemen
 | G-06 | Retention source enrollment | Retention subjects are not yet linked to every source table | ODR-011 record classes and schedules |
 | G-07 | Production PostgreSQL provider | PostgreSQL 15 minimum is a design target; provider, collation, locale, managed service and restore topology are not confirmed | ODR-ENV technical/deployment confirmation |
 | G-08 | Workload/index validation | Index candidates have not been tested against production-like data | Post-approval non-production EXPLAIN/ANALYZE and concurrency tests |
-| G-09 | Conceptual-to-physical amendments | Five new tables and two removed columns refine the previously approved conceptual model | Explicit project-owner approval of this exact consolidated revision |
+| G-09 | Conceptual-to-physical amendments | Five new tables, two removed ownership columns, and four appointment scope columns with composite position FKs refine the previously approved conceptual model | Explicit project-owner approval of this exact consolidated revision |
 
 ## 13. Final approval checklist
 
