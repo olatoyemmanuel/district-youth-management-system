@@ -155,3 +155,12 @@ The approved DFR-001 through DFR-006 decisions and approved conceptual ERD remai
 This review authorizes no implementation. No Prisma schema, SQL DDL, migration, database object, generated client, seed or application code has been created or changed.
 
 The physical design remains **not approved for implementation**. Separate explicit project-owner approval of the complete physical design and separate explicit implementation authorization remain mandatory.
+
+
+## 8. TBR-01 follow-up disposition (2026-11-02)
+
+The [Technical Blocker Resolution TBR-01](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md) supplies the design-level decisions missing from PIR-07 and several earlier environment/constraint blockers. Specifically, it selects the PG15 minimum baseline, no required extensions, UUID generation, timestamp defaults/update trigger, canonical identifier storage, extension-free appointment overlap enforcement, attendance concurrency contract, audit role separation and refined DDD-013 technical model.
+
+This is an engineering design supplement. It does not supply production provider evidence, execute SQL, prove query plans, or close authority decisions. The column register still requires row-level regeneration for exact defaults and named CHECK expressions. The six policy-blocked indexes remain blocked pending their named ODR decisions. Production workload approval and independent review of the revised DDD-013 proposal remain pending.
+
+**Current result:** technical direction resolved at design level; final physical design still requires register regeneration, owner/authority decisions, independent review and explicit approval. Implementation remains NOT AUTHORIZED.
