@@ -147,6 +147,24 @@ Acceptance criteria below define observable outcomes for future tests. They do n
 | SEC-011 | API is versioned and contract-documented. | DFR-002; approved | Given an API operation is released, then it is under /api/v1 and represented in the OpenAPI contract with standard success/error response semantics. |
 | SEC-012 | Backup and recovery targets are testable. | DFR-005; approved target | Given a recovery exercise is performed, then evidence demonstrates RPO no greater than 24 hours and restoration of critical services within 8 hours. |
 
+
+### 8.1 Reporting and export
+
+The following REPORT requirements were approved by the project owner on 2026-11-02 for inclusion in the canonical testable requirements baseline. The first-release report catalogue, classification matrix, data-owner approvals, disclosure permissions and export policy remain subject to ODR-013 delegated-authority confirmation.
+
+| ID | Requirement | Source/status | Acceptance criteria |
+|---|---|---|---|
+| REPORT-001 | Report definitions are versioned and immutable once used. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given a report definition is changed, then a new version is created; every report run references one exact immutable version. |
+| REPORT-002 | Every report run is bound to a server-authorized district, church or department scope. | ODR-004/013; project-owner approved 2026-11-02; authority confirmation pending | Given a requester supplies an unauthorized or arbitrary scope, then the request is rejected; report parameters cannot widen scope. |
+| REPORT-003 | Authorization is rechecked at request, execution and export retrieval. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given a role, appointment, permission or scope is revoked after request creation, then execution or retrieval is denied. |
+| REPORT-004 | Every published report definition has an approved data classification and data owner. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given a report has no approved classification or owner, then it cannot be published or executed for disclosure. |
+| REPORT-005 | Report-specific aggregation and redaction rules are applied consistently. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given the approved classification requires redaction or aggregation, then interactive results and exports apply the same versioned rules. |
+| REPORT-006 | Report runs retain reproducibility and audit metadata without storing secrets or unnecessary personal data. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given a report completes or fails, then requester, definition version, effective scope, safe parameters/reference, timing, outcome and output reference are recorded. |
+| REPORT-007 | Exports use private storage and fresh authorization at retrieval. | ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given an export reference is known but authorization is absent or revoked, then retrieval is denied; permanent public URLs are not issued. |
+| REPORT-008 | Export requests, generation, retrieval, denial, expiry and authorized disposal are audited. | ODR-013/DDD-012; project-owner approved 2026-11-02; authority confirmation pending | Given an export action occurs, then an append-only audit record links actor, report run, definition version, scope, format and outcome without storing file contents or secrets. |
+| REPORT-009 | Report runs and exports follow approved record-class retention schedules and holds. | ODR-011/013; project-owner approved 2026-11-02; authority confirmation pending | Given no approved retention schedule exists, then automated permanent deletion is disabled; a valid hold suspends disposal. |
+| REPORT-010 | Report execution and export workloads have server-enforced resource limits and rate limits. | DFR security baseline/ODR-013; project-owner approved 2026-11-02; authority confirmation pending | Given a request exceeds execution, result, export or concurrency limits, then the server rejects or safely terminates it; long-running work uses asynchronous execution and durable job references. |
+
 ## 9. Non-functional acceptance areas
 
 The following cross-cutting test suites are required before a release is considered ready:
@@ -180,6 +198,6 @@ These must not be filled with invented values:
 
 ## 11. Review status
 
-This document expands the requirements into testable acceptance criteria. It remains a working specification. Before it is treated as complete, the project owner and relevant ministry/financial authorities must review policy gaps, and the requirement IDs must be reconciled against the final domain decision register.
+This document expands the requirements into testable acceptance criteria. The project owner approved REPORT-001–REPORT-010 for inclusion on 2026-11-02. The report catalogue, data classification, data-owner approvals, disclosure permissions, export formats and retention schedules remain subject to ODR-013 and ODR-011 delegated-authority confirmation. Other policy gaps remain as listed in the canonical decision register.
 
 No ERD, physical schema, Prisma model, migration, or application implementation is approved by this document.
