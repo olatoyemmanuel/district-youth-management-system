@@ -315,6 +315,10 @@ The current candidate registers were fetched back from the working branch and cr
 - No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
 - No stale removed ownership/index names remain in the column register's index references.
 - 107 requirement IDs are mapped exactly once; zero unmapped or unrecognized IDs.
+- 54 named structural CHECK constraints in the integrity register are referenced by the canonical column register.
+- The appointment position-scope model has three composite FKs and three supporting indexes; positions have mandatory district boundary and scope-consistent child references.
+- The Phase 2 index comparison is exact: 216 old names, 21 removed, 33 added, 228 current names.
+- The Phase 2 FK comparison is exact: 155 old names, 11 removed/renamed, 22 added/renamed, 166 current names.
 
 These are static documentation consistency checks. They are not PostgreSQL DDL execution, query-plan validation, concurrency testing or independent reviewer acceptance.
 
