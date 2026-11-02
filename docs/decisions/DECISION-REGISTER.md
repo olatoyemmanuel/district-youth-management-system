@@ -120,3 +120,12 @@ The following remain implementation and release responsibilities:
 - Backup restoration exercises.
 - Deployment and production smoke tests.
 - Milestone reviews and verified Git commits.
+
+
+## DFR-006 current governance clarification (2026-11-02)
+
+The project-owner clarification is recorded in [DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md](DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md).
+
+DFR-006 remains APPROVED and its formal design-freeze/change-control requirements remain in force. The repository README previously asserted that the freeze was lifted and implementation authorized on 2026-10-29, but the README did not identify a corresponding formal supersession/change record or separately scoped implementation authorization. The project owner's explicit instruction on 2026-11-02 confirms that implementation remains NOT AUTHORIZED until a separate explicit authorization is issued.
+
+This clarification does not infer whether a historical discussion or decision occurred on 2026-10-29. It records the operative current status and corrects the README. Documentation-only design and governance closure may continue within the owner's direction; material changes to the frozen design remain subject to DFR-006 change control. Physical ERD and DDD-013 design approvals do not authorize implementation.
