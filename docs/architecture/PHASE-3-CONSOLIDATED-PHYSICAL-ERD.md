@@ -21,6 +21,8 @@ Supporting registers:
 5. [Requirement-to-Physical Traceability](./PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md)
 6. [DDD-013 Physical Slice Engineering Review](./PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md)
 7. [Final Physical ERD Reconciliation Plan](./PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md)
+8. [TBR-01 Technical Blocker Resolution](./PHASE-2-TECHNICAL-BLOCKER-RESOLUTION.md)
+9. [DDD-013 Physical Design Revision](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md)
 
 This package is design-only. It does not approve SQL DDL, Prisma models, migrations, database objects, seeds, API implementation or application code.
 
