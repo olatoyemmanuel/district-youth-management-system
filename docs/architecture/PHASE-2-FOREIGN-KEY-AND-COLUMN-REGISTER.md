@@ -523,3 +523,16 @@ The [Canonical Index Inventory](./PHASE-2-CANONICAL-INDEX-INVENTORY.md) consolid
 ## DDD-013 authentication idempotency revision overlay
 
 The idempotency rows in this register describe the earlier physical proposal and are **superseded for authentication idempotency** by [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md). Do not implement the old mandatory `actor_user_account_id`, district/church/department scope columns, or four organizational-scope unique indexes for authentication idempotency. The revision proposes nullable authenticated identity references, a pre-authentication context FK, explicit `scope_mode`, server-derived `scope_fingerprint`, two mode-specific unique indexes, HMAC key-version and fencing/retention/recovery metadata, plus outbox linkage. The exact rows in this register must be regenerated from D13-PDR-01 after independent review and owner approval; this overlay does not authorize implementation.
+
+
+## DDD-013 technical refinement overlay (TBR-01)
+
+The revised [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md) now specifies:
+- composite session ownership FK `(session_id,actor_user_account_id) → auth_sessions(id,user_account_id)`, supported by UNIQUE `(id,user_account_id)`;
+- versioned 32-byte SHA-256 scope fingerprint with domain separator, explicit scope tag, length-prefixed UUID encoding and explicit GLOBAL representation;
+- PostgreSQL 15 expression/partial unique-index sentinel contract with a CHECK prohibiting the sentinel as a real session ID;
+- append-only `idempotency_recovery_events` instead of mutable recovery-attempt outcome rows;
+- same-row tombstone compaction after 24-hour response retention and 30-day identity protection;
+- failure-safe external secret-store choreography for password-reset delivery.
+
+The earlier DDD-013 rows in this register remain superseded until the complete column/FK/index rows are regenerated from the refined revision and the independent review and owner approval gates are satisfied. This overlay does not authorize implementation.
