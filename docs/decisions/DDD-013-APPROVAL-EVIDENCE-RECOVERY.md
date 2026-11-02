@@ -3,7 +3,7 @@
 - Review date: 2026-11-02
 - Domain decision: DDD-013, idempotency and safe mutation replay
 - Scope: Authentication idempotency follow-up approvals and PostgreSQL fencing/version counter
-- Review status: PARTIAL RECOVERY; POLICY DETAILS RECOVERED; AUTH-IDEM-016 OVERFLOW CONFLICT RESOLVED
+- Review status: INDIVIDUAL AUTH-IDEM-001–025 PR RECORDS RECOVERED; POLICY DETAILS RECOVERED; AUTH-IDEM-016 OVERFLOW CONFLICT RESOLVED
 - Physical database design approval: NOT GRANTED
 - Implementation authorization: NOT AUTHORIZED
 
@@ -62,7 +62,41 @@ The repository contains a consolidated specification in [PR #35](https://github.
 
 The consolidated specification explicitly states that AUTH-IDEM-001 through AUTH-IDEM-041 are incorporated as approved decisions. It further states that ten earlier policy recommendations were approved and separately recorded as AUTH-IDEM-026 through AUTH-IDEM-035, and six consistency recommendations CR-01 through CR-06 were approved and recorded as AUTH-IDEM-036 through AUTH-IDEM-041.
 
-### 3.1 Individually identified approval records recovered
+### 3.1 Individually identified approval records recovered: AUTH-IDEM-001–025
+
+The review recovered a separate formal decision document for every decision AUTH-IDEM-001 through AUTH-IDEM-025. The corresponding pull-request descriptions explicitly state that the product owner/user approved the decision on 2026-10-30. Each changed-file patch identifies the matching AUTH-IDEM decision ID, labels the decision APPROVED (AUTH-IDEM-001 is APPROVED REQUIREMENT; detailed contract remains open), and records the same approval date.
+
+| Decision | Subject | Formal decision file | Pull request |
+|---|---|---|---|
+| AUTH-IDEM-001 | Idempotency keys required for all state-changing authentication operations | `AUTHENTICATION-IDEMPOTENCY-REQUIREMENT-DECISION.md` | [#10](https://github.com/olatoyemmanuel/district-youth-management-system/pull/10) |
+| AUTH-IDEM-002 | New random key per logical operation; reuse only for exact retries | `IDEMPOTENCY-KEY-GENERATION-AND-REUSE-DECISION.md` | [#11](https://github.com/olatoyemmanuel/district-youth-management-system/pull/11) |
+| AUTH-IDEM-003 | UUID v4 format and Idempotency-Key header | `IDEMPOTENCY-KEY-FORMAT-DECISION.md` | [#12](https://github.com/olatoyemmanuel/district-youth-management-system/pull/12) |
+| AUTH-IDEM-004 | Operation, principal, session and fingerprint scope; separate login pre-auth scope | `AUTHENTICATION-IDEMPOTENCY-SCOPE-DECISION.md` | [#13](https://github.com/olatoyemmanuel/district-youth-management-system/pull/13) |
+| AUTH-IDEM-005 | SHA-256 request fingerprint over canonical request representation | `AUTHENTICATION-IDEMPOTENCY-FINGERPRINT-DECISION.md` | [#14](https://github.com/olatoyemmanuel/district-youth-management-system/pull/14) |
+| AUTH-IDEM-006 | RFC 8785 JSON Canonicalization Scheme | `AUTHENTICATION-IDEMPOTENCY-JSON-CANONICALIZATION-DECISION.md` | [#15](https://github.com/olatoyemmanuel/district-youth-management-system/pull/15) |
+| AUTH-IDEM-007 | HMAC-SHA-256 representation for sensitive request fields | `AUTHENTICATION-IDEMPOTENCY-SENSITIVE-FIELD-FINGERPRINTING-DECISION.md` | [#16](https://github.com/olatoyemmanuel/district-youth-management-system/pull/16) |
+| AUTH-IDEM-008 | Versioned HMAC keys and retention of old keys while records depend on them | `AUTHENTICATION-IDEMPOTENCY-HMAC-KEY-VERSIONING-AND-ROTATION-DECISION.md` | [#17](https://github.com/olatoyemmanuel/district-youth-management-system/pull/17) |
+| AUTH-IDEM-009 | 256-bit cryptographically random HMAC keys | `AUTHENTICATION-IDEMPOTENCY-HMAC-KEY-SIZE-DECISION.md` | [#18](https://github.com/olatoyemmanuel/district-youth-management-system/pull/18) |
+| AUTH-IDEM-010 | 24-hour retention for completed idempotency records | `AUTHENTICATION-IDEMPOTENCY-RECORD-RETENTION-DECISION.md` | [#19](https://github.com/olatoyemmanuel/district-youth-management-system/pull/19) |
+| AUTH-IDEM-011 | IN_PROGRESS, COMPLETED and FAILED operation states | `AUTHENTICATION-IDEMPOTENCY-OPERATION-STATES-DECISION.md` | [#20](https://github.com/olatoyemmanuel/district-youth-management-system/pull/20) |
+| AUTH-IDEM-012 | No automatic client retry re-execution of FAILED operations | `AUTHENTICATION-IDEMPOTENCY-FAILED-STATE-POLICY-DECISION.md` | [#21](https://github.com/olatoyemmanuel/district-youth-management-system/pull/21) |
+| AUTH-IDEM-013 | Two-minute processing lease and controlled recovery assessment | `AUTHENTICATION-IDEMPOTENCY-PROCESSING-LEASE-AND-RECOVERY-DECISION.md` | [#22](https://github.com/olatoyemmanuel/district-youth-management-system/pull/22) |
+| AUTH-IDEM-014 | Fixed two-minute lease; no automatic renewal | `AUTHENTICATION-IDEMPOTENCY-FIXED-PROCESSING-LEASE-DECISION.md` | [#23](https://github.com/olatoyemmanuel/district-youth-management-system/pull/23) |
+| AUTH-IDEM-015 | PostgreSQL row locking and fencing for recovery-worker coordination | `AUTHENTICATION-IDEMPOTENCY-RECOVERY-WORKER-COORDINATION-DECISION.md` | [#24](https://github.com/olatoyemmanuel/district-youth-management-system/pull/24) |
+| AUTH-IDEM-016 | PostgreSQL BIGINT fencing counter, initial 0, increment by 1 | `AUTHENTICATION-IDEMPOTENCY-FENCING-COUNTER-DECISION.md` | [#25](https://github.com/olatoyemmanuel/district-youth-management-system/pull/25) |
+| AUTH-IDEM-017 | READ COMMITTED isolation with explicit row-level locking | `AUTHENTICATION-IDEMPOTENCY-RECOVERY-ISOLATION-LEVEL-DECISION.md` | [#26](https://github.com/olatoyemmanuel/district-youth-management-system/pull/26) |
+| AUTH-IDEM-018 | Five-second PostgreSQL recovery row-lock timeout | `AUTHENTICATION-IDEMPOTENCY-RECOVERY-LOCK-TIMEOUT-DECISION.md` | [#27](https://github.com/olatoyemmanuel/district-youth-management-system/pull/27) |
+| AUTH-IDEM-019 | Exponential backoff with full jitter and five delay ceilings | `AUTHENTICATION-IDEMPOTENCY-RETRY-BACKOFF-DECISION.md` | [#28](https://github.com/olatoyemmanuel/district-youth-management-system/pull/28) |
+| AUTH-IDEM-020 | Maximum ten-second database transaction duration | `AUTHENTICATION-IDEMPOTENCY-TRANSACTION-DURATION-DECISION.md` | [#29](https://github.com/olatoyemmanuel/district-youth-management-system/pull/29) |
+| AUTH-IDEM-021 | Deterministic lock-acquisition order | `AUTHENTICATION-IDEMPOTENCY-LOCK-ORDERING-DECISION.md` | [#30](https://github.com/olatoyemmanuel/district-youth-management-system/pull/30) |
+| AUTH-IDEM-022 | Replay safe stored HTTP status/response without re-executing | `AUTHENTICATION-IDEMPOTENCY-RESPONSE-REPLAY-DECISION.md` | [#31](https://github.com/olatoyemmanuel/district-youth-management-system/pull/31) |
+| AUTH-IDEM-023 | Permanent, recoverable and uncertain failure classification | `AUTHENTICATION-IDEMPOTENCY-FAILURE-CLASSIFICATION-DECISION.md` | [#32](https://github.com/olatoyemmanuel/district-youth-management-system/pull/32) |
+| AUTH-IDEM-024 | Controlled recovery outcomes: COMPLETED, FAILED, RETRYABLE, MANUAL_REVIEW | `AUTHENTICATION-IDEMPOTENCY-RECOVERY-OUTCOMES-DECISION.md` | [#33](https://github.com/olatoyemmanuel/district-youth-management-system/pull/33) |
+| AUTH-IDEM-025 | BullMQ recovery scheduling; PostgreSQL remains authoritative | `AUTHENTICATION-IDEMPOTENCY-RECOVERY-SCHEDULING-DECISION.md` | [#34](https://github.com/olatoyemmanuel/district-youth-management-system/pull/34) |
+
+All 25 PRs (#10–#34) were checked individually. At review time, each was OPEN and UNMERGED. Their PR descriptions state the owner approval date, and their changed-file patches contain the matching formal decision ID, APPROVED status and 2026-10-30 date. This is decision-specific repository provenance, stronger than the consolidated PR #35 summary alone. It is not a cryptographically signed approval transcript; the evidence is the owner-authored GitHub PR record and its formal decision file. The documents remain unmerged and must not be described as present on the default branch.
+
+### 3.2 Individually identified approval records recovered: AUTH-IDEM-026–041
 
 All of the following individual pull requests state that the product owner/user explicitly approved the corresponding decision on 2026-10-30. The records are documentation/governance only and do not authorize implementation.
 
@@ -87,7 +121,7 @@ All of the following individual pull requests state that the product owner/user 
 
 PR #35's consolidated specification also identifies AUTH-IDEM-001 through AUTH-IDEM-025 as approved and incorporates their requirements. However, this recovery pass did not independently recover the exact original approval wording and provenance for every one of those 25 individual decisions. The consolidated specification is evidence of the recorded project baseline, but the missing individual source records should remain linked or recovered where available.
 
-### 3.2 CR-01 through CR-06 approvals
+### 3.3 CR-01 through CR-06 approvals
 
 The consistency review file in PR #35 states that all six recommendations were explicitly approved by the product owner on 2026-10-30 and records them as follows:
 
@@ -125,7 +159,7 @@ These are the terms recorded by the consolidated specification. The AUTH-IDEM-01
 ## 5. Remaining gaps and required actions
 
 1. **AUTH-IDEM-016 overflow:** RESOLVED on 2026-11-02. Overflow is an integrity failure; wrapping/reset/reuse is prohibited; fail closed and route to controlled recovery/manual intervention. See AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md.
-2. **AUTH-IDEM-001–025 provenance:** PR #35 says the range is approved and incorporated, but exact individual source records were not independently recovered in this pass. Link/recover them before claiming complete per-decision provenance.
+2. **AUTH-IDEM-001–025 provenance:** RECOVERED. Separate owner-authored PRs #10–#34 and their matching formal decision files identify every decision, APPROVED status, and 2026-10-30 approval date. PRs remain open/unmerged; provenance is recorded in this file.
 3. **PR merge state:** PR #25, #35, and #36–#52 were found open and unmerged during this review. The decision text is evidence of recorded owner approval, but the files are not all present on the default branch. Do not claim the records are merged/canonical on main.
 4. **DDD-013 completion:** The consolidated spec and consistency review still say the authentication idempotency ERD slice is NOT READY. Physical uniqueness, exact columns/index predicates, secret-store integration, retention enforcement, transaction/lock behavior, and endpoint test evidence remain to be validated.
 5. **Formal DDD-013 final approval:** The specification itself says final explicit project-owner approval is still required after ERD validation.
