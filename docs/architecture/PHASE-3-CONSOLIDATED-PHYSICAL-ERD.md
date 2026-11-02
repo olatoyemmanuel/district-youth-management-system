@@ -55,7 +55,7 @@ Preserved boundaries:
 | Tables | 65 | 70 |
 | Column declarations | 617 | 675 |
 | Named FK relationships | 155 | 164 |
-| Distinct named index candidates | 214 historical summary | 222 |
+| Distinct named index candidates | 216 enumerated in Phase 2 source (its summary incorrectly stated 214) | 222 |
 | Testable requirements | 97 historical | 107 current |
 
 Counts refer to the reconciled candidate registers, not a live database. The Phase 3 index count is the number of distinct named candidate indexes after removing superseded entries and adding Phase 3 indexes. PK indexes are not listed unless separately named composite candidate keys are required.
