@@ -102,14 +102,15 @@ Use table-specific, named scope CHECKs. Do not apply a generic three-column scop
 
 | Table | Constraint | Predicate / invariant | Classification |
 |---|---|---|---|
-| positions | `ck_positions_exactly_one_owner_scope` | Exactly one of district_id, church_id, department_id is populated and it matches allowed_scope_type | DDD-004 technical scope |
-| appointments | `ck_appointments_exactly_one_owner_scope` | Exactly one of district_id, church_id, department_id is populated and it matches the linked position scope type | DDD-004 technical scope |
+| positions | `ck_positions_scope_shape` | district_id is always NOT NULL; DISTRICT requires church_id/department_id NULL; CHURCH requires church_id NOT NULL and department_id NULL; DEPARTMENT requires department_id NOT NULL and church_id NULL | DDD-004 technical scope |
+| appointments | `ck_appointments_scope_shape` | district_id and scope_type are NOT NULL; DISTRICT requires child scope IDs NULL; CHURCH requires church_id only; DEPARTMENT requires department_id only. Composite FKs prove scope_type/IDs match the position. | DDD-004 technical scope |
 | user_role_assignments | `ck_user_role_assignments_exactly_one_owner_scope` | Exactly one valid organizational scope is populated | DDD-005 |
 | access_denies | `ck_access_denies_exactly_one_owner_scope` | Exactly one valid organizational scope is populated | DDD-005 |
 | member_category_eligibility_rules | `ck_member_category_eligibility_rules_approval_pair` | approved_by_user_account_id and approved_at are both NULL or both NOT NULL | ODR-001; no rule activates without approval |
 
 
-- `positions`: exactly one of district_id, church_id, department_id, consistent with allowed_scope_type.
+- `positions`: district_id is mandatory for all position scopes; allowed_scope_type determines whether church_id or department_id is additionally populated. Composite FKs bind child scope to the same district.
+- `appointments`: district_id and scope_type are mandatory; optional church_id/department_id follow scope_type. Three composite FKs bind appointment district/type and optional child scope to the selected position.
 - `user_role_assignments`: exactly one valid organizational scope.
 - `access_denies`: exactly one valid organizational scope.
 - `financial_accounts` and `budgets`: exactly one of district_id and church_id.
