@@ -227,14 +227,13 @@ One row represents one distinct proposed index name. The definition column recor
 | `uq_financial_accounts_district_account_code` | `financial_accounts` | `district_id, account_code WHERE district_id IS NOT NULL AND church_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_account_reference` | `financial_transactions` | `financial_account_id, reference` | Unique / partial unique | Medium catalogue |
 | `uq_financial_transactions_id_account_currency` | `financial_transactions` | `id, financial_account_id, currency_code` | Unique / partial unique | Medium catalogue |
+| `uq_idempotency_church_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, church_id, key_digest WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | D13-PDR-01 |
 <!-- SUPERSEDED by D13-PDR-01; retained here as historical inventory only. -->
-| `uq_idempotency_church_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, church_id, key_digest WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | Medium catalogue |
+| `uq_idempotency_department_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, department_id, key_digest WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | D13-PDR-01 |
 <!-- SUPERSEDED by D13-PDR-01; retained here as historical inventory only. -->
-| `uq_idempotency_department_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, department_id, key_digest WHERE department_id IS NOT NULL AND district_id IS NULL AND church_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | Medium catalogue |
+| `uq_idempotency_district_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, district_id, key_digest WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | D13-PDR-01 |
 <!-- SUPERSEDED by D13-PDR-01; retained here as historical inventory only. -->
-| `uq_idempotency_district_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, district_id, key_digest WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | Medium catalogue |
-<!-- SUPERSEDED by D13-PDR-01; retained here as historical inventory only. -->
-| `uq_idempotency_global_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, key_digest WHERE district_id IS NULL AND church_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | Medium catalogue |
+| `uq_idempotency_global_actor_operation_key` | `idempotency_records` | `actor_user_account_id, operation_code, key_digest WHERE district_id IS NULL AND church_id IS NULL AND department_id IS NULL` | SUPERSEDED / DO NOT IMPLEMENT | D13-PDR-01 |
 | `uq_idempotency_authenticated_identity` | `idempotency_records` | `actor_user_account_id, operation_code, scope_fingerprint, COALESCE(session_id, reserved-zero-uuid), key_digest WHERE scope_mode = 'AUTHENTICATED'` | PROPOSED FOR INDEPENDENT REVIEW | D13-PDR-01 |
 | `uq_idempotency_pre_auth_identity` | `idempotency_records` | `pre_auth_context_id, operation_code, scope_fingerprint, key_digest WHERE scope_mode = 'PRE_AUTHENTICATION'` | PROPOSED FOR INDEPENDENT REVIEW | D13-PDR-01 |
 | `uq_member_categories_code` | `member_categories` | `code` | Unique / partial unique | Medium catalogue |
