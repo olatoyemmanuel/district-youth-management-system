@@ -422,3 +422,10 @@ This package is a consolidated physical-design candidate only. Do not:
 - provision or modify production infrastructure.
 
 **Final physical ERD approval: NOT GRANTED. Implementation authorization: NOT GRANTED.**
+
+
+## 15. Exact revision and approval record
+
+The immutable review target is identified in [PHASE-3-PHYSICAL-ERD-APPROVAL-MANIFEST.md](./PHASE-3-PHYSICAL-ERD-APPROVAL-MANIFEST.md). The manifest records the Git blob SHA of this master ERD and the exact hashes of its supporting registers.
+
+Project-owner approval must explicitly identify revision CPERD-01 and the recorded blob SHA. Approval of this document does not authorize implementation; implementation requires a separate explicit authorization after physical ERD approval.
