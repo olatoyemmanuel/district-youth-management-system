@@ -3,7 +3,7 @@
 - Revision: RPT-PR-01
 - Date: 2026-11-02
 - Scope: DYMS v1.0, Sango District
-- Status: **PROPOSED; NOT YET ADDED TO THE APPROVED 97-REQUIREMENT BASELINE**
+- Status: **PROJECT OWNER APPROVED 2026-11-02; ADDED TO THE 107-REQUIREMENT TESTABLE BASELINE; DELEGATED-AUTHORITY CONFIRMATION PENDING**
 - Authority: DDD-005, DDD-012, ODR-004, ODR-013, approved conceptual ERD
 - Implementation: NOT AUTHORIZED
 
@@ -11,7 +11,7 @@
 
 The requirements consolidation contains reporting entities and report export controls, but no dedicated REPORT requirement group. This proposal supplies testable candidate requirements so the report-definition, report-run and export-audit model has traceability.
 
-These IDs are reserved proposal identifiers. They do not change the approved 97-row requirement count until the project owner approves this package and the requirements catalogue and crosswalk are updated together.
+The project owner approved these requirements on 2026-11-02. REPORT-001–REPORT-010 have been added to PHASE-1-TESTABLE-REQUIREMENTS.md and the Phase 1 traceability matrix. The canonical count is now 107, comprising the prior 97 plus these 10 report requirements. ODR-013 delegated-authority confirmation remains pending.
 
 ## 2. Candidate requirements
 
@@ -138,7 +138,7 @@ No additional scope owner type is authorized by this proposal. District and chur
 
 ## 4. Owner decisions still required
 
-ODR-013 remains open. The competent reporting, data-owner, security/privacy and project authorities must approve:
+The project owner approved the report requirements and recommended v1 scope on 2026-11-02. ODR-013 remains pending delegated-authority confirmation. The competent reporting, data-owner, security/privacy and project authorities must still approve:
 - first-release report catalogue;
 - classification and disclosure matrix;
 - role/scope access matrix;
@@ -158,6 +158,6 @@ After approval:
 4. Update ODR-013 status and record the authority/approval metadata.
 5. Reconcile the report physical table, column, FK and index registers.
 
-Until then, REPORT-001–REPORT-010 remain proposed IDs outside the approved 97-row baseline.
+REPORT-001–REPORT-010 are now canonical testable requirement IDs. Their acceptance criteria are approved for design traceability; report catalogue, classification, disclosure, export and retention policies remain authority-gated.
 
 **No SQL, Prisma, migration, seed, report API or application implementation is authorized.**
