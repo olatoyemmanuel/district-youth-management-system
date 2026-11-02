@@ -434,3 +434,37 @@ This addendum supersedes earlier status wording in this register where later pro
 - REPORT-001–REPORT-010 remain part of the 107-ID testable requirements baseline. Report catalogue, classification, disclosure and export authority remain pending under ODR-013.
 
 The current consolidated closure queue is [PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md](./PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md).
+
+## 13. Superseding project-owner decision status (2026-11-02)
+
+This section is the current status authority and supersedes historical wording in §§3–4 and earlier status snapshots where they describe the decisions below as blocked on external confirmation.
+
+### DYMS design decisions closed
+
+| Decision | Current DYMS disposition |
+|---|---|
+| ODR-001 | Configurable, versioned category eligibility. One active primary category and permanent assignment history remain. No age threshold or automatic promotion is hardcoded. Master Guide remains a credential. |
+| ODR-002 | Member-initiated transfer, receiving-church acceptance, district final approval and effective-on-approval. Preserve all decisions and reasons. One unresolved request per member. No backdating by default. Cancellation/rejection/appeal paths are explicit, auditable and configurable before enablement. |
+| ODR-003 | Higher-authority appointment approval, fresh approval on renewal, 1 January–31 December term, one active holder per position/scope, reasoned early termination. Acting, overlap and retroactive exceptions are disabled in v1. |
+| ODR-004 | ODR-REC-01 approved. District-owned departments; events owned by district or one church; departments may organize but not own events. |
+| ODR-005 | ODR-REC-01 approved. Conservative account and transaction workflow; submitter/approver separation; payment and posting separated; partial payments and FX disabled in v1; linked full reversals. |
+| ODR-006 | ODR-REC-01 approved. EVENT or SESSION subject mode; confirmed registration normally required; documented authorized exception; self-check-in and offline sync disabled; corrections audited. |
+| ODR-007 | Member-requested department membership, coordinator approval, multiple memberships, withdrawal and reasoned termination. Eligibility is versioned/configurable; no automatic expiry or renewal assumption. |
+| ODR-008 | ODR-REC-01 approved. Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes reapproved; postponement preserves prior schedule. |
+| ODR-009 | Versioned credential catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Only configured definitions are issuable; unknown validity periods remain unset. |
+| ODR-010 | ODR-REC-01 approved. Separate Audit Officer; admin does not automatically receive audit-read; scoped access and independently approved exceptional access; break-glass disabled until a procedure is configured. |
+| ODR-011 | ODR-REC-01 approved. No automated permanent deletion without an approved schedule; holds suspend disposal; business retention remains separate from DFR-005 backup retention. |
+| ODR-012 | ODR-REC-01 approved. In-app baseline; verified email and approved templates; optional SMS/WhatsApp with consent; provider-independent adapters; bounded retries and audited manual replay. |
+| ODR-013 | ODR-REC-01 approved. District/church/department reports only; versioned/classified definitions; authorization at request, execution and retrieval; private CSV/PDF exports; retention follows ODR-011. |
+
+These are DYMS product decisions. They do not claim to change external church policy or issue official ministry credentials. External source metadata is attached to a rule or credential version when official recognition is asserted. Where a source or value is unknown, it remains configurable or unset.
+
+### Technical and deployment disposition
+
+- ODR-ENV-001–006: design-level engineering decisions are recorded in TBR-01. PostgreSQL 15 is the minimum design target; no extension is required; UUID, normalization, timestamp, FK and database-role conventions are documented.
+- ODR-ENV-007: deployment topology, provider, backup product and proof of DFR-005 RPO/RTO remain deployment-time work.
+- DDD-013 implementation-time PostgreSQL DDL, concurrency, security and recovery tests remain blocked only by the separate implementation authorization, not by a request for additional design approval.
+
+### Governance boundary
+
+The project owner's DYMS decision is sufficient to close DYMS product-design questions. Do not request external committee or third-party evidence as a prerequisite for accepting these decisions. Preserve DFR-001–DFR-006 and the separate implementation authorization gate. No Prisma schema, SQL DDL, migration, database object, seed, generated client, API, frontend/backend code, infrastructure change or deployment is authorized.
