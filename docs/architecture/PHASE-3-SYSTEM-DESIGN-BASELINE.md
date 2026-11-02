@@ -342,3 +342,17 @@ The following companion documents expand this system design baseline:
 These artifacts are design proposals. The route catalogue is not a final OpenAPI contract, aggregate candidates are not final physical aggregates, and the ERD reconciliation plan does not approve physical schema. They preserve all existing policy and implementation gates.
 
 **Milestone status:** Detailed architecture artifacts created on the working branch. They require review and reconciliation. Final physical ERD approval remains NOT GRANTED. Implementation remains NOT AUTHORIZED.
+
+
+## 16. Consolidated physical ERD reconciliation package (2026-11-02)
+
+The Phase 3 physical-design candidate has been assembled. The master artifact is [PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md](./PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md). Its supporting canonical registers are:
+
+- [PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md](./PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md): 70 tables and 675 column declarations.
+- [PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md](./PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md): 164 named FK candidates.
+- [PHASE-3-CANONICAL-INDEX-INVENTORY.md](./PHASE-3-CANONICAL-INDEX-INVENTORY.md): 222 distinct named index candidates.
+- [PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md](./PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md): structural CHECKs, trigger/transaction boundaries and concurrency tests.
+- [PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md](./PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md): all 107 requirement IDs mapped.
+- [PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md](./PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md): internal engineering review of all ten DDD-013 review questions.
+
+This package is a consolidated candidate for project-owner review, not an approved physical schema. Five physical entities and two removed ownership columns are explicitly identified as conceptual-to-physical amendments. External DDD-013 review, delegated authority confirmations, DFR-006 governance clarification and final project-owner approval remain outstanding. Implementation remains NOT AUTHORIZED.
