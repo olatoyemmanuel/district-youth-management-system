@@ -17,7 +17,7 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | Measure | Count |
 |---|---:|
 | Phase 2 named FK relationships | 155 |
-| Phase 3 candidate named FK relationships | 163 |
+| Phase 3 candidate named FK relationships | 164 |
 | Phase 3 additions / replacements | 13 new named rows, with superseded scope relationships removed |
 | Delete/update action baseline | RESTRICT / RESTRICT |
 | Implementation | NOT AUTHORIZED |
@@ -43,6 +43,7 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_attendance_corrections_attendance_record_id` | `attendance_corrections` | `attendance_record_id` | `attendance_records(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_attendance_corrections_record_time` |
 | `fk_attendance_corrections_requested_by_user_account_id` | `attendance_corrections` | `requested_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_corrections_requested_by_user_account_id` |
 | `fk_attendance_records_recorded_by_user_account_id` | `attendance_records` | `recorded_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_records_recorded_by_user_account_id` |
+| `fk_attendance_records_reg_exception_actor` | `attendance_records` | `registration_exception_granted_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_attendance_records_reg_exception_actor` |
 | `fk_attendance_records_registration_event_member` | `attendance_records` | `registration_id,event_id,member_id` | `event_registrations(id,event_id,member_id)` | NULL / NOT NULL / NOT NULL | UNIQUE(id,event_id,member_id), `uq_event_registrations_id_event_member` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_records_registration_id_event_id_member_id` |
 | `fk_attendance_records_session_event` | `attendance_records` | `event_session_id,event_id` | `event_sessions(id,event_id)` | NULL / NOT NULL | UNIQUE(id,event_id), `uq_event_sessions_id_event` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_records_event_session_id_event_id` |
 | `fk_attendance_records_subject_event_member` | `attendance_records` | `attendance_subject_id,event_id,member_id` | `event_attendance_subjects(id,event_id,member_id)` | NOT NULL / NOT NULL / NOT NULL | UNIQUE(id,event_id,member_id), `uq_event_attendance_subjects_id_event_member` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_attendance_records_subject_event_member` |
