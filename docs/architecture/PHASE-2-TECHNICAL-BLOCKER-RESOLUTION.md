@@ -266,3 +266,48 @@ The following implementation areas must remain feature-gated until their authori
 Before implementation, complete the final physical registers from this baseline, obtain owner approval of the physical design, and receive separate explicit implementation authorization. The conflicting DFR-006 repository statements must also be reconciled by a dated owner governance record; this document does not lift or change DFR-006.
 
 **No Prisma schema, SQL DDL, migration, database object, seed, generated client, API implementation or application code is authorized by this document.**
+
+
+## 14. Exact trigger and identity refinements
+
+### 14.1 Appointment overlap trigger contract
+
+The overlap guard uses a BEFORE INSERT OR UPDATE trigger on `appointments`. The trigger:
+- requires `position_id`, `effective_from`, and the approved appointment marker to be present before the appointment becomes effective;
+- locks the parent `positions` row with `FOR UPDATE` before checking for overlap;
+- checks only other approved rows (`approved_at IS NOT NULL`) using the half-open interval predicate:
+  `existing.effective_from < COALESCE(NEW.effective_to, 'infinity'::timestamptz)` AND
+  `NEW.effective_from < COALESCE(existing.effective_to, 'infinity'::timestamptz)`;
+- excludes the current appointment on UPDATE;
+- rejects an approved appointment's `position_id` change; a scope/position change requires a new appointment and preserved history;
+- allows adjacent intervals where one interval ends exactly when the next begins;
+- runs the overlap query after acquiring the parent lock, in the same transaction as the insert/update.
+
+The trigger does not use a lifecycle status string. The `approved_at IS NOT NULL` marker identifies records that crossed the approved appointment boundary. If appointment requests are stored separately in the final model, only the approved appointment table receives this trigger. The lock serializes competing approvals for the same position, so the second transaction observes the first committed interval before accepting its own.
+
+### 14.2 Attendance mode and registration exception columns
+
+The event row must expose `attendance_mode varchar(16) NOT NULL`, with candidate values `EVENT` and `SESSION`. The event mode becomes immutable after the first attendance record is inserted.
+
+For `attendance_records`, add:
+- `registration_exception_granted_by_user_account_id uuid NULL` FK to `user_accounts(id)`;
+- `registration_exception_reason text NULL`;
+- `registration_exception_granted_at timestamptz NULL`.
+
+A CHECK enforces one of two shapes:
+- registered attendance: `registration_id IS NOT NULL` and all three exception columns are NULL;
+- approved exception: `registration_id IS NULL` and all three exception columns are NOT NULL.
+
+A BEFORE INSERT/UPDATE trigger locks the parent `events` row before checking the event's configured mode and referenced session. EVENT mode requires `event_session_id IS NULL`; SESSION mode requires `event_session_id IS NOT NULL` and the session must belong to the same event. The event-level and session-level partial unique indexes prevent duplicate rows. In SESSION mode, an event-level summary is derived and not stored as a duplicate attendance row.
+
+Attendance identity fields (`attendance_subject_id`, `event_id`, `member_id`) are immutable after insert. Corrections are represented by the approved correction workflow, not by moving an attendance row to another member/event.
+
+ODR-006 remains the authority gate for approving the mode vocabulary and operational exceptions. These column/trigger details are the proposed physical contract for that decision.
+
+### 14.3 Canonical login identifier storage
+
+The existing `user_accounts.login_identifier` column is the canonical stored identifier, not a display-preserving copy. The application normalizes it using versioned Unicode NFC plus the selected case-folding rule before insert. A separate display/contact field may preserve presentation, but authentication lookup and the unique index use only the canonical `login_identifier` under `COLLATE "C"`. The exact case policy for email as an accepted login identifier remains an owner decision; email contact uniqueness is not inferred from login identifier uniqueness.
+
+### 14.4 No implicit status defaults
+
+All lifecycle-bearing values remain explicit command inputs after authorization and transition validation. Do not default an account, appointment, transfer, registration, attendance, finance, credential, notification or report status to an assumed active/pending value. Database defaults are limited to technical IDs, creation timestamps, update timestamps and explicitly approved counters.
