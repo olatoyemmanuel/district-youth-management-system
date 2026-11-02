@@ -295,7 +295,7 @@ The documentation reconciliation pass has produced a consolidated candidate pack
 | Entity/aggregate ownership | PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md | 70 tables assigned to one owning context; five candidate additions identified |
 | Column reconciliation | PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | 679 column declarations; old 617-column baseline reconciled |
 | FK reconciliation | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 166 named candidate relationships; all source/target columns and supporting indexes cross-checked |
-| Index reconciliation | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 228 distinct names; 23 superseded names removed; six policy blockers retained as blocked |
+| Index reconciliation | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 228 distinct names; 21 superseded names removed; six policy blockers retained as blocked |
 | CHECK/trigger enforcement | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | Structural predicates, trigger boundaries and concurrency tests catalogued |
 | DDD-013 slice | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | Ten review questions addressed internally; independent reviewer still pending |
 | Requirements traceability | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | 107 of 107 requirement IDs mapped, including platform-only and policy-gated requirements |
