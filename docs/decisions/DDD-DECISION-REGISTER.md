@@ -50,6 +50,8 @@ The Owner Decision Register records the approved baseline for DDD-002 through DD
 - Owner decision queue: `docs/decisions/PHASE-2-OWNER-DECISION-REGISTER.md` (ODR-001–ODR-013 and ODR-ENV-001–ODR-ENV-007).
 - Owner decision package: `docs/decisions/PHASE-2-OWNER-DECISION-PACKAGE.md`.
 - DDD reconciliation: `docs/decisions/PHASE-2-DDD-DECISION-REGISTER-RECONCILIATION.md`.
+- DDD-013 approval evidence recovery: `docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md`.
+- AUTH-IDEM-016 overflow clarification: `docs/decisions/AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md`.
 - DDD-005 explicit-deny and role-conflict approval: `docs/decisions/DDD-005-EXPLICIT-DENY-AND-ROLE-CONFLICT-PROPOSAL.md`.
 - Requirements: `docs/product/PHASE-1-TESTABLE-REQUIREMENTS.md`.
 - Requirement crosswalk: `docs/product/PHASE-1-REQUIREMENT-TO-ERD-TRACEABILITY.md`.
@@ -495,10 +497,10 @@ The consolidated DDD-013 specification and consistency review are in [PR #35](ht
 PR #25 and PR #52 both use decision ID AUTH-IDEM-016 and both state that the product owner explicitly approved the decision on 2026-10-30. They are not identical:
 - PR #25 explicitly treats counter overflow as an exceptional integrity failure and prohibits wrap/reset.
 - PR #52 leaves overflow handling open, while adding that counter values must not be reset or reused during the operation's lifetime.
-- The consolidated DDD-013 specification in PR #35 includes overflow-as-integrity-failure language, matching PR #25.
+- The consolidated DDD-013 specification in PR #35 includes overflow-as-integrity-failure language, matching the owner's 2026-11-02 clarification.
 - PR #52 is later but does not explicitly state that it supersedes PR #25.
 
-Therefore the common approved core (BIGINT, initial 0, increment-by-one per successful recovery claim, atomic coordination, stale-value rejection) is recovered. The precise approval boundary for overflow handling remains unresolved. Do not silently choose a variant. The owner must confirm whether overflow failure/no-wrap is part of AUTH-IDEM-016 approval or remains a separate technical integrity requirement.
+Therefore the common approved core (BIGINT, initial 0, increment-by-one per successful recovery claim, atomic coordination, stale-value rejection) is recovered. The project owner resolved this discrepancy on 2026-11-02 by explicitly approving the PR #25 treatment: overflow is an integrity failure; wrapping, resetting, or reusing values is prohibited; the operation must fail closed and route to controlled recovery or manual intervention. See AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md. The historical difference between PR #25 and PR #52 remains documented.
 
 **Open technical detail and evidence limits**
 - Exact physical columns, scope-mode constraints, partial unique-index predicates, foreign keys, nullability/defaults, and transaction/locking enforcement remain physical-design work.
@@ -617,12 +619,12 @@ The following are not approvals. They are the current closure obligations.
 2. The current requirement-to-ERD crosswalk maps these 97 IDs to DDD decisions and conceptual ERD areas.
 3. There is no dedicated REPORT requirement group, despite reporting definitions, report runs, classification, and export audit appearing in the owner decision package and physical-design materials.
 4. The preliminary ranges in the requirements consolidation do not consistently match the IDs actually present in the detailed testable requirements file.
-5. DDD-013 follow-up approval evidence is now recovered from PR #25, PR #35, and PR #36–#52. AUTH-IDEM-016 has two conflicting versions concerning overflow handling; exact individual provenance for AUTH-IDEM-001–025 remains incomplete. See docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md.
+5. DDD-013 follow-up approval evidence is now recovered from PR #25, PR #35, and PR #36–#52. AUTH-IDEM-016 overflow conflict resolved by owner approval dated 2026-11-02; exact individual provenance for AUTH-IDEM-001–025 remains incomplete. See docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md.
 
 **Required corrective work**
 - Add testable report requirements and update the crosswalk, or document an explicit, testable mapping to existing requirements. Do not invent IDs in this register.
 - Reconcile the preliminary ID ranges against the detailed requirements file.
-- Preserve the recovered DDD-013 approval records and resolve the AUTH-IDEM-016 overflow boundary with the project owner. Recover exact individual provenance for AUTH-IDEM-001–025 where available.
+- Preserve the recovered DDD-013 approval records and formalize the AUTH-IDEM-016 overflow clarification. Recover exact individual provenance for AUTH-IDEM-001–025 where available.
 - Update requirements, lifecycle catalogue, traceability, conceptual/physical design, and tests together when a competent authority closes a policy item.
 
 ## 7. Physical design and implementation boundary
@@ -654,6 +656,7 @@ For every new or amended DDD decision:
 | Date | Change | Evidence |
 |---|---|---|
 | 2026-11-02 | Initial canonical DDD-001–DDD-015 register created from the repository reconciliation. Approved principles preserved; unresolved details and missing approval metadata explicitly identified. | `PHASE-2-DDD-DECISION-REGISTER-RECONCILIATION.md`; `PHASE-2-OWNER-DECISION-REGISTER.md`; requirements and traceability documents; DDD-005 formal approval record |
+| 2026-11-02 | AUTH-IDEM-016 overflow wording conflict resolved by project-owner approval: overflow is an integrity failure; no wrap/reset/reuse; fail closed and route to controlled recovery/manual intervention. | `AUTH-IDEM-016-OVERFLOW-CLARIFICATION.md`; PR #25; PR #52 |
 
 ## 9. Register completion assessment
 
@@ -662,7 +665,7 @@ For every new or amended DDD decision:
 **Approved principles preserved:** Yes, subject to the stated evidence metadata gaps and open details.  
 **DDD-005 follow-up approval preserved exactly in scope:** Yes, dated 2026-10-31.  
 **DDD-003/004/006 conflicts identified and constrained:** Yes.  
-**DDD-013 technical follow-up evidence recovered:** Partially. AUTH-IDEM-016 common core and AUTH-IDEM-026–041/CR-01–CR-06 evidence recovered; overflow variant and AUTH-IDEM-001–025 individual provenance remain open.  
+**DDD-013 technical follow-up evidence recovered:** Partially. AUTH-IDEM-016 common core and overflow clarification, plus AUTH-IDEM-026–041/CR-01–CR-06 evidence, recovered; AUTH-IDEM-001–025 individual provenance and ERD validation remain open.  
 **Reporting traceability gap resolved:** No; corrective action remains open.  
 **Physical database design approved:** No.  
 **Application implementation authorized:** **No.**
