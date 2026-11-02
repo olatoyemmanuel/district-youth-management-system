@@ -7,7 +7,7 @@
 - Review pull request: #53
 - Master ERD revision: CPERD-01
 - Master ERD Git blob SHA: **6d0b47973f4e24c73409832a4986f00817805638**
-- Physical ERD approval: **NOT GRANTED**
+- Physical ERD approval: **PROJECT OWNER APPROVED — CPERD-01 (2026-11-02)**
 - Implementation authorization: **NOT AUTHORIZED**
 
 ## 1. Exact approval target
@@ -108,20 +108,20 @@ The five new tables and appointment scope additions are physical design proposal
 | DFR-006 governance discrepancy | OPEN |
 | Production PostgreSQL provider/version confirmation | OPEN |
 | Retention schedules/source enrollment | OPEN |
-| Final physical ERD project-owner approval | NOT GRANTED |
+| Final physical ERD project-owner approval | APPROVED — CPERD-01, exact SHA recorded below |
 | Separate implementation authorization | NOT GRANTED |
 
 ## 7. Approval record
 
-Project-owner decision to record against this exact revision:
-
 - Revision: CPERD-01
 - Master Git blob SHA: 6d0b47973f4e24c73409832a4986f00817805638
-- Decision: APPROVED / REVISE / REJECT
-- Date:
-- Conditions or change-request references:
+- Decision: **APPROVED**
+- Decision authority: Project owner
+- Date: 2026-11-02
+- Evidence: Explicit approval in the project conversation, “I approve CPERD-01, SHA 6d0b47973f4e24c73409832a4986f00817805638”.
+- Detailed record: [CPERD-01 Project-Owner Approval Record](./PHASE-3-CPERD-01-OWNER-APPROVAL-RECORD.md)
 
-Approval of CPERD-01 does not by itself authorize implementation. Implementation requires a separate explicit authorization after the physical ERD approval and required governance/authority gates are satisfied.
+This is physical-ERD design approval only. It does not authorize implementation. Implementation requires separate explicit authorization after the outstanding governance, delegated-authority, independent-review and environment gates are addressed and recorded.
 
 ## 8. Implementation restriction
 
