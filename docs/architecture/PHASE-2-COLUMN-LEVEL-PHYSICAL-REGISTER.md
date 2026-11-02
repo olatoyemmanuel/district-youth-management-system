@@ -679,3 +679,22 @@ No SQL DDL, Prisma schema, migration, database object, generated client, seed, o
 ## DDD-013 authentication idempotency revision overlay
 
 The idempotency rows in this register describe the earlier physical proposal and are **superseded for authentication idempotency** by [DDD-013 Physical Design Revision D13-PDR-01](./PHASE-2-DDD-013-PHYSICAL-DESIGN-REVISION.md). Do not implement the old mandatory `actor_user_account_id`, district/church/department scope columns, or four organizational-scope unique indexes for authentication idempotency. The revision proposes nullable authenticated identity references, a pre-authentication context FK, explicit `scope_mode`, server-derived `scope_fingerprint`, two mode-specific unique indexes, HMAC key-version and fencing/retention/recovery metadata, plus outbox linkage. The exact rows in this register must be regenerated from D13-PDR-01 after independent review and owner approval; this overlay does not authorize implementation.
+
+
+## 6. Technical default and timestamp convention (TBR-01)
+
+Apply the following conventions when regenerating the per-column register. These conventions are design decisions, not a blanket default for all 617 columns:
+
+| Column pattern | Proposed default / enforcement |
+|---|---|
+| UUID primary-key `id` | `gen_random_uuid()` on the PostgreSQL 15 baseline |
+| `created_at` | `transaction_timestamp()`; immutable after insert |
+| `updated_at` | Database-maintained BEFORE UPDATE trigger using `statement_timestamp()`; initialize on insert with `transaction_timestamp()` |
+| Explicit approved counters such as `fencing_counter` and `reserved_count` | Retain their explicitly documented `DEFAULT 0` and nonnegative CHECK |
+| Status, category, role, permission, decision, owner scope, amount, currency, effective date, event schedule and approval fields | No inferred default. Require explicit domain command/value. |
+
+Business timestamps (approval, effective, issued, recorded, provider callback and event start/end) are not substituted with creation timestamps. Historical imports must preserve source times in explicit domain columns and cannot backdate database audit timestamps.
+
+The 611 previously unspecified defaults must not be filled mechanically. Only the patterns above receive a default. Other columns remain NOT SPECIFIED IN SOURCE until their domain contract explicitly defines one.
+
+**Status:** Default conventions resolved at design level. The per-column register still requires regeneration to show each affected field and exact named CHECK constraints before final physical approval.
