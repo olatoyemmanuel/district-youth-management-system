@@ -284,3 +284,50 @@ Documentation, diagrams, review matrices and design-only artifacts are permitted
 8. Request separate implementation authorization only after physical ERD approval.
 
 **Current status:** Physical design approval is not granted. Implementation is not authorized.
+
+
+## 11. Reconciliation execution update (2026-11-02)
+
+The documentation reconciliation pass has produced a consolidated candidate package:
+
+| Workstream | Output | Current result |
+|---|---|---|
+| Entity/aggregate ownership | PHASE-3-CONSOLIDATED-PHYSICAL-ERD.md | 70 tables assigned to one owning context; five candidate additions identified |
+| Column reconciliation | PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | 675 column declarations; old 617-column baseline reconciled |
+| FK reconciliation | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 164 named candidate relationships; all source/target columns and supporting indexes cross-checked |
+| Index reconciliation | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 222 distinct names; 19 superseded names removed; six policy blockers retained as blocked |
+| CHECK/trigger enforcement | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | Structural predicates, trigger boundaries and concurrency tests catalogued |
+| DDD-013 slice | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | Ten review questions addressed internally; independent reviewer still pending |
+| Requirements traceability | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | 107 of 107 requirement IDs mapped, including platform-only and policy-gated requirements |
+
+### 11.1 Automated documentation consistency checks
+
+The current candidate registers were fetched back from the working branch and cross-checked:
+
+- 675 column rows across 70 distinct tables.
+- 164 named foreign-key rows.
+- 222 distinct index rows.
+- Every FK source table and source column exists in the column register.
+- Every FK target table and target column exists in the column register.
+- Every FK supporting source index exists in the canonical index inventory.
+- Every named target candidate key referenced by an FK exists in the index inventory.
+- No duplicate index names.
+- No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
+- No stale removed ownership/index names remain in the column register's index references.
+- 107 requirement IDs are mapped exactly once; zero unmapped or unrecognized IDs.
+
+These are static documentation consistency checks. They are not PostgreSQL DDL execution, query-plan validation, concurrency testing or independent reviewer acceptance.
+
+### 11.2 Remaining gates
+
+The reconciliation package is assembled but is not approved. The following remain open:
+- external independent DDD-013 reviewer disposition;
+- explicit project-owner approval of five new physical entities and two removed columns;
+- ODR-001/002/003/007/009 authority decisions or explicit exclusions;
+- delegated confirmation for ODR-004/005/006/008/010/011/012/013 where required;
+- DFR-006 governance clarification;
+- production PostgreSQL provider/version and environment confirmation;
+- retention source enrollment and schedules;
+- exact final project-owner approval of the consolidated ERD revision and its Git blob hash.
+
+**Current gate:** consolidated physical-design candidate prepared for review; physical ERD approval NOT GRANTED; implementation NOT AUTHORIZED.
