@@ -247,6 +247,8 @@ The owner-approved AUTH-IDEM-016 clarification controls: if the next fencing inc
 
 ## 11. Revised review disposition
 
+The Phase 3 internal engineering review and reconciled physical slice are recorded in [PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md](./PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md). The Phase 3 canonical column, FK, index and integrity registers carry the current candidate. The independent reviewer gate remains open.
+
 TBR-01 closes the previously underspecified session ownership, scope fingerprint encoding, recovery event history, tombstone representation and external-secret transaction choreography at design level. It is an internal engineering refinement, not an independent reviewer acceptance.
 
 **Status:** REVISED FOR INDEPENDENT REVIEW AND PROJECT-OWNER REVIEW.  
