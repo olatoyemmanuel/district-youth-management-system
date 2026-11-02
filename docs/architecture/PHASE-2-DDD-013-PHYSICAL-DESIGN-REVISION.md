@@ -254,3 +254,59 @@ TBR-01 closes the previously underspecified session ownership, scope fingerprint
 **Physical design approval:** NOT GRANTED.  
 **DDD-013 final physical approval:** NOT GRANTED.  
 **Implementation:** NOT AUTHORIZED.
+
+
+## 12. TBR-01 exact encoding and enforcement refinement
+
+This section is normative for the revised proposal and supplements §10.
+
+### 12.1 Scope fingerprint byte encoding
+
+Version 1 uses this deterministic byte sequence before SHA-256:
+
+1. ASCII bytes for `DYMS/AUTH-IDEM/SCOPE`, followed by one zero byte.
+2. One unsigned byte for encoding version (`0x01`).
+3. One unsigned byte for scope kind: GLOBAL=`0x00`, DISTRICT=`0x01`, CHURCH=`0x02`, DEPARTMENT=`0x03`.
+4. One unsigned byte for component count.
+5. For each component, in canonical order: one unsigned byte component tag, one unsigned byte length (always `0x10`), then the UUID's 16 bytes in network/big-endian order.
+
+Version 1 component order:
+- GLOBAL: no components.
+- DISTRICT: district UUID.
+- CHURCH: district UUID, church UUID.
+- DEPARTMENT: district UUID, department UUID. Version 1 follows the proposed district-owned department model. If church-owned departments are later approved, define a new encoding version rather than silently changing v1.
+
+The stored `scope_fingerprint_version` is 1 and `scope_fingerprint` is exactly 32 bytes. The database does not accept client-supplied fingerprints.
+
+### 12.2 Digest and key material separation
+
+- `key_digest`: SHA-256 of the UUIDv4 client idempotency key, exactly 32 bytes. UUIDv4 provides high-entropy random input; never store the raw key.
+- `request_fingerprint`: 32-byte SHA-256 fingerprint of the RFC 8785 canonical request representation, incorporating the approved HMAC-SHA-256 treatment for sensitive fields.
+- `hmac_key_version`: identifies the HMAC key version needed to reproduce the original sensitive-field fingerprint. It is NULL only for endpoint contracts with no HMAC-protected inputs.
+- Scope digest, key digest and request fingerprint use distinct input domains and are never interchangeable.
+
+### 12.3 Recovery-event ledger fields
+
+`idempotency_recovery_events` contains:
+- `id uuid PK DEFAULT gen_random_uuid()`;
+- `idempotency_record_id uuid NOT NULL FK idempotency_records(id) ON DELETE RESTRICT`;
+- `fencing_counter bigint NOT NULL CHECK (fencing_counter > 0)`;
+- `event_type varchar(32) NOT NULL`, constrained to the approved technical event vocabulary CLAIMED, COMPLETED, FAILED, STALE_WORKER_REJECTED, OVERFLOW_BLOCKED;
+- `worker_reference text NOT NULL`, non-secret service identity;
+- `occurred_at timestamptz NOT NULL DEFAULT transaction_timestamp()`;
+- `safe_failure_code varchar(80) NULL`;
+- `correlation_id uuid NULL`.
+
+A partial unique index on `(idempotency_record_id,fencing_counter)` WHERE `event_type='CLAIMED'` permits one successful claim event per fencing generation. The application database role cannot UPDATE or DELETE ledger rows. The OVERFLOW_BLOCKED event is recorded without incrementing the counter or changing the idempotency operation state.
+
+### 12.4 Session FK and expression-index checks
+
+Add UNIQUE `auth_sessions(id,user_account_id)`. The authenticated identity row uses the composite session-owner FK described in §10.1. The scope-mode CHECK requires:
+- AUTHENTICATED: actor non-NULL, pre-auth context NULL; session may be NULL only for principal-scoped endpoint contracts.
+- PRE_AUTHENTICATION: pre-auth context non-NULL, actor NULL and session NULL.
+
+The zero UUID sentinel is rejected by a CHECK on `session_id`. PostgreSQL 15 supports the proposed expression/partial unique index; the final DDL review must still verify index expression immutability, exact predicate, matching lookup expression and EXPLAIN/index usage.
+
+### 12.5 Password reset transaction ordering
+
+The external secret store operation occurs before the database transaction. The database transaction atomically creates the token-hash record, idempotency terminal row and outbox reference. On uncertain commit, the worker/request handler must query the unique idempotency identity before deleting the external secret. Secret TTL is a bounded orphan-cleanup mechanism, not a replacement for reference reconciliation.
