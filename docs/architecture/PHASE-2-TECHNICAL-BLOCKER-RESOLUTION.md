@@ -348,3 +348,64 @@ This CHECK proves that an unregistered attendance row carries a complete excepti
 The attendance subject mode remains the existing `event_attendance_subjects.mode` column. The prior draft sentence that said the event itself chooses a mode is superseded. The event/member subject locks itself before checking child attendance shape. ODR-006 must confirm whether the mode should be per member-event subject (the current ERD shape) or a single setting for the entire event before the final schema is frozen.
 
 The candidate column, FK, CHECK and index above must be added to the canonical column/FK/index registers during final register regeneration. They are not represented as already present in the 617-column/155-FK/214-index source inventories.
+
+
+## 16. Stable CHECK-constraint naming catalogue
+
+Use the stable pattern `ck_<table>_<invariant>`. Names are lowercase ASCII, deterministic, unique within the schema and no longer than PostgreSQL's 63-byte identifier limit. Do not put lifecycle status values in a CHECK until the corresponding state catalogue is approved.
+
+The following structural CHECK names are the proposed baseline:
+
+| Table | Constraint name | Invariant |
+|---|---|---|
+| `auth_sessions` | `ck_auth_sessions_expiry_order` | Inactivity expiry does not exceed absolute expiry |
+| `auth_session_tokens` | `ck_auth_session_tokens_generation_positive` | Token generation is greater than zero |
+| `password_reset_tokens` | `ck_password_reset_tokens_expiry_order` | Expiry is later than creation |
+| `member_category_assignments` | `ck_member_category_assignments_effective_interval` | Effective end is NULL or later than start |
+| `church_memberships` | `ck_church_memberships_effective_interval` | Effective end is NULL or later than start |
+| `church_transfer_requests` | `ck_church_transfer_requests_distinct_churches` | Source and receiving church differ |
+| `positions` | `ck_positions_allowed_scope_type` | Scope type is one of DISTRICT, CHURCH or DEPARTMENT |
+| `appointments` | `ck_appointments_term_interval` | Term end is not before term start |
+| `appointments` | `ck_appointments_effective_interval` | Effective end is NULL or later than start |
+| `role_permissions` | `ck_role_permissions_effect_allow` | Role-permission rows represent ALLOW only; DENY remains separate |
+| `events` | `ck_events_capacity_nonnegative` | Capacity is NULL or nonnegative |
+| `events` | `ck_events_reserved_count_nonnegative` | Reserved count is nonnegative |
+| `events` | `ck_events_time_order` | Event end is later than event start |
+| `events` | `ck_events_registration_window` | Registration close is not before registration open when both are set |
+| `event_sessions` | `ck_event_sessions_time_order` | Session end is later than session start |
+| `event_attendance_subjects` | `ck_event_attendance_subjects_mode` | Mode is EVENT or SESSION |
+| `financial_accounts` | `ck_financial_accounts_exactly_one_owner` | Exactly one of district_id and church_id is populated |
+| `currencies` | `ck_currencies_minor_unit_range` | Minor unit is between zero and four |
+| `financial_transaction_reversals` | `ck_financial_transaction_reversals_not_self` | Original and reversal transaction differ |
+| `budget_revisions` | `ck_budget_revisions_number_positive` | Revision number is greater than zero |
+| `budgets` | `ck_budgets_exactly_one_owner` | Exactly one of district_id and church_id is populated |
+| `budgets` | `ck_budgets_period_order` | Period end is not before period start |
+| `budget_lines` | `ck_budget_lines_sort_order_nonnegative` | Sort order is nonnegative |
+| `credential_definition_versions` | `ck_credential_definition_versions_validity` | Duration is present only when the validity policy requires it |
+| `credential_issuances` | `ck_credential_issuances_validity_order` | Valid-until is NULL or not before valid-from |
+| `notification_deliveries` | `ck_notification_deliveries_attempt_positive` | Attempt number is greater than zero |
+| `outbox_messages` | `ck_outbox_messages_event_version_positive` | Event version is greater than zero |
+| `outbox_messages` | `ck_outbox_messages_attempt_count_nonnegative` | Attempt count is nonnegative |
+| `integration_failures` | `ck_integration_failures_retry_count_nonnegative` | Retry count is nonnegative |
+| `audit_events` | `ck_audit_events_actor_type` | Actor type is USER, SYSTEM, SERVICE or ANONYMOUS |
+| `audit_events` | `ck_audit_events_actor_identity` | Actor type matches the required user/service/null identity shape |
+| `report_runs` | `ck_report_runs_output_size_nonnegative` | Output size is NULL or nonnegative |
+| `idempotency_records` | `ck_idempotency_records_scope_mode_identity` | Exactly one authenticated or pre-auth identity shape |
+| `idempotency_records` | `ck_idempotency_records_status` | Status is IN_PROGRESS, COMPLETED or FAILED |
+| `idempotency_records` | `ck_idempotency_records_fencing_nonnegative` | Fencing counter is nonnegative |
+| `idempotency_records` | `ck_idempotency_records_session_not_reserved` | Reserved zero UUID is never a real session reference |
+| `attendance_records` | `ck_attendance_records_registration_evidence` | Registration FK and exception evidence are mutually exclusive complete shapes |
+
+Additional exact-one-scope CHECKs must be named per table using `ck_<table>_exactly_one_owner_scope` only where the table has the corresponding typed owner columns. Their permitted owner set is table-specific and must match the final ODR-004 decision. Do not apply a generic three-way district/church/department CHECK to finance accounts or budgets.
+
+The following are not ordinary row CHECK constraints and must remain separate enforcement mechanisms:
+- appointment overlap: serialized parent-position trigger;
+- attendance mode/child-shape: serialized attendance-subject trigger plus partial unique indexes;
+- submitter/approver inequality: transactionally enforced actor comparison;
+- parent/child organizational hierarchy: composite FKs;
+- finance reversal equality and one-full-reversal rule: composite FKs, unique keys and transactionally enforced amount comparison;
+- event capacity: atomic reservation operation and parent-event lock;
+- retention hold versus disposal: locked hold check in the same disposal transaction;
+- append-only audit/recovery evidence: database privileges and restricted writer path.
+
+Lifecycle state CHECKs for transfer, appointment, department membership, event registration, finance, credentials, notification and report workflows remain blocked until their state catalogues are approved. This catalogue supplies stable names for structural invariants; the final register must still include exact expressions, field participation and source traceability.
