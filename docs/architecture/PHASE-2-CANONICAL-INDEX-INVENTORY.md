@@ -1,4 +1,6 @@
 # DYMS Phase 2 Canonical Index Inventory
+> **Phase 2 baseline notice:** This file is retained as historical source material. Its summary states 214 indexes, while its table contains 216 distinct named entries. Use [Phase 3 Canonical Index Inventory](./PHASE-3-CANONICAL-INDEX-INVENTORY.md) for the reconciled 222-index candidate. No index DDL is authorized.
+
 
 **Status:** Consolidated document-level proposal, not approved for implementation  
 **Scope:** DYMS v1.0, Sango District  
