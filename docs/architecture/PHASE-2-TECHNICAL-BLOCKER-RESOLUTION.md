@@ -285,6 +285,24 @@ The overlap guard uses a BEFORE INSERT OR UPDATE trigger on `appointments`. The 
 
 The trigger does not use a lifecycle status string. The `approved_at IS NOT NULL` marker identifies records that crossed the approved appointment boundary. If appointment requests are stored separately in the final model, only the approved appointment table receives this trigger. The lock serializes competing approvals for the same position, so the second transaction observes the first committed interval before accepting its own.
 
+#### 14.1.1 Phase 3 position/appointment scope reconciliation
+
+The earlier overlap trigger contract did not fully specify the physical scope columns needed to prove that an appointment has the same district and child scope as its position. The Phase 3 candidate closes that gap and supersedes the earlier simple position_id FK:
+
+- positions.district_id is NOT NULL for every position.
+- positions.allowed_scope_type is DISTRICT, CHURCH or DEPARTMENT.
+- DISTRICT position: church_id and department_id are NULL.
+- CHURCH position: church_id is NOT NULL and department_id is NULL.
+- DEPARTMENT position: department_id is NOT NULL and church_id is NULL.
+- positions.church_id,district_id references churches(id,district_id); positions.department_id,district_id references departments(id,district_id).
+- appointments adds district_id NOT NULL, scope_type NOT NULL, church_id NULL and department_id NULL.
+- Appointment scope shape follows scope_type. The three composite FKs bind appointment position/district/type, position/church and position/department to the exact position tuple.
+- Target candidate keys are positions(id,district_id,allowed_scope_type), positions(id,church_id) and positions(id,department_id).
+- The simple appointments.position_id FK is superseded by the three scope-specific composite FKs.
+- The parent-position lock and half-open overlap predicate remain unchanged. Approved position scope/identity is immutable while dependent appointments exist.
+
+This design makes district the mandatory parent boundary for district, church and department positions. It does not change the annual appointment term, no-self-approval, fresh-renewal or no-overlap decisions.
+
 ### 14.2 Attendance mode and registration exception columns
 
 The existing `event_attendance_subjects.mode varchar(16) NOT NULL` is the authoritative mode for one member within one event, with candidate values `EVENT` and `SESSION`. Do not add `events.attendance_mode` in this revision. The subject mode becomes immutable after the first attendance record is inserted. This preserves the current physical ERD shape; ODR-006 must confirm whether the final business rule is per member-event subject or one mode for the entire event before final approval.
@@ -365,7 +383,9 @@ The following structural CHECK names are the proposed baseline:
 | `church_memberships` | `ck_church_memberships_effective_interval` | Effective end is NULL or later than start |
 | `church_transfer_requests` | `ck_church_transfer_requests_distinct_churches` | Source and receiving church differ |
 | `positions` | `ck_positions_allowed_scope_type` | Scope type is one of DISTRICT, CHURCH or DEPARTMENT |
+| `positions` | `ck_positions_scope_shape` | District is mandatory; allowed_scope_type determines the optional church or department scope |
 | `appointments` | `ck_appointments_term_interval` | Term end is not before term start |
+| `appointments` | `ck_appointments_scope_shape` | District and scope_type are mandatory; optional church/department references match the selected scope |
 | `appointments` | `ck_appointments_effective_interval` | Effective end is NULL or later than start |
 | `role_permissions` | `ck_role_permissions_effect_allow` | Role-permission rows represent ALLOW only; DENY remains separate |
 | `events` | `ck_events_capacity_nonnegative` | Capacity is NULL or nonnegative |
