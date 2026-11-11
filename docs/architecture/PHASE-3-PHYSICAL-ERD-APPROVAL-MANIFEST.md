@@ -32,7 +32,7 @@ These hashes identify the supporting files fetched from the working branch when 
 |---|---|
 | PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | 282419018c64967ff577ffcd806aefd4f8766187 |
 | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 116e61cfe06d43badf543cc7bbb32bbc32fa1ae0 |
-| PHASE-3-CANONICAL-INDEX-INVENTORY.md | 5e6f2b3df5982ca4a0903d520d07e578b0000042 |
+| PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
 | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 1f32158086c65751089464a46b975cd8c5964756 |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
@@ -77,6 +77,7 @@ The candidate registers were fetched back from the repository and checked agains
 - All 54 named structural CHECKs in the integrity register are referenced by the column register.
 - No duplicate index names.
 - No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
+- CPERD-05 correction verification: 228 unique index entries; 30 malformed predicate descriptions corrected; eight appointment-scope entries relocated into the canonical inventory; six policy blockers and two DDD-013 independent-review entries preserved; all 166 named FK rows have supporting indexes; no FK source/target columns are missing. See [CPERD-05 Correction and Verification Report](./PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
