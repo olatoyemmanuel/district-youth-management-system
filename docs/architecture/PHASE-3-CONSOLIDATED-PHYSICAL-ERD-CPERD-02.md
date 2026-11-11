@@ -473,7 +473,7 @@ The successor integrity register defines status-specific decision and terminatio
 | Named index candidates | 228 | 232 |
 | Row-local structural CHECK candidates | 53 | 60 |
 
-The successor adds no tables. Four new user-account FKs have matching supporting indexes. All seven new row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 60 row-local structural CHECK candidates. The original six policy-dependent indexes remain excluded; the transfer open-request predicate is now defined by the owner-approved core workflow but remains a candidate pending approval of this exact successor package.
+The successor adds no tables. Four new user-account FKs have matching supporting indexes. All seven new row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 60 row-local structural CHECK candidates. Five unrelated policy-dependent indexes remain excluded. The transfer open-request predicate is now defined by the owner-approved core workflow and is a successor candidate pending approval of this exact package.
 
 ### 16.4 Approval and implementation boundary
 
