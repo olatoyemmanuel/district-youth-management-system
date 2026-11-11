@@ -431,10 +431,10 @@ The server sets requester, submission timestamp, decision actor/time, approval a
 ### 21.3 Finance command boundaries
 
 - Transaction creation/submission requires account, transaction type, reference, description, amount, currency and transaction date. Account currency must equal transaction currency. The server derives submitter and account scope.
-- Approval/rejection requires an independent authorized approver. Rejection requires a non-empty reason. The submitter cannot approve their own transaction.
-- Payment initiation is available only for an approved transaction. Partial payment and more than one successful payment are rejected. A provider callback is authenticated, replay-protected and deduplicated. Provider acceptance is not proof of settlement.
+- Approval/rejection requires one independent authorized decision per submitted transaction. Rejection requires a non-empty reason. The submitter cannot approve their own transaction. A rejected transaction is terminal; material correction requires a new transaction.
+- Payment initiation is available only for an approved transaction. Multiple failed/pending attempts are allowed, but at most one CONFIRMED full payment is accepted. The confirmed amount must equal the transaction amount and the currency must match. A provider callback is authenticated, replay-protected and deduplicated. Provider acceptance is not proof of settlement.
 - Posting is a separate action after the required payment/reconciliation evidence. The posting actor is separately authorized. A posted transaction is immutable.
-- Reversal requests are full reversals only, linked to the original posted transaction, same account and currency, and subject to independent approval. At most one full reversal is permitted.
+- Reversal requests are full reversals only, linked to the original posted transaction, same account and currency, and subject to independent approval. Approval/rejection actor, time and reason are recorded. At most one full reversal is permitted.
 - Client-supplied status, approval actor, posting actor, settlement status, account owner or reversal linkage is rejected.
 
 ### 21.4 Federation read-only API boundary
