@@ -30,12 +30,15 @@ These hashes identify the supporting files fetched from the working branch when 
 
 | Artifact | Git blob SHA |
 |---|---|
-| PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | aed548fec93769740ad84d622234e1bd88c61a68 |
-| PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 116e61cfe06d43badf543cc7bbb32bbc32fa1ae0 |
+| PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | 61d1ee90b0aad07e9234d6327df2cda4c410e472 |
+| PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | a2d7595809faaad165396aed08f4ab3aa1149ab2 |
 | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
 | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 6e7959f9ca562e0b3488cf366de4436ec20dc0ad |
 | PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md | be5fdd84c013adee7a785e4b9e5ec6f49387006e |
 | PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md | fb0bf9a8e14bbfe08a56f9638332251e8092ac8d |
+| PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md | e708cb8a504d8698780cf2f77c2ce8ddd9eaa5c6 |
+| PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md | 1520f5f6f496e327efce42c59d64d8f8ac25d5b7 |
+| PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | ee9e376068c347284e05dea4dcb41bd92457da8f |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -84,9 +87,22 @@ The candidate registers were fetched back from the repository and checked agains
 - No stale removed owner/index names remain in the current column register's index references.
 - CPERD-07 database security/least-privilege design: logical object-owner, migration, runtime, worker, reporting, audit-reader, backup-operator and narrow audit-writer roles are defined at design level; table-by-table grants, provider capabilities, audit/exception authority, reporting governance and trigger/function hardening remain open. See [CPERD-07 Database Security and Least-Privilege Report](./PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md).
 - CPERD-08 trigger/transaction reconciliation: exact design contracts recorded for appointment overlap, attendance mode/session validation, event capacity, retention holds, updated_at, append-only evidence, credential validity, refresh rotation, DDD-013 fencing, finance reversal and outbox processing; 20 concurrency/failure test specifications defined but not executed. Authority/provider gates remain open. See [CPERD-08 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md).
+- CPERD-09 static cross-register reconciliation: 70 tables, 679 columns, 166 FKs, 228 named indexes and 53 structural CHECKs verified; the missing named category-eligibility unique-index reference and malformed FK-register section boundary were corrected. CPERD-01 status-header mismatch and DDD-013/system-baseline hash drift are recorded as governance/integrity gates. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
+
+
+### 4.1 Current-branch artifact hash drift
+
+The support hashes above preserve the original manifest snapshot and exact approval references. CPERD-09 identified two current-branch differences that must not be silently treated as approved versions:
+
+| Artifact | Hash recorded in original support snapshot / approval | Current branch blob | Disposition |
+|---|---|---|---|
+| PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b | a2c1eb8a4989bad7cb7687b1eae208642eb22abe | Approval record remains bound to the recorded hash; current artifact equivalence is unverified. |
+| PHASE-3-SYSTEM-DESIGN-BASELINE.md | 43e4a26fdb40ff2bd4cad7dbce6ae303752796e5 | eb25d44d30a65c2028eb6897ade4a30a74ef457c | Original snapshot preserved; current branch version requires diff review. |
+
+The CPERD-01 master file remains at its exact owner-approved blob. Its internal header status is stale and is not to be edited in place. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
 
 ## 5. Material amendments requiring explicit owner approval
 
