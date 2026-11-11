@@ -86,13 +86,13 @@ The current table already represents the position, appointee, appointing authori
 Add:
 - `requested_by_user_account_id` UUID NOT NULL FK to `user_accounts(id)`;
 - `submitted_at` timestamptz NOT NULL;
-- `decided_by_user_account_id` UUID nullable FK to `user_accounts(id)`;
-- `decided_at` timestamptz nullable;
-- `decision_reason` text nullable;
+- `rejected_by_user_account_id` UUID nullable FK to `user_accounts(id)`;
+- `rejected_at` timestamptz nullable;
+- `rejection_reason` text nullable;
 - `terminated_by_user_account_id` UUID nullable FK to `user_accounts(id)`;
 - `terminated_at` timestamptz nullable.
 
-Replace `approved_by_user_account_id` and `approved_at` with the generic decision actor/time fields. They remain NULL while PENDING_APPROVAL and become mandatory for APPROVED or REJECTED. The decision outcome is represented by status. A non-empty `decision_reason` is mandatory for REJECTED. `appointing_authority_user_account_id` remains the designated authority reference and is not proof by itself that the acting approver has current authority.
+Retain `approved_by_user_account_id` and `approved_at`, but make them nullable while PENDING_APPROVAL or REJECTED. They are mandatory for APPROVED and TERMINATED. Rejection uses its own actor/time/reason fields, all mandatory for REJECTED and all NULL otherwise. `appointing_authority_user_account_id` remains the designated authority reference and is not proof by itself that the acting approver has current authority.
 
 A single terminal decision is allowed for each submitted appointment request. Rejected requests remain as rows. Renewal creates a new appointment row with a new request lifecycle and fresh approval. No automatic extension, acting appointment, overlapping holder or retroactive appointment is enabled.
 
@@ -102,9 +102,9 @@ A single terminal decision is allowed for each submitted appointment request. Re
 |---|---|---|
 | PENDING_APPROVAL | Submitted and awaiting designated higher authority | requester, submitted_at, proposed position/appointee/scope/term |
 | APPROVED | Higher-authority approval recorded; appointment is effective according to its approved interval | approved_by, approved_at, effective_from |
-| REJECTED | Higher authority rejected the request | approved_by as decision actor, approved_at as decision time, rejection_reason |
+| REJECTED | Higher authority rejected the request | rejected_by_user_account_id, rejected_at, non-empty rejection_reason |
 | TERMINATED | Previously approved appointment ended early | terminated_by, terminated_at, termination_reason |
-| EXPIRED | Approved appointment reached its approved end boundary | derived or recorded by a controlled expiry transition; no permission after effective_to |
+| Expired (derived) | Approved appointment's effective interval has ended | No persisted EXPIRED status is required; authority is inactive when the evaluation instant is outside the effective interval |
 
 Do not use a generic status alone to determine permission. Appointment-derived grants are valid only when the appointment is approved, its effective interval contains the evaluation instant, and the underlying role mapping and scope remain valid.
 
