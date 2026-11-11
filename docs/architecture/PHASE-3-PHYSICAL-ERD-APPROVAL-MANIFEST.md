@@ -35,6 +35,7 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
 | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 6e7959f9ca562e0b3488cf366de4436ec20dc0ad |
 | PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md | be5fdd84c013adee7a785e4b9e5ec6f49387006e |
+| PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md | fb0bf9a8e14bbfe08a56f9638332251e8092ac8d |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -82,6 +83,7 @@ The candidate registers were fetched back from the repository and checked agains
 - CPERD-06 integrity reconciliation: 53 row-local structural CHECK candidates are cross-referenced; credential-definition validity is reclassified as a cross-row application policy; the updated_at trigger scope now enumerates all nine affected tables. Trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
 - CPERD-07 database security/least-privilege design: logical object-owner, migration, runtime, worker, reporting, audit-reader, backup-operator and narrow audit-writer roles are defined at design level; table-by-table grants, provider capabilities, audit/exception authority, reporting governance and trigger/function hardening remain open. See [CPERD-07 Database Security and Least-Privilege Report](./PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md).
+- CPERD-08 trigger/transaction reconciliation: exact design contracts recorded for appointment overlap, attendance mode/session validation, event capacity, retention holds, updated_at, append-only evidence, credential validity, refresh rotation, DDD-013 fencing, finance reversal and outbox processing; 20 concurrency/failure test specifications defined but not executed. Authority/provider gates remain open. See [CPERD-08 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
