@@ -41,7 +41,7 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md | 82cab77039fbb1fc5a4a6f6bcf9ab11260caf091 |
 | DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md | 8452b503ccd542b639600d1d01d7dc5f38e13285 |
 | PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md | 0936099909ee997569dd5c7cba6d8dce247d45b3 |
-| PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | 66f39ceb1d23573a52edf0fef8ce0add9ddb9092 |
+| PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | 2f6689e17fd609371ffc7da3416bf897cdfce5f4 |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -86,11 +86,12 @@ The candidate registers were fetched back from the repository and checked agains
 - No duplicate index names.
 - No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
 - CPERD-05 correction verification: 228 unique index entries; 30 malformed predicate descriptions corrected; eight appointment-scope entries relocated into the canonical inventory; six policy blockers and two DDD-013 independent-review entries preserved; all 166 named FK rows have supporting indexes; no FK source/target columns are missing. See [CPERD-05 Correction and Verification Report](./PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md).
-- CPERD-06 integrity reconciliation: 53 row-local structural CHECK candidates are cross-referenced; credential-definition validity is reclassified as a cross-row application policy; the updated_at trigger scope now enumerates all nine affected tables. Trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
+- CPERD-06 integrity reconciliation: 53 row-local structural CHECK candidates are cross-referenced; credential-definition validity is reclassified as a cross-row application policy; the updated_at trigger scope now enumerates all nine affected tables. Trigger/function metadata and implementation validation remain separate follow-up work. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
-- CPERD-07 database security/least-privilege design: logical object-owner, migration, runtime, worker, reporting, audit-reader, backup-operator and narrow audit-writer roles are defined at design level; table-by-table grants, provider capabilities, audit/exception authority, reporting governance and trigger/function hardening remain open. See [CPERD-07 Database Security and Least-Privilege Report](./PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md).
-- CPERD-08 trigger/transaction reconciliation: exact design contracts recorded for appointment overlap, attendance mode/session validation, event capacity, retention holds, updated_at, append-only evidence, credential validity, refresh rotation, DDD-013 fencing, finance reversal and outbox processing; 20 concurrency/failure test specifications defined but not executed. Authority/provider gates remain open. See [CPERD-08 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md).
-- CPERD-09 static cross-register reconciliation: 70 tables, 679 columns, 166 FKs, 228 named indexes and 53 structural CHECKs verified; the missing named category-eligibility unique-index reference and malformed FK-register section boundary were corrected. CPERD-01 status-header mismatch and DDD-013/system-baseline hash drift are recorded as governance/integrity gates. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
+- CPERD-07 database security/least-privilege design: logical object-owner, migration, runtime, worker, reporting, audit-reader, backup-operator and narrow audit-writer roles are defined; owner-approved audit/reporting defaults are applied; provider-specific grants, append-only privilege proof, backup/restore capabilities and trigger/function hardening remain open. See [CPERD-07 Database Security and Least-Privilege Report](./PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md).
+- CPERD-08 trigger/transaction reconciliation: contracts recorded for appointment overlap, attendance mode/session validation, event capacity, retention holds, updated_at, append-only evidence, credential validity, refresh rotation, DDD-013 fencing, finance reversal and outbox processing; 20 concurrency/failure test specifications defined but not executed. Exact trigger/function metadata and provider-specific validation remain open. See [CPERD-08 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md).
+- CPERD-09 static cross-register reconciliation: 70 tables, 679 columns, 166 FKs, 228 named indexes and 53 structural CHECKs verified; the missing named category-eligibility unique-index reference and malformed FK-register section boundary were corrected. Approval/status hash differences were compared and explained as additive governance/approval records. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
+- CPERD-10 governance reconciliation: DFR-006 is clarified; Phase 4 owner-approved DYMS product defaults supersede older delegated-authority blocker wording; DDD-013 and system-baseline hash differences are verified status/governance addenda. See [CPERD-10 Governance Authority and Design-Status Reconciliation](./PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
@@ -107,7 +108,7 @@ The support hashes above preserve the original manifest snapshot and exact appro
 
 The CPERD-01 master file remains at its exact owner-approved blob. Its internal header status is stale and is not to be edited in place. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
 
-## 5. Material amendments requiring explicit owner approval
+## 5. CPERD-01 approved scope and successor-package boundary
 
 The consolidated candidate includes the following material physical refinements:
 
@@ -117,9 +118,9 @@ The consolidated candidate includes the following material physical refinements:
 4. Position scope now has a mandatory district boundary. Appointment records persist district_id and scope_type plus optional church/department scope, with three composite FKs binding the appointment to the exact position scope.
 5. DDD-013 authenticated/pre-authentication identity split, recovery event ledger, pre-auth context, password-reset outbox and secret-store boundary.
 6. Versioned member-category eligibility rule provenance and report data-owner catalogue.
-7. The 54 structural CHECK catalogue entries and trigger/transaction enforcement contracts.
+7. The 53 structural CHECK candidates and trigger/transaction enforcement contracts.
 
-The five new tables and appointment scope additions are physical design proposals. They require explicit project-owner approval as amendments to the previously approved conceptual model. Delegated ministry, finance, attendance, records, security and data authority decisions remain separately required as listed in the Owner Decision Register.
+The five new tables and appointment scope additions are included in the exact CPERD-01 master blob approved by the project owner. That approval remains valid for the master file SHA recorded above. The current supporting column/FK/index/integrity registers and CPERD-05 through CPERD-10 reconciliations provide later detailed corrections and refinements; they are not a new owner-approved implementation schema. A successor consolidated package must be reconciled and submitted for owner review before coding. Phase 4 GDC-01 confirms the owner-approved DYMS product defaults; external institutional confirmation is not a prerequisite for accepting those defaults.
 
 ## 6. Outstanding approval gates
 
@@ -131,10 +132,10 @@ The five new tables and appointment scope additions are physical design proposal
 | DDD-013 project-owner review | APPROVED — ALL TEN AREAS, 2026-11-02 |
 | DDD-013 project-owner review of all ten areas | APPROVED — D13-POA-01, 2026-11-02 |
 | DDD-013 external independent technical assurance | NOT PERFORMED; separate assurance consideration |
-| Delegated authority confirmation | PENDING where identified |
-| DFR-006 governance discrepancy | OPEN |
+| DYMS product/design decisions | OWNER-APPROVED under Phase 4 GDC-01 and ODR register §§12–13; external institutional confirmation is not a DYMS design blocker |
+| DFR-006 governance status | CLARIFIED — 2026-11-02; design freeze/change control remains in force |
 | Production PostgreSQL provider/version confirmation | OPEN |
-| Retention schedules/source enrollment | OPEN |
+| Retention schedules/source enrollment | Not configured; automated permanent deletion remains disabled until an approved schedule and source enrollment exist |
 | Final physical ERD project-owner approval | APPROVED — CPERD-01, exact SHA recorded below |
 | Separate implementation authorization | NOT GRANTED |
 
@@ -148,8 +149,8 @@ The five new tables and appointment scope additions are physical design proposal
 - Evidence: Explicit approval in the project conversation, “I approve CPERD-01, SHA 6d0b47973f4e24c73409832a4986f00817805638”.
 - Detailed record: [CPERD-01 Project-Owner Approval Record](./PHASE-3-CPERD-01-OWNER-APPROVAL-RECORD.md)
 
-This is physical-ERD design approval only. It does not authorize implementation. Implementation requires separate explicit authorization after the outstanding governance, delegated-authority, independent-review and environment gates are addressed and recorded.
+This is physical-ERD design approval only. It does not authorize implementation. The current supporting-register reconciliation is not a new final implementation schema approval. Any successor package that materially changes the approved master must receive exact-hash owner review. Implementation still requires separate explicit authorization. Provider and operational evidence are deployment gates; external institutional confirmation is not required to accept the owner-approved DYMS defaults. DDD-013 independent technical assurance has not been performed and is not represented as complete.
 
 ## 8. Implementation restriction
 
-Until the final physical ERD is approved and a separate implementation authorization is recorded, do not create or modify Prisma models, migrations, SQL DDL, database objects, seeds, API code, backend modules, frontend features or production infrastructure.
+The exact CPERD-01 master blob is owner-approved, but the later supporting-register corrections and CPERD-05–CPERD-10 design refinements have not been consolidated into a successor owner-approved implementation package. Regardless, separate implementation authorization is NOT GRANTED. Do not create or modify Prisma models, migrations, SQL DDL, database objects, seeds, API code, backend modules, frontend features, implementation tests or production infrastructure.
