@@ -86,7 +86,7 @@ A CHECK must not query another row or call a volatile function. Cross-row condit
 | budgets | `ck_budgets_exactly_one_owner` | exactly one of district_id and church_id is non-NULL | DDD-009/010 |
 | budgets | `ck_budgets_period_order` | period_end >= period_start | Structural |
 | budget_lines | `ck_budget_lines_sort_order_nonnegative` | sort_order >= 0 | Structural |
-| credential_definition_versions | `ck_credential_definition_versions_validity` | validity duration exists only when the approved definition requires it | ODR-009 gated |
+
 | credential_issuances | `ck_credential_issuances_validity_order` | valid_until IS NULL OR valid_until >= valid_from | ODR-009 gated |
 | notification_deliveries | `ck_notification_deliveries_attempt_positive` | attempt_number > 0 | DDD-015 |
 | integration_failures | `ck_integration_failures_retry_count_nonnegative` | retry_count >= 0 | DDD-015 |
@@ -145,8 +145,9 @@ The six POLICY BLOCKED indexes remain out of DDL until their predicates are appr
 | `trg_attendance_records_enforce_subject_mode` | BEFORE INSERT OR UPDATE or reviewed deferred constraint trigger; lock event_attendance_subjects row FOR UPDATE | EVENT mode requires no session; SESSION mode requires same-event session; one subject cannot mix modes; attendance identity columns immutable | ODR-006 owner-approved default; delegated attendance authority pending |
 | `trg_event_registrations_reserve_capacity` | Controlled transaction/trigger; lock events row FOR UPDATE | Only confirmed registrations consume capacity; increment/decrement reserved_count atomically; prevent last-slot race and direct counter bypass | ODR-008 owner-approved default; delegated event authority pending; exact lifecycle value still needs approval |
 | `trg_retention_actions_hold_guard` | Controlled transaction; lock retention_subject row FOR UPDATE | Active hold blocks disposal; recheck approved schedule and hold in same transaction | ODR-011 owner-approved default; no schedule/source enrollment until delegated approval |
-| `trg_<table>_set_updated_at` | BEFORE UPDATE on mutable tables | Set updated_at from database transaction time; callers cannot backdate | TBR-01 technical baseline; exact table list to be generated during DDL design |
+| `trg_<table>_set_updated_at` | BEFORE UPDATE on mutable tables | Set updated_at from database transaction time; callers cannot backdate | TBR-01 technical baseline; exact target tables: user_accounts, members, church_memberships, events, budgets, budget_lines, service_principals, idempotency_records and pre_auth_contexts |
 | Audit/recovery append-only privilege boundary | Database grants; optional defensive trigger | Runtime roles cannot UPDATE, DELETE or TRUNCATE audit_events, audit_access_events or idempotency_recovery_events | DDD-012 / D13-PDR-01 |
+| Credential definition validity policy | Application transaction before version approval or activation; read the referenced credential definition | validity_policy and validity_duration consistency depends on the related definition row and is not enforceable by a row-local CHECK | ODR-009; credential authority confirmation pending |
 | Finance reversal transaction | Application transaction with original financial transaction row lock | Full reversal only; same account/currency; at most one full reversal; original posted fact retained | ODR-005 owner-approved default; finance authority confirmation pending |
 | Appointment approval actor check | Application transaction | Higher-authority approval; requester/appointee cannot approve own appointment | DDD-004 |
 | Finance submit/approve actor check | Application transaction | Submitter cannot approve own transaction | DDD-010 |
