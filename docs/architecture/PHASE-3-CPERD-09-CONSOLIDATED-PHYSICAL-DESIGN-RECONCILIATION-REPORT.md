@@ -157,23 +157,23 @@ The approval manifest links to the CPERD-05 and CPERD-06 reports in its reconcil
 | Canonical column/FK/index/integrity registers | Reconciliation candidates; not independently certified as final implementation schema |
 | CPERD-05 | Corrections applied; static checks recorded |
 | CPERD-06 | Structural CHECK corrections applied; trigger/transaction and authority closure remains open |
-| CPERD-07 | Logical database role model defined; provider-specific grants and authority gates open |
-| CPERD-08 | Trigger/transaction contracts and 20 test specifications defined; implementation tests not executed |
+| CPERD-07 | Logical database role model defined; owner-approved audit/reporting defaults applied; provider-specific grants, append-only proof and backup/restore evidence remain open |
+| CPERD-08 | Trigger/transaction contracts and 20 test specifications defined; exact trigger/function metadata and register alignment remain open; implementation tests are post-authorization |
 | CPERD-09 | Static cross-register consistency passed after documentation corrections |
 | DDD-013 external independent technical assurance | NOT PERFORMED |
-| DFR-006 governance status | CLARIFIED — 2026-11-02 |
+| DFR-006 governance status | CLARIFIED — 2026-11-02; formal freeze/change control remains in force |
 | PostgreSQL provider/version and managed-service privilege model | OPEN |
-| ODR-010 audit access | OWNER DEFAULT APPROVED; break-glass remains disabled until a procedure is configured |
+| ODR-010 audit access | OWNER DEFAULT APPROVED; break-glass disabled until a procedure is configured |
 | ODR-011 retention | OWNER DEFAULT APPROVED; destructive disposal remains disabled until approved schedule/source enrollment is configured |
-| ODR-013 reporting | OWNER DEFAULT APPROVED; report-specific catalogue, data-owner, classification and disclosure configuration remains design work |
-| ODR-001–ODR-013 DYMS product defaults | OWNER DECISIONS RECORDED in Phase 4 GDC-01; external institutional policy is separate metadata/configuration, not a DYMS design blocker |
+| ODR-013 reporting | OWNER DEFAULT APPROVED; report-specific catalogue, data-owner, classification, disclosure and export-expiry configuration remains design work |
+| ODR-001–ODR-013 DYMS product defaults | Owner-approved decisions are recorded in Phase 4 GDC-01 and ODR register §§12–13; external institutional policy is separate metadata/configuration, not a DYMS design blocker |
 | Final amended physical package approval | NOT GRANTED |
 | Separate implementation authorization | NOT GRANTED |
 
 ## 7. Next reconciliation actions
 
-1. Reconcile the DDD-013 current-file hash against the exact approved blob and record the diff outcome.
-2. Preserve the DFR-006 clarification and ensure successor artifacts no longer repeat superseded governance status wording.
+1. Preserve the exact pre-approval DDD-013 hash and the later owner-approval status addendum as separate, traceable artifacts.
+2. Ensure successor artifacts no longer repeat superseded DFR-006 or delegated-authority status wording.
 3. Produce a successor physical ERD candidate with an exact artifact manifest. Do not overwrite CPERD-01.
 4. Regenerate the consolidated column/FK/index/CHECK/trigger package from the approved decisions and CPERD-05 through CPERD-08 corrections.
 5. Complete the CPERD-07 provider-specific privilege matrix and CPERD-08 trigger/function metadata.
