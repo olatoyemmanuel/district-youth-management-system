@@ -1,7 +1,8 @@
 import {
   Injectable,
   Logger,
-  TooManyRequestsException,
+  HttpException,
+  HttpStatus,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -28,8 +29,10 @@ function sha256(value: string): Buffer {
   return createHash('sha256').update(value).digest();
 }
 
-function constantTimeBufferEqual(left: Buffer, right: Buffer): boolean {
-  return left.length === right.length && timingSafeEqual(left, right);
+function constantTimeBufferEqual(left: Uint8Array, right: Uint8Array): boolean {
+  const leftBuffer = Buffer.from(left);
+  const rightBuffer = Buffer.from(right);
+  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
 }
 
 function addMilliseconds(date: Date, milliseconds: number): Date {
@@ -185,7 +188,7 @@ export class AuthService {
     await this.prisma.preAuthContext.create({
       data: {
         id: contextId,
-        secretDigest: sha256(secret),
+        secretDigest: Uint8Array.from(sha256(secret)),
         createdAt: now,
         expiresAt,
         updatedAt: now,
@@ -368,10 +371,10 @@ export class AuthService {
     const fingerprint = this.identifierFingerprint(input.loginIdentifier);
     const recentFailures = await this.countRecentFailures(fingerprint);
     if (recentFailures >= MAX_LOGIN_FAILURES) {
-      throw new TooManyRequestsException({
-        code: 'RATE_LIMITED',
-        message: 'Too many sign-in attempts. Try again later.',
-      });
+      throw new HttpException(
+        { code: 'RATE_LIMITED', message: 'Too many sign-in attempts. Try again later.' },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
     }
 
     const account = await this.prisma.userAccount.findUnique({

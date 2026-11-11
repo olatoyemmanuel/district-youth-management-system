@@ -23,7 +23,9 @@ export class CsrfGuard implements CanActivate {
 
     this.authService.verifySessionCsrf(
       request.authActor.sessionId,
-      request.headers['x-csrf-token'],
+      Array.isArray(request.headers['x-csrf-token'])
+        ? request.headers['x-csrf-token'][0]
+        : request.headers['x-csrf-token'],
     );
 
     return true;
