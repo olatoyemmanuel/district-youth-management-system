@@ -251,3 +251,45 @@ The design is not ready to be represented as a final successor physical schema u
 The project owner retains final approval authority. This recommendation record does not approve its own physical changes. The owner-review package must identify the exact successor ERD revision, every supporting register hash, the change-impact summary and explicit exclusions. Approval must name the exact manifest/package hash.
 
 Implementation remains **NOT AUTHORIZED** unless and until the project owner separately authorizes it.
+
+
+## 13. Logical role and authority map
+
+This is the application-level authority map. It is deliberately separate from PostgreSQL connection roles. The exact permission codes must map to the approved DDD-005 deny-by-default, explicit-deny and role-conflict model. A role name alone never grants access outside its assigned organizational scope.
+
+| Capability role family | Scope | Permitted authority | Explicit restriction / separation |
+|---|---|---|---|
+| Federation Oversight Reader | Assigned federation and its districts | Read aggregate oversight reports and permitted activity summaries | Read-only; no member, church or district mutation; no appointment, finance or credential approval |
+| District Organization Administrator | One district | Maintain district organization catalogue and local-church records | Cannot act outside own district; cannot bypass appointment or finance approval |
+| District Membership Authority | One district | Final transfer decision, membership administration and category administration | Cannot initiate a transfer on behalf of a member; member self-service remains account-bound |
+| Church Membership Authority | One church | Review receiving-church transfer decisions and local membership records | Cannot give final district transfer approval |
+| Department Coordinator | Assigned district department | Review department membership requests and organize permitted events | Department membership does not confer leadership authority; department does not own events |
+| Member | Own member/account identity | Read/update permitted own profile and initiate own transfer | Cannot impersonate another member or submit actor/scope identifiers as authority |
+| Appointment Requester | Exact position scope | Submit an appointment request for an eligible appointee | Cannot approve own request or self-appoint |
+| Higher Appointment Authority | Exact position scope and higher-authority relationship | Approve/reject appointment and authorize early termination | Must be higher authority in the same scope; cannot approve own appointment or appointee-self approval |
+| Finance Preparer | One district/church account scope | Prepare and submit transaction/budget | Cannot approve own transaction or post own transaction where separation applies |
+| Finance Approver | One account/budget scope | Approve/reject independently | Submitter cannot approve; independent approval required |
+| Payment Officer | One account scope | Initiate approved payment and reconcile provider evidence | Payment initiation is not posting; provider acceptance is not settlement |
+| Posting Officer | One account scope | Post verified approved transaction or approved reversal | Separate from submitter and approval actor under the finance separation model |
+| Audit Officer | Explicit authorized audit scope | Search/read permitted audit evidence and investigation records | System Administrator receives no automatic audit-read; exceptional access independently approved |
+| Records Authority | Approved record-class scope | Propose/approve schedules, place/release holds and request disposal | No permanent disposal without approved schedule, enrolled source and independent approval |
+| Credential Catalogue Editor | Configured credential catalogue scope | Propose definition/version changes | Cannot issue credentials solely by catalogue-edit permission |
+| Credential Evidence Verifier | Configured issuer/source scope | Verify submitted evidence | Separate from requester; evidence access is minimized and audited |
+| Credential Issuer | Configured credential/source scope | Issue, renew/reissue or revoke a configured credential | Issuer authority is explicit and scoped; unknown standards/validity remain unset |
+| Report Data Owner | One report definition/domain | Approve report purpose, source fields, classification, scope and disclosure | One accountable owner per report in v1; consultation with other domains is recorded |
+| Report Operator | Authorized district/church/department scope | Request, run and retrieve permitted reports/exports | Authorization is rechecked at request, execution and retrieval; exports are private and expiring |
+| System Administrator | Platform administration scope | Manage platform configuration and technical operations | No automatic business approval, finance authority, membership authority or audit-read permission |
+
+### 13.1 Separation-of-duties invariants
+
+- The actor who submits a financial transaction cannot approve it.
+- Payment initiation, verification/reconciliation and posting are distinct actions with separately authorized actors.
+- A requester/appointee cannot approve their appointment.
+- A transfer requester cannot make the receiving-church or district decision.
+- A credential requester/evidence submitter cannot self-verify or self-issue where independent verification is required.
+- A report requester does not become its data owner or disclosure approver.
+- An audit subject cannot approve their own exceptional audit access.
+- A retention initiator cannot independently approve destructive disposal.
+- System administration does not imply domain authority or audit-read.
+
+This map defines capability families, not a new role catalogue seed. Existing DDD-005 role-pair classifications and explicit-deny precedence remain authoritative. Exact role-to-permission assignments are generated only from those approved records and must be checked against the target resource scope at every protected operation.
