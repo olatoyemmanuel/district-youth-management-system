@@ -19,6 +19,8 @@ describe('DYMS environment validation', () => {
       DATABASE_URL: TEST_DATABASE_URL,
       RATE_LIMIT_TTL_MS: 60_000,
       RATE_LIMIT_MAX: 100,
+      CORS_ALLOWED_ORIGINS: 'http://localhost:5173',
+      TRUST_PROXY_HOPS: 0,
     });
   });
 

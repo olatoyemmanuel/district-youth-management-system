@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - phase-1/requirements-consolidation
+  pull_request:
+    branches:
+      - phase-1/requirements-consolidation
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Build and test backend
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://dyms_ci:dyms_ci@127.0.0.1:5432/dyms_ci
+      NODE_ENV: test
+      AUTH_ACCESS_TOKEN_SECRET: ci-only-access-secret-change-this-value-000000000000
+      AUTH_CSRF_SECRET: ci-only-csrf-secret-change-this-value-000000000000
+      AUTH_IDENTIFIER_HMAC_SECRET: ci-only-fingerprint-secret-change-this-value-000000000000
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+        name: Check out repository
+      - uses: actions/setup-node@v4
+        name: Set up Node.js 22
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate Prisma Client
+        run: npm run prisma:generate
+      - name: Build
+        run: npm run build
+      - name: Run unit tests
+        run: npm test
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+      - name: Run lint
+        run: npm run lint
