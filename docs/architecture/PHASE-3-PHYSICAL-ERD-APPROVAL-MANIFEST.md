@@ -34,6 +34,7 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 116e61cfe06d43badf543cc7bbb32bbc32fa1ae0 |
 | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
 | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 6e7959f9ca562e0b3488cf366de4436ec20dc0ad |
+| PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md | a8294d9bc30fb425be9edaa4d22b048b6e99767b |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -80,6 +81,7 @@ The candidate registers were fetched back from the repository and checked agains
 - CPERD-05 correction verification: 228 unique index entries; 30 malformed predicate descriptions corrected; eight appointment-scope entries relocated into the canonical inventory; six policy blockers and two DDD-013 independent-review entries preserved; all 166 named FK rows have supporting indexes; no FK source/target columns are missing. See [CPERD-05 Correction and Verification Report](./PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md).
 - CPERD-06 integrity reconciliation: 53 row-local structural CHECK candidates are cross-referenced; credential-definition validity is reclassified as a cross-row application policy; the updated_at trigger scope now enumerates all nine affected tables. Trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
+- CPERD-07 database security/least-privilege design: logical object-owner, migration, runtime, worker, reporting, audit-reader, backup-operator and narrow audit-writer roles are defined at design level; table-by-table grants, provider capabilities, audit/exception authority, reporting governance and trigger/function hardening remain open. See [CPERD-07 Database Security and Least-Privilege Report](./PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
