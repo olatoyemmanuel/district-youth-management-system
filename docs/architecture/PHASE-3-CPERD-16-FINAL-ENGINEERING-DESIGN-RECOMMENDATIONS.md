@@ -86,11 +86,13 @@ The current table already represents the position, appointee, appointing authori
 Add:
 - `requested_by_user_account_id` UUID NOT NULL FK to `user_accounts(id)`;
 - `submitted_at` timestamptz NOT NULL;
-- `rejection_reason` text nullable;
+- `decided_by_user_account_id` UUID nullable FK to `user_accounts(id)`;
+- `decided_at` timestamptz nullable;
+- `decision_reason` text nullable;
 - `terminated_by_user_account_id` UUID nullable FK to `user_accounts(id)`;
 - `terminated_at` timestamptz nullable.
 
-Change `approved_by_user_account_id` and `approved_at` to nullable while the request is pending. They become mandatory when status is APPROVED or TERMINATED. `appointing_authority_user_account_id` remains the designated authority reference and is not proof by itself that the acting approver has current authority.
+Replace `approved_by_user_account_id` and `approved_at` with the generic decision actor/time fields. They remain NULL while PENDING_APPROVAL and become mandatory for APPROVED or REJECTED. The decision outcome is represented by status. A non-empty `decision_reason` is mandatory for REJECTED. `appointing_authority_user_account_id` remains the designated authority reference and is not proof by itself that the acting approver has current authority.
 
 A single terminal decision is allowed for each submitted appointment request. Rejected requests remain as rows. Renewal creates a new appointment row with a new request lifecycle and fresh approval. No automatic extension, acting appointment, overlapping holder or retroactive appointment is enabled.
 
@@ -120,7 +122,7 @@ Do not use a generic status alone to determine permission. Appointment-derived g
 
 ### 4.5 Audit and history
 
-Every submission, approval, rejection, termination and expiry transition emits an immutable audit event containing resource type/id, actor, action, event time, reason where applicable, and before/after state reference. Audit events supplement explicit domain provenance; they do not replace the new requester/termination columns.
+Every submission, approval, rejection, termination and expiry transition emits an immutable audit event containing resource type/id, actor, action, event time, reason where applicable, and before/after state reference. Audit events supplement explicit domain provenance; they do not replace the requester, decision and termination columns.
 
 ## 5. ODR-005 — Finance: conservative v1 workflow
 
