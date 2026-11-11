@@ -390,7 +390,7 @@ The six policy-blocked indexes remain excluded from DDL.
 |---|---|---|
 | Columns | 70 tables / 692 column declarations | DDD-013 23-column record; pre-auth/recovery; organizer association; category-rule provenance; report data owner; attendance exception; remove obsolete owner columns |
 | Foreign keys | 171 named relationships | Session-owner composite FK; pre-auth/recovery/outbox FKs; organizer composite FKs; category eligibility and report-owner FKs; remove obsolete scope FKs |
-| Indexes | 235 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain six policy blockers as blocked |
+| Indexes | 235 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain five policy blockers as blocked |
 | Integrity/triggers | Structural CHECK and concurrency register | Exact structural names, trigger/transaction boundaries and test requirements |
 | Traceability | 107 / 107 requirements mapped | Explicit platform-only and policy-gated requirements |
 
@@ -485,7 +485,7 @@ Four reversal columns, one rejection-actor FK, three indexes and eight CHECK can
 | Named index candidates | 228 | 235 |
 | Row-local structural CHECK candidates | 53 | 68 |
 
-The successor adds no tables. Four new user-account FKs have matching supporting indexes. All seven new row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 68 row-local structural CHECK candidates. Five unrelated policy-dependent indexes remain excluded. The transfer open-request predicate is now defined by the owner-approved core workflow and is a successor candidate pending approval of this exact package.
+The successor adds no tables. Four new user-account FKs have matching supporting indexes. All 15 successor row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 68 row-local structural CHECK candidates. Five unrelated policy-dependent indexes remain excluded. The transfer open-request predicate is now defined by the owner-approved core workflow and is a successor candidate pending approval of this exact package.
 
 ### 16.5 Approval and implementation boundary
 
