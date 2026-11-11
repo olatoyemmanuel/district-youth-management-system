@@ -95,6 +95,14 @@ A CHECK must not query another row or call a volatile function. Cross-row condit
 | currencies | `ck_currencies_minor_unit_range` | minor_unit BETWEEN 0 AND 4 | Structural; currency catalogue authority remains open |
 | transaction_revisions | `ck_transaction_revisions_number_positive` | revision_number > 0 | DDD-010 |
 | transaction_reversals | `ck_transaction_reversals_not_self` | original_transaction_id <> reversal_transaction_id | DDD-010 |
+| financial_transactions | `ck_financial_transactions_status` | status IN (DRAFT, SUBMITTED, APPROVED, REJECTED, PAID, POSTED, REVERSED) | CPERD-16 successor candidate |
+| financial_transactions | `ck_financial_transactions_submission_metadata` | DRAFT requires submitted_at NULL; all later states require submitted_at NOT NULL | CPERD-16 successor candidate |
+| financial_transactions | `ck_financial_transactions_posting_metadata` | POSTED/REVERSED require posted_at and posted_by_user_account_id; all other states require both NULL | CPERD-16 successor candidate |
+| transaction_approvals | `ck_transaction_approvals_decision_reason` | decision IN (APPROVED, REJECTED); REJECTED requires non-empty reason; APPROVED may have NULL reason | CPERD-16 successor candidate |
+| payments | `ck_payments_status_metadata` | status IN (INITIATED, PENDING, CONFIRMED, FAILED, EXHAUSTED, CANCELLED); CONFIRMED requires confirmed_at; other states require confirmed_at NULL | CPERD-16 successor candidate |
+| transaction_reversals | `ck_transaction_reversals_status` | status IN (REQUESTED, APPROVED, REJECTED, POSTED) | CPERD-16 successor candidate |
+| transaction_reversals | `ck_transaction_reversals_decision_metadata` | REQUESTED requires decision metadata NULL; APPROVED/POSTED require approved actor/time and no rejection metadata; REJECTED requires rejected actor/time/non-empty rejection reason and no approval metadata | CPERD-16 successor candidate |
+| transaction_reversals | `ck_transaction_reversals_posting_metadata` | POSTED requires posted_at NOT NULL; all other statuses require posted_at NULL | CPERD-16 successor candidate |
 | budgets | `ck_budgets_exactly_one_owner` | exactly one of district_id and church_id is non-NULL | DDD-009/010 |
 | budgets | `ck_budgets_period_order` | period_end >= period_start | Structural |
 | budget_lines | `ck_budget_lines_sort_order_nonnegative` | sort_order >= 0 | Structural |
@@ -203,7 +211,7 @@ This register defines the proposed physical enforcement model. It does not autho
 
 ## CPERD-02 successor lifecycle and integrity delta
 
-Seven additional row-local CHECK candidates are defined above for appointment request/decision/termination metadata and church-transfer state/decision/cancellation metadata. The successor inventory therefore contains 60 row-local structural CHECK candidates. The original 53-check register remains unchanged as the CPERD-01-era source.
+Seven additional row-local CHECK candidates are defined above for appointment request/decision/termination metadata and church-transfer state/decision/cancellation metadata. The successor inventory therefore contains 68 row-local structural CHECK candidates. The original 53-check register remains unchanged as the CPERD-01-era source.
 
 The appointment overlap guard remains serialized by the parent position row and uses approved appointment provenance plus half-open effective intervals. Rejected and pending requests do not occupy a position. Terminated appointments retain their approved provenance and have a bounded effective interval.
 
@@ -217,3 +225,8 @@ All seven additions are owner-review candidates only. No CHECK, trigger or index
 The exact trigger metadata is maintained in [CPERD-02 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-02-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md). Only appointment overlap, attendance subject-mode enforcement and the nine updated_at trigger instances are database triggers. Event capacity, transfer completion, finance reversal, idempotency, outbox and credential validity are application transaction contracts. Retention disposal remains disabled until approved source enrollment and schedules exist.
 
 This separation avoids duplicate enforcement and prevents an unreviewed SECURITY DEFINER path from being introduced. The trigger/function owner is the non-login object-owner role; runtime and worker roles cannot alter or bypass trigger definitions.
+
+
+### CPERD-02 finance integrity delta
+
+Eight row-local CHECK candidates define transaction status/submission/posting metadata, approval decision/reason, payment status/confirmation metadata and reversal status/decision/posting metadata. The successor inventory now contains 68 row-local structural CHECK candidates. Cross-row payment amount equality, account/currency invariants and reversal linkage remain enforced by composite FKs and authorized transactions.
