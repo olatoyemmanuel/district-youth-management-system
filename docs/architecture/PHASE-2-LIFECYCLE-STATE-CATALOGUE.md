@@ -1,6 +1,6 @@
 # DYMS Phase 2: Lifecycle and State Catalogue
 
-**Status:** Working design catalogue; not approved for implementation  
+**Status:** Working lifecycle vocabulary catalogue; Phase 4 owner-approved product rules apply; exact persisted state labels remain subject to technical reconciliation; not approved for implementation  
 **Scope:** DYMS v1.0, Sango District  
 **Logical authority:** Approved conceptual ERD revision `25f2813e0256d9472daded45657dfb7ac9f70a43`  
 **Physical-design source:** `PHASE-2-PHYSICAL-DATABASE-DESIGN.md`  
@@ -10,7 +10,7 @@
 
 This catalogue defines the lifecycle vocabulary that the physical database design must eventually enforce. It separates states directly implied by approved workflows from provisional technical states and unresolved ministry, finance, safeguarding, or governance policy.
 
-It is not a blanket approval of the proposed values. A state marked **PROPOSED** must be confirmed by the project owner and relevant authority before a CHECK constraint, lookup seed, API contract, or migration is created. A state marked **POLICY BLOCKED** must not be implemented as a guessed value set.
+It is not a blanket approval of proposed persisted labels. An owner-approved DYMS product rule can be operative while its exact database state labels, transition codes and partial-unique predicates remain technical proposals. External institutional confirmation is not a prerequisite for accepting the project owner's DYMS product decisions. A state marked **POLICY BLOCKED** means its value or transition is not selected, or the capability remains disabled; do not invent a value set or implement a guessed constraint.
 
 The catalogue covers status-bearing entities and decision-bearing history entities. Some history tables have no mutable lifecycle status; they record immutable decisions or outcomes instead.
 
@@ -18,7 +18,8 @@ The catalogue covers status-bearing entities and decision-bearing history entiti
 
 - **DERIVED:** The distinction follows directly from an approved workflow. Exact labels still need consistent technical naming.
 - **PROPOSED:** A conservative technical lifecycle suggestion. It requires project-owner confirmation and must not be represented as official church policy.
-- **POLICY BLOCKED:** The correct states or transition authority depend on an unresolved policy or owner decision. Do not finalize database CHECK constraints or production seeds.
+- **POLICY BLOCKED:** The exact value/transition is not selected, or the capability remains disabled. Do not finalize a CHECK constraint or production seed. This classification does not imply an external committee approval is required where Phase 4 records an owner-approved DYMS product default.
+- **OWNER-APPROVED PRODUCT RULE:** The project owner has selected the DYMS behavior. Exact persisted labels, state-machine encoding, and constraints may still require technical reconciliation; do not treat candidate labels as approved database enums.
 - **IMMUTABLE HISTORY:** No mutable lifecycle status is required. The row is an append-only decision, evidence, or audit fact. Any processing outcome is represented by a separate related entity where applicable.
 
 ## 3. Lifecycle catalogue
@@ -94,15 +95,45 @@ The catalogue covers status-bearing entities and decision-bearing history entiti
 ## 5. Approval checklist
 
 - [ ] Project owner confirms the proposed technical states.
-- [ ] Relevant ministry authorities confirm member, category, church, department, appointment, event, attendance, and credential states.
-- [ ] Finance authority confirms account, budget, transaction, payment, approval and reversal states.
-- [ ] Security authority confirms account, role, permission, deny, session and idempotency states.
-- [ ] Records/administrative authority confirms retention policy, hold and action states.
-- [ ] Notification/integration owners confirm provider and delivery processing states.
+- [ ] Owner-approved DYMS product behavior is mapped to canonical state transitions. External source metadata is recorded only where official recognition is asserted.
+- [ ] Conservative finance defaults are reflected; disabled finance features remain absent from the enabled v1 state machine.
+- [ ] Security states preserve DFR-001/004, DDD-005, DDD-012 and DDD-013 without weakening their approved controls.
+- [ ] Retention disposal remains disabled until approved schedules and source enrollment are configured; holds suspend disposal.
+- [ ] Provider-specific states remain adapter/operational configuration; acceptance is distinct from delivery.
 - [ ] Every state-bearing table has an initial state, allowed states, transition authority, terminal states and history record.
 - [ ] Every transition has an authorization rule and an auditable outcome.
-- [ ] State catalogues are reconciled with all 97 testable requirement rows and the approved conceptual ERD.
+- [ ] State catalogue is reconciled with all 107 testable requirement IDs, including REPORT-001–REPORT-010, and the owner-approved CPERD-01 baseline.
 
 ## 6. Implementation boundary
 
 This document is a design proposal only. It does not authorize Prisma schema changes, migrations, SQL DDL, database objects, generated clients, or application implementation. The project owner must approve the physical design and separately authorize implementation.
+
+ 
+## 7. Phase 4 owner-authority and lifecycle status reconciliation (2026-11-11)
+
+Phase 4 GDC-01 §§4–5 and §12, together with the superseding ODR status in Owner Decision Register §§12–13, are the current authority for DYMS product behavior. Historical row-level statements describing a decision as waiting for external authority are superseded where they conflict with those owner decisions. Keep the old notes as audit history; apply this section when determining current status.
+
+### 7.1 Operative lifecycle defaults
+
+- Member category: one active primary category; preserve permanent assignment history; eligibility rules are versioned/configurable. Do not hardcode age thresholds or automatic promotion.
+- Church transfer: member initiates; receiving church accepts; district gives final approval; effective on approval; one unresolved request per member; no backdating by default. Cancellation/rejection/appeal paths must be explicit, auditable and configured before enablement.
+- Appointments: 1 January–31 December standard term; higher-authority approval; fresh approval for renewal; one active holder per position/scope; reasoned early termination. Acting, overlap and retroactive exceptions are disabled in v1.
+- Department membership: member request; coordinator approval; multiple memberships; withdrawal and reasoned termination; versioned/configurable eligibility; no automatic expiry or renewal assumption.
+- Events: district or one local church owns the event; department may organize but not own. Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes are reapproved.
+- Attendance: EVENT or SESSION subject mode; confirmed registration normally required; documented authorized registration exception; self-check-in and offline capture disabled.
+- Finance: submit/approve/pay/post separation; submitter cannot approve own transaction; reasoned rejection; pre-posting revisions; posted corrections through linked full reversals. Partial payments, multiple successful payments, FX, refunds, budget exceptions and amount-based thresholds remain disabled unless separately approved/configured.
+- Credentials: versioned catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Unknown validity remains unset.
+- Audit: append-only evidence; separate Audit Officer; system administrator has no automatic audit-read; exceptional access independently approved; break-glass disabled until a procedure is configured.
+- Retention: no automated permanent deletion without an approved schedule; holds suspend disposal; business retention is separate from DFR-005 backup retention.
+- Notifications: in-app baseline; verified email and approved templates; optional SMS/WhatsApp with consent; provider-independent adapters and bounded retries.
+- Reporting: district/church/department scope; versioned/classified definitions; authorization at request, execution and retrieval; private CSV/PDF exports.
+
+### 7.2 Technical status-label boundary
+
+The behavior above is owner-approved DYMS product design. It does not mean every candidate status word in §3 is an approved persisted enum. Before a state is used in a CHECK, unique-index predicate, API enum or migration:
+1. map the approved business transition to one canonical persisted state;
+2. document transition actor, command, preconditions, terminal behavior and history record;
+3. reconcile the exact label across DDD, ODR, API contract, requirements, physical columns, CHECKs, indexes and tests;
+4. keep disabled capabilities and unknown values out of the enabled v1 state machine.
+
+A technical label gap is a design-reconciliation task, not a request for external institutional approval. No migration, SQL, Prisma schema or implementation test is authorized by this catalogue.
