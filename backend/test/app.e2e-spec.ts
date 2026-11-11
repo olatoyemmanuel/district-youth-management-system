@@ -4,6 +4,7 @@ import request from 'supertest';
 import { App } from 'supertest/types.js';
 
 import { AppModule } from '../src/app.module.js';
+import { requestIdMiddleware } from '../src/common/http/request-id.middleware.js';
 import { PrismaService } from '../src/database/prisma.service.js';
 
 // Mock Prisma so these HTTP tests don't depend on a live PostgreSQL server.
@@ -15,7 +16,6 @@ describe('DYMS API (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
-    // Reset the database query mock to a healthy state for each test.
     prismaMock.$queryRaw.mockReset();
     prismaMock.$queryRaw.mockResolvedValue([{ result: 1 }]);
 
@@ -27,42 +27,48 @@ describe('DYMS API (e2e)', () => {
       .compile();
 
     app = moduleFixture.createNestApplication();
-
-    // Match the global API prefix configured by src/main.ts.
+    app.use(requestIdMiddleware);
     app.setGlobalPrefix('api/v1');
 
     await app.init();
   });
 
   afterEach(async () => {
-    // Close the application after each test to avoid leaking resources.
     await app.close();
   });
 
-  it('GET /api/v1/ returns the initial root response', async () => {
-    await request(app.getHttpServer())
+  it('GET /api/v1/ returns the standard success envelope', async () => {
+    const response = await request(app.getHttpServer())
       .get('/api/v1/')
-      .expect(200)
-      .expect('Hello World!');
+      .expect(200);
+
+    expect(response.body.data).toBe('Hello World!');
+    expect(response.body.meta).toEqual({
+      requestId: expect.any(String),
+      timestamp: expect.any(String),
+    });
+    expect(response.headers['x-request-id']).toBe(
+      response.body.meta.requestId,
+    );
   });
 
-  it('GET /api/v1/health returns the liveness payload', async () => {
+  it('GET /api/v1/health returns the liveness payload in the success envelope', async () => {
     const response = await request(app.getHttpServer())
       .get('/api/v1/health')
       .expect(200);
 
-    expect(response.body).toEqual({
+    expect(response.body.data).toEqual({
       status: 'ok',
       service: 'dyms-api',
       timestamp: expect.any(String),
     });
 
-    // Verify that the timestamp is a valid ISO-formatted date.
-    expect(new Date(response.body.timestamp).toISOString()).toBe(
-      response.body.timestamp,
+    expect(new Date(response.body.data.timestamp).toISOString()).toBe(
+      response.body.data.timestamp,
     );
-
-    // Liveness should not need to query PostgreSQL.
+    expect(response.body.meta.requestId).toBe(
+      response.headers['x-request-id'],
+    );
     expect(prismaMock.$queryRaw).not.toHaveBeenCalled();
   });
 
@@ -71,7 +77,7 @@ describe('DYMS API (e2e)', () => {
       .get('/api/v1/health/ready')
       .expect(200);
 
-    expect(response.body).toEqual({
+    expect(response.body.data).toEqual({
       status: 'ready',
       service: 'dyms-api',
       dependencies: {
@@ -81,12 +87,12 @@ describe('DYMS API (e2e)', () => {
     });
 
     expect(prismaMock.$queryRaw).toHaveBeenCalledTimes(1);
-    expect(new Date(response.body.timestamp).toISOString()).toBe(
-      response.body.timestamp,
+    expect(new Date(response.body.data.timestamp).toISOString()).toBe(
+      response.body.data.timestamp,
     );
   });
 
-  it('GET /api/v1/health/ready returns 503 when the database query fails', async () => {
+  it('GET /api/v1/health/ready returns a safe 503 error when the database query fails', async () => {
     prismaMock.$queryRaw.mockRejectedValue(
       new Error('Simulated database connection failure'),
     );
@@ -95,41 +101,36 @@ describe('DYMS API (e2e)', () => {
       .get('/api/v1/health/ready')
       .expect(503);
 
-    // NestJS returns the custom exception response object directly.
-    expect(response.body).toEqual({
-      status: 'not_ready',
-      service: 'dyms-api',
-      dependencies: {
-        database: 'unavailable',
-      },
-      timestamp: expect.any(String),
+    expect(response.body.error).toEqual({
+      code: 'REQUEST_FAILED',
+      message: 'The request could not be completed.',
+      details: [],
+      requestId: response.headers['x-request-id'],
     });
 
-    // Never expose the internal database error to API clients.
     expect(JSON.stringify(response.body)).not.toContain(
       'Simulated database connection failure',
     );
-
-    expect(new Date(response.body.timestamp).toISOString()).toBe(
-      response.body.timestamp,
-    );
   });
 
-  it('rejects requests that exceed the configured rate limit', async () => {
+  it('returns the standard error envelope for requests that exceed the rate limit', async () => {
     const statuses: number[] = [];
+    let lastResponse: request.Response | undefined;
 
-    // A fresh app is created for this test, so the in-memory throttler
-    // starts with a clean window. Send 101 requests against a limit of 100.
     for (let index = 0; index < 101; index += 1) {
-      const response = await request(app.getHttpServer()).get(
+      lastResponse = await request(app.getHttpServer()).get(
         '/api/v1/health',
       );
-
-      statuses.push(response.status);
+      statuses.push(lastResponse.status);
     }
 
     expect(statuses.filter((status) => status === 200)).toHaveLength(100);
     expect(statuses[100]).toBe(429);
-    expect(statuses.filter((status) => status === 429)).toHaveLength(1);
+    expect(lastResponse?.body.error).toEqual({
+      code: 'RATE_LIMIT_EXCEEDED',
+      message: 'Too Many Requests',
+      details: [],
+      requestId: lastResponse?.headers['x-request-id'],
+    });
   });
 });

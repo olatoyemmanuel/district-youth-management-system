@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
+import { ApiExceptionFilter } from './common/http/api-exception.filter.js';
+import { ApiResponseInterceptor } from './common/http/api-response.interceptor.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { validateEnvironment } from './config/env.validation.js';
@@ -12,8 +14,8 @@ import { PrismaModule } from './database/prisma.module.js';
  * Root module for the District Youth Management System API.
  *
  * Environment configuration is validated at startup. PostgreSQL access
- * is provided through Prisma, and the existing global rate-limit guard
- * remains enabled.
+ * is provided through Prisma. Rate limiting, request envelopes and safe
+ * exception normalization are registered globally.
  */
 @Module({
   imports: [
@@ -40,6 +42,14 @@ import { PrismaModule } from './database/prisma.module.js';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ApiResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: ApiExceptionFilter,
     },
   ],
 })

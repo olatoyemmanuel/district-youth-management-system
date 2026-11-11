@@ -2,17 +2,19 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module.js';
+import { requestIdMiddleware } from './common/http/request-id.middleware.js';
 
 /**
  * Application entry point.
  *
- * ConfigModule validates environment variables before the application
- * starts. The validated HOST and PORT values determine the listener.
+ * Configuration is validated before the application starts. The global
+ * prefix and request correlation middleware apply to all HTTP endpoints.
  */
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  app.use(requestIdMiddleware);
   app.setGlobalPrefix('api/v1');
   app.enableShutdownHooks();
 
