@@ -4,7 +4,7 @@
 - Date: 2026-11-11
 - Repository: olatoyemmanuel/district-youth-management-system
 - Branch: phase-1/requirements-consolidation
-- Status: **STATIC STRUCTURAL CHECKS PASSED; API FIELD-LEVEL COMPLETENESS REVIEW REMAINS OPEN**
+- Status: **STATIC STRUCTURAL CHECKS PASSED; SUCCESSOR PACKAGE READY FOR PROJECT-OWNER REVIEW**
 - Implementation: **NOT AUTHORIZED**
 
 ## 1. Purpose and scope
@@ -15,26 +15,26 @@ CPERD-17 records static verification of the CPERD-02 successor physical-design c
 
 | Artifact | Git blob SHA |
 |---|---|
-| CPERD-02 consolidated physical ERD | `9d7e418cbf4aa298d41a1abf77e8e5de04811e63` |
-| CPERD-02 canonical column register | `a92de2d6e8688f5b8d26c1a10aa013c59a22b154` |
-| CPERD-02 canonical FK register | `72c7cd3b7ff3df1b8d3317606a261df654f5ef1b` |
-| CPERD-02 canonical index inventory | `e25df772b53f556917076baceec16c544a6f0b04` |
-| CPERD-02 integrity/trigger register | `5c71b787c56e627b79deb213ee59e9780945bfcf` |
-| CPERD-02 lifecycle catalogue | `f99963b6ecbed38717938f9a104cb2bbd5a6a83f` |
-| CPERD-02 requirement traceability | `4a6c275dd05931c88a3d7c3dd030d2b3c13533c8` |
-| CPERD-02 API contract candidate | `5d98b530295ce281768982f16dd23ed653abad98` |
+| CPERD-02 consolidated physical ERD | `995b025d8381bc3c7e91acc64c71fadfc042546d` |
+| CPERD-02 canonical column register | `f1979b191fe98da487ada89e4409fde838ad3c47` |
+| CPERD-02 canonical FK register | `77d6a8705083f5cedad8d34403bd62ddf4be268a` |
+| CPERD-02 canonical index inventory | `ac195c012ab1704d289bac389ca8f96b2d6960fb` |
+| CPERD-02 integrity/trigger register | `2319ec755465df0fbbd3db46128162989f3abc84` |
+| CPERD-02 lifecycle catalogue | `bee5ea6469f17d2471ea860421de8b85afd2aeb4` |
+| CPERD-02 requirement traceability | `817a1e43e2127912b796bbc00db906a3e3a846fc` |
+| CPERD-02 API contract candidate | `b37b6fce8f9059149164fe35a3c1224faeacf3d5` |
 | CPERD-02 trigger/transaction contracts | `07272821b9cead1cb2c0a47eee73ae477010a7f6` |
-| CPERD-16 engineering recommendations | `15d4da93bbcd9faafa135c2c563d8ba747465859` |
+| CPERD-16 engineering recommendations | `cf6eb7aa51fd633422e8b2b7a5485d8d8fafd3d2` |
 
 ## 3. Static verification results
 
 | Check | Result | Disposition |
 |---|---:|---|
 | Physical tables | 70 | PASS |
-| Column declarations | 688 | PASS |
-| Named foreign-key relationships | 170 | PASS |
-| Named index candidates | 232 | PASS |
-| Row-local CHECK names | 60 | PASS |
+| Column declarations | 692 | PASS |
+| Named foreign-key relationships | 171 | PASS |
+| Named index candidates | 235 | PASS |
+| Row-local CHECK names | 68 | PASS |
 | Policy-blocked indexes remaining | 5 | PASS; excluded from implementation |
 | Duplicate column/table pairs | 0 | PASS |
 | Duplicate FK names | 0 | PASS |
@@ -50,11 +50,11 @@ CPERD-17 records static verification of the CPERD-02 successor physical-design c
 | Duplicate requirement IDs | 0 | PASS |
 | Requirement-to-physical mappings | 107 / 107 | PASS |
 
-The four new actor FKs (appointment requester, appointment rejection actor, appointment termination actor and transfer cancellation actor) each have a matching column declaration, named FK relationship and named supporting index.
+The five new actor FKs (appointment requester, appointment rejection actor, appointment termination actor, transfer cancellation actor and reversal rejection actor) each have a matching column declaration, named FK relationship and named supporting index.
 
-The seven successor CHECKs cover appointment status/decision/termination metadata and church-transfer status/cancellation/receiving-decision/district-decision metadata. All 60 named CHECKs are cross-referenced by the successor column register.
+The 15 successor CHECKs cover appointment, church-transfer and finance status/decision/termination/cancellation metadata. All 68 named CHECKs are cross-referenced by the successor column register.
 
-The transfer open-request index candidate uses exactly the two pending states: PENDING_RECEIVING_CHURCH and PENDING_DISTRICT. Five unrelated policy-dependent indexes remain excluded.
+The transfer open-request index candidate uses exactly the two pending states: PENDING_RECEIVING_CHURCH and PENDING_DISTRICT. Five unrelated policy-dependent indexes remain excluded. Finance uniqueness candidates enforce one final approval decision per transaction and at most one CONFIRMED full payment per transaction.
 
 ## 4. Workflow and contract alignment
 
@@ -69,12 +69,12 @@ The transfer open-request index candidate uses exactly the two pending states: P
 
 ## 5. Remaining design review items
 
-The static ERD/register checks pass. The successor package is not yet ready to be represented as fully complete because the API route catalogue and selected command contracts still need a complete field-level request/response schema review across every v1 endpoint. The following are also required in the owner-review package:
+The static ERD/register checks pass. The API route catalogue and core transfer, appointment and finance command semantics are reconciled to the successor lifecycle and physical design. The complete generated OpenAPI field schemas and automated contract tests remain implementation deliverables under DFR-002; they do not block owner approval of the physical ERD because no unresolved product workflow or physical relationship is left ambiguous in the approved v1 scope.
 
-1. Complete the API field-level contract for all v1 routes, or explicitly exclude routes that are not in v1.
-2. Reconcile each API operation to its permission code, bounded context, scope rule, lifecycle precondition and requirement IDs.
-3. Complete the finance physical workflow mapping to the exact approval, payment, posting and reversal records.
-4. Regenerate the final manifest after those changes and rerun all static checks.
+The remaining owner-review package steps are:
+1. Freeze the exact CPERD-02 artifact hashes in a successor approval manifest.
+2. Present the successor master ERD, supporting registers, API/lifecycle catalogue, traceability and CPERD-16 change-impact record together.
+3. Obtain the project owner's explicit approval of the exact CPERD-02 manifest hash.
 
 Provider-specific database grants, PostgreSQL execution, concurrency tests, query-plan evidence, secret-store selection, backup/restore tests and measured RPO/RTO remain post-authorization implementation or deployment validation. They are not claimed as completed.
 
