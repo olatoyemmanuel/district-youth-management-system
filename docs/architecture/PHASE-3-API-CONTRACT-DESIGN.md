@@ -118,7 +118,7 @@ Base: `/members`, `/membership`
 | POST `/church-transfers/{transferId}/district-decision` | Record district final decision | District authority |
 | POST `/church-transfers/{transferId}/complete` | Complete approved transfer on approved date | Authorized workflow/service actor |
 
-Withdrawal, rejection, cancellation, appeal and backdating endpoints are intentionally omitted until ODR-002 policy is approved. Exact category eligibility and lifecycle endpoints remain dependent on ODR-001.
+The owner-approved transfer core is member initiation, receiving-church acceptance, district final approval and effective-on-approval, with one unresolved request and no backdating by default. Withdrawal, rejection, cancellation and appeal commands remain omitted until their exact actor/reason/transition contract is reconciled with the configurable lifecycle. Category eligibility is an owner-approved configurable model; do not hardcode age thresholds or automatic progression.
 
 ## 7. Organization endpoints
 
@@ -136,7 +136,7 @@ Base: `/district`, `/churches`, `/departments`
 | GET `/departments/{departmentId}` | Read department | Authorized scope |
 | PATCH `/departments/{departmentId}` | Update permitted catalogue fields | District authority |
 
-ODR-004 owner-approved default: departments are district-owned; events have one district or local-church owner; departments may organize but do not own events. Delegated governance confirmation remains pending.
+ODR-004 owner-approved default: departments are district-owned; events have one district or local-church owner; departments may organize but do not own events. External church governance remains outside the software's authority and is not a DYMS design blocker.
 
 ## 8. Leadership and access administration endpoints
 
@@ -177,7 +177,7 @@ Base: `/department-memberships`
 | POST `/department-memberships/{membershipId}/withdraw` | Member withdrawal | Member/self |
 | POST `/department-memberships/{membershipId}/terminate` | Reasoned termination | Authorized coordinator |
 
-Rejection/appeal, annual renewal, eligibility exceptions and church-transfer effects are not exposed as settled workflows pending ODR-007 authority confirmation.
+The owner-approved department membership core is member request, coordinator approval, multiple memberships, withdrawal and reasoned termination. Rejection/appeal, annual renewal, eligibility exceptions and church-transfer effects remain configurable design details; do not expose them as settled workflows until their exact command and transition contracts are defined.
 
 ## 10. Events, sessions and registration endpoints
 
@@ -202,7 +202,7 @@ Base: `/events`
 | POST `/events/{eventId}/registrations/{registrationId}/confirm` | Confirm registration | Authorized event workflow |
 | POST `/events/{eventId}/registrations/{registrationId}/cancel` | Cancel registration | Member/self or authorized coordinator |
 
-Waitlist endpoints are excluded. Late registration reopening and capacity overrides require explicit event-authority approval. ODR-008 defaults govern capacity behavior.
+Waitlist endpoints are excluded under the owner-approved ODR-008 default. Late registration/capacity overrides require approval and a reason; material event changes are reapproved. No waitlist or unapproved exception route is exposed.
 
 ## 11. Attendance endpoints
 
@@ -220,7 +220,7 @@ Base: `/attendance`
 | POST `/attendance/corrections/{correctionId}/approve` | Approve correction | Designated independent authority |
 | POST `/attendance/corrections/{correctionId}/apply` | Apply approved correction | Authorized workflow actor |
 
-The subject mode is EVENT or SESSION and cannot be mixed after the first attendance record. Self-check-in and offline capture are excluded pending authority confirmation. A documented registration exception must include actor, reason and approval evidence.
+The owner-approved ODR-006 default uses EVENT or SESSION subject mode, normally requires confirmed registration, and permits a documented authorized exception with actor, reason and approval evidence. Self-check-in and offline capture are disabled in v1, not awaiting external authority confirmation.
 
 ## 12. Finance endpoints
 
@@ -248,7 +248,7 @@ Base: `/finance`
 | POST `/finance/reversals/{reversalId}/approve` | Approve reversal | Independent finance authority |
 | POST `/finance/reversals/{reversalId}/post` | Post approved reversal | Authorized posting officer |
 
-Partial payments, multiple successful payments, FX, refunds and budget exceptions remain disabled pending finance authority confirmation. Do not expose endpoints for these options until approved. Payment-provider callbacks use a separate authenticated integration route and event-deduplication contract.
+Under the owner-approved ODR-005 conservative default, partial payments, multiple successful payments, FX, refunds, budget exceptions and amount-based thresholds remain disabled. Do not expose endpoints for these excluded v1 features. Payment-provider callbacks use a separate authenticated integration route and event-deduplication contract.
 
 ## 13. Credential endpoints
 
@@ -268,7 +268,7 @@ Base: `/credentials`
 | POST `/credentials/issuances/{issuanceId}/issue` | Issue credential | Designated issuer |
 | POST `/credentials/issuances/{issuanceId}/revoke` | Revoke with reason | Authorized issuer/higher authority |
 
-Official credential catalogue, issuer authority, evidence types and validity rules remain open. Public blockchain verification is not in v1.
+The owner-approved ODR-009 design uses a versioned configurable credential catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Unknown validity remains unset; official source standards are metadata/configuration where recognition is asserted. Public blockchain verification is not in v1.
 
 ## 14. Reporting, audit, retention and notifications endpoints
 
@@ -285,7 +285,7 @@ Official credential catalogue, issuer authority, evidence types and validity rul
 | POST `/reports/runs/{runId}/exports` | Request protected export | Authorized report user |
 | GET `/reports/exports/{exportId}` | Retrieve short-lived authorized export | Reauthorization required |
 
-Report catalogue/classification/disclosure policy remains delegated-authority gated. CSV/PDF are initial proposed formats under ODR-013. Apply report resource limits and rate limiting.
+The owner-approved ODR-013 defaults are district/church/department scope, versioned/classified reports, authorization at request/execution/retrieval, and private CSV/PDF exports. Report-specific catalogue entries, data owners, field disclosure/redaction and export expiry remain design/configuration work. Apply report resource limits and rate limiting.
 
 ### Audit: `/audit`
 
@@ -296,7 +296,7 @@ Report catalogue/classification/disclosure policy remains delegated-authority ga
 | POST `/audit/access-requests` | Request exceptional audit access | Authorized requester |
 | POST `/audit/access-requests/{requestId}/approve` | Independent approval | Authorized reviewer |
 
-Audit access is itself audited. System Administrator does not automatically have unrestricted audit-read access. Break-glass remains disabled pending authority confirmation.
+Audit access is itself audited. The owner-approved ODR-010 default requires a separate Audit Officer; System Administrator does not automatically have audit-read access. Exceptional access requires independent approval. Break-glass remains disabled until a documented procedure is configured.
 
 ### Retention: `/retention`
 
@@ -387,3 +387,15 @@ The exact status/code mapping must be contract-tested. Do not use 404 to conceal
 ## 19. Approval boundary
 
 This is a complete route-catalogue proposal, not a final OpenAPI contract. Request/response field schemas, lifecycle enums and endpoint-level permission codes require formal contract review. No API code, controller, DTO, Prisma schema, migration, SQL DDL or database object is authorized.
+
+ 
+## 20. Phase 4 owner-authority and API status reconciliation (2026-11-11)
+
+Phase 4 GDC-01 §§4–5 and §12 and Owner Decision Register §§12–13 are the current authority for DYMS product behavior. Historical notes elsewhere in this proposal that describe ODR-001–ODR-013 as awaiting external delegated approval are superseded where they conflict with those owner decisions.
+
+- The owner-approved product defaults are operative API design constraints, not pending external approvals.
+- This catalogue remains a proposal. Exact request/response schemas, command names, field-level validation, enum/state labels, transition contracts, role/permission mappings, idempotency requirements and OpenAPI review still need technical reconciliation.
+- Features explicitly disabled by the owner-approved v1 defaults remain absent from the route catalogue.
+- External institutional policy is represented as source/configuration metadata where relevant; it is not a prerequisite for accepting DYMS behavior.
+- The API must preserve DFR-001/002/004, rate limiting, scope derivation, authorization rechecks, audit evidence, idempotency and financial separation of duties.
+- API design approval does not authorize controllers, DTOs, routes, Prisma, SQL, migrations, application code, tests or deployment. Separate explicit implementation authorization remains required.
