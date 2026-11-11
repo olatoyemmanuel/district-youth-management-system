@@ -13,7 +13,7 @@ This document refines TBR-07 and the CPERD-06 requirement for a least-privilege 
 
 This is a design-only artifact. It creates no PostgreSQL roles, grants, schemas, functions, triggers, SQL DDL, Prisma models, migrations, database state, application code, or deployment resources.
 
-Authority order remains DFR-001–DFR-006, formal owner governance records, explicit owner decisions, approved DDD decisions, the canonical Owner Decision Register, the approved requirements baseline, and the physical-design registers. This document does not amend the CPERD-01 master ERD or silently approve unresolved delegated authority.
+Authority order remains DFR-001–DFR-006, formal owner governance records, explicit owner decisions, approved DDD decisions, the canonical Owner Decision Register, the approved requirements baseline, and the physical-design registers. This document does not amend the CPERD-01 master ERD. Apply the Phase 4 Governance and Design Closure Register as the current authority: owner-approved DYMS product defaults are operative; external institutional confirmation is not a prerequisite for representing those defaults as DYMS behavior. Provider and deployment selections remain separate gates.
 
 ## 2. Governing security constraints
 
@@ -114,7 +114,7 @@ The reporting role is read-only. It receives no INSERT, UPDATE, DELETE, TRUNCATE
 - Authorization is rechecked at request, execution and export retrieval.
 - Federation oversight, where present, remains application-level read-only oversight and does not create database write capability.
 - A generic shared reporting login does not enforce row-level scope by itself. Until RLS or isolated per-scope credentials are separately approved, the application/report execution service must enforce scope using trusted actor context and parameterized, server-controlled query plans.
-- Report catalogue, classification, disclosure matrix and export permissions remain subject to ODR-013 delegated data/security authority confirmation.
+- Apply the owner-approved ODR-013 defaults: district/church/department scope only, versioned and classified definitions, authorization at request/execution/retrieval, and private CSV/PDF exports. Report-specific catalogue entries, data-owner assignments, classifications, field-level disclosure and export expiry still require explicit design/configuration. Do not treat external delegated confirmation as a DYMS design blocker.
 - No global or cross-district report access is introduced.
 
 ### 5.4 Audit reader and audit writer
@@ -245,12 +245,12 @@ These are design/implementation verification requirements. No tests were execute
 | ODR-ENV-001 PostgreSQL provider/version | OPEN | Confirm production PostgreSQL version and managed provider capability |
 | ODR-ENV-006 role/privilege model | OPEN | Confirm target-provider grants, ownership, audit path, backup and restore privileges |
 | ODR-ENV-007 deployment/backup topology | OPEN | Confirm topology and produce DFR-005 evidence |
-| ODR-010 audit investigation authority | OPEN | Name Audit Officer authority, ordinary/sensitive audit visibility, investigation approval, exceptional access and independent review |
-| ODR-011 retention | OPEN | Approve record classes, basis, duration, trigger, disposal authority and hold policy |
-| ODR-013 reporting governance | OPEN | Approve report catalogue, classification, disclosure, export permissions and expiry |
+| ODR-010 audit access | OWNER DEFAULT APPROVED | Separate Audit Officer; system administrator receives no automatic audit-read; exceptional access independently approved; break-glass disabled until a procedure is configured. Complete exact permission mapping and procedure as design/configuration; no external confirmation is a prerequisite for the accepted DYMS default. |
+| ODR-011 retention | OWNER DEFAULT APPROVED | No automated permanent deletion without an approved schedule; holds suspend disposal; DFR-005 backup retention remains separate. Source enrollment and approved schedule values are required before destructive disposal, but no schedule is invented and no external confirmation blocks the product default. |
+| ODR-013 reporting | OWNER DEFAULT APPROVED | District/church/department scope; versioned/classified definitions; authorization at request, execution and retrieval; private CSV/PDF exports. Populate report-specific catalogue, data owner, classification, disclosure and expiry configuration. |
 | Trigger/function contracts from CPERD-06 | OPEN | Finalize timing, execution mode, ownership, lock order and bypass controls |
 | DDD-013 external independent technical assurance | NOT PERFORMED | Independent technical assurance remains separate from this role design |
-| DFR-006 governance discrepancy | OPEN | Preserve the dated governance clarification and reconcile historical repository wording |
+| DFR-006 governance status | CLARIFIED — 2026-11-02 | DFR-006 remains approved; design-freeze/change control remains in force; README conflict corrected; implementation remains NOT AUTHORIZED. See DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md and Phase 4 GDC-01. |
 | Final consolidated ERD reconciliation | OPEN | Reconcile this and prior CPERD findings into one exact current owner-review package |
 | Separate implementation authorization | NOT GRANTED | Explicit project-owner authorization required after design gates |
 
@@ -260,11 +260,11 @@ These are design/implementation verification requirements. No tests were execute
 - Least-privilege intent: **DEFINED**.
 - Table-by-table SQL grants: **NOT ISSUED; pending final physical reconciliation and provider confirmation**.
 - RLS: **NOT SELECTED**.
-- Audit reader and break-glass authority: **PENDING ODR-010**.
+- Audit reader: separate Audit Officer capability is an owner-approved DYMS default; exact database grants remain subject to provider-specific least-privilege verification. Break-glass remains disabled until a documented procedure is configured.
 - Reporting read contracts and disclosure: **PENDING ODR-013**.
 - Backup provider privileges and measured recovery evidence: **PENDING ODR-ENV-001/006/007**.
 - Trigger/function execution hardening: **OPEN under CPERD-06**.
-- CPERD-07 closure: **NOT CLOSED** pending the evidence and authority gates above.
+- CPERD-07 closure: **NOT CLOSED** pending provider-specific role attributes/grants, table/function mapping, append-only privilege proof, backup/restore capability evidence, and final cross-register reconciliation. ODR-010/011/013 owner-approved product defaults are not delegated-authority blockers.
 - Implementation authorization: **NOT GRANTED**.
 
 ## 13. Protected implementation boundary
