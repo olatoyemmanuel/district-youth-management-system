@@ -102,8 +102,8 @@ describe('DYMS API (e2e)', () => {
       .expect(503);
 
     expect(response.body.error).toEqual({
-      code: 'REQUEST_FAILED',
-      message: 'The request could not be completed.',
+      code: 'SERVICE_UNAVAILABLE',
+      message: 'The service is temporarily unavailable.',
       details: [],
       requestId: response.headers['x-request-id'],
     });
@@ -115,22 +115,29 @@ describe('DYMS API (e2e)', () => {
 
   it('returns the standard error envelope for requests that exceed the rate limit', async () => {
     const statuses: number[] = [];
-    let lastResponse: request.Response | undefined;
+    let lastError: unknown;
+    let lastRequestId: string | undefined;
 
     for (let index = 0; index < 101; index += 1) {
-      lastResponse = await request(app.getHttpServer()).get(
+      const response = await request(app.getHttpServer()).get(
         '/api/v1/health',
       );
-      statuses.push(lastResponse.status);
+      statuses.push(response.status);
+
+      if (response.status === 429) {
+        lastError = response.body.error;
+        lastRequestId = response.headers['x-request-id'];
+      }
     }
 
     expect(statuses.filter((status) => status === 200)).toHaveLength(100);
     expect(statuses[100]).toBe(429);
-    expect(lastResponse?.body.error).toEqual({
+    expect(lastError).toEqual({
       code: 'RATE_LIMIT_EXCEEDED',
-      message: 'Too Many Requests',
+      message: 'Too many requests. Please try again later.',
       details: [],
-      requestId: lastResponse?.headers['x-request-id'],
+      requestId: lastRequestId,
     });
+    expect(lastRequestId).toEqual(expect.any(String));
   });
 });

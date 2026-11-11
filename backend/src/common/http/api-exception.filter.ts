@@ -33,9 +33,41 @@ function errorCodeForStatus(status: number): string {
       return 'CONFLICT';
     case HttpStatus.TOO_MANY_REQUESTS:
       return 'RATE_LIMIT_EXCEEDED';
+    case HttpStatus.SERVICE_UNAVAILABLE:
+      return 'SERVICE_UNAVAILABLE';
     default:
       return status >= 500 ? 'INTERNAL_SERVER_ERROR' : 'REQUEST_FAILED';
   }
+}
+
+function safeMessageForStatus(
+  status: number,
+  exceptionResponse: string | object | null,
+): string {
+  if (status >= 500) {
+    return status === HttpStatus.SERVICE_UNAVAILABLE
+      ? 'The service is temporarily unavailable.'
+      : 'An unexpected error occurred.';
+  }
+
+  if (status === HttpStatus.TOO_MANY_REQUESTS) {
+    return 'Too many requests. Please try again later.';
+  }
+
+  if (typeof exceptionResponse === 'string') {
+    return exceptionResponse;
+  }
+
+  if (
+    typeof exceptionResponse === 'object' &&
+    exceptionResponse !== null &&
+    'message' in exceptionResponse &&
+    typeof exceptionResponse.message === 'string'
+  ) {
+    return exceptionResponse.message;
+  }
+
+  return 'The request could not be completed.';
 }
 
 /**
@@ -68,18 +100,6 @@ export class ApiExceptionFilter implements ExceptionFilter {
           }))
         : [];
 
-    const safeMessage =
-      status >= 500
-        ? 'An unexpected error occurred.'
-        : typeof exceptionResponse === 'string'
-          ? exceptionResponse
-          : typeof exceptionResponse === 'object' &&
-              exceptionResponse !== null &&
-              'message' in exceptionResponse &&
-              typeof exceptionResponse.message === 'string'
-            ? exceptionResponse.message
-            : 'The request could not be completed.';
-
     if (status >= 500) {
       this.logger.error(
         `Unhandled request failure (requestId=${request.requestId ?? 'unknown'})`,
@@ -89,7 +109,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     const body: ApiErrorBody = {
       error: {
         code: errorCodeForStatus(status),
-        message: safeMessage,
+        message: safeMessageForStatus(status, exceptionResponse),
         details: validationMessages,
         requestId: request.requestId ?? null,
       },
