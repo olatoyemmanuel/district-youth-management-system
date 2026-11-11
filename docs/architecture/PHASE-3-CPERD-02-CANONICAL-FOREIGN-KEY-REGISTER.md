@@ -17,7 +17,7 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | Measure | Count |
 |---|---:|
 | Phase 2 named FK relationships | 155 |
-| Phase 3 candidate named FK relationships | 170 |
+| Phase 3 candidate named FK relationships | 171 |
 | Phase 3 additions / replacements | 22 new or renamed named rows, with 11 superseded relationships removed |
 | Delete/update action baseline | RESTRICT / RESTRICT |
 | Implementation | NOT AUTHORIZED |
@@ -184,6 +184,7 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_transaction_approvals_financial_transaction_id` | `transaction_approvals` | `financial_transaction_id` | `financial_transactions(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_transaction_approvals_transaction_time` |
 | `fk_transaction_reversals_approved_by_user_account_id` | `transaction_reversals` | `approved_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_transaction_reversals_approved_by_user_account_id` |
 | `fk_transaction_reversals_initiated_by_user_account_id` | `transaction_reversals` | `initiated_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_transaction_reversals_initiated_by_user_account_id` |
+| `fk_transaction_reversals_rejected_by_user_account_id` | `transaction_reversals` | `rejected_by_user_account_id` | `user_accounts(id)` | NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_transaction_reversals_rejected_by_user_account_id` |
 | `fk_transaction_reversals_original_transaction_id_financ_aba661` | `transaction_reversals` | `original_transaction_id,financial_account_id,currency_code` | `financial_transactions(id,financial_account_id,currency_code)` | NOT NULL / NOT NULL / NOT NULL | UNIQUE(id,financial_account_id,currency_code), `uq_financial_transactions_id_account_currency` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_transaction_reversals_original_tuple` |
 | `fk_transaction_reversals_reversal_transaction_id_financ_9b229f` | `transaction_reversals` | `reversal_transaction_id,financial_account_id,currency_code` | `financial_transactions(id,financial_account_id,currency_code)` | NOT NULL / NOT NULL / NOT NULL | UNIQUE(id,financial_account_id,currency_code), `uq_financial_transactions_id_account_currency` | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_transaction_reversals_reversal_tuple` |
 | `fk_transaction_revisions_financial_transaction_id` | `transaction_revisions` | `financial_transaction_id` | `financial_transactions(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `uq_transaction_revisions_transaction_number` |
@@ -246,3 +247,8 @@ This register is a physical-design proposal. It does not approve DDL, Prisma mod
 Four user-account relationships are added for appointment requester, appointment rejection actor, appointment termination actor and transfer cancellation actor. The existing appointment approval FK is now nullable to support PENDING_APPROVAL and REJECTED rows; status-specific CHECKs require it for APPROVED and TERMINATED rows.
 
 Totals: 170 named FK relationships. Every added nullable FK uses MATCH SIMPLE and RESTRICT/RESTRICT actions. Each source tuple has a named supporting index in the CPERD-02 index candidate. This register is not owner-approved or implementation-authorized.
+
+
+### CPERD-02 finance FK delta
+
+One nullable RESTRICT/RESTRICT FK is added from `transaction_reversals.rejected_by_user_account_id` to `user_accounts(id)`. Its supporting source index is registered in the CPERD-02 index inventory. Total named FK relationships: 171.
