@@ -1,0 +1,144 @@
+# DYMS Phase 3: CPERD-02 Successor Lifecycle and State Catalogue
+
+**Status:** Successor lifecycle candidate aligned to CPERD-16; owner review required; not approved for implementation  
+**Scope:** DYMS v1.0, Sango District  
+**Logical authority:** Approved conceptual ERD revision `25f2813e0256d9472daded45657dfb7ac9f70a43`  
+**Physical-design source:** `PHASE-2-PHYSICAL-DATABASE-DESIGN.md`  
+**Implementation authorization:** NOT GRANTED
+
+## 1. Purpose
+
+This catalogue defines the lifecycle vocabulary that the physical database design must eventually enforce. It separates states directly implied by approved workflows from provisional technical states and unresolved ministry, finance, safeguarding, or governance policy.
+
+It is not a blanket approval of proposed persisted labels. An owner-approved DYMS product rule can be operative while its exact database state labels, transition codes and partial-unique predicates remain technical proposals. External institutional confirmation is not a prerequisite for accepting the project owner's DYMS product decisions. A state marked **POLICY BLOCKED** means its value or transition is not selected, or the capability remains disabled; do not invent a value set or implement a guessed constraint.
+
+The catalogue covers status-bearing entities and decision-bearing history entities. Some history tables have no mutable lifecycle status; they record immutable decisions or outcomes instead.
+
+## 2. Classification
+
+- **DERIVED:** The distinction follows directly from an approved workflow. Exact labels still need consistent technical naming.
+- **PROPOSED:** A conservative technical lifecycle suggestion. It requires project-owner confirmation and must not be represented as official church policy.
+- **POLICY BLOCKED:** The exact value/transition is not selected, or the capability remains disabled. Do not finalize a CHECK constraint or production seed. This classification does not imply an external committee approval is required where Phase 4 records an owner-approved DYMS product default.
+- **OWNER-APPROVED PRODUCT RULE:** The project owner has selected the DYMS behavior. Exact persisted labels, state-machine encoding, and constraints may still require technical reconciliation; do not treat candidate labels as approved database enums.
+- **IMMUTABLE HISTORY:** No mutable lifecycle status is required. The row is an append-only decision, evidence, or audit fact. Any processing outcome is represented by a separate related entity where applicable.
+
+## 3. Lifecycle catalogue
+
+| Table | Initial state / creation condition | Candidate states or outcome values | Transition authority | Terminal states | Classification and notes |
+|---|---|---|---|---|---|
+| `user_accounts` | Provisioning creates PENDING or another explicitly authorized initial state | PENDING, ACTIVE, SUSPENDED, CLOSED | Account provisioning and designated account/security authority | CLOSED; SUSPENDED is reversible only through authorized reinstatement | PROPOSED. PENDING/ACTIVE/SUSPENDED/CLOSED already appear in the physical proposal; confirm closure and reinstatement policy. |
+| `members` | Created with linked individual account | TBD | Authorized membership administrator | TBD | POLICY BLOCKED. Member lifecycle must remain distinct from account lifecycle. Do not infer that account suspension closes membership. |
+| `districts` | Administrative setup | TBD | Project/district system authority | TBD | POLICY BLOCKED. District activation/deactivation governance is not yet defined. |
+| `churches` | Created under a district | TBD | Authorized district administrator | TBD | POLICY BLOCKED. Define closure/merger and effect on memberships before state constraints. |
+| `member_category_assignments` | Created by an authorized category decision | PENDING, ACTIVE, ENDED, REVOKED | Authorized administrator within assigned scope; verification/approval path still requires policy confirmation | ENDED, REVOKED | PROPOSED. Eligibility and exception rules remain open. Only one current active primary category per member. |
+| `church_memberships` | Created through approved membership or completed transfer workflow | PENDING, CURRENT, ENDED | Receiving church acceptance and district approval for transfer; initial membership authority needs confirmation | ENDED | PROPOSED. The one-current-primary-church invariant is approved. Exact initial membership and rejection flow remain open. |
+| `church_transfer_requests` | Member submits request | PENDING_RECEIVING_CHURCH, PENDING_DISTRICT, COMPLETED, REJECTED, CANCELLED | Member initiates; receiving church accepts/rejects; district gives final approval/rejection; requester may cancel before district approval | COMPLETED, REJECTED, CANCELLED | CPERD-16 successor candidate. District approval and membership replacement are one transaction and effective immediately. Rejection/cancellation are terminal; appeal/reconsideration and backdating are disabled. One unresolved request is limited to the two pending states. Decision/cancellation actor, time and reason are preserved. |
+| `departments` | Authorized organizational setup | TBD | District authority; church ownership model requires confirmation | TBD | POLICY BLOCKED. District-wide versus church-specific department governance remains unresolved. |
+| `department_eligibility_rules` | Drafted from an authoritative source | DRAFT, APPROVED, ACTIVE, SUPERSEDED, WITHDRAWN | Recognized policy authority approves; designated administrator publishes | SUPERSEDED, WITHDRAWN | PROPOSED. Never activate without source authority and approval evidence. |
+| `department_memberships` | Member submits request | Candidate vocabulary only: REQUESTED, ACTIVE, WITHDRAWAL_REQUESTED, ENDED, REJECTED | Approved core: member requests; designated department coordinator approves; member may withdraw; authorized coordinator may terminate with reason | Not finalized | POLICY BLOCKED for final state/transition constraints. Multiple concurrent department memberships are approved. Eligibility, rejection/appeal, annual review/renewal, church-transfer effects, eligibility exceptions, and department-change workflow remain unresolved. Candidate labels are not approved values. |
+| `positions` | Created by authorized organization administrator | TBD | Authority responsible for the position's declared scope | TBD | POLICY BLOCKED. Position catalogue and scope ownership require owner confirmation. |
+| `appointments` | Appointment submitted for higher-authority approval | PENDING_APPROVAL, APPROVED, REJECTED, TERMINATED | Designated higher authority in the exact position scope; requester/appointee self-approval prohibited | REJECTED, TERMINATED | CPERD-16 successor candidate. APPROVED and TERMINATED retain approval actor/time. REJECTED records rejection actor/time/reason. TERMINATED records termination actor/time/reason. Expiry is derived from the effective interval, not a persisted EXPIRED state. Renewal creates a new appointment row. Acting, overlapping and retroactive appointments are disabled. |
+| `roles` | Created in controlled role catalogue | DRAFT, ACTIVE, RETIRED | System/security governance authority | RETIRED | PROPOSED. Role catalogue and independent roles remain to be completed. |
+| `permissions` | Created in controlled permission catalogue | DRAFT, ACTIVE, RETIRED | System/security governance authority | RETIRED | PROPOSED. Full permission catalogue and scope map remain a prerequisite. |
+| `user_role_assignments` | Authorized grant request | PENDING, ACTIVE, EXPIRED, REVOKED, REJECTED | Separately authorized grantor; self-grant prohibited | EXPIRED, REVOKED, REJECTED | PROPOSED. Appointment-derived grants must cease when the appointment ceases to be effective. |
+| `access_denies` | Authorized deny issued with reason and scope | ACTIVE, EXPIRED, REVOKED | Separately authorized administrator; affected actor cannot administer own deny | EXPIRED, REVOKED | DERIVED from approved DDD-005 deny lifecycle. Permanent deny requires review controls; expiry/review schedule policy still needs confirmation. |
+| `role_conflict_rules` | Governance rule drafted and versioned | DRAFT, ACTIVE, SUPERSEDED, RETIRED | Independent role/security governance authority | SUPERSEDED, RETIRED | PROPOSED. Allowed/review-required/prohibited combinations require approved catalogue. |
+| `role_conflict_reviews` | Review created when role pair requires independent review | APPROVED, REJECTED, REVOKED | Independent authorized reviewer | REJECTED, REVOKED | PROPOSED. Exact review validity and renewal conditions require role-conflict policy. |
+| `events` | Authorized coordinator creates draft | DRAFT, PENDING_APPROVAL, APPROVED, PUBLISHED, CANCELLED, COMPLETED, CLOSED | Event owner/coordinator; district approval required before district event publication | CANCELLED, CLOSED | PROPOSED. Local church approval and postponement/rescheduling states remain open. |
+| `event_approvals` | Decision record appended for an approval stage | APPROVED, REJECTED | Authority designated for the event's scope and stage | Immutable decision record | DERIVED. Each decision is a separate history row; later review must not overwrite earlier decisions. |
+| `event_change_records` | Authorized change request submitted | SUBMITTED, APPROVED, REJECTED, WITHDRAWN | Authorized requester; designated event authority approves significant changes | REJECTED, WITHDRAWN, APPLIED | PROPOSED. APPLIED records successful application, not merely approval. |
+| `event_registrations` | Eligible member submits registration | SUBMITTED, CONFIRMED, CANCELLED, REJECTED | Member submits; event coordinator controls authorized exceptional decisions | CANCELLED, REJECTED | PROPOSED. Capacity-consuming states must be explicitly approved before capacity counter activation. Waitlist and late-registration states are not assumed. |
+| `event_sessions` | Session created under an event | SCHEDULED, OPEN, CLOSED, CANCELLED | Authorized event coordinator | CLOSED, CANCELLED | PROPOSED. Session operational rules require event policy confirmation. |
+| `attendance_records` | Authorized event personnel records attendance | TBD | Authorized event personnel; correction approvals follow designated event/district authority | Immutable attendance fact subject to approved correction workflow | POLICY BLOCKED. Attendance status vocabulary must include approved present/absent/other statuses, but exact list is not yet approved. |
+| `attendance_corrections` | Correction request submitted | REQUESTED, APPROVED, REJECTED, APPLIED | Designated event/district authority, independent of requester where required | REJECTED, APPLIED | PROPOSED. Original attendance remains preserved; applied correction is a separate fact. |
+| `financial_accounts` | Account opening request | OPEN, FROZEN, CLOSED | Authorized finance authority within account ownership scope | CLOSED | POLICY BLOCKED. Open/freeze/close authority and reopening rules require finance governance. |
+| `financial_transactions` | Draft or submitted transaction | DRAFT, SUBMITTED, APPROVED, REJECTED, PAID, POSTED, REVERSED | Submitter, designated approver, authorized payment officer and posting authority | REJECTED, POSTED, REVERSED | PROPOSED, aligned to approved workflow distinctions. Payment/posting separation and exact sequence remain open. |
+| `transaction_revisions` | Pre-posting revision request | REQUESTED, APPROVED, REJECTED, APPLIED | Authorized submitter requests; designated approver decides | REJECTED, APPLIED | DERIVED. Posted transactions cannot be revised; use linked reversal. |
+| `transaction_approvals` | Decision appended for transaction approval stage | APPROVED, REJECTED | Authorized independent finance approver | Immutable decision record | DERIVED. Submitter cannot approve own transaction. Approval thresholds and multi-level authority remain open. |
+| `payments` | Payment attempt initiated | INITIATED, PENDING, CONFIRMED, FAILED, EXHAUSTED, CANCELLED | Payment provider evidence plus authorized reconciliation process | CONFIRMED, FAILED, EXHAUSTED, CANCELLED | PROPOSED. Provider-specific meanings and returned/refunded/partial states require finance policy. |
+| `transaction_reversals` | Full reversal requested | REQUESTED, APPROVED, REJECTED, POSTED | Authorized finance initiator and independent approver/posting authority | REJECTED, POSTED | PROPOSED. Full reversal only; partial reversal remains disabled pending policy. |
+| `budgets` | Budget draft created for a defined period | DRAFT, SUBMITTED, APPROVED, ACTIVE, CLOSED, REJECTED | Authorized budget preparer and designated finance approver | CLOSED, REJECTED | POLICY BLOCKED for final use. Approval matrix, budget enforcement and variance policy remain open. |
+| `credential_definitions` | Controlled credential catalogue entry proposed | DRAFT, ACTIVE, RETIRED | Recognized issuing authority | RETIRED | PROPOSED. Official credential catalogue and issuer authority evidence required. |
+| `credential_definition_versions` | New version drafted | DRAFT, APPROVED, ACTIVE, SUPERSEDED, WITHDRAWN | Recognized authority approves requirements and effective period | SUPERSEDED, WITHDRAWN | PROPOSED. No credential standard or validity period is invented. |
+| `credential_issuances` | Approved issuance after evidence verification | ISSUED, ACTIVE, EXPIRED, REVOKED, SUPERSEDED | Authorized verifier and designated issuer | EXPIRED, REVOKED, SUPERSEDED | PROPOSED. Expiry only applies when the approved definition requires it. |
+| `credential_evidence` | Evidence submitted for an issuance | SUBMITTED, VERIFIED, REJECTED, WITHDRAWN | Authorized verifier | VERIFIED, REJECTED, WITHDRAWN | PROPOSED. Evidence types and retention need official authority. |
+| `notification_templates` | Template version drafted | DRAFT, ACTIVE, RETIRED | Notification/system administrator under content governance | RETIRED | PROPOSED. Version is immutable once used for dispatch. |
+| `notification_preferences` | Preference/consent choice recorded | UNKNOWN, GRANTED, DENIED, WITHDRAWN | Account holder; applicable consent rules govern optional channels | Superseded by a later preference record | PROPOSED. Essential account/security notices are treated separately from optional channels. |
+| `notifications` | Logical notification request created | PENDING, PROCESSING, ACCEPTED, DELIVERED, FAILED, EXHAUSTED, CANCELLED | System notification workflow | DELIVERED, EXHAUSTED, CANCELLED | DERIVED from approved DDD-015 delivery distinctions. ACCEPTED is not proof of delivery or reading. |
+| `notification_recipients` | Recipient resolved and preference evaluated | PENDING, ELIGIBLE, SUPPRESSED, COMPLETED, FAILED | Notification workflow applies recorded preference/consent | SUPPRESSED, COMPLETED, FAILED | PROPOSED. Do not send optional channels without applicable consent. |
+| `integration_providers` | Provider configuration registered | CONFIGURED, ACTIVE, DISABLED, SUSPENDED | Authorized integration administrator | DISABLED | PROPOSED. Secrets remain in a secrets manager. |
+| `notification_deliveries` | Delivery attempt queued | PENDING, PROCESSING, ACCEPTED, DELIVERED, FAILED, EXHAUSTED, CANCELLED | Notification worker and provider evidence | DELIVERED, EXHAUSTED, CANCELLED | DERIVED from approved DDD-015 distinctions. Provider acceptance must not be labelled delivery. |
+| `outbox_messages` | Inserted atomically with source business mutation | PENDING, PROCESSING, PUBLISHED, RETRY_WAIT, EXHAUSTED, DEAD_LETTERED | Outbox worker; controlled operator for replay/recovery | PUBLISHED, EXHAUSTED, DEAD_LETTERED | PROPOSED. Retry limits and dead-letter authority are operational settings, not business approval. |
+| `webhook_events` | Provider event received | RECEIVED, VERIFIED, REJECTED, PROCESSING, PROCESSED, FAILED | Webhook verifier and integration worker | REJECTED, PROCESSED, FAILED | PROPOSED. Signature/replay validation and provider event identity are mandatory. |
+| `integration_failures` | Failure record created | OPEN, RETRYING, RESOLVED, EXHAUSTED, DISMISSED | Integration worker; authorized operator for manual resolution | RESOLVED, EXHAUSTED, DISMISSED | PROPOSED. Retry ceiling and alert threshold remain operational decisions. |
+| `audit_events` | Appended when auditable action occurs | No mutable status; immutable event record | Dedicated audit writer | Immutable | IMMUTABLE HISTORY. Actor type/identity is governed by the audit actor contract. |
+| `idempotency_records` | First request claims key | IN_PROGRESS, COMPLETED, FAILED_RETRYABLE, EXPIRED | Request transaction/service | COMPLETED, EXPIRED | PROPOSED. Key retention and lease durations remain technical decisions; replay rechecks authorization. |
+| `retention_policies` | Schedule drafted | DRAFT, APPROVED, ACTIVE, SUPERSEDED, WITHDRAWN | Authorized records/finance/church governance authority | SUPERSEDED, WITHDRAWN | POLICY BLOCKED for activation. No category receives a guessed retention duration. |
+| `retention_holds` | Hold issued for exact retention subject | ACTIVE, RELEASED, EXPIRED | Authorized hold issuer; release authority must be designated | RELEASED, EXPIRED | PROPOSED. Legal/investigation hold policy and authority require confirmation. |
+| `retention_actions` | Disposal/anonymization action proposed | REQUESTED, APPROVED, BLOCKED_BY_HOLD, EXECUTED, REJECTED, FAILED | Independent authorized approver and controlled executor | EXECUTED, REJECTED, FAILED | PROPOSED. Automated permanent deletion remains disabled without an approved schedule. |
+| `report_definitions` | Report definition/version drafted | DRAFT, ACTIVE, RETIRED | Reporting/system administrator; classification owner approves sensitive report | RETIRED | PROPOSED. Report permission and classification catalogue must be approved. |
+| `report_runs` | Authorized report request created | QUEUED, RUNNING, COMPLETED, FAILED, CANCELLED, EXPIRED | Reporting worker; requester may cancel only if policy permits | COMPLETED, FAILED, CANCELLED, EXPIRED | PROPOSED. Recheck authorization at execution and export. |
+
+## 4. Decision rules for state implementation
+
+1. Store the current lifecycle state on the aggregate only where the state represents its current operational condition.
+2. Store each approval, rejection, review, correction, or revocation as an append-only decision/history record. Do not overwrite decision history.
+3. Use one table-specific state catalogue per aggregate. Do not create a universal status enum.
+4. Use explicit transition services and authorization checks. A valid state value alone does not authorize a transition.
+5. Add database CHECK constraints only after the relevant row is classified DERIVED or the proposed values are explicitly approved.
+6. Where a state is POLICY BLOCKED, keep the status field as a working design placeholder and do not seed production values or create restrictive final CHECK constraints.
+7. A terminal state is not automatically a deletion instruction. Retention schedules govern disposal separately.
+8. Provider delivery states and business workflow states remain separate. Provider acceptance does not mean a business transaction is posted.
+9. A background job must record its service actor and, where user-triggered, the initiating user in audit history.
+10. State changes that affect capacity, finance, authorization, appointment validity, or retention must be atomic with their associated records and audit/outbox entries.
+
+## 5. Approval checklist
+
+- [ ] Project owner confirms the proposed technical states.
+- [ ] Owner-approved DYMS product behavior is mapped to canonical state transitions. External source metadata is recorded only where official recognition is asserted.
+- [ ] Conservative finance defaults are reflected; disabled finance features remain absent from the enabled v1 state machine.
+- [ ] Security states preserve DFR-001/004, DDD-005, DDD-012 and DDD-013 without weakening their approved controls.
+- [ ] Retention disposal remains disabled until approved schedules and source enrollment are configured; holds suspend disposal.
+- [ ] Provider-specific states remain adapter/operational configuration; acceptance is distinct from delivery.
+- [ ] Every state-bearing table has an initial state, allowed states, transition authority, terminal states and history record.
+- [ ] Every transition has an authorization rule and an auditable outcome.
+- [ ] State catalogue is reconciled with all 107 testable requirement IDs, including REPORT-001–REPORT-010, and the owner-approved CPERD-01 baseline.
+
+## 6. Implementation boundary
+
+This document is a design proposal only. It does not authorize Prisma schema changes, migrations, SQL DDL, database objects, generated clients, or application implementation. The project owner must approve the physical design and separately authorize implementation.
+
+ 
+## 7. Phase 4 owner-authority and lifecycle status reconciliation (2026-11-11)
+
+Phase 4 GDC-01 §§4–5 and §12, together with the superseding ODR status in Owner Decision Register §§12–13, are the current authority for DYMS product behavior. Historical row-level statements describing a decision as waiting for external authority are superseded where they conflict with those owner decisions. Keep the old notes as audit history; apply this section when determining current status.
+
+### 7.1 Operative lifecycle defaults
+
+- Member category: one active primary category; preserve permanent assignment history; eligibility rules are versioned/configurable. Do not hardcode age thresholds or automatic promotion.
+- Church transfer: member initiates; receiving church accepts; district gives final approval; effective on approval; one unresolved request per member; no backdating by default. Cancellation/rejection/appeal paths must be explicit, auditable and configured before enablement.
+- Appointments: 1 January–31 December standard term; higher-authority approval; fresh approval for renewal; one active holder per position/scope; reasoned early termination. Acting, overlap and retroactive exceptions are disabled in v1.
+- Department membership: member request; coordinator approval; multiple memberships; withdrawal and reasoned termination; versioned/configurable eligibility; no automatic expiry or renewal assumption.
+- Events: district or one local church owns the event; department may organize but not own. Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes are reapproved.
+- Attendance: EVENT or SESSION subject mode; confirmed registration normally required; documented authorized registration exception; self-check-in and offline capture disabled.
+- Finance: submit/approve/pay/post separation; submitter cannot approve own transaction; reasoned rejection; pre-posting revisions; posted corrections through linked full reversals. Partial payments, multiple successful payments, FX, refunds, budget exceptions and amount-based thresholds remain disabled unless separately approved/configured.
+- Credentials: versioned catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Unknown validity remains unset.
+- Audit: append-only evidence; separate Audit Officer; system administrator has no automatic audit-read; exceptional access independently approved; break-glass disabled until a procedure is configured.
+- Retention: no automated permanent deletion without an approved schedule; holds suspend disposal; business retention is separate from DFR-005 backup retention.
+- Notifications: in-app baseline; verified email and approved templates; optional SMS/WhatsApp with consent; provider-independent adapters and bounded retries.
+- Reporting: district/church/department scope; versioned/classified definitions; authorization at request, execution and retrieval; private CSV/PDF exports.
+
+### 7.2 Technical status-label boundary
+
+The behavior above is owner-approved DYMS product design. It does not mean every candidate status word in §3 is an approved persisted enum. Before a state is used in a CHECK, unique-index predicate, API enum or migration:
+1. map the approved business transition to one canonical persisted state;
+2. document transition actor, command, preconditions, terminal behavior and history record;
+3. reconcile the exact label across DDD, ODR, API contract, requirements, physical columns, CHECKs, indexes and tests;
+4. keep disabled capabilities and unknown values out of the enabled v1 state machine.
+
+A technical label gap is a design-reconciliation task, not a request for external institutional approval. No migration, SQL, Prisma schema or implementation test is authorized by this catalogue.
+
+
+## CPERD-02 lifecycle reconciliation
+
+The transfer and appointment rows above supersede the historical candidate vocabularies for the successor package. All other lifecycle rows retain the owner-approved Phase 4 product boundaries and remain subject to their stated configuration gates. Persisted values are still proposals until the project owner approves the exact CPERD-02 manifest. No lifecycle seed or database constraint is authorized.
