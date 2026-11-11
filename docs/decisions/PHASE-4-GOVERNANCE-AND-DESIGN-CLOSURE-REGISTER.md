@@ -172,3 +172,23 @@ The recommended v1 dispositions are:
 - Credentials, reports and retention: use versioned/configurable definitions; do not invent age thresholds, validity periods, retention durations, or report activation settings.
 
 The successor package must preserve the exact CPERD-01 approval artifact and submit any material amendments as a new revision with a new manifest and exact hashes. The project owner remains the final approver. Implementation remains NOT AUTHORIZED.
+
+
+## 14. CPERD-02 successor package and static verification status (2026-11-11)
+
+The engineering successor package is prepared for project-owner review:
+
+- [CPERD-02 successor consolidated physical ERD](../architecture/PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-02.md)
+- CPERD-02 canonical column register: 70 tables / 692 column declarations.
+- CPERD-02 canonical FK register: 171 named relationships.
+- CPERD-02 index inventory: 235 candidates, including five unrelated policy-blocked indexes that remain excluded.
+- CPERD-02 integrity register: 68 row-local CHECK candidates.
+- CPERD-02 lifecycle catalogue, API contract candidate and 107-ID requirement traceability.
+- [CPERD-16 engineering recommendations and DFR-006 change-impact record](../architecture/PHASE-3-CPERD-16-FINAL-ENGINEERING-DESIGN-RECOMMENDATIONS.md).
+- [CPERD-17 static consistency verification](../architecture/PHASE-3-CPERD-17-STATIC-CONSISTENCY-VERIFICATION-REPORT.md).
+
+CPERD-17 reports zero missing FK source/target columns, zero missing FK supporting indexes, zero missing target candidate keys, zero missing CHECK-to-column references, zero duplicate FK/index names, zero identifiers over PostgreSQL's 63-byte limit, and 107 unique requirement IDs mapped exactly once.
+
+The successor is a candidate, not owner-approved. CPERD-01 remains approved only at its original exact SHA. CPERD-02 contains material physical refinements and requires a separate exact-hash project-owner approval. Provider-specific grants, PostgreSQL execution, concurrency tests, workload evidence and deployment/DR evidence remain post-authorization or deployment validation. DDD-013 external independent assurance remains NOT PERFORMED and is not represented as complete.
+
+**Implementation remains NOT AUTHORIZED.** The next owner decision is approval or requested revision of the exact CPERD-02 manifest, not another general documentation cycle.
