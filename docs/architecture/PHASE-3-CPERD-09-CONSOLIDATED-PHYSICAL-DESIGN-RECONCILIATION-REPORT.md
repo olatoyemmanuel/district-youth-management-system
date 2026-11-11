@@ -145,7 +145,7 @@ The exact blob contents were compared. The diff adds only §17, a dated current 
 
 ### 5.4 CPERD-05/06 report registration
 
-The approval manifest links to the CPERD-05 and CPERD-06 reports in its reconciliation narrative but does not list their exact report hashes in the supporting-artifact hash table. Their current hashes are recorded in §2 and are to be added to the manifest's current reconciliation evidence.
+The CPERD-05 and CPERD-06 report hashes have now been added to the approval manifest's supporting-artifact hash table. The manifest also registers CPERD-07 through CPERD-10 and the current DFR-006/Phase 4 governance authorities.
 
 - DFR-006 is clarified by DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md and Phase 4 GDC-01. The formal design freeze remains approved; the former README conflict is corrected; implementation remains NOT AUTHORIZED.
 
@@ -156,7 +156,7 @@ The approval manifest links to the CPERD-05 and CPERD-06 reports in its reconcil
 | CPERD-01 exact master ERD blob | Owner-approved on 2026-11-02 |
 | Canonical column/FK/index/integrity registers | Reconciliation candidates; not independently certified as final implementation schema |
 | CPERD-05 | Corrections applied; static checks recorded |
-| CPERD-06 | Structural CHECK corrections applied; trigger/transaction and authority closure remains open |
+| CPERD-06 | Structural CHECK corrections applied; trigger/transaction metadata reconciliation continues under CPERD-08; owner-approved product defaults are operative |
 | CPERD-07 | Logical database role model defined; owner-approved audit/reporting defaults applied; provider-specific grants, append-only proof and backup/restore evidence remain open |
 | CPERD-08 | Trigger/transaction contracts and 20 test specifications defined; exact trigger/function metadata and register alignment remain open; implementation tests are post-authorization |
 | CPERD-09 | Static cross-register consistency passed after documentation corrections |
