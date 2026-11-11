@@ -40,13 +40,14 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md | 1520f5f6f496e327efce42c59d64d8f8ac25d5b7 |
 | PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md | 82cab77039fbb1fc5a4a6f6bcf9ab11260caf091 |
 | DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md | 8452b503ccd542b639600d1d01d7dc5f38e13285 |
-| PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md | d63ab2846ee509ab44abc6d0e92dc203e457d529 |
+| PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md | e66be2c25ac5552097fa93e1a7519e0b0b6a80c9 |
 | PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | 5703575c4545ba7aec089c6d73c6b52345d4fb5f |
 | DDD-DECISION-REGISTER.md | bc4b8b045012fe57517ebdcb59f17a9a59f6223b |
 | PHASE-2-LIFECYCLE-STATE-CATALOGUE.md | 96e4e1ad0f4e0c2d4781f45680c67abfc6348052 |
 | PHASE-3-API-CONTRACT-DESIGN.md | 6a6f3e3481027482564d4c6b1b3de314d6ed5a65 |
 | PHASE-3-CPERD-11-DOMAIN-LIFECYCLE-API-AND-REQUIREMENT-STATUS-RECONCILIATION.md | 7f02db1cdab0e9e10007657bb4c3a79c9df1ad9f |
 | PHASE-3-CPERD-12-RETENTION-SOURCE-ENROLLMENT-CANDIDATE-INVENTORY.md | 552c87f0733165fa833a10b36f7f2b5970674c77 |
+| PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md | 3d6973500c777d3669ee8229189248c956c71df0 |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | 0cc3ed044f31b2bbd1de4922579e0f7b9ecd70d8 |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -99,6 +100,7 @@ The candidate registers were fetched back from the repository and checked agains
 - CPERD-10 governance reconciliation: DFR-006 is clarified; Phase 4 owner-approved DYMS product defaults supersede older delegated-authority blocker wording; DDD-013 and system-baseline hash differences are verified status/governance addenda. See [CPERD-10 Governance Authority and Design-Status Reconciliation](./PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md).
 - CPERD-11 domain/lifecycle/API/traceability reconciliation: DDD-001–015 current statuses align with Phase 4; lifecycle catalogue has 52 rows, all matching physical tables; 107 requirements map exactly once; API and traceability notes distinguish owner-approved defaults from technical/configuration gates. See [CPERD-11 Domain, Lifecycle, API and Requirement-Status Reconciliation](./PHASE-3-CPERD-11-DOMAIN-LIFECYCLE-API-AND-REQUIREMENT-STATUS-RECONCILIATION.md).
 - CPERD-12 retention source-enrollment inventory: 15 candidate record classes cover all 70 physical tables; no source-link FK, retention duration, schedule or destructive action was added. Phase 4 GDC-01 §8 records the inventory as prepared. See [CPERD-12 Retention Source-Enrollment Candidate Inventory](./PHASE-3-CPERD-12-RETENTION-SOURCE-ENROLLMENT-CANDIDATE-INVENTORY.md).
+- CPERD-13 reporting catalogue proposal: 14 candidate reports include purpose, accountable data owner, scope, candidate classification, field minimization, export permission and retention dependency. The proposal is not approved; no report definitions or seeds are authorized. See [CPERD-13 Reporting Catalogue and Data-Governance Proposal](./PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
