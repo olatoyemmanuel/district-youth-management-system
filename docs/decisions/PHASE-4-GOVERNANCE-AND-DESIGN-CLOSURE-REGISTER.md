@@ -107,7 +107,7 @@ The following documentation-only work may continue:
 
 - Reconcile the DDD register, ODR register, API catalogue, lifecycle catalogue and 107-ID requirement crosswalk so each unresolved policy rule is marked consistently.
 - PREPARED: [CPERD-12 Retention Source-Enrollment Candidate Inventory](../architecture/PHASE-3-CPERD-12-RETENTION-SOURCE-ENROLLMENT-CANDIDATE-INVENTORY.md). It maps all 70 physical tables into 15 candidate record classes; no retention FKs, source links, schedules or destructive actions were added.
-- Prepare a report catalogue proposal with report purpose, owner, scope, data classes, fields, redaction, export role and retention dependency. Do not treat it as approved.
+- PREPARED: [CPERD-13 Reporting Catalogue and Data-Governance Proposal](../architecture/PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md). It proposes 14 candidate reports and identifies owners, scopes, candidate classifications, field minimization, export permissions and retention dependencies. Proposal only; no report definitions, classifications or owner seeds are approved.
 - Prepare a credential standards evidence matrix for ODR-001/009.
 - Prepare transfer and appointment lifecycle decision sheets for ODR-002/003.
 - Prepare a finance workflow decision sheet that preserves approved conservative defaults and identifies each authority question.
