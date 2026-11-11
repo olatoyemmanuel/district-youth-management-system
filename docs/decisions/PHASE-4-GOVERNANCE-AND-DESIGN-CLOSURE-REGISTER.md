@@ -106,7 +106,7 @@ These validations must occur only after separate implementation authorization. T
 The following documentation-only work may continue:
 
 - Reconcile the DDD register, ODR register, API catalogue, lifecycle catalogue and 107-ID requirement crosswalk so each unresolved policy rule is marked consistently.
-- Prepare source-enrollment candidate inventory for retention without adding retention FKs or inventing schedules.
+- PREPARED: [CPERD-12 Retention Source-Enrollment Candidate Inventory](../architecture/PHASE-3-CPERD-12-RETENTION-SOURCE-ENROLLMENT-CANDIDATE-INVENTORY.md). It maps all 70 physical tables into 15 candidate record classes; no retention FKs, source links, schedules or destructive actions were added.
 - Prepare a report catalogue proposal with report purpose, owner, scope, data classes, fields, redaction, export role and retention dependency. Do not treat it as approved.
 - Prepare a credential standards evidence matrix for ODR-001/009.
 - Prepare transfer and appointment lifecycle decision sheets for ODR-002/003.
