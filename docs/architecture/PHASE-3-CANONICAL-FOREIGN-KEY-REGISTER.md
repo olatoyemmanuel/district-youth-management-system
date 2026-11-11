@@ -190,7 +190,9 @@ All relationships use ON DELETE RESTRICT and ON UPDATE RESTRICT unless a future 
 | `fk_ura_granted_by_user` | `user_role_assignments` | `granted_by_user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_user_role_assignments_granted_by_user_account_id` |
 | `fk_ura_role` | `user_role_assignments` | `role_id` | `roles(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_fk_user_role_assignments_role_id` |
 | `fk_ura_user_account` | `user_role_assignments` | `user_account_id` | `user_accounts(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `ix_user_role_assignments_user_scope` |
-| `fk_webhook_events_provider_id` | `webhook_events` | `provider_id` | `integration_providers(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `uq_webhook_events_provider_event` |## 4. Critical composite relationship contracts
+| `fk_webhook_events_provider_id` | `webhook_events` | `provider_id` | `integration_providers(id)` | NOT NULL | PK(id) | MATCH SIMPLE | RESTRICT | RESTRICT | `uq_webhook_events_provider_event` |
+
+## 4. Critical composite relationship contracts
 ### 4.1 User account and member
 
 `members.user_account_id` remains UNIQUE and NOT NULL, enforcing at most one member per account. Member provisioning must create the account and member relationship through the approved atomic workflow. No guardian or shared-account relationship is permitted.
