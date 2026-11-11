@@ -29,7 +29,9 @@ export class PasswordHasherService {
 
   async verify(encodedHash: string, password: string): Promise<boolean> {
     try {
-      return await argon2.verify(encodedHash, password);
+      return await argon2.verify(encodedHash, password, {
+        type: argon2.argon2id,
+      });
     } catch {
       return false;
     }

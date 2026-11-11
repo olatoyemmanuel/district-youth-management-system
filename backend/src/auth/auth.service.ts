@@ -145,6 +145,7 @@ export class AuthService {
   async issueCsrfContext(
     accessCookie: string | null,
     preAuthCookie: string | null,
+    refreshCookie: string | null,
   ): Promise<{
     csrfToken: string;
     preAuthCookie?: string;
@@ -168,6 +169,34 @@ export class AuthService {
         if (session) {
           return { csrfToken: this.csrfProof(`session:${session.id}`) };
         }
+      }
+    }
+
+    if (refreshCookie) {
+      const refreshHash = sha256(refreshCookie).toString('hex');
+      const refreshRecord = await this.prisma.authSessionToken.findUnique({
+        where: { tokenHash: refreshHash },
+        include: {
+          authSession: {
+            include: { userAccount: true },
+          },
+        },
+      });
+
+      const now = new Date();
+      if (
+        refreshRecord &&
+        !refreshRecord.revokedAt &&
+        !refreshRecord.authSession.revokedAt &&
+        refreshRecord.authSession.inactivityExpiresAt > now &&
+        refreshRecord.authSession.absoluteExpiresAt > now &&
+        refreshRecord.authSession.userAccount.status === 'ACTIVE'
+      ) {
+        return {
+          csrfToken: this.csrfProof(
+            `session:${refreshRecord.authSession.id}`,
+          ),
+        };
       }
     }
 

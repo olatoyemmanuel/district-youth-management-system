@@ -6,6 +6,7 @@ import {
   Get,
   Headers,
   Param,
+  ParseUUIDPipe,
   Post,
   Req,
   Res,
@@ -56,6 +57,7 @@ export class AuthController {
     const result = await this.authService.issueCsrfContext(
       readCookie(request, ACCESS_COOKIE_NAME),
       readCookie(request, PRE_AUTH_COOKIE_NAME),
+      readCookie(request, REFRESH_COOKIE_NAME),
     );
 
     if (result.preAuthCookie && result.preAuthExpiresAt) {
@@ -183,14 +185,8 @@ export class AuthController {
   @Delete('sessions/:sessionId')
   @UseGuards(AccessTokenGuard, CsrfGuard)
   async revokeSession(
-    @Param('sessionId', new (class {
-      transform(value: string): string {
-        if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)) {
-          throw new BadRequestException('Invalid session identifier.');
-        }
-        return value;
-      }
-    })()) sessionId: string,
+    @Param('sessionId', new ParseUUIDPipe({ version: '4' }))
+    sessionId: string,
     @Req() request: AuthenticatedRequest,
   ) {
     await this.authService.revokeOwnedSession(
