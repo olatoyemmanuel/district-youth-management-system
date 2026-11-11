@@ -7,16 +7,10 @@ import { ApiExceptionFilter } from './common/http/api-exception.filter.js';
 import { ApiResponseInterceptor } from './common/http/api-response.interceptor.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { AuthModule } from './auth/auth.module.js';
 import { validateEnvironment } from './config/env.validation.js';
 import { PrismaModule } from './database/prisma.module.js';
 
-/**
- * Root module for the District Youth Management System API.
- *
- * Environment configuration is validated at startup. PostgreSQL access
- * is provided through Prisma. Rate limiting, request envelopes and safe
- * exception normalization are registered globally.
- */
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,22 +29,14 @@ import { PrismaModule } from './database/prisma.module.js';
       ],
     }),
     PrismaModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: ApiResponseInterceptor,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: ApiExceptionFilter,
-    },
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+    { provide: APP_INTERCEPTOR, useClass: ApiResponseInterceptor },
+    { provide: APP_FILTER, useClass: ApiExceptionFilter },
   ],
 })
 export class AppModule {}
