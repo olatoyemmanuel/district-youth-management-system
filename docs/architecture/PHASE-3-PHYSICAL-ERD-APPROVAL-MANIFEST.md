@@ -78,6 +78,7 @@ The candidate registers were fetched back from the repository and checked agains
 - No duplicate index names.
 - No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
 - CPERD-05 correction verification: 228 unique index entries; 30 malformed predicate descriptions corrected; eight appointment-scope entries relocated into the canonical inventory; six policy blockers and two DDD-013 independent-review entries preserved; all 166 named FK rows have supporting indexes; no FK source/target columns are missing. See [CPERD-05 Correction and Verification Report](./PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md).
+- CPERD-06 static integrity reconciliation: 54 CHECK candidates and their column-register references were enumerated; one cross-row credential-validity policy is misclassified as a CHECK and requires correction; trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
