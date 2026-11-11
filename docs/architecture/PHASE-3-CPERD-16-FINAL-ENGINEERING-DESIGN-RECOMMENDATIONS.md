@@ -142,6 +142,19 @@ The following is the recommended canonical workflow, consistent with the owner-a
 
 Disabled in v1: partial payments, multiple successful payments, foreign exchange, refunds, budget exceptions, amount-based approval thresholds and unconfigured payment providers. NGN is the district default, but every account and transaction retains an explicit currency. Do not invent debit/credit sign semantics or a universal amount-positive CHECK until the accounting convention is selected.
 
+### 5.1 Finance physical-model corrections required
+
+The current finance tables already provide the main aggregate structure. The successor package must make the following minimum additions so the conservative workflow is enforceable and auditable:
+
+- `transaction_approvals`: one terminal approval/rejection decision per submitted transaction in v1. Add a unique candidate on `financial_transaction_id`. A rejected transaction is terminal; material correction is a new transaction, not a second approval decision on the same submitted row. The submitter cannot be the approver.
+- `payments`: permit multiple failed/pending attempts, but at most one CONFIRMED payment per financial transaction. Add a partial unique candidate on `financial_transaction_id WHERE status = 'CONFIRMED'`. The payment currency is already bound to the transaction by the composite FK. A confirmed payment amount must equal the full transaction amount; enforce this cross-row invariant in the same authorized payment-confirmation transaction, not a row-local CHECK.
+- `transaction_reversals`: preserve the existing one-full-reversal-per-original unique constraint and same-account/currency composite FKs. Add `approved_at` nullable, `rejected_by_user_account_id` nullable FK, `rejected_at` nullable and `rejection_reason` nullable. Keep `reason` as the initiator's reversal reason. APPROVED/POSTED requires approver and approved_at; REJECTED requires rejection actor/time/non-empty rejection_reason; REQUESTED has no decision metadata. POSTED requires posted_at. The linked reversal `financial_transactions` row remains the accounting fact and carries the posting actor.
+- `financial_transactions`: status vocabulary is DRAFT, SUBMITTED, APPROVED, REJECTED, PAID, POSTED, REVERSED. Submission actor/time are mandatory from SUBMITTED onward. Posting actor/time are paired and mandatory only for POSTED/REVERSED. PAID means verified full payment, not provider acceptance.
+- `payments`: status vocabulary is INITIATED, PENDING, CONFIRMED, FAILED, EXHAUSTED, CANCELLED. CONFIRMED requires confirmed_at; non-confirmed states must not claim settlement.
+- `transaction_approvals`: decision is APPROVED or REJECTED; REJECTED requires a non-empty reason. Multi-level approvals and approval thresholds are disabled in v1; approval_level remains NULL.
+
+The successor column, FK, index and integrity registers must add the four reversal decision columns, their rejection-actor FK and supporting index, two finance unique indexes, and the status/metadata CHECKs. These are CPERD-16 recommendations, not yet owner-approved.
+
 ## 6. CPERD-07 — Logical database security disposition
 
 The logical database role families are accepted as the design target:
