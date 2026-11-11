@@ -74,70 +74,70 @@ All names satisfy PostgreSQL's 63-byte identifier limit.
 | `ix_fk_appointment_role_links_created_by_user_account_id` | `appointment_role_links` | `created_by_user_account_id` | FK support | FK register |
 | `ix_fk_appointment_role_links_role_id` | `appointment_role_links` | `role_id` | FK support | FK register |
 | `ix_fk_appointments_appointing_authority_user_account_id` | `appointments` | `appointing_authority_user_account_id` | FK support | FK register |
-| `ix_fk_appointments_approved_by_user_account_id` | `appointments` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_attendance_corrections_approved_by_user_account_id` | `attendance_corrections` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_appointments_approved_by_user_account_id` | `appointments` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_corrections_approved_by_user_account_id` | `attendance_corrections` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_attendance_corrections_requested_by_user_account_id` | `attendance_corrections` | `requested_by_user_account_id` | FK support | FK register |
-| `ix_fk_attendance_records_event_session_id_event_id` | `attendance_records` | `event_session_id, event_id WHERE  WHERE event_session_id IS NOT NULL AND event_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_records_event_session_id_event_id` | `attendance_records` | `event_session_id, event_id WHERE event_session_id IS NOT NULL AND event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_attendance_records_recorded_by_user_account_id` | `attendance_records` | `recorded_by_user_account_id` | FK support | FK register |
-| `ix_fk_attendance_records_registration_id_event_id_member_id` | `attendance_records` | `registration_id, event_id, member_id WHERE  WHERE registration_id IS NOT NULL AND event_id IS NOT NULL AND member_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_records_registration_id_event_id_member_id` | `attendance_records` | `registration_id, event_id, member_id WHERE registration_id IS NOT NULL AND event_id IS NOT NULL AND member_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_attendance_records_subject_event_member` | `attendance_records` | `attendance_subject_id, event_id, member_id` | FK support | FK register |
 | `ix_fk_audit_access_events_audit_event_id` | `audit_access_events` | `audit_event_id WHERE audit_event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_audit_events_initiating_user_account_id` | `audit_events` | `initiating_user_account_id WHERE initiating_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_budget_lines_budget_id_currency_code` | `budget_lines` | `budget_id, currency_code` | FK support | FK register |
-| `ix_fk_budgets_approved_by_user_account_id` | `budgets` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_budgets_church_id` | `budgets` | `church_id WHERE  WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_budgets_approved_by_user_account_id` | `budgets` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_budgets_church_id` | `budgets` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_budgets_currency_code` | `budgets` | `currency_code` | FK support | FK register |
-| `ix_fk_budgets_district_id` | `budgets` | `district_id WHERE  WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_budgets_district_id` | `budgets` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_budgets_submitted_by_user_account_id` | `budgets` | `submitted_by_user_account_id` | FK support | FK register |
-| `ix_fk_church_memberships_accepted_by_user_account_id` | `church_memberships` | `accepted_by_user_account_id WHERE  WHERE accepted_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_church_memberships_approved_by_user_account_id` | `church_memberships` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id WHERE  WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_accepted_by_user_account_id` | `church_memberships` | `accepted_by_user_account_id WHERE accepted_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_approved_by_user_account_id` | `church_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_church_memberships_initiated_by_user_account_id` | `church_memberships` | `initiated_by_user_account_id` | FK support | FK register |
-| `ix_fk_church_transfer_requests_district_decider` | `church_transfer_requests` | `district_decided_by_user_account_id WHERE  WHERE district_decided_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_transfer_requests_district_decider` | `church_transfer_requests` | `district_decided_by_user_account_id WHERE district_decided_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_church_transfer_requests_receiving_church_id` | `church_transfer_requests` | `receiving_church_id` | FK support | FK register |
-| `ix_fk_church_transfer_requests_receiving_decider` | `church_transfer_requests` | `receiving_decided_by_user_account_id WHERE  WHERE receiving_decided_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_transfer_requests_receiving_decider` | `church_transfer_requests` | `receiving_decided_by_user_account_id WHERE receiving_decided_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_church_transfer_requests_requested_by_user_account_id` | `church_transfer_requests` | `requested_by_user_account_id` | FK support | FK register |
 | `ix_fk_church_transfer_requests_source_church_id` | `church_transfer_requests` | `source_church_id` | FK support | FK register |
-| `ix_fk_credential_definition_versions_approver` | `credential_definition_versions` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_credential_definition_versions_approver` | `credential_definition_versions` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_credential_definitions_issuer_scope_church_id` | `credential_definitions` | `issuer_scope_church_id` | FK support | FK register |
 | `ix_fk_credential_definitions_issuer_scope_district_id` | `credential_definitions` | `issuer_scope_district_id` | FK support | FK register |
 | `ix_fk_credential_evidence_submitted_by_user_account_id` | `credential_evidence` | `submitted_by_user_account_id` | FK support | FK register |
-| `ix_fk_credential_evidence_verified_by_user_account_id` | `credential_evidence` | `verified_by_user_account_id WHERE  WHERE verified_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_credential_issuances_approved_by_user_account_id` | `credential_issuances` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_credential_evidence_verified_by_user_account_id` | `credential_evidence` | `verified_by_user_account_id WHERE verified_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_credential_issuances_approved_by_user_account_id` | `credential_issuances` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_credential_issuances_credential_definition_version_id` | `credential_issuances` | `credential_definition_version_id` | FK support | FK register |
 | `ix_fk_credential_issuances_issuer_user_account_id` | `credential_issuances` | `issuer_user_account_id` | FK support | FK register |
-| `ix_fk_credential_issuances_prior_issuance_id` | `credential_issuances` | `prior_issuance_id WHERE  WHERE prior_issuance_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_department_memberships_approved_by_user_account_id` | `department_memberships` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_department_memberships_department_id` | `department_memberships` | `department_id WHERE  WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_credential_issuances_prior_issuance_id` | `credential_issuances` | `prior_issuance_id WHERE prior_issuance_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_approved_by_user_account_id` | `department_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_department_id` | `department_memberships` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_department_memberships_eligibility_rule_id` | `department_memberships` | `eligibility_rule_id` | FK support | FK register |
-| `ix_fk_department_memberships_ended_by_user_account_id` | `department_memberships` | `ended_by_user_account_id WHERE  WHERE ended_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_ended_by_user_account_id` | `department_memberships` | `ended_by_user_account_id WHERE ended_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_department_memberships_requested_by_user_account_id` | `department_memberships` | `requested_by_user_account_id` | FK support | FK register |
 | `ix_fk_event_approvals_event_id` | `event_approvals` | `event_id` | FK support | FK register |
 | `ix_fk_event_approvals_reviewer_user_account_id` | `event_approvals` | `reviewer_user_account_id` | FK support | FK register |
 | `ix_fk_event_attendance_subjects_created_by_user_account_id` | `event_attendance_subjects` | `created_by_user_account_id` | FK support | FK register |
 | `ix_fk_event_attendance_subjects_member_id` | `event_attendance_subjects` | `member_id` | FK support | FK register |
-| `ix_fk_event_change_records_approved_by_user_account_id` | `event_change_records` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_event_change_records_approved_by_user_account_id` | `event_change_records` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_event_change_records_event_id` | `event_change_records` | `event_id` | FK support | FK register |
 | `ix_fk_event_change_records_requested_by_user_account_id` | `event_change_records` | `requested_by_user_account_id` | FK support | FK register |
 | `ix_fk_event_registrations_member_id` | `event_registrations` | `member_id` | FK support | FK register |
 | `ix_fk_events_created_by_user_account_id` | `events` | `created_by_user_account_id` | FK support | FK register |
-| `ix_fk_financial_accounts_church_id` | `financial_accounts` | `church_id WHERE  WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_financial_accounts_church_id` | `financial_accounts` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_financial_accounts_currency_code` | `financial_accounts` | `currency_code` | FK support | FK register |
-| `ix_fk_financial_accounts_district_id` | `financial_accounts` | `district_id WHERE  WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_financial_accounts_district_id` | `financial_accounts` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_financial_transactions_financial_account_id_currency_code` | `financial_transactions` | `financial_account_id, currency_code` | FK support | FK register |
-| `ix_fk_financial_transactions_posted_by_user_account_id` | `financial_transactions` | `posted_by_user_account_id WHERE  WHERE posted_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_financial_transactions_posted_by_user_account_id` | `financial_transactions` | `posted_by_user_account_id WHERE posted_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_financial_transactions_submitted_by_user_account_id` | `financial_transactions` | `submitted_by_user_account_id` | FK support | FK register |
-| `ix_fk_integration_failures_webhook_event_id` | `integration_failures` | `webhook_event_id WHERE  WHERE webhook_event_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_integration_failures_webhook_event_id` | `integration_failures` | `webhook_event_id WHERE webhook_event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | FK support | FK register |
 | `ix_fk_member_category_assignments_eligibility_rule_id` | `member_category_assignments` | `eligibility_rule_id WHERE eligibility_rule_id IS NOT NULL` | FK support | MEM-005 eligibility provenance |
 | `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | FK support | FK register |
-| `ix_fk_notification_deliveries_provider_id` | `notification_deliveries` | `provider_id WHERE  WHERE provider_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_notification_deliveries_provider_id` | `notification_deliveries` | `provider_id WHERE provider_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_notification_preferences_user_account_id` | `notification_preferences` | `user_account_id` | FK support | FK register |
-| `ix_fk_notifications_template_id` | `notifications` | `template_id WHERE  WHERE template_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_notifications_template_id` | `notifications` | `template_id WHERE template_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_payments_financial_transaction_id_currency_code` | `payments` | `financial_transaction_id, currency_code` | FK support | FK register |
-| `ix_fk_payments_provider_id` | `payments` | `provider_id WHERE  WHERE provider_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_payments_provider_id` | `payments` | `provider_id WHERE provider_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_positions_district_id` | `positions` | `district_id` | FK support | FK register |
-| `ix_fk_report_definitions_approved_by_user_account_id` | `report_definitions` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_report_definitions_approved_by_user_account_id` | `report_definitions` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_report_definitions_created_by_user_account_id` | `report_definitions` | `created_by_user_account_id` | FK support | FK register |
 | `ix_fk_report_runs_definition_version` | `report_runs` | `report_definition_id, report_definition_version` | FK support | FK register |
 | `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
@@ -146,13 +146,13 @@ All names satisfy PostgreSQL's 63-byte identifier limit.
 | `ix_fk_retention_holds_approved_by_user_account_id` | `retention_holds` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_retention_holds_issued_by_user_account_id` | `retention_holds` | `issued_by_user_account_id` | FK support | FK register |
 | `ix_fk_retention_subjects_created_by_user_account_id` | `retention_subjects` | `created_by_user_account_id` | FK support | FK register |
-| `ix_fk_role_conflict_reviews_reviewed_by_user_account_id` | `role_conflict_reviews` | `reviewed_by_user_account_id WHERE  WHERE reviewed_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_role_conflict_reviews_reviewed_by_user_account_id` | `role_conflict_reviews` | `reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_role_conflict_reviews_role_conflict_rule_id` | `role_conflict_reviews` | `role_conflict_rule_id` | FK support | FK register |
 | `ix_fk_role_conflict_reviews_user_account_id` | `role_conflict_reviews` | `user_account_id` | FK support | FK register |
 | `ix_fk_role_conflict_rules_role_b_id` | `role_conflict_rules` | `role_b_id` | FK support | FK register |
 | `ix_fk_role_permissions_permission_id` | `role_permissions` | `permission_id` | FK support | FK register + Medium catalogue |
 | `ix_fk_transaction_approvals_approver_user_account_id` | `transaction_approvals` | `approver_user_account_id` | FK support | FK register |
-| `ix_fk_transaction_reversals_approved_by_user_account_id` | `transaction_reversals` | `approved_by_user_account_id WHERE  WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_transaction_reversals_approved_by_user_account_id` | `transaction_reversals` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_transaction_reversals_initiated_by_user_account_id` | `transaction_reversals` | `initiated_by_user_account_id` | FK support | FK register |
 | `ix_fk_transaction_reversals_original_tuple` | `transaction_reversals` | `original_transaction_id, financial_account_id, currency_code` | FK support | FK register |
 | `ix_fk_transaction_reversals_reversal_tuple` | `transaction_reversals` | `reversal_transaction_id, financial_account_id, currency_code` | FK support | FK register |
@@ -251,6 +251,15 @@ All names satisfy PostgreSQL's 63-byte identifier limit.
 | `uq_user_accounts_phone_present` | `user_accounts` | `phone_e164 WHERE phone_e164 IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_webhook_events_provider_event` | `webhook_events` | `provider_id, provider_event_id` | Unique / partial unique | Medium catalogue |
 
+| Index name | Table | Key columns / predicate | Classification | Source |
+| `uq_positions_id_district_scope_type` | `positions` | `id, district_id, allowed_scope_type` | Unique candidate key | Appointment scope-type/district composite FK |
+| `uq_positions_id_church` | `positions` | `id, church_id` | Unique candidate key | Appointment church-scope composite FK |
+| `uq_positions_id_department` | `positions` | `id, department_id` | Unique candidate key | Appointment department-scope composite FK |
+| `ix_positions_church_district` | `positions` | `church_id, district_id` | FK support | Position church/district composite FK |
+| `ix_positions_department_district` | `positions` | `department_id, district_id` | FK support | Position department/district composite FK |
+| `ix_appointments_position_district_scope_type` | `appointments` | `position_id, district_id, scope_type` | FK support | Appointment position/district/type composite FK |
+| `ix_appointments_position_church_scope` | `appointments` | `position_id, church_id` | FK support | Appointment position/church composite FK |
+| `ix_appointments_position_department_scope` | `appointments` | `position_id, department_id` | FK support | Appointment position/department composite FK |
 ## 4. Superseded Phase 2 entries
 
 The following old names are removed from the canonical Phase 3 inventory because their columns or relationships no longer exist, or their access path is now covered by a more exact composite index:
@@ -317,12 +326,3 @@ The Phase 3 candidate removes redundant FK support indexes where a suitable left
 ## 9. Approval boundary
 
 This is the canonical proposed named-index inventory for the consolidated physical design. It does not authorize SQL DDL, Prisma models, migrations, database objects, seeds or application code. Physical ERD approval and separate implementation authorization remain required.
-
-| `uq_positions_id_district_scope_type` | `positions` | `id, district_id, allowed_scope_type` | Unique candidate key | Appointment scope-type/district composite FK |
-| `uq_positions_id_church` | `positions` | `id, church_id` | Unique candidate key | Appointment church-scope composite FK |
-| `uq_positions_id_department` | `positions` | `id, department_id` | Unique candidate key | Appointment department-scope composite FK |
-| `ix_positions_church_district` | `positions` | `church_id, district_id` | FK support | Position church/district composite FK |
-| `ix_positions_department_district` | `positions` | `department_id, district_id` | FK support | Position department/district composite FK |
-| `ix_appointments_position_district_scope_type` | `appointments` | `position_id, district_id, scope_type` | FK support | Appointment position/district/type composite FK |
-| `ix_appointments_position_church_scope` | `appointments` | `position_id, church_id` | FK support | Appointment position/church composite FK |
-| `ix_appointments_position_department_scope` | `appointments` | `position_id, department_id` | FK support | Appointment position/department composite FK |
