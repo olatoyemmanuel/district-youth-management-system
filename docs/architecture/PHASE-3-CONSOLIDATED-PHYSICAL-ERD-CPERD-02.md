@@ -388,9 +388,9 @@ The six policy-blocked indexes remain excluded from DDL.
 
 | Register | Phase 3 candidate | Key changes |
 |---|---|---|
-| Columns | 70 tables / 688 column declarations | DDD-013 23-column record; pre-auth/recovery; organizer association; category-rule provenance; report data owner; attendance exception; remove obsolete owner columns |
-| Foreign keys | 170 named relationships | Session-owner composite FK; pre-auth/recovery/outbox FKs; organizer composite FKs; category eligibility and report-owner FKs; remove obsolete scope FKs |
-| Indexes | 232 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain six policy blockers as blocked |
+| Columns | 70 tables / 692 column declarations | DDD-013 23-column record; pre-auth/recovery; organizer association; category-rule provenance; report data owner; attendance exception; remove obsolete owner columns |
+| Foreign keys | 171 named relationships | Session-owner composite FK; pre-auth/recovery/outbox FKs; organizer composite FKs; category eligibility and report-owner FKs; remove obsolete scope FKs |
+| Indexes | 235 distinct named candidates | Two DDD-013 identity indexes; supporting composite indexes; remove superseded idempotency and obsolete ownership indexes; retain six policy blockers as blocked |
 | Integrity/triggers | Structural CHECK and concurrency register | Exact structural names, trigger/transaction boundaries and test requirements |
 | Traceability | 107 / 107 requirements mapped | Explicit platform-only and policy-gated requirements |
 
@@ -463,18 +463,30 @@ The `appointments` table remains the single lifecycle aggregate. No separate app
 
 The successor integrity register defines status-specific decision and termination metadata checks. The appointment overlap guard excludes pending/rejected requests and protects approved effective intervals under a position-parent lock.
 
-### 16.3 Successor inventory
+### 16.3 Finance workflow and physical controls
+
+The successor preserves the existing finance aggregates and adds decision provenance and uniqueness controls:
+- One final approval/rejection decision per submitted transaction.
+- Multiple failed/pending payment attempts are permitted, but only one CONFIRMED full payment per transaction.
+- CONFIRMED payment amount must equal the transaction amount and currency must match through the existing composite FK.
+- Payment confirmation is distinct from transaction posting. Provider acceptance is not settlement.
+- A reversal is full only, same account/currency, and at most one per original posted transaction. Reversal approval/rejection actor/time/reason and posting time are explicit.
+- Rejected transactions/reversals remain historical. A rejected transaction is not resubmitted; correction requires a new transaction. Partial payments, FX, refunds, budget overrides, amount thresholds and multi-level approvals remain disabled.
+
+Four reversal columns, one rejection-actor FK, three indexes and eight CHECK candidates are included in the CPERD-02 finance delta. Cross-row amount equality and payment confirmation verification remain authorized transaction invariants.
+
+### 16.4 Successor inventory
 
 | Measure | CPERD-01 approved base | CPERD-02 successor candidate |
 |---|---:|---:|
 | Tables | 70 | 70 |
-| Column declarations | 679 | 688 |
-| Named FK relationships | 166 | 170 |
-| Named index candidates | 228 | 232 |
-| Row-local structural CHECK candidates | 53 | 60 |
+| Column declarations | 679 | 692 |
+| Named FK relationships | 166 | 171 |
+| Named index candidates | 228 | 235 |
+| Row-local structural CHECK candidates | 53 | 68 |
 
-The successor adds no tables. Four new user-account FKs have matching supporting indexes. All seven new row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 60 row-local structural CHECK candidates. Five unrelated policy-dependent indexes remain excluded. The transfer open-request predicate is now defined by the owner-approved core workflow and is a successor candidate pending approval of this exact package.
+The successor adds no tables. Four new user-account FKs have matching supporting indexes. All seven new row-local CHECKs are listed in the CPERD-02 integrity register, bringing the candidate to 68 row-local structural CHECK candidates. Five unrelated policy-dependent indexes remain excluded. The transfer open-request predicate is now defined by the owner-approved core workflow and is a successor candidate pending approval of this exact package.
 
-### 16.4 Approval and implementation boundary
+### 16.5 Approval and implementation boundary
 
 CPERD-02 is a successor owner-review candidate. It does not supersede or alter the exact CPERD-01 approval. The project owner must approve the exact CPERD-02 master and manifest hashes before this successor is treated as the operative physical design. No implementation is authorized by this document.
