@@ -116,9 +116,9 @@ Base: `/members`, `/membership`
 | GET `/church-transfers/{transferId}` | Read transfer | Requester or authorized scope |
 | POST `/church-transfers/{transferId}/receiving-decision` | Record receiving-church acceptance decision | Receiving church authority |
 | POST `/church-transfers/{transferId}/district-decision` | Record district final decision | District authority |
-| POST `/church-transfers/{transferId}/complete` | Complete approved transfer on approved date | Authorized workflow/service actor |
+| POST `/church-transfers/{transferId}/cancel` | Cancel before district approval with reason | Requesting member only |
 
-The owner-approved transfer core is member initiation, receiving-church acceptance, district final approval and effective-on-approval, with one unresolved request and no backdating by default. Withdrawal, rejection, cancellation and appeal commands remain omitted until their exact actor/reason/transition contract is reconciled with the configurable lifecycle. Category eligibility is an owner-approved configurable model; do not hardcode age thresholds or automatic progression.
+The owner-approved transfer core is member initiation, receiving-church acceptance, district final approval and effective-on-approval, with one unresolved request and no backdating by default. The successor command contract defines terminal rejection and requester cancellation before district approval; appeal/reconsideration remains disabled. Category eligibility is an owner-approved configurable model; do not hardcode age thresholds or automatic progression.
 
 ## 7. Organization endpoints
 
