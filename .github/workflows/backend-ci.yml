@@ -19,6 +19,10 @@ jobs:
   backend:
     name: Build and test backend
     runs-on: ubuntu-latest
+    env:
+      # AppModule validates configuration. End-to-end tests replace Prisma,
+      # so this syntactically valid URL does not require a running database.
+      DATABASE_URL: postgresql://dyms_ci:dyms_ci@127.0.0.1:5432/dyms_ci
     defaults:
       run:
         working-directory: backend
