@@ -34,11 +34,14 @@ These hashes identify the supporting files fetched from the working branch when 
 | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | a2d7595809faaad165396aed08f4ab3aa1149ab2 |
 | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
 | PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 6e7959f9ca562e0b3488cf366de4436ec20dc0ad |
-| PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md | be5fdd84c013adee7a785e4b9e5ec6f49387006e |
-| PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md | fb0bf9a8e14bbfe08a56f9638332251e8092ac8d |
+| PHASE-3-CPERD-07-DATABASE-SECURITY-AND-LEAST-PRIVILEGE-REPORT.md | 98279e69950b7b9aa8fb139cae5b61d1b2e2cf6a |
+| PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md | dfd8953f4b5087f51289df908e2bb58cbcafe5ac |
 | PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md | e708cb8a504d8698780cf2f77c2ce8ddd9eaa5c6 |
 | PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md | 1520f5f6f496e327efce42c59d64d8f8ac25d5b7 |
-| PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | ee9e376068c347284e05dea4dcb41bd92457da8f |
+| PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md | 82cab77039fbb1fc5a4a6f6bcf9ab11260caf091 |
+| DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md | 8452b503ccd542b639600d1d01d7dc5f38e13285 |
+| PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md | 0936099909ee997569dd5c7cba6d8dce247d45b3 |
+| PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | 66f39ceb1d23573a52edf0fef8ce0add9ddb9092 |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -95,12 +98,12 @@ These are static documentation consistency checks only. They do not establish th
 
 ### 4.1 Current-branch artifact hash drift
 
-The support hashes above preserve the original manifest snapshot and exact approval references. CPERD-09 identified two current-branch differences that must not be silently treated as approved versions:
+The support hashes above preserve the original manifest snapshot and exact approval references. CPERD-09/10 compared both historical blobs with their current branch versions. The differences are later status/governance addenda only; the historical approval references remain preserved:
 
 | Artifact | Hash recorded in original support snapshot / approval | Current branch blob | Disposition |
 |---|---|---|---|
-| PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b | a2c1eb8a4989bad7cb7687b1eae208642eb22abe | Approval record remains bound to the recorded hash; current artifact equivalence is unverified. |
-| PHASE-3-SYSTEM-DESIGN-BASELINE.md | 43e4a26fdb40ff2bd4cad7dbce6ae303752796e5 | eb25d44d30a65c2028eb6897ade4a30a74ef457c | Original snapshot preserved; current branch version requires diff review. |
+| PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b | a2c1eb8a4989bad7cb7687b1eae208642eb22abe | Verified status-only owner-approval addendum; no physical-slice specification changed. |
+| PHASE-3-SYSTEM-DESIGN-BASELINE.md | 43e4a26fdb40ff2bd4cad7dbce6ae303752796e5 | eb25d44d30a65c2028eb6897ade4a30a74ef457c | Verified §17 governance/status addendum only; no physical schema or domain rule changed. |
 
 The CPERD-01 master file remains at its exact owner-approved blob. Its internal header status is stale and is not to be edited in place. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
 
