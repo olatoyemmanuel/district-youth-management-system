@@ -158,6 +158,7 @@ All names satisfy PostgreSQL's 63-byte identifier limit.
 | `ix_fk_transaction_approvals_approver_user_account_id` | `transaction_approvals` | `approver_user_account_id` | FK support | FK register |
 | `ix_fk_transaction_reversals_approved_by_user_account_id` | `transaction_reversals` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_transaction_reversals_initiated_by_user_account_id` | `transaction_reversals` | `initiated_by_user_account_id` | FK support | FK register |
+| `ix_fk_transaction_reversals_rejected_by_user_account_id` | `transaction_reversals` | `rejected_by_user_account_id` | FK support | CPERD-16 reversal rejection actor FK |
 | `ix_fk_transaction_reversals_original_tuple` | `transaction_reversals` | `original_transaction_id, financial_account_id, currency_code` | FK support | FK register |
 | `ix_fk_transaction_reversals_reversal_tuple` | `transaction_reversals` | `reversal_transaction_id, financial_account_id, currency_code` | FK support | FK register |
 | `ix_fk_transaction_revisions_requested_by_user_account_id` | `transaction_revisions` | `requested_by_user_account_id` | FK support | FK register |
@@ -247,6 +248,8 @@ All names satisfy PostgreSQL's 63-byte identifier limit.
 | `uq_retention_policies_category_version` | `retention_policies` | `record_category, version` | Unique / partial unique | Medium catalogue |
 | `uq_role_conflict_rules_pair_version` | `role_conflict_rules` | `role_a_id, role_b_id, version` | Unique / partial unique | Medium catalogue |
 | `uq_role_permissions_role_permission` | `role_permissions` | `role_id, permission_id` | Unique / partial unique | Medium catalogue |
+| `uq_payments_one_confirmed_per_transaction` | `payments` | `financial_transaction_id WHERE status = 'CONFIRMED'` | SUCCESSOR CANDIDATE; OWNER REVIEW | CPERD-16; at most one full confirmed payment per transaction |
+| `uq_transaction_approvals_one_decision_per_transaction` | `transaction_approvals` | `financial_transaction_id` | SUCCESSOR CANDIDATE; OWNER REVIEW | CPERD-16; one final approval/rejection decision per submitted transaction |
 | `uq_transaction_reversals_original_full` | `transaction_reversals` | `original_transaction_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_reversals_reversal_transaction` | `transaction_reversals` | `reversal_transaction_id` | Unique / partial unique | Medium catalogue |
 | `uq_transaction_revisions_transaction_number` | `transaction_revisions` | `financial_transaction_id, revision_number` | Unique / partial unique | Medium catalogue |
@@ -337,3 +340,13 @@ This is the canonical proposed named-index inventory for the consolidated physic
 Four FK-supporting indexes are added for the CPERD-16 appointment and transfer actor references. The one-open-transfer candidate now uses the two owner-approved pending workflow states, but remains a successor candidate pending exact owner approval and static verification.
 
 Total candidate index entries: 232. The six unrelated policy-dependent indexes remain excluded from implementation. This inventory is not owner-approved or implementation-authorized.
+
+
+### CPERD-02 finance index delta
+
+Three indexes are added:
+- `ix_fk_transaction_reversals_rejected_by_user_account_id` supports the new rejection-actor FK.
+- `uq_transaction_approvals_one_decision_per_transaction` limits each submitted transaction to one final approval/rejection decision in v1.
+- `uq_payments_one_confirmed_per_transaction` allows failed/pending attempts but at most one CONFIRMED full payment per transaction.
+
+Total candidate index entries: 235. The two unique finance indexes are successor owner-review candidates and must be statically checked against the finance lifecycle before approval.
