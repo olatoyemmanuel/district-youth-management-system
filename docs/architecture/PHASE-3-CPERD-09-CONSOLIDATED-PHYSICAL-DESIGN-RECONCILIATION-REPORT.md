@@ -34,8 +34,8 @@ The following are the current branch blobs fetched for this reconciliation:
 | Integrity/trigger register | `6e7959f9ca562e0b3488cf366de4436ec20dc0ad` |
 | CPERD-05 correction report | `e708cb8a504d8698780cf2f77c2ce8ddd9eaa5c6` |
 | CPERD-06 integrity report | `1520f5f6f496e327efce42c59d64d8f8ac25d5b7` |
-| CPERD-07 security report | `be5fdd84c013adee7a785e4b9e5ec6f49387006e` |
-| CPERD-08 trigger/transaction report | `fb0bf9a8e14bbfe08a56f9638332251e8092ac8d` |
+| CPERD-07 security report, aligned to Phase 4 | `98279e69950b7b9aa8fb139cae5b61d1b2e2cf6a` |
+| CPERD-08 trigger/transaction report, aligned to Phase 4 | `dfd8953f4b5087f51289df908e2bb58cbcafe5ac` |
 
 The CPERD-01 master ERD blob is unchanged. The column and FK hashes changed only because of the two documentation corrections in §4.
 
@@ -123,14 +123,13 @@ The approval manifest records the same reviewed blob. The current working-branch
 
 `a2c1eb8a4989bad7cb7687b1eae208642eb22abe`
 
-These hashes differ. The available current-file content does not establish whether the difference is a harmless editorial change or a material post-approval change.
+The exact blob contents were compared. The diff is limited to the review's approval/status section: the earlier version records physical approval as not granted and independent review as pending; the current version adds the project-owner approval under D13-POA-01, records that external independent technical assurance was not performed, and updates the approval-boundary wording. No DDD-013 physical-slice specification, field, index, FK, transaction rule or test contract changed in the diff.
 
 Disposition:
-- Preserve `0a172162e83925472d7f258efaf0935314f0848b` as the exact recorded approval target.
-- Do not silently replace the approved hash with the current blob.
-- Treat the current DDD-013 review artifact as not proven identical to the approved artifact.
-- Reconcile the Git history/diff against the approved version and either restore the approved artifact, or issue a dated owner amendment identifying the new exact hash and material changes.
-- External independent DDD-013 technical assurance remains NOT PERFORMED.
+- Preserve `0a172162e83925472d7f258efaf0935314f0848b` as the exact pre-approval review artifact referenced by the approval record.
+- Retain current blob `a2c1eb8a4989bad7cb7687b1eae208642eb22abe` as the same review with a subsequent owner-approval/status addendum.
+- The separate D13-POA-01 approval record is the evidence of owner approval of all ten areas.
+- External independent technical assurance remains NOT PERFORMED and is not represented as completed. Phase 4 classifies the remaining PostgreSQL execution, concurrency, security and recovery checks as post-authorization implementation validation.
 
 ### 5.3 System design baseline hash drift
 
@@ -142,11 +141,13 @@ The current branch blob is:
 
 `eb25d44d30a65c2028eb6897ade4a30a74ef457c`
 
-This is a stale supporting-artifact pointer. It is not the exact CPERD-01 approval target. Preserve the historical hash as the manifest's original snapshot and record the current branch hash separately. Review the diff before treating the current baseline as the same reviewed support package.
+The exact blob contents were compared. The diff adds only §17, a dated current approval/governance status reconciliation recording CPERD-01 approval, D13-POA-01 approval, the continuing DFR-006 freeze, and the separate implementation gate. No physical schema, domain rule or architecture design content changed in the diff. Preserve `43e4a26fdb40ff2bd4cad7dbce6ae303752796e5` as the original manifest snapshot and `eb25d44d30a65c2028eb6897ade4a30a74ef457c` as the current branch version.
 
 ### 5.4 CPERD-05/06 report registration
 
 The approval manifest links to the CPERD-05 and CPERD-06 reports in its reconciliation narrative but does not list their exact report hashes in the supporting-artifact hash table. Their current hashes are recorded in §2 and are to be added to the manifest's current reconciliation evidence.
+
+- DFR-006 is clarified by DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md and Phase 4 GDC-01. The formal design freeze remains approved; the former README conflict is corrected; implementation remains NOT AUTHORIZED.
 
 ## 6. Approval boundary and package status
 
@@ -160,23 +161,23 @@ The approval manifest links to the CPERD-05 and CPERD-06 reports in its reconcil
 | CPERD-08 | Trigger/transaction contracts and 20 test specifications defined; implementation tests not executed |
 | CPERD-09 | Static cross-register consistency passed after documentation corrections |
 | DDD-013 external independent technical assurance | NOT PERFORMED |
-| DFR-006 governance discrepancy | OPEN |
+| DFR-006 governance status | CLARIFIED — 2026-11-02 |
 | PostgreSQL provider/version and managed-service privilege model | OPEN |
-| ODR-010 audit investigation/exception authority | OPEN |
-| ODR-011 retention schedules and source enrollment | OPEN |
-| ODR-013 reporting classification/disclosure/export authority | OPEN |
-| Other delegated policy decisions | OPEN as recorded in canonical ODR register |
+| ODR-010 audit access | OWNER DEFAULT APPROVED; break-glass remains disabled until a procedure is configured |
+| ODR-011 retention | OWNER DEFAULT APPROVED; destructive disposal remains disabled until approved schedule/source enrollment is configured |
+| ODR-013 reporting | OWNER DEFAULT APPROVED; report-specific catalogue, data-owner, classification and disclosure configuration remains design work |
+| ODR-001–ODR-013 DYMS product defaults | OWNER DECISIONS RECORDED in Phase 4 GDC-01; external institutional policy is separate metadata/configuration, not a DYMS design blocker |
 | Final amended physical package approval | NOT GRANTED |
 | Separate implementation authorization | NOT GRANTED |
 
 ## 7. Next reconciliation actions
 
 1. Reconcile the DDD-013 current-file hash against the exact approved blob and record the diff outcome.
-2. Reconcile the DFR-006 governance discrepancy without weakening the design-freeze or implementation-authorization gate.
+2. Preserve the DFR-006 clarification and ensure successor artifacts no longer repeat superseded governance status wording.
 3. Produce a successor physical ERD candidate with an exact artifact manifest. Do not overwrite CPERD-01.
 4. Regenerate the consolidated column/FK/index/CHECK/trigger package from the approved decisions and CPERD-05 through CPERD-08 corrections.
 5. Complete the CPERD-07 provider-specific privilege matrix and CPERD-08 trigger/function metadata.
-6. Close the outstanding delegated-authority and environment decisions or explicitly exclude the affected features from v1.
+6. Close provider/deployment selections and populate approved configurable values only where the product design requires them. Keep unconfigured/disabled features off; do not treat external institutional confirmation as a prerequisite for owner-approved DYMS defaults.
 7. Submit the exact successor package and hashes to the project owner for review.
 8. Obtain separate explicit implementation authorization before any code, Prisma, SQL, migration, database, test implementation or deployment work.
 
