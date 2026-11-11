@@ -4,7 +4,7 @@
 - Date: 2026-11-11
 - Repository: olatoyemmanuel/district-youth-management-system
 - Branch: phase-1/requirements-consolidation
-- Status: **CONTRACT RECONCILIATION IN PROGRESS; OWNER AND PROVIDER GATES OPEN**
+- Status: **CONTRACT RECONCILIATION IN PROGRESS; REGISTER RECONCILIATION AND PROVIDER/IMPLEMENTATION VALIDATION OPEN**
 - Implementation: **NOT AUTHORIZED**
 
 ## 1. Purpose and authority
@@ -23,7 +23,7 @@ The CPERD-01 master ERD and canonical integrity register remain the current phys
 4. Use a single authorized transaction for actor authorization, lifecycle transitions, multi-row business invariants and required audit/outbox writes.
 5. Use database privileges to protect append-only evidence and separate operational duties. Triggers do not replace least-privilege grants.
 6. Use Redis/BullMQ only for scheduling and delivery. PostgreSQL remains the durable source of truth for business state, idempotency and outbox work.
-7. Do not infer lifecycle values, partial unique predicates, retention schedules, delegated authority or trigger bypass rights.
+7. Apply the owner-approved Phase 4 DYMS product defaults. Do not invent unspecified lifecycle values, partial unique predicates, retention schedules or trigger bypass rights. Keep disabled features disabled and unconfigured policy values unset.
 8. All multi-row transactions must document lock ordering. If a workflow needs a new lock order, document and test it before implementation.
 9. Use parameterized SQL and fixed, schema-qualified database object references. No client-provided identifier, table name or sort expression may enter dynamic SQL.
 10. The PostgreSQL production provider/version remains open. PostgreSQL 15 is the minimum design target in TBR-01, not a claim that the production service has been selected.
@@ -64,7 +64,7 @@ Lock sequence: position parent row first, then overlap query over appointments i
 | Duplicate protection | Canonical partial unique indexes remain the final duplicate guard |
 | Failure | Reject mismatched mode, event/session, or immutable identity mutation |
 | Bypass | Runtime cannot disable trigger or mutate trigger function/ownership |
-| Status | EVENT/SESSION default accepted by project owner; delegated attendance authority pending |
+| Status | ODR-006 owner-approved product default. Preserve EVENT/SESSION subject-mode behavior and documented authorized registration exceptions. The current physical owner is per member-event subject; reconcile this representation in the successor ERD. No external attendance-authority confirmation is a DYMS design prerequisite. |
 
 Critical unresolved decision: the current ERD stores mode on `event_attendance_subjects`, which means mode is per member-event subject. A single mode for the entire event would require a different physical owner. Do not change the ERD or add an `events.attendance_mode` column without explicit reconciliation and approval.
 
@@ -79,7 +79,7 @@ Critical unresolved decision: the current ERD stores mode on `event_attendance_s
 | Idempotency | Repeated confirmation/cancellation must not double-increment or double-decrement |
 | Failure | Reject confirmation when capacity is exhausted; no partial counter or registration mutation |
 | Bypass | Runtime cannot directly set the counter outside the approved workflow |
-| Status | ODR-008 owner-approved default; delegated event authority and exact lifecycle values remain pending |
+| Status | ODR-008 owner-approved product default: confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes reapproved. Map these rules to an explicit lifecycle vocabulary without inventing additional states. |
 
 No status CHECK or partial-unique predicate is authorized until the registration lifecycle catalogue is approved. The counter must be treated as derived transactional state, not a client-controlled field.
 
@@ -134,7 +134,7 @@ The validity-duration rule depends on a related `credential_definitions` row. It
 - Read the referenced definition under the documented consistency model.
 - Prevent a definition/version change race by locking the authoritative definition row or using an immutable versioned definition contract.
 - Do not reintroduce a cross-row CHECK or volatile lookup function.
-- ODR-009 issuer/validity authority remains pending.
+- ODR-009 is an owner-approved configurable credential catalogue design: recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Unknown validity remains unset; do not invent a duration or require external confirmation to accept the DYMS design.
 
 ## 4. Transaction contracts
 
@@ -179,7 +179,7 @@ Exact PostgreSQL lock/isolation/unique-conflict handling and concurrency proof r
 - Provider webhook processing must be idempotent and must not post twice.
 - Do not implement partial reversal, FX, partial payment or budget exceptions without the relevant authority approval.
 
-Finance authority thresholds and some accounting/payment details remain delegated-authority gates.
+ODR-005 owner-approved conservative DYMS defaults apply. Partial payments, multiple successful payments, FX, refunds, budget exceptions and amount-based approval thresholds remain disabled unless separately configured under an approved change/decision. Official external accounting policy is not a prerequisite for the accepted DYMS default.
 
 ### 4.4 Transactional outbox and worker lease
 
@@ -263,7 +263,7 @@ Before a final physical ERD candidate is regenerated:
 4. Reconcile append-only classification with CPERD-07 role/grant matrix and the exact per-table lifecycle.
 5. Reconcile the nine updated_at targets and timestamp source with TBR-01.
 6. Reconcile event capacity trigger behavior with approved registration lifecycle values.
-7. Reconcile attendance subject mode owner with delegated attendance authority.
+7. Reconcile attendance subject-mode placement and semantics with the owner-approved ODR-006 product default. Preserve the current per member-event subject representation unless a documented change request approves a different physical owner.
 8. Reconcile retention transaction with approved schedule, source enrollment and holds.
 9. Reconcile finance reversal cardinality, amount/account/currency and payment-posting states with finance authority.
 10. Reconcile idempotency transaction and recovery ledger with the DDD-013 exact physical slice and independent assurance findings.
@@ -274,18 +274,18 @@ Before a final physical ERD candidate is regenerated:
 
 | Gate | Status | Required evidence |
 |---|---|---|
-| ODR-003 appointment lifecycle | OPEN where exceptions remain | Confirm approval/termination lifecycle and authority details |
-| ODR-005 finance | OPEN where delegated details remain | Confirm finance authority, payment/posting and reversal rules |
-| ODR-006 attendance | OPEN | Confirm per-subject versus per-event mode and attendance exception authority |
-| ODR-008 event registration | OPEN where delegated details remain | Confirm exact capacity lifecycle and exceptions |
-| ODR-009 credential validity/issuer | OPEN | Confirm issuer authority and validity policy |
-| ODR-010 audit | OPEN | Confirm investigation, Audit Officer and exceptional-access authority |
-| ODR-011 retention | OPEN | Confirm schedules, source classes, holds and disposal authority |
-| ODR-012 notifications/integrations | OPEN | Confirm retry ceiling, manual replay and provider operational controls |
+| ODR-003 appointment lifecycle | OWNER DESIGN CLOSED | Standard annual appointment lifecycle, higher-authority approval, fresh renewal, one active holder per position/scope and reasoned early termination. Acting, overlap and retroactive exceptions remain disabled in v1. |
+| ODR-005 finance | OWNER DEFAULT APPROVED | Conservative account/approval/payment/reversal/budget workflow. Advanced payment/FX/refund/budget-exception/threshold features remain disabled; do not infer their behavior. |
+| ODR-006 attendance | OWNER DEFAULT APPROVED | EVENT/SESSION subject mode; confirmed registration normally required; documented authorized exception; self-check-in/offline disabled. Preserve current subject-mode physical owner in this candidate. |
+| ODR-008 event registration | OWNER DEFAULT APPROVED | Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes reapproved. Lifecycle mapping remains a design reconciliation task. |
+| ODR-009 credentials | OWNER DESIGN CLOSED | Versioned configurable catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure; unknown validity remains unset. |
+| ODR-010 audit | OWNER DEFAULT APPROVED | Separate Audit Officer; administrator has no automatic audit-read; exceptional access independently approved; break-glass disabled until a procedure is configured. |
+| ODR-011 retention | OWNER DEFAULT APPROVED | No automated permanent deletion without an approved schedule; holds suspend disposal; source enrollment/schedule configuration is required before disposal. |
+| ODR-012 notifications/integrations | OWNER DEFAULT APPROVED | In-app baseline; verified email/templates; optional SMS/WhatsApp with consent; provider-independent adapters. Retry ceiling/provider configuration remain operational design selections. |
 | ODR-ENV-001/006/007 | OPEN | Confirm PostgreSQL provider/version, grants, topology and backup evidence |
 | CPERD-07 role/grant matrix | NOT CLOSED | Complete provider-specific grants and verify privilege boundaries |
 | DDD-013 independent technical assurance | NOT PERFORMED | Independent review and documented findings |
-| DFR-006 governance record | OPEN | Preserve and reconcile dated governance clarification |
+| DFR-006 governance | CLARIFIED — 2026-11-02 | Formal design freeze/change control remains in force; implementation remains NOT AUTHORIZED. See DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md. |
 | Final consolidated ERD owner approval | NOT GRANTED for any amended package | Exact package/hash review by project owner |
 | Separate implementation authorization | NOT GRANTED | Explicit owner authorization after design closure |
 
@@ -295,9 +295,9 @@ Before a final physical ERD candidate is regenerated:
 - Exact trigger/function implementation inventory: **OPEN**.
 - Global lock-order policy: **PROPOSED; workflow-specific proof required**.
 - Concurrency test specifications: **20 DEFINED; NOT EXECUTED**.
-- Delegated authority gates: **OPEN**.
+- Delegated-authority confirmation is not a prerequisite for the owner-approved DYMS product defaults under Phase 4. Unspecified values remain configurable or disabled; external institutional policy is recorded separately where relevant.
 - Provider-specific validation: **OPEN**.
-- CPERD-08 closure: **NOT CLOSED**.
+- CPERD-08 design-contract disposition: **RECONCILIATION IN PROGRESS** pending exact trigger/function inventory metadata and successor-register/ERD alignment. Runtime concurrency tests remain unexecuted and are post-authorization implementation validation.
 - Implementation authorization: **NOT GRANTED**.
 
 ## 10. Protected implementation boundary
