@@ -4,9 +4,9 @@
 **Scope:** v1.0, Sango District  
 **Status:** Canonical domain decision register; reconciled against the reviewed repository evidence  
 **Working branch:** `phase-1/requirements-consolidation`  
-**Register owner:** DYMS Engineering, with policy decisions reserved to the competent ministry, district, finance, security, records, or project authority  
+**Register owner:** DYMS Engineering; the project owner is final decision-maker for DYMS product scope, workflow and system design. External institutional policy is recorded separately as source metadata/configuration.  
 **Implementation authorization:** **NOT AUTHORIZED**  
-**Physical database design approval:** **NOT GRANTED**
+**CPERD-01 physical ERD:** PROJECT-OWNER APPROVED at exact master blob SHA `6d0b47973f4e24c73409832a4986f00817805638`; successor supporting-register package remains under reconciliation.
 
 ## 1. Purpose and authority
 
@@ -64,22 +64,22 @@ The Owner Decision Register records the approved baseline for DDD-002 through DD
 | ID | Domain | Reconciled status | Primary requirement traceability |
 |---|---|---|---|
 | DDD-001 | Identity and member account separation | APPROVED PRINCIPLE / approval metadata gap | ID-003, ID-004 |
-| DDD-002 | Member categories and ministry classification | APPROVED PRINCIPLE / eligibility detail open | MEM-001–MEM-006 |
-| DDD-003 | Church membership and transfer | APPROVED PRINCIPLE / transfer-detail conflict | ORG-001–ORG-007 |
-| DDD-004 | Leadership appointments and terms | APPROVED PRINCIPLE / acting-appointment detail open | APP-001–APP-007 |
+| DDD-002 | Member categories and ministry classification | OWNER DESIGN APPROVED; configurable eligibility; one active primary category; preserve history; no hardcoded age thresholds or automatic promotion | MEM-001–MEM-006 |
+| DDD-003 | Church membership and transfer | OWNER DESIGN APPROVED; member initiation, receiving-church acceptance, district final approval, effective-on-approval; one unresolved request; no backdating by default | ORG-001–ORG-007 |
+| DDD-004 | Leadership appointments and terms | OWNER DESIGN APPROVED; annual term, higher-authority approval, fresh renewal, one active holder per position/scope, reasoned early termination; acting/overlap/retroactive exceptions disabled in v1 | APP-001–APP-007 |
 | DDD-005 | Authorization, permissions, explicit deny, role conflicts | APPROVED PRINCIPLE; follow-up APPROVED 2026-10-31 | AUTHZ-001–AUTHZ-011 |
-| DDD-006 | Department membership | APPROVED PRINCIPLE / lifecycle detail open | DEPT-001–DEPT-006 |
-| DDD-007 | Event governance and lifecycle | APPROVED PRINCIPLE / local and exception detail open | EVT-001–EVT-007 |
-| DDD-008 | Attendance recording and correction | APPROVED PRINCIPLE / recording-mode detail open | ATT-001–ATT-007 |
-| DDD-009 | Financial accounts and currency | APPROVED PRINCIPLE / account-authority detail open | FIN-001–FIN-005 |
-| DDD-010 | Financial transaction workflow | APPROVED PRINCIPLE / accounting policy detail open | FIN-006–FIN-012 |
-| DDD-011 | Verifiable credentials | APPROVED PRINCIPLE / official standards open | CRED-001–CRED-004 |
-| DDD-012 | Audit and accountability | APPROVED PRINCIPLE / access and retention detail open | AUD-001–AUD-004 |
-| DDD-013 | Idempotency and safe mutation replay | APPROVED PRINCIPLE / technical follow-up evidence gap | SEC-005, SEC-006 |
-| DDD-014 | Records retention and disposal | APPROVED GOVERNANCE PRINCIPLE / schedules open | RET-001–RET-004 |
-| DDD-015 | Notifications and external integrations | APPROVED PRINCIPLE / provider operations open | NOTIF-001–NOTIF-006 |
+| DDD-006 | Department membership | OWNER DESIGN APPROVED; member request, coordinator approval, multiple memberships, withdrawal and reasoned termination; eligibility configurable; no automatic expiry/renewal | DEPT-001–DEPT-006 |
+| DDD-007 | Event governance and lifecycle | OWNER DESIGN APPROVED; district/church event owner, scope approval, reasoned cancellation, significant changes reapproved; no waitlist; approved capacity defaults apply | EVT-001–EVT-007 |
+| DDD-008 | Attendance recording and correction | OWNER DESIGN APPROVED; EVENT/SESSION subject mode, confirmed registration normally required, documented authorized exception; self-check-in/offline disabled; preserve correction history | ATT-001–ATT-007 |
+| DDD-009 | Financial accounts and currency | OWNER DESIGN APPROVED; district/church account ownership, one currency per account, NGN default, scoped access | FIN-001–FIN-005 |
+| DDD-010 | Financial transaction workflow | OWNER DESIGN APPROVED; submit/approve/pay/post separation, no self-approval, reasoned rejection, pre-posting revisions, linked full reversals; advanced payment/FX features disabled | FIN-006–FIN-012 |
+| DDD-011 | Verifiable credentials | OWNER DESIGN APPROVED; versioned catalogue, recognized issuer, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure; unknown validity unset; blockchain deferred | CRED-001–CRED-004 |
+| DDD-012 | Audit and accountability | OWNER DESIGN APPROVED; append-only evidence, separate Audit Officer, administrator has no automatic audit-read; exceptional access independently approved; break-glass disabled pending procedure | AUD-001–AUD-004 |
+| DDD-013 | Idempotency and safe mutation replay | PROJECT-OWNER APPROVED — D13-POA-01, all ten physical review areas; external independent assurance not performed; implementation validation remains post-authorization | SEC-005, SEC-006 |
+| DDD-014 | Records retention and disposal | OWNER DESIGN APPROVED; no automated permanent deletion without approved schedule; holds suspend disposal; business retention separate from DFR-005 backup retention | RET-001–RET-004 |
+| DDD-015 | Notifications and external integrations | OWNER DESIGN APPROVED; in-app baseline, verified email/templates, optional SMS/WhatsApp with consent, provider-independent adapters and bounded retries | NOTIF-001–NOTIF-006 |
 
-The requirement IDs above are the IDs currently present in the detailed testable requirements file. The current crosswalk counts 97 IDs. Reporting is a known separate traceability gap and is not silently assigned new IDs here.
+The current canonical testable requirements baseline contains 107 IDs, including REPORT-001–REPORT-010. The Phase 3 requirement-to-physical traceability register maps all 107 IDs exactly once, with no missing or unrecognized IDs. The older 97-ID count and missing REPORT-group statement are historical and superseded.
 
 ---
 
@@ -600,7 +600,7 @@ The document-level validation in [PHASE-2-DDD-013-ERD-SLICE-VALIDATION.md](../ar
 
 ## 5. Open decision and evidence register
 
-The following are not approvals. They are the current closure obligations.
+This table is a historical closure snapshot from the initial DDD reconciliation. Current DYMS product-design status is superseded by Phase 4 GDC-01 §§4–5 and this register's §11. Do not treat historical entries as current blockers without checking the later owner decisions.
 
 | Ref | Open item | Competent authority / owner | Required evidence before closure |
 |---|---|---|---|
@@ -621,15 +621,15 @@ The following are not approvals. They are the current closure obligations.
 
 ## 6. Requirements and traceability controls
 
-1. The current detailed testable requirements file contains 97 IDs across ID, MEM, ORG, DEPT, APP, AUTHZ, EVT, ATT, FIN, CRED, AUD, RET, NOTIF, and SEC.
-2. The current requirement-to-ERD crosswalk maps these 97 IDs to DDD decisions and conceptual ERD areas.
-3. There is no dedicated REPORT requirement group, despite reporting definitions, report runs, classification, and export audit appearing in the owner decision package and physical-design materials.
-4. The preliminary ranges in the requirements consolidation do not consistently match the IDs actually present in the detailed testable requirements file.
+1. The canonical testable requirements baseline contains 107 IDs, including REPORT-001–REPORT-010.
+2. The Phase 3 requirement-to-physical traceability maps all 107 IDs to physical tables, constraints, transaction controls or platform/API controls, exactly once.
+3. REPORT-001–REPORT-010 are included as a dedicated reporting requirement group.
+4. The Phase 3 traceability register records 107 recognized IDs, with zero missing or unrecognized mappings.
 5. DDD-013 individual approval evidence is now recovered for AUTH-IDEM-001–041 from PRs #10–#34 and #36–#51, with PR #35 consolidating the specification and PR #52 providing the alternate AUTH-IDEM-016 record. AUTH-IDEM-016 overflow conflict resolved by owner approval dated 2026-11-02. See docs/decisions/DDD-013-APPROVAL-EVIDENCE-RECOVERY.md.
 
 **Required corrective work**
-- Add testable report requirements and update the crosswalk, or document an explicit, testable mapping to existing requirements. Do not invent IDs in this register.
-- Reconcile the preliminary ID ranges against the detailed requirements file.
+- COMPLETED: REPORT-001–REPORT-010 are included in the 107-ID baseline and mapped in Phase 3 traceability.
+- COMPLETED at traceability level: all 107 IDs are mapped exactly once; preserve the detailed requirements file as the canonical requirement source.
 - Preserve the recovered DDD-013 approval records and formalize the AUTH-IDEM-016 overflow clarification. Recover exact individual provenance for AUTH-IDEM-001–025 where available.
 - Update requirements, lifecycle catalogue, traceability, conceptual/physical design, and tests together when a competent authority closes a policy item.
 
@@ -638,10 +638,10 @@ The following are not approvals. They are the current closure obligations.
 The conceptual ERD revision `25f2813e0256d9472daded45657dfb7ac9f70a43` was approved for progression to physical-design review. That approval does not approve the physical database design.
 
 The following gates remain in force:
-- DFR-001 through DFR-006 remain preserved. The historical DFR-006 freeze/lift discrepancy must be resolved through an explicit dated owner governance record; this register does not resolve or silently rewrite it.
-- Physical database design remains a proposal pending explicit project-owner approval.
+- DFR-001 through DFR-006 remain preserved. DFR-006 remains the approved formal design-freeze/change-control decision; its current status was clarified by DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md and Phase 4 GDC-01 §3.
+- CPERD-01 is project-owner approved at the exact SHA recorded above. Supporting-register corrections and CPERD-05–CPERD-10 refinements are being reconciled into a successor owner-review package.
 - No Prisma schema, migration, SQL DDL, database object, seed, generated client, API, or application implementation is authorized.
-- The implementation status remains **NOT AUTHORIZED** until the project owner separately grants explicit authorization after the required design approvals.
+- Implementation remains **NOT AUTHORIZED** until the project owner separately grants explicit authorization.
 
 A domain principle marked approved does not by itself authorize a particular physical table, column, enum, index, constraint, trigger, API, or code path. Those technical artifacts require their own reviewed design and approval gate.
 
@@ -669,12 +669,12 @@ For every new or amended DDD decision:
 
 **Register established:** Yes.  
 **DDD coverage:** DDD-001 through DDD-015 recorded.  
-**Approved principles preserved:** Yes, subject to the stated evidence metadata gaps and open details.  
+**Owner-approved DYMS product decisions:** Current status recorded in Phase 4 GDC-01 and §11 below.  
 **DDD-005 follow-up approval preserved exactly in scope:** Yes, dated 2026-10-31.  
-**DDD-003/004/006 conflicts identified and constrained:** Yes.  
-**DDD-013 technical follow-up evidence recovered:** Individual decision provenance recovered for AUTH-IDEM-001–041, plus AUTH-IDEM-016 overflow clarification. Physical ERD validation and final DDD-013 approval remain open.  
-**Reporting traceability gap resolved:** No; corrective action remains open.  
-**Physical database design approved:** No.  
+**DDD-013 technical review and project-owner approval:** All ten physical review areas approved under D13-POA-01; external independent assurance not performed.  
+**Reporting traceability:** RESOLVED at requirements/traceability level; report-specific catalogue and configuration remain design work.  
+**CPERD-01 physical ERD:** PROJECT-OWNER APPROVED at exact SHA `6d0b47973f4e24c73409832a4986f00817805638`.  
+**Successor supporting-register package:** Reconciliation in progress; not a new implementation-schema approval.  
 **Application implementation authorized:** **No.**
 
 
@@ -689,3 +689,38 @@ The historical DDD-013 physical-design findings and evidence limitations above d
 **Current status:** DDD-013 policy and detailed physical design are PROJECT-OWNER APPROVED. External independent technical assurance has not been performed and is not represented as completed. Secret-store/key-management provider selection and implementation-time PostgreSQL DDL, concurrency, failure-recovery and security validation remain open.
 
 The project-owner approval does not authorize Prisma, SQL DDL, migrations, database objects, seeds, API or application code. Implementation remains NOT AUTHORIZED until a separate explicit project-owner authorization is recorded. See [DFR-006-GOV-CLAR-01](./DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md).
+
+ 
+## 11. Phase 4 owner-authority and current status reconciliation (2026-11-11)
+
+This section applies the later project-owner authority recorded in [PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md](./PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md). It supersedes conflicting historical “open”, “policy blocked”, or “external authority pending” wording in §§2–9 for current DYMS product-design status. Historical detail remains in place for auditability.
+
+### 11.1 Current authority
+
+- The project owner is the final decision-maker for DYMS product scope, workflow and system design.
+- ODR-001, ODR-002, ODR-003, ODR-007 and ODR-009 are closed at the DYMS design level using the configurable models and conservative defaults in Phase 4 §4.
+- ODR-004, ODR-005, ODR-006, ODR-008, ODR-010, ODR-011, ODR-012 and ODR-013 use the owner-approved ODR-REC-01 product defaults in Phase 4 §5.
+- External institutional policy is not a prerequisite for accepting DYMS product behavior. When official recognition is asserted, preserve the source authority/version/effective date as metadata or configuration.
+- ODR-ENV-001–006 have design-level engineering dispositions. Production provider, service capability and deployment topology remain deployment-time selections; ODR-ENV-007 remains a deployment/DR evidence gate.
+- DFR-006 remains approved. The dated DFR-006 clarification resolves the old README status conflict. The freeze/change-control requirements remain in force.
+- CPERD-01 is project-owner approved at exact master SHA `6d0b47973f4e24c73409832a4986f00817805638`. That approval is design approval only.
+- DDD-013's ten physical review areas are project-owner approved under D13-POA-01. External independent technical assurance has not been performed and is not represented as complete.
+
+### 11.2 Product defaults and conservative exclusions
+
+- Category eligibility is versioned/configurable; one active primary category and permanent history are preserved. No age threshold or automatic promotion is hardcoded.
+- Transfers follow member initiation, receiving-church acceptance, district final approval and effective-on-approval. One unresolved request per member; no backdating by default; cancellation/rejection/appeal paths are explicit and configurable before enablement.
+- Appointments use the standard annual term, higher-authority approval, fresh renewal approval, one active holder per position/scope and reasoned early termination. Acting, overlap and retroactive exceptions are disabled in v1.
+- Department membership uses member request, coordinator approval, multiple memberships, withdrawal and reasoned termination. Eligibility is configurable; no automatic expiry or renewal is assumed.
+- Credentials use a versioned catalogue, recognized issuer role, evidence review, linked renewal/reissue, reasoned revocation and controlled disclosure. Unknown validity remains unset; blockchain remains deferred.
+- Events are district- or church-owned; departments may organize but not own events. Confirmed registrations consume capacity; no waitlist; late registration/capacity override require approval and reason; material changes are reapproved.
+- Attendance uses EVENT or SESSION subject mode, normally requires confirmed registration, supports a documented authorized exception, and excludes self-check-in/offline capture.
+- Finance uses separate account ownership and conservative transaction controls. Submitter cannot approve own transaction; payment and posting are distinct; posted corrections use linked full reversals. Partial payments, multiple successful payments, FX, refunds, budget exceptions and amount thresholds remain disabled unless separately approved/configured.
+- Audit is append-only and separately permissioned. A separate Audit Officer is required; system administration does not imply audit-read. Exceptional access requires independent approval; break-glass remains disabled pending a procedure.
+- Retention has no automated permanent deletion without an approved schedule; holds suspend disposal; backup retention remains separate under DFR-005.
+- Notifications use in-app baseline, verified email/templates, optional SMS/WhatsApp with consent, provider-independent adapters and bounded retries.
+- Reporting is district/church/department scoped, versioned/classified, reauthorized at request/execution/retrieval and uses private CSV/PDF exports. Report-specific catalogue, data-owner, classification, redaction and expiry configuration remains design work.
+
+### 11.3 Implementation and deployment boundary
+
+Owner approval of DYMS design decisions does not authorize implementation. PostgreSQL DDL, concurrency, security, recovery, workload and integration tests remain post-authorization implementation validation. Provider selection, managed-service capabilities, backup product and topology remain deployment gates. No code, Prisma schema, SQL, migration, database object, seed, test implementation or deployment is authorized by this register.
