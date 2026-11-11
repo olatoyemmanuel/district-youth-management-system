@@ -42,7 +42,11 @@ These hashes identify the supporting files fetched from the working branch when 
 | DFR-006-GOVERNANCE-CLARIFICATION-2026-11-02.md | 8452b503ccd542b639600d1d01d7dc5f38e13285 |
 | PHASE-4-GOVERNANCE-AND-DESIGN-CLOSURE-REGISTER.md | 0936099909ee997569dd5c7cba6d8dce247d45b3 |
 | PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md | 5703575c4545ba7aec089c6d73c6b52345d4fb5f |
-| PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
+| DDD-DECISION-REGISTER.md | bc4b8b045012fe57517ebdcb59f17a9a59f6223b |
+| PHASE-2-LIFECYCLE-STATE-CATALOGUE.md | 96e4e1ad0f4e0c2d4781f45680c67abfc6348052 |
+| PHASE-3-API-CONTRACT-DESIGN.md | 6a6f3e3481027482564d4c6b1b3de314d6ed5a65 |
+| PHASE-3-CPERD-11-DOMAIN-LIFECYCLE-API-AND-REQUIREMENT-STATUS-RECONCILIATION.md | 7f02db1cdab0e9e10007657bb4c3a79c9df1ad9f |
+| PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | 0cc3ed044f31b2bbd1de4922579e0f7b9ecd70d8 |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
 | PHASE-3-SYSTEM-DESIGN-BASELINE.md | 43e4a26fdb40ff2bd4cad7dbce6ae303752796e5 |
@@ -92,6 +96,7 @@ The candidate registers were fetched back from the repository and checked agains
 - CPERD-08 trigger/transaction reconciliation: contracts recorded for appointment overlap, attendance mode/session validation, event capacity, retention holds, updated_at, append-only evidence, credential validity, refresh rotation, DDD-013 fencing, finance reversal and outbox processing; 20 concurrency/failure test specifications defined but not executed. Exact trigger/function metadata and provider-specific validation remain open. See [CPERD-08 Trigger, Transaction and Concurrency Contracts](./PHASE-3-CPERD-08-TRIGGER-TRANSACTION-AND-CONCURRENCY-CONTRACTS.md).
 - CPERD-09 static cross-register reconciliation: 70 tables, 679 columns, 166 FKs, 228 named indexes and 53 structural CHECKs verified; the missing named category-eligibility unique-index reference and malformed FK-register section boundary were corrected. Approval/status hash differences were compared and explained as additive governance/approval records. See [CPERD-09 Consolidated Physical-Design Reconciliation Report](./PHASE-3-CPERD-09-CONSOLIDATED-PHYSICAL-DESIGN-RECONCILIATION-REPORT.md).
 - CPERD-10 governance reconciliation: DFR-006 is clarified; Phase 4 owner-approved DYMS product defaults supersede older delegated-authority blocker wording; DDD-013 and system-baseline hash differences are verified status/governance addenda. See [CPERD-10 Governance Authority and Design-Status Reconciliation](./PHASE-3-CPERD-10-GOVERNANCE-AUTHORITY-AND-DESIGN-STATUS-RECONCILIATION.md).
+- CPERD-11 domain/lifecycle/API/traceability reconciliation: DDD-001–015 current statuses align with Phase 4; lifecycle catalogue has 52 rows, all matching physical tables; 107 requirements map exactly once; API and traceability notes distinguish owner-approved defaults from technical/configuration gates. See [CPERD-11 Domain, Lifecycle, API and Requirement-Status Reconciliation](./PHASE-3-CPERD-11-DOMAIN-LIFECYCLE-API-AND-REQUIREMENT-STATUS-RECONCILIATION.md).
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
 These are static documentation consistency checks only. They do not establish that PostgreSQL DDL executes, that query plans are optimal, or that concurrency tests pass.
