@@ -172,7 +172,7 @@ The following records are treated as append-only evidence or controlled history 
 - `event_approvals`
 - `event_change_records`
 - `retention_actions`
-- `report_export_audits)
+- `report_export_audits`
 - `notification_deliveries` as attempt history, subject to the final correction/retention policy
 
 This list is a security classification proposal for privilege design, not a blanket declaration that every listed table has identical lifecycle rules. The final integrity/trigger register must specify whether each table permits INSERT only, INSERT plus narrowly scoped status progression, or controlled archival/disposal after an approved retention action.
