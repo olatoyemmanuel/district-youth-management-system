@@ -30,10 +30,10 @@ These hashes identify the supporting files fetched from the working branch when 
 
 | Artifact | Git blob SHA |
 |---|---|
-| PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | 282419018c64967ff577ffcd806aefd4f8766187 |
+| PHASE-3-CANONICAL-PHYSICAL-COLUMN-REGISTER.md | aed548fec93769740ad84d622234e1bd88c61a68 |
 | PHASE-3-CANONICAL-FOREIGN-KEY-REGISTER.md | 116e61cfe06d43badf543cc7bbb32bbc32fa1ae0 |
 | PHASE-3-CANONICAL-INDEX-INVENTORY.md | 84b3a5de0afd8176e39f27bd20f9563abe75d43f |
-| PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 1f32158086c65751089464a46b975cd8c5964756 |
+| PHASE-3-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md | 6e7959f9ca562e0b3488cf366de4436ec20dc0ad |
 | PHASE-3-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md | b0cca40fb095bab32820a3f8b6c4420bd3a5023f |
 | PHASE-3-DDD-013-PHYSICAL-SLICE-REVIEW.md | 0a172162e83925472d7f258efaf0935314f0848b |
 | PHASE-3-FINAL-PHYSICAL-ERD-RECONCILIATION-PLAN.md | f6a4fded9bf03732ae48f0b9e16905e8f5cfb819 |
@@ -49,7 +49,7 @@ The Phase 2 source records and DFR/DDD/ODR decision registers remain referenced 
 | Column declarations | 679 |
 | Named foreign-key relationships | 166 |
 | Distinct named index candidates | 228 |
-| Named structural CHECK constraints | 54 |
+| Named structural CHECK constraints | 53 |
 | Testable requirements mapped | 107 |
 
 ### 3.1 Register delta checks
@@ -74,11 +74,11 @@ The candidate registers were fetched back from the repository and checked agains
 - All FK target tables and columns exist in the column register.
 - Every FK source supporting index exists in the canonical index inventory.
 - Every named target candidate key referenced by an FK exists in the canonical index inventory.
-- All 54 named structural CHECKs in the integrity register are referenced by the column register.
+- All 53 row-local structural CHECKs in the integrity register are referenced by the column register; the credential-definition validity rule is separately classified as a cross-row application policy.
 - No duplicate index names.
 - No index or FK identifier exceeds PostgreSQL's 63-byte identifier limit.
 - CPERD-05 correction verification: 228 unique index entries; 30 malformed predicate descriptions corrected; eight appointment-scope entries relocated into the canonical inventory; six policy blockers and two DDD-013 independent-review entries preserved; all 166 named FK rows have supporting indexes; no FK source/target columns are missing. See [CPERD-05 Correction and Verification Report](./PHASE-3-CPERD-05-CORRECTION-AND-VERIFICATION-REPORT.md).
-- CPERD-06 static integrity reconciliation: 54 CHECK candidates and their column-register references were enumerated; one cross-row credential-validity policy is misclassified as a CHECK and requires correction; trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
+- CPERD-06 integrity reconciliation: 53 row-local structural CHECK candidates are cross-referenced; credential-definition validity is reclassified as a cross-row application policy; the updated_at trigger scope now enumerates all nine affected tables. Trigger/transaction completeness and delegated authority gates remain open. See [CPERD-06 Structural Integrity Reconciliation Report](./PHASE-3-CPERD-06-STRUCTURAL-INTEGRITY-RECONCILIATION-REPORT.md).
 - No stale removed owner/index names remain in the current column register's index references.
 - All 107 requirement IDs are mapped exactly once; no unmapped or unrecognized IDs.
 
