@@ -110,10 +110,10 @@ The following documentation-only work may continue:
 - PREPARED: [CPERD-13 Reporting Catalogue and Data-Governance Proposal](../architecture/PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md). It proposes 14 candidate reports and identifies owners, scopes, candidate classifications, field minimization, export permissions and retention dependencies. Proposal only; no report definitions, classifications or owner seeds are approved.
 - PREPARED: [CPERD-14 Credential and Youth-Eligibility Standards Evidence Matrix](../architecture/PHASE-3-CPERD-14-CREDENTIAL-AND-YOUTH-ELIGIBILITY-EVIDENCE-MATRIX.md). It records 11 official source entries, category/class/credential distinctions, versioned evidence requirements and age/source discrepancies; no age threshold or validity period was hardcoded.
 - PREPARED: [CPERD-15 Transfer and Appointment Lifecycle Decision Sheets](../architecture/PHASE-3-CPERD-15-TRANSFER-AND-APPOINTMENT-LIFECYCLE-DECISION-SHEETS.md). The sheets map approved core flows, candidate transitions and physical gaps. They identify a critical appointment-request mismatch: the current appointments row requires approval fields but has no request actor/time or separate request/decision entity.
-- Prepare a finance workflow decision sheet that preserves approved conservative defaults and identifies each authority question.
-- Prepare a named-role/authority map for audit, report data ownership and records decisions.
-- Reconcile the 107 testable requirements to every ODR item and identify requirements whose acceptance evidence is still missing.
-- Maintain a change-impact log under DFR-006 for every proposed amendment.
+- PREPARED: [CPERD-16 Final Engineering Design Recommendations and Change-Impact Record](../architecture/PHASE-3-CPERD-16-FINAL-ENGINEERING-DESIGN-RECOMMENDATIONS.md). It records the recommended transfer and appointment lifecycle dispositions, conservative finance workflow, logical database security boundary, trigger/transaction rules, API contract decisions, reporting/retention/credential configuration and successor-package change list. It is a DFR-006 change-impact proposal, not a physical-schema amendment or owner approval.
+- The remaining work is consolidation, not further open-ended research: regenerate the successor ERD and its column/FK/index/CHECK/trigger registers from CPERD-16; reconcile API/lifecycle/traceability; run static cross-register checks; publish exact artifact hashes for owner review.
+- Provider-specific grants, production topology, backup product evidence and measured RPO/RTO remain deployment/implementation verification gates. They do not block the owner from approving the logical design.
+- DDD-013 external independent assurance remains NOT PERFORMED and must not be described as completed. It is separate from the project owner's existing D13-POA-01 approval.
 
 ## 9. Closure criteria
 
@@ -156,3 +156,19 @@ This section is the current status authority and supersedes any earlier wording 
 - No item in this clarification authorizes application implementation.
 
 The prior generic closure criteria in §9 are superseded for DYMS design decisions: a design decision is closed when the project owner has selected the exact product rule, its scope and assumptions are recorded, and affected requirements/design documents are reconciled. External source evidence is attached when the product asserts an official external standard. Deployment decisions close when the actual environment is selected. Neither category changes the implementation authorization boundary.
+
+
+## 13. CPERD-16 engineering recommendations and successor-package direction (2026-11-11)
+
+[CPERD-16](../architecture/PHASE-3-CPERD-16-FINAL-ENGINEERING-DESIGN-RECOMMENDATIONS.md) is the current engineering recommendation record for the remaining material design reconciliation. It does not amend CPERD-01 and does not authorize implementation.
+
+The recommended v1 dispositions are:
+- Church transfers: explicit pending-receiving, pending-district, completed, rejected and cancelled states; district approval commits the transfer atomically; requester cancellation is allowed only before district approval; appeals/reconsideration remain disabled; explicit cancellation actor/time provenance is added.
+- Appointments: retain one appointment lifecycle aggregate; add requester/submission, decision actor/time/reason and termination actor/time provenance; approval/rejection is a single decision; renewal creates a new record; acting, overlap and retroactive exceptions remain disabled.
+- Finance: separate submission, approval, verified payment, posting and full reversal; no partial/multiple successful payments, FX, refunds, budget overrides or amount thresholds in v1.
+- Database security: keep separate owner, migrator, runtime, worker, reporting, audit-reader, backup and narrow audit-writer identities; do not select RLS; provider-specific grants remain deployment/verification work.
+- Trigger/transaction controls: retain the defined concurrency contracts and exact workflow lock ordering; retention disposal remains disabled until a source enrollment and approved schedule exist.
+- API: every endpoint must have a request/response contract, permission/scope, lifecycle, audit, idempotency, rate-limit and error contract; federation access remains read-only oversight.
+- Credentials, reports and retention: use versioned/configurable definitions; do not invent age thresholds, validity periods, retention durations, or report activation settings.
+
+The successor package must preserve the exact CPERD-01 approval artifact and submit any material amendments as a new revision with a new manifest and exact hashes. The project owner remains the final approver. Implementation remains NOT AUTHORIZED.
