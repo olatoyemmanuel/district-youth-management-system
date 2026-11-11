@@ -2,8 +2,8 @@
 
 - Deliverable: CPERD-06
 - Source revision: PITR-01
-- Integrity register Git blob SHA: 1f32158086c65751089464a46b975cd8c5964756
-- Canonical column register SHA: 282419018c64967ff577ffcd806aefd4f8766187
+- Integrity register Git blob SHA: 6e7959f9ca562e0b3488cf366de4436ec20dc0ad
+- Canonical column register SHA: aed548fec93769740ad84d622234e1bd88c61a68
 - Canonical FK register SHA: 116e61cfe06d43badf543cc7bbb32bbc32fa1ae0
 - Canonical index inventory SHA: 84b3a5de0afd8176e39f27bd20f9563abe75d43f
 - Status: STATIC RECONCILIATION COMPLETE; CORRECTIONS AND OWNER REVIEW REQUIRED
@@ -15,24 +15,21 @@ This review compares the Phase 3 physical integrity register with the canonical 
 
 ## 2. Structural CHECK inventory verification
 
-- 54 named CHECK candidates are enumerated in PITR-01.
-- All 54 names are unique.
-- All 54 names are referenced in the canonical column register.
-- No named CHECK reference is missing from the column register.
-- The review identified one candidate incorrectly classified as a row-local CHECK: `ck_credential_definition_versions_validity`.
+- 53 row-local CHECK candidates remain after correction.
+- All 53 names are unique and referenced in the canonical column register.
+- The former `ck_credential_definition_versions_validity` candidate is no longer classified as a CHECK; its cross-row policy is recorded in the transaction/application enforcement catalogue and in the column register.
 
 ### Required correction: credential-definition validity policy
 
 The proposed invariant says that `validity_duration` exists only when the approved credential definition requires it. This requires reading the related `credential_definitions` row. PostgreSQL CHECK constraints are row-local and cannot safely enforce cross-row lookups.
 
-Disposition:
-- Remove `ck_credential_definition_versions_validity` from the structural CHECK catalogue.
-- Reclassify the invariant as a transaction/application policy that validates the credential definition's approved validity policy before a version is approved or activated.
-- Preserve the rule's business meaning.
-- Do not replace it with a trigger unless a separately reviewed locking, update-propagation and concurrency contract is approved.
-- Update the column register's participation notes accordingly.
+Correction applied:
+- Removed `ck_credential_definition_versions_validity` from the structural CHECK catalogue.
+- Reclassified the invariant as a transaction/application policy that validates the referenced credential definition's approved validity policy before a version is approved or activated.
+- Preserved the business meaning without introducing a cross-row CHECK or an unreviewed trigger.
+- Updated the column register's participation notes.
 
-Result: 53 row-local structural CHECK candidates remain; one cross-row policy invariant is reclassified. The candidate count change requires reconciliation of the consolidated ERD and approval manifest before a new physical-design revision is presented for owner approval.
+Result: 53 row-local structural CHECK candidates remain; one cross-row policy invariant is separately classified.
 
 ## 3. Other CHECK observations
 
@@ -57,7 +54,7 @@ Result: 53 row-local structural CHECK candidates remain; one cross-row policy in
   - `idempotency_records`
   - `pre_auth_contexts`
 
-The trigger register currently describes a generic `trg_<table>_set_updated_at` trigger and defers the exact table list. The exact nine-table list above should be incorporated into the integrity register and subsequently into the DDL design specification. This does not authorize trigger implementation.
+The integrity register now enumerates the exact nine-table target list for the generic `trg_<table>_set_updated_at` trigger. The table list must carry into the DDL design specification. This does not authorize trigger implementation.
 
 ## 5. Trigger and transaction contract review
 
@@ -86,11 +83,11 @@ The register distinguishes row-local CHECKs from cross-row triggers, serialized 
 ## 7. Disposition
 
 - Static inventory/reference reconciliation: PASS.
-- CHECK semantic classification: CORRECTION REQUIRED.
+- CHECK semantic classification: CORRECTION APPLIED; 53 row-local CHECKs and one cross-row application policy.
 - Trigger/transaction contract completeness: OPEN.
 - Currency and attendance authority gates: OPEN.
 - Runtime PostgreSQL validation: DEFERRED.
-- CPERD-06 closure: NOT CLOSED.
+- CPERD-06 closure: NOT CLOSED; trigger/transaction contracts, delegated authority and runtime validation remain open.
 - Implementation authorization: NOT GRANTED.
 
 This report is a reconciliation artifact. It does not amend the owner-approved CPERD-01 master ERD or authorize implementation. The cross-row CHECK reclassification and any corresponding master ERD revision must be included in the next owner-review package.
