@@ -218,4 +218,4 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 9. Verify every indexed column exists and every partial predicate references an approved stable state.
 10. Reconcile index workload purpose with query/API contracts and report access patterns.
 
-**Status: DRAFT 0.2 — NOT APPROVED. Implementation authorization is conditional on final CPERD-03 approval and is not exercisable yet.**
+**Status: DRAFT 0.3 — NOT APPROVED. Implementation authorization is conditional on final CPERD-03 approval and is not exercisable yet.**
