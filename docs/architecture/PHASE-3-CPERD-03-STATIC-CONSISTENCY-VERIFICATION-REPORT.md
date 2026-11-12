@@ -29,7 +29,7 @@ The report is not an independent technical review. It is not final physical ERD 
 | FK source/target columns | PASS | 0 missing source or target columns across the 127 FK rows |
 | FK source support indexes | PASS | 127 support-index references resolve; each source index begins with the ordered FK source tuple |
 | FK target candidate keys | PASS | All declared PK and composite UNIQUE target keys resolve to their named candidate indexes |
-| Index candidates | PASS | 176 named index rows |
+| Index candidates | PASS | 175 named index rows |
 | Duplicate index names | PASS | 0 duplicates |
 | Index identifier length | PASS | 0 names exceed PostgreSQL's 63-byte identifier limit |
 | Index table references | PASS | 0 index rows reference a table absent from the column register |
@@ -91,9 +91,9 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 | Artifact | Path | Git blob SHA |
 |---|---|---|
 | Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `b37447fa36852f2a6d0993b16c52565aaf1b569f` |
-| Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `45300927ad9e801e0afcdaf5daca483fcb1e580f` |
+| Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `e5f20d77c165fa01573a6ad46870ff81f00c5e75` |
 | FK register | `PHASE-3-CPERD-03-CANONICAL-FOREIGN-KEY-REGISTER.md` | `9e60b6a2de7f650de9c53079ad78f0072c31f44b` |
-| Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `1bae0b39ccfb459c329a955df796b2f22d05022f` |
+| Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `d303adec8800eff8a8f98d5eef905fd7fb9e8a13` |
 | Lifecycle catalogue | `PHASE-3-CPERD-03-LIFECYCLE-STATE-CATALOGUE.md` | `29c449cfef99eee07bef423180080ab1d9b98335` |
 | Integrity and trigger register | `PHASE-3-CPERD-03-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md` | `b0680278a7dd934faf8b02c1812f54cf79a9e3c3` |
 | ENUM catalogue | `PHASE-3-CPERD-03-TECHNICAL-ENUM-AND-STATE-TYPE-CATALOGUE.md` | `ca934fe3f925a9b11593d1b534ea2a5af111b7e0` |
