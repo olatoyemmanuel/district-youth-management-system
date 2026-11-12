@@ -42,6 +42,8 @@ The report is not an independent technical review. It is not final physical ERD 
 | Non-timezone timestamp types | PASS | 0 non-TIMESTAMPTZ timestamp columns detected |
 | Calendar-date columns | PASS | DATE retained for date_of_birth, term_start and term_end |
 | Scope-excluded FK/index rows | PASS | 0 excluded/deferred table references in candidate FK and index rows |
+| Cross-district semantic ownership | BLOCKED | Referential columns and support indexes resolve, but member district ownership and several member-to-district child relationships are not yet proven by composite FKs |
+| Federation-scoped authorization | BLOCKED | Current user_role_assignments/access_denies candidates lack an explicit federation scope; read-only Federation Oversight needs a federation-bound grant/deny model |
 
 ## 3. Open design findings
 
@@ -53,13 +55,14 @@ The static checks above do not close these design issues:
 4. **Technical ENUM closure:** The successor ENUM catalogue contains 56 state-column mappings across 53 distinct proposed types. Sixteen mappings remain open or conflicted. In particular, idempotency_records.status differs between the inherited integrity CHECK and lifecycle catalogue and must be reconciled before the ENUM can be finalized.
 5. **Timezone validation:** Three IANA timezone fields exist: districts.timezone, events.timezone and event_sessions.timezone. Their application validation and authoritative ownership/source contract remain to be documented.
 6. **Recurring events:** No explicit local recurrence-rule column is present in the current column inventory. Confirm whether recurring event schedules are in scope; if they are, preserve the local recurrence rule separately from calculated UTC instants.
-7. **Cross-district ownership:** Column existence and FK supporting-index checks pass. Composite ownership coverage for every child relationship still needs a dedicated semantic review.
-8. **API and permission traceability:** The 107 requirements have been dispositioned, but the final API, command, permission and bounded-context mapping remains open.
-9. **Reporting and retention:** Report ownership, report scope, retention subject coverage and source enrollment require full cross-register reconciliation.
-10. **Updated timestamps:** Eight tables have updated_at fields. The trusted update trigger candidate and its exact function, execution privilege and bypass protection require final review.
-11. **OD-09:** Migration governance remains PROPOSED, NOT APPROVED.
-12. **OD-10 through OD-12:** Exact owner approval status remains unverified.
-13. **Independent assurance:** DDD-013 independent technical review evidence has not been supplied or completed.
+7. **Cross-district ownership:** The dedicated CPERD-03 gap review found that members has no district_id and several member-to-district relationships use separate simple FKs. OD-03 requires same-district composite ownership enforcement. Treat this as a high-priority blocker until the proposed correction is reconciled and added to the canonical registers.
+8. **Federation authorization scope:** Federation Oversight is read-only, but the current role-grant/deny schema has no federation scope. A federation-bound grant and deny model is a required design correction.
+9. **API and permission traceability:** The 107 requirements have been dispositioned, but the final API, command, permission and bounded-context mapping remains open.
+10. **Reporting and retention:** Report ownership, report scope, retention subject coverage and source enrollment require full cross-register reconciliation.
+11. **Updated timestamps:** Eight tables have updated_at fields. The trusted update trigger candidate and its exact function, execution privilege and bypass protection require final review.
+12. **OD-09:** Migration governance remains PROPOSED, NOT APPROVED.
+13. **OD-10 through OD-12:** Exact owner approval status remains unverified.
+14. **Independent assurance:** DDD-013 independent technical review evidence has not been supplied or completed.
 
 ## 4. Verification limitations
 
