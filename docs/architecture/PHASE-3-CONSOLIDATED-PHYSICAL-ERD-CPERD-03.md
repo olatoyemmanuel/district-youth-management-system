@@ -256,6 +256,6 @@ The project owner has issued explicit implementation authorization on 2026-11-12
 
 ## 12. Current status
 
-**CPERD-03 Draft 0.4 — RECONCILIATION IN PROGRESS.**
+**CPERD-03 Draft 0.5 — RECONCILIATION IN PROGRESS; CROSS-DISTRICT OWNERSHIP BLOCKER OPEN.**
 
-The current file is a control and correction baseline. It is not the final physical ERD or a certification report. The separate implementation authorization has been granted but cannot be exercised before approval of the final CPERD-03 artifact hashes.
+The current file is a control and correction baseline. It is not the final physical ERD or a certification report. Initial static checks pass for column/FK/index reference consistency, but cross-district semantic ownership is not closed: members lacks an explicit district owner and several child relationships use separate simple FKs. Federation-scoped grant/deny support is also missing. The proposed correction is documented in the CPERD-03 Cross-District Ownership Integrity Reconciliation. These are high-priority design blockers. The separate implementation authorization has been granted but cannot be exercised before approval of the final CPERD-03 artifact hashes.
