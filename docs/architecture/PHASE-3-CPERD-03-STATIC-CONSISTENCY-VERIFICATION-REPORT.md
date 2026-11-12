@@ -35,6 +35,9 @@ The report is not an independent technical review. It is not final physical ERD 
 | Index table references | PASS | 0 index rows reference a table absent from the column register |
 | Lifecycle rows | PASS | 40 included lifecycle rows; excluded/deferred lifecycle rows absent |
 | Requirement traceability | PASS | 107 requirement rows retained and individually classified |
+| CPERD-02 API route inventory | PASS | 151 endpoint rows; 128 distinct route path strings parsed |
+| Deferred API route families | PASS | 8 Church Transfer, 16 finance/payment/budget and 9 credential route strings identified for exclusion/deferment |
+| Federation oversight API proposal | PASS WITH OPEN CONTRACT | Three GET-only, federation-bounded, aggregate-only route candidates added; request/response and permission review remains open |
 | Non-timezone timestamp types | PASS | 0 non-TIMESTAMPTZ timestamp columns detected |
 | Calendar-date columns | PASS | DATE retained for date_of_birth, term_start and term_end |
 | Scope-excluded FK/index rows | PASS | 0 excluded/deferred table references in candidate FK and index rows |
