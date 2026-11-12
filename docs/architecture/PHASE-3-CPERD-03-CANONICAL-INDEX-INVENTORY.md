@@ -1,0 +1,223 @@
+# DYMS Phase 3 — CPERD-03 Canonical Index Inventory
+
+- Revision: IDX-PR-03 Draft 0.1
+- Date: 2026-11-12
+- Branch: `cperd-03-documentation-reconciliation`
+- Status: **SUCCESSOR CANDIDATE; RECONCILIATION IN PROGRESS; NOT APPROVED**
+- PostgreSQL baseline: 15 minimum, no required extensions
+- Implementation: **NOT AUTHORIZED TO START UNTIL FINAL CPERD-03 APPROVAL**
+
+## 1. Authority
+
+This candidate is mechanically filtered from the CPERD-02 index inventory to remove indexes belonging to Church Transfer, finance and credential issuance/evidence tables. It also removes transfer-only membership actor FK support indexes. Historical CPERD-02 files remain unchanged.
+
+The retained rows are not automatically approved. Every index requires validation against the CPERD-03 column and FK registers, its exact ordered keys, predicate, uniqueness semantics and workload purpose.
+
+## 2. Mechanical scope delta
+
+- CPERD-02 index rows: 235.
+- Retained after first-pass exclusions: 176.
+- Additions required for Federation: `uq_districts_federation_code` and `ix_fk_districts_federation_id`.
+- Current membership uniqueness is no longer blocked at the business-rule level by IDX-R02. The persisted predicate must use the approved ACTIVE/SUSPENDED/TERMINATED semantics.
+- Normalized email uniqueness is approved by OD-04, but exact canonical normalization storage/expression remains open.
+- Other policy-dependent indexes remain open until their exact predicates are reconciled.
+
+The mechanical row count is not a certified inventory. Rebuild the inventory from the CPERD-03 FK, column, lifecycle and requirements registers before approval.
+
+## 3. Candidate index inventory
+
+| Index name | Table | Key columns / predicate | Classification | Source |
+|---|---|---|---|---|
+| `uq_districts_federation_code` | `districts` | `federation_id, code` | UNIQUE candidate; OD-04 scoped uniqueness | CPERD-03 federation hierarchy; exact code normalization open |
+| `ix_fk_districts_federation_id` | `districts` | `federation_id` | FK support | CPERD-03 FK candidate |
+| `ix_access_denies_department_id` | `access_denies` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_access_denies_church_id` | `access_denies` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_access_denies_district_id` | `access_denies` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_access_denies_target_scope` | `access_denies` | `target_user_account_id, permission_id, effective_from DESC` | Access / workload | Medium catalogue |
+| `ix_appointments_appointee_effective` | `appointments` | `appointee_member_id, effective_from DESC` | Access / workload | Medium catalogue |
+| `ix_appointments_position_effective` | `appointments` | `position_id, effective_from, effective_to` | Access / workload | Medium catalogue |
+| `ix_attendance_corrections_record_time` | `attendance_corrections` | `attendance_record_id, requested_at DESC` | Access / workload | Medium catalogue |
+| `ix_attendance_records_event_member` | `attendance_records` | `event_id, member_id` | Access / workload | Medium catalogue |
+| `ix_attendance_records_reg_exception_actor` | `attendance_records` | `registration_exception_granted_by_user_account_id WHERE registration_exception_granted_by_user_account_id IS NOT NULL` | FK support | TBR-01 attendance exception |
+| `ix_attendance_records_session_member` | `attendance_records` | `event_session_id, member_id` | Access / workload | Medium catalogue |
+| `ix_audit_access_events_actor_time` | `audit_access_events` | `accessing_user_account_id, occurred_at DESC` | Access / workload | Medium catalogue |
+| `ix_audit_access_events_church_id` | `audit_access_events` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_access_events_department_id` | `audit_access_events` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_access_events_district_id` | `audit_access_events` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_events_actor_service_time` | `audit_events` | `actor_service_principal_id, occurred_at DESC` | Access / workload | Medium catalogue |
+| `ix_audit_events_actor_user_time` | `audit_events` | `actor_user_account_id, occurred_at DESC` | Access / workload | Medium catalogue |
+| `ix_audit_events_church_id` | `audit_events` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_events_correlation` | `audit_events` | `correlation_id` | Access / workload | Medium catalogue |
+| `ix_audit_events_department_id` | `audit_events` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_events_district_id` | `audit_events` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_audit_events_target_time` | `audit_events` | `target_type, target_id, occurred_at DESC` | Access / workload | Medium catalogue |
+| `ix_auth_session_tokens_session_generation` | `auth_session_tokens` | `auth_session_id, token_generation DESC` | Access / workload | Medium catalogue |
+| `ix_auth_sessions_account_expiry` | `auth_sessions` | `user_account_id, absolute_expires_at` | Access / workload | Medium catalogue |
+| `ix_church_memberships_member_time` | `church_memberships` | `member_id, effective_from DESC` | Access / workload | Medium catalogue |
+| `ix_department_memberships_member_time` | `department_memberships` | `member_id, requested_at DESC` | Access / workload | Medium catalogue |
+| `ix_event_organizing_departments_assigned_by_user` | `event_organizing_departments` | `assigned_by_user_account_id` | FK support | Organizer actor FK |
+| `ix_event_organizing_departments_department_district` | `event_organizing_departments` | `department_id, district_id` | FK support | Composite department/district FK |
+| `ix_event_organizing_departments_event_district` | `event_organizing_departments` | `event_id, district_id` | FK support | Composite event/district FK |
+| `ix_event_registrations_event_status` | `event_registrations` | `event_id, status, registered_at` | Access / workload | Medium catalogue |
+| `ix_event_sessions_event_start` | `event_sessions` | `event_id, starts_at` | Access / workload | Medium catalogue |
+| `ix_events_church_district` | `events` | `church_id, district_id` | FK support | Composite church/district FK |
+| `ix_events_church_start` | `events` | `church_id, starts_at WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_events_district_start` | `events` | `district_id, starts_at WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_fk_access_denies_issued_by_user_account_id` | `access_denies` | `issued_by_user_account_id` | FK support | FK register + Medium catalogue |
+| `ix_fk_access_denies_permission_id` | `access_denies` | `permission_id` | FK support | FK register + Medium catalogue |
+| `ix_fk_access_denies_reviewed_by_user_account_id` | `access_denies` | `reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL` | FK support | FK register + Medium catalogue |
+| `ix_fk_appointment_role_links_created_by_user_account_id` | `appointment_role_links` | `created_by_user_account_id` | FK support | FK register |
+| `ix_fk_appointment_role_links_role_id` | `appointment_role_links` | `role_id` | FK support | FK register |
+| `ix_fk_appointments_appointing_authority_user_account_id` | `appointments` | `appointing_authority_user_account_id` | FK support | FK register |
+| `ix_fk_appointments_requested_by_user_account_id` | `appointments` | `requested_by_user_account_id` | FK support | CPERD-16 requester FK |
+| `ix_fk_appointments_rejected_by_user_account_id` | `appointments` | `rejected_by_user_account_id` | FK support | CPERD-16 rejection actor FK |
+| `ix_fk_appointments_terminated_by_user_account_id` | `appointments` | `terminated_by_user_account_id` | FK support | CPERD-16 termination actor FK |
+| `ix_fk_appointments_approved_by_user_account_id` | `appointments` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_corrections_approved_by_user_account_id` | `attendance_corrections` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_corrections_requested_by_user_account_id` | `attendance_corrections` | `requested_by_user_account_id` | FK support | FK register |
+| `ix_fk_attendance_records_event_session_id_event_id` | `attendance_records` | `event_session_id, event_id WHERE event_session_id IS NOT NULL AND event_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_records_recorded_by_user_account_id` | `attendance_records` | `recorded_by_user_account_id` | FK support | FK register |
+| `ix_fk_attendance_records_registration_id_event_id_member_id` | `attendance_records` | `registration_id, event_id, member_id WHERE registration_id IS NOT NULL AND event_id IS NOT NULL AND member_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_attendance_records_subject_event_member` | `attendance_records` | `attendance_subject_id, event_id, member_id` | FK support | FK register |
+| `ix_fk_audit_access_events_audit_event_id` | `audit_access_events` | `audit_event_id WHERE audit_event_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_audit_events_initiating_user_account_id` | `audit_events` | `initiating_user_account_id WHERE initiating_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_accepted_by_user_account_id` | `church_memberships` | `accepted_by_user_account_id WHERE accepted_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_approved_by_user_account_id` | `church_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_church_memberships_initiated_by_user_account_id` | `church_memberships` | `initiated_by_user_account_id` | FK support | FK register |
+| `ix_fk_department_memberships_approved_by_user_account_id` | `department_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_department_id` | `department_memberships` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_eligibility_rule_id` | `department_memberships` | `eligibility_rule_id` | FK support | FK register |
+| `ix_fk_department_memberships_ended_by_user_account_id` | `department_memberships` | `ended_by_user_account_id WHERE ended_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_department_memberships_requested_by_user_account_id` | `department_memberships` | `requested_by_user_account_id` | FK support | FK register |
+| `ix_fk_event_approvals_event_id` | `event_approvals` | `event_id` | FK support | FK register |
+| `ix_fk_event_approvals_reviewer_user_account_id` | `event_approvals` | `reviewer_user_account_id` | FK support | FK register |
+| `ix_fk_event_attendance_subjects_created_by_user_account_id` | `event_attendance_subjects` | `created_by_user_account_id` | FK support | FK register |
+| `ix_fk_event_attendance_subjects_member_id` | `event_attendance_subjects` | `member_id` | FK support | FK register |
+| `ix_fk_event_change_records_approved_by_user_account_id` | `event_change_records` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_event_change_records_event_id` | `event_change_records` | `event_id` | FK support | FK register |
+| `ix_fk_event_change_records_requested_by_user_account_id` | `event_change_records` | `requested_by_user_account_id` | FK support | FK register |
+| `ix_fk_event_registrations_member_id` | `event_registrations` | `member_id` | FK support | FK register |
+| `ix_fk_events_created_by_user_account_id` | `events` | `created_by_user_account_id` | FK support | FK register |
+| `ix_fk_integration_failures_webhook_event_id` | `integration_failures` | `webhook_event_id WHERE webhook_event_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_member_category_assignments_assigned_by_user_account_id` | `member_category_assignments` | `assigned_by_user_account_id` | FK support | FK register |
+| `ix_fk_member_category_assignments_eligibility_rule_id` | `member_category_assignments` | `eligibility_rule_id WHERE eligibility_rule_id IS NOT NULL` | FK support | MEM-005 eligibility provenance |
+| `ix_fk_member_category_assignments_member_category_id` | `member_category_assignments` | `member_category_id` | FK support | FK register |
+| `ix_fk_notification_deliveries_provider_id` | `notification_deliveries` | `provider_id WHERE provider_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_notification_preferences_user_account_id` | `notification_preferences` | `user_account_id` | FK support | FK register |
+| `ix_fk_notifications_template_id` | `notifications` | `template_id WHERE template_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_positions_district_id` | `positions` | `district_id` | FK support | FK register |
+| `ix_fk_report_definitions_approved_by_user_account_id` | `report_definitions` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_report_definitions_created_by_user_account_id` | `report_definitions` | `created_by_user_account_id` | FK support | FK register |
+| `ix_fk_report_runs_definition_version` | `report_runs` | `report_definition_id, report_definition_version` | FK support | FK register |
+| `ix_fk_retention_actions_approved_by_user_account_id` | `retention_actions` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_retention_actions_initiated_by_user_account_id` | `retention_actions` | `initiated_by_user_account_id` | FK support | FK register |
+| `ix_fk_retention_actions_retention_policy_id` | `retention_actions` | `retention_policy_id` | FK support | FK register |
+| `ix_fk_retention_holds_approved_by_user_account_id` | `retention_holds` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_retention_holds_issued_by_user_account_id` | `retention_holds` | `issued_by_user_account_id` | FK support | FK register |
+| `ix_fk_retention_subjects_created_by_user_account_id` | `retention_subjects` | `created_by_user_account_id` | FK support | FK register |
+| `ix_fk_role_conflict_reviews_reviewed_by_user_account_id` | `role_conflict_reviews` | `reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL` | FK support | FK register |
+| `ix_fk_role_conflict_reviews_role_conflict_rule_id` | `role_conflict_reviews` | `role_conflict_rule_id` | FK support | FK register |
+| `ix_fk_role_conflict_reviews_user_account_id` | `role_conflict_reviews` | `user_account_id` | FK support | FK register |
+| `ix_fk_role_conflict_rules_role_b_id` | `role_conflict_rules` | `role_b_id` | FK support | FK register |
+| `ix_fk_role_permissions_permission_id` | `role_permissions` | `permission_id` | FK support | FK register + Medium catalogue |
+| `ix_fk_user_role_assignments_granted_by_user_account_id` | `user_role_assignments` | `granted_by_user_account_id` | FK support | FK register |
+| `ix_fk_user_role_assignments_role_id` | `user_role_assignments` | `role_id` | FK support | FK register |
+| `ix_idempotency_records_actor_operation` | `idempotency_records` | `actor_user_account_id, operation_code, created_at DESC` | Access / workload | Medium catalogue |
+| `ix_idempotency_records_session_actor` | `idempotency_records` | `session_id, actor_user_account_id WHERE scope_mode = 'AUTHENTICATED' AND session_id IS NOT NULL` | FK support | D13-PDR-01 composite session FK |
+| `ix_idempotency_recovery_events_record_time` | `idempotency_recovery_events` | `idempotency_record_id, occurred_at DESC` | FK support / workload | D13-PDR-01 recovery ledger |
+| `ix_integration_failures_provider_status` | `integration_failures` | `provider_id, status, first_seen_at` | Access / workload | Medium catalogue |
+| `ix_member_category_assignments_member_time` | `member_category_assignments` | `member_id, effective_from DESC` | Access / workload | Medium catalogue |
+| `ix_member_category_eligibility_rules_approver` | `member_category_eligibility_rules` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | MEM-005 eligibility provenance |
+| `ix_notification_deliveries_status_attempt` | `notification_deliveries` | `status, attempt_number` | Access / workload | Medium catalogue |
+| `ix_notification_recipients_user_status` | `notification_recipients` | `user_account_id, status` | Access / workload | Medium catalogue |
+| `ix_outbox_messages_idempotency_record_id` | `outbox_messages` | `idempotency_record_id WHERE idempotency_record_id IS NOT NULL` | FK support | D13-PDR-01 reset outbox |
+| `ix_outbox_messages_password_reset_token_id` | `outbox_messages` | `password_reset_token_id WHERE password_reset_token_id IS NOT NULL` | FK support | D13-PDR-01 reset outbox |
+| `ix_outbox_messages_ready` | `outbox_messages` | `status, available_at` | Access / workload | Medium catalogue |
+| `ix_password_reset_tokens_account_expiry` | `password_reset_tokens` | `user_account_id, expires_at` | Access / workload | Medium catalogue |
+| `ix_pre_auth_contexts_expiry` | `pre_auth_contexts` | `expires_at WHERE secret_digest IS NOT NULL` | Access / cleanup | Pre-auth context expiry |
+| `ix_report_data_owners_approver` | `report_data_owners` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | REPORT-004 data owner catalogue |
+| `ix_report_definitions_data_owner_id` | `report_definitions` | `data_owner_id` | FK support | REPORT-004 data owner FK |
+| `ix_report_export_audits_actor_time` | `report_export_audits` | `actor_user_account_id, exported_at DESC` | Access / workload | Medium catalogue |
+| `ix_report_export_audits_run_time` | `report_export_audits` | `report_run_id, exported_at DESC` | Access / workload | Medium catalogue |
+| `ix_report_runs_requester_time` | `report_runs` | `requested_by_user_account_id, requested_at DESC` | Access / workload | Medium catalogue |
+| `ix_report_runs_scope_church_district` | `report_runs` | `scope_church_id, scope_district_id WHERE scope_church_id IS NOT NULL` | FK support | REPORT-002 composite scope |
+| `ix_report_runs_scope_department_district` | `report_runs` | `scope_department_id, scope_district_id WHERE scope_department_id IS NOT NULL` | FK support | REPORT-002 composite scope |
+| `ix_report_runs_scope_district_kind` | `report_runs` | `scope_district_id, scope_kind` | FK support / workload | REPORT-002 district-bound scope |
+| `ix_report_runs_status_time` | `report_runs` | `status, requested_at` | Access / workload | Medium catalogue |
+| `ix_retention_actions_subject_time` | `retention_actions` | `retention_subject_id, executed_at DESC` | Access / workload | Medium catalogue |
+| `ix_retention_holds_subject_status` | `retention_holds` | `retention_subject_id, status` | Access / workload | Medium catalogue |
+| `ix_user_role_assignments_church_id` | `user_role_assignments` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
+| `ix_user_role_assignments_department_id` | `user_role_assignments` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
+| `ix_user_role_assignments_district_id` | `user_role_assignments` | `district_id WHERE district_id IS NOT NULL` | FK support | FK register |
+| `ix_user_role_assignments_user_scope` | `user_role_assignments` | `user_account_id, role_id, effective_from DESC` | Access / workload | Medium catalogue |
+| `ix_webhook_events_provider_received` | `webhook_events` | `provider_id, received_at DESC` | Access / workload | Medium catalogue |
+| `uq_appointment_role_links_mapping` | `appointment_role_links` | `appointment_id, role_id, mapping_version` | Unique / partial unique | Medium catalogue |
+| `uq_attendance_records_event_subject` | `attendance_records` | `attendance_subject_id WHERE event_session_id IS NULL` | Unique / partial unique | Medium catalogue |
+| `uq_attendance_records_session_subject` | `attendance_records` | `attendance_subject_id, event_session_id WHERE event_session_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_auth_sessions_id_user_account` | `auth_sessions` | `id, user_account_id` | Unique candidate key | DDD-013 session ownership |
+| `uq_church_memberships_current` | `church_memberships` | `member_id WHERE UNRESOLVED current-membership predicate (ODR-002)` | POLICY BLOCKED | Medium catalogue |
+| `uq_churches_district_code` | `churches` | `district_id, code` | Unique / partial unique | Medium catalogue |
+| `uq_churches_id_district` | `churches` | `id, district_id` | Unique / partial unique | FK register |
+| `uq_department_eligibility_rules_version` | `department_eligibility_rules` | `department_id, version` | Unique / partial unique | Medium catalogue |
+| `uq_department_memberships_current` | `department_memberships` | `member_id, department_id WHERE UNRESOLVED current-membership predicate (ODR-007)` | POLICY BLOCKED | Medium catalogue |
+| `uq_departments_district_code` | `departments` | `district_id, code` | Unique | ODR-004 district-owned department |
+| `uq_departments_id_district` | `departments` | `id, district_id` | Unique candidate key | Composite organizer/report FK |
+| `uq_event_attendance_subject_event_member` | `event_attendance_subjects` | `event_id, member_id` | Unique / partial unique | Medium catalogue |
+| `uq_event_attendance_subjects_id_event_member` | `event_attendance_subjects` | `id, event_id, member_id` | Unique / partial unique | FK register |
+| `uq_event_registrations_current_member` | `event_registrations` | `event_id, member_id WHERE UNRESOLVED valid-registration predicate (ODR-008)` | POLICY BLOCKED | Medium catalogue |
+| `uq_event_registrations_id_event_member` | `event_registrations` | `id, event_id, member_id` | Unique / partial unique | FK register |
+| `uq_event_sessions_id_event` | `event_sessions` | `id, event_id` | Unique / partial unique | Medium catalogue |
+| `uq_events_id_district` | `events` | `id, district_id` | Unique candidate key | Composite organizer FK |
+| `uq_idempotency_authenticated_identity` | `idempotency_records` | `actor_user_account_id, operation_code, scope_fingerprint, COALESCE(session_id, reserved-zero-uuid), key_digest WHERE scope_mode = 'AUTHENTICATED'` | PROPOSED FOR INDEPENDENT REVIEW | D13-PDR-01 |
+| `uq_idempotency_pre_auth_identity` | `idempotency_records` | `pre_auth_context_id, operation_code, scope_fingerprint, key_digest WHERE scope_mode = 'PRE_AUTHENTICATION'` | PROPOSED FOR INDEPENDENT REVIEW | D13-PDR-01 |
+| `uq_idempotency_recovery_events_claim` | `idempotency_recovery_events` | `idempotency_record_id, fencing_counter WHERE event_type = 'CLAIMED'` | Unique / partial unique | D13-PDR-01 claim uniqueness |
+| `uq_member_categories_code` | `member_categories` | `code` | Unique / partial unique | Medium catalogue |
+| `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE UNRESOLVED current-category predicate (ODR-001)` | POLICY BLOCKED | Medium catalogue |
+| `uq_member_category_eligibility_rules_version` | `member_category_eligibility_rules` | `member_category_id, version` | Unique / FK support | MEM-005 eligibility provenance |
+| `uq_members_member_number` | `members` | `member_number` | Unique / partial unique | Medium catalogue |
+| `uq_members_user_account` | `members` | `user_account_id` | Unique / partial unique | Medium catalogue |
+| `uq_notification_deliveries_attempt` | `notification_deliveries` | `notification_recipient_id, attempt_number` | Unique / partial unique | Medium catalogue |
+| `uq_notification_recipients_notification_user` | `notification_recipients` | `notification_id, user_account_id` | Unique / partial unique | Medium catalogue |
+| `uq_notification_templates_version_channel_locale` | `notification_templates` | `code, version, channel, locale` | Unique / partial unique | Medium catalogue |
+| `uq_notifications_logical_key` | `notifications` | `logical_key` | Unique / partial unique | Medium catalogue |
+| `uq_outbox_messages_event_id` | `outbox_messages` | `event_id` | Unique / partial unique | Medium catalogue |
+| `uq_outbox_messages_password_reset_idempotency` | `outbox_messages` | `idempotency_record_id WHERE delivery_purpose = 'PASSWORD_RESET'` | Unique / partial unique | One reset delivery event per idempotency record |
+| `uq_outbox_messages_password_reset_token` | `outbox_messages` | `password_reset_token_id WHERE delivery_purpose = 'PASSWORD_RESET'` | Unique / partial unique | One reset delivery event per token |
+| `uq_positions_church_code` | `positions` | `church_id, code WHERE church_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_positions_department_code` | `positions` | `department_id, code WHERE department_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_positions_district_code` | `positions` | `district_id, code WHERE district_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_pre_auth_contexts_secret_digest` | `pre_auth_contexts` | `secret_digest WHERE secret_digest IS NOT NULL` | Unique / partial unique | AUTH-IDEM-026/036 |
+| `uq_report_data_owners_code` | `report_data_owners` | `code` | Unique | REPORT-004 data owner catalogue |
+| `uq_report_definitions_code_version` | `report_definitions` | `code, version` | Unique / partial unique | Medium catalogue |
+| `uq_report_definitions_id_version` | `report_definitions` | `id, version` | Unique / partial unique | Medium catalogue |
+| `uq_retention_policies_category_version` | `retention_policies` | `record_category, version` | Unique / partial unique | Medium catalogue |
+| `uq_role_conflict_rules_pair_version` | `role_conflict_rules` | `role_a_id, role_b_id, version` | Unique / partial unique | Medium catalogue |
+| `uq_role_permissions_role_permission` | `role_permissions` | `role_id, permission_id` | Unique / partial unique | Medium catalogue |
+| `uq_user_accounts_email_present` | `user_accounts` | `UNRESOLVED: normalized email expression; no stored normalized_email column is declared WHERE email IS NOT NULL` | POLICY BLOCKED | Medium catalogue |
+| `uq_user_accounts_login_identifier` | `user_accounts` | `login_identifier` | Unique / partial unique | Medium catalogue |
+| `uq_user_accounts_phone_present` | `user_accounts` | `phone_e164 WHERE phone_e164 IS NOT NULL` | Unique / partial unique | Medium catalogue |
+| `uq_webhook_events_provider_event` | `webhook_events` | `provider_id, provider_event_id` | Unique / partial unique | Medium catalogue |
+| `uq_positions_id_district_scope_type` | `positions` | `id, district_id, allowed_scope_type` | Unique candidate key | Appointment scope-type/district composite FK |
+| `uq_positions_id_church` | `positions` | `id, church_id` | Unique candidate key | Appointment church-scope composite FK |
+| `uq_positions_id_department` | `positions` | `id, department_id` | Unique candidate key | Appointment department-scope composite FK |
+| `ix_positions_church_district` | `positions` | `church_id, district_id` | FK support | Position church/district composite FK |
+| `ix_positions_department_district` | `positions` | `department_id, district_id` | FK support | Position department/district composite FK |
+| `ix_appointments_position_district_scope_type` | `appointments` | `position_id, district_id, scope_type` | FK support | Appointment position/district/type composite FK |
+| `ix_appointments_position_church_scope` | `appointments` | `position_id, church_id` | FK support | Appointment position/church composite FK |
+| `ix_appointments_position_department_scope` | `appointments` | `position_id, department_id` | FK support | Appointment position/department composite FK |
+
+## 4. Required predicate decisions and verification
+
+1. `uq_church_memberships_current`: exact predicate must be identical to IDX-R02 and the lifecycle catalogue. ACTIVE is current; SUSPENDED and TERMINATED are not current. Reactivation returns the same row to ACTIVE.
+2. `uq_user_accounts_email_present`: specify one deterministic canonical normalization algorithm and stored representation. OD-04 requires global uniqueness of normalized email; do not guess trimming, Unicode normalization or case-folding details.
+3. `uq_member_category_assignments_current`: one active primary category per member; exact canonical current-state label and partial predicate require cross-register reconciliation.
+4. `uq_department_memberships_current`: permit multiple departments; prevent duplicate current membership for the same member and department. Exact state predicate remains to be reconciled.
+5. `uq_event_registrations_current_member`: reconcile exact event registration states and capacity-consuming behavior before finalizing predicate.
+6. Remove any residual index that references excluded/deferred tables or transfer-only fields.
+7. Verify all FK-support indexes and eliminate redundant or duplicate indexes.
+8. Verify names do not exceed PostgreSQL's 63-byte identifier limit and contain no duplicates.
+9. Verify every indexed column exists and every partial predicate references an approved stable state.
+10. Reconcile index workload purpose with query/API contracts and report access patterns.
+
+**Status: DRAFT 0.1 — NOT APPROVED. No implementation is authorized by this register.**
