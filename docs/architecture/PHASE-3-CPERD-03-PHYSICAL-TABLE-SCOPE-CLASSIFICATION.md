@@ -4,11 +4,11 @@
 - Date: 2026-11-12
 - Source: CPERD-02 canonical physical column register, SHA `f1979b191fe98da487ada89e4409fde838ad3c47`
 - Status: **FIRST-PASS SCOPE CLASSIFICATION — NOT A CANONICAL SUCCESSOR REGISTER**
-- Implementation: **NOT AUTHORIZED**
+- Implementation authorization: **GRANTED CONDITIONALLY; NOT EXERCISABLE BEFORE FINAL CPERD-03 APPROVAL**
 
 ## 1. Purpose and limits
 
-This document classifies the CPERD-02 physical tables against the DYMS 1.0 scope baseline. It is a first-pass scope filter, not the final CPERD-03 table or column inventory. No final table/column count is certified here.
+This document classifies the CPERD-02 physical tables against the DYMS 1.0 scope baseline. It remains a first-pass scope filter, not the final CPERD-03 table or column inventory. The successor column register now records a mechanical 57-table/547-column first-pass candidate, not a certified final inventory.
 
 The CPERD-02 source contains 70 tables and 692 column declarations. The classifications below are intended to prevent deferred capabilities from leaking into the successor model.
 
