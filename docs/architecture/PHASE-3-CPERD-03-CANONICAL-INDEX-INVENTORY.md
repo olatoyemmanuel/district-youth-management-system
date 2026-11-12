@@ -5,7 +5,7 @@
 - Branch: `cperd-03-documentation-reconciliation`
 - Status: **SUCCESSOR CANDIDATE; RECONCILIATION IN PROGRESS; NOT APPROVED**
 - PostgreSQL baseline: 15 minimum, no required extensions
-- Implementation: **NOT AUTHORIZED TO START UNTIL FINAL CPERD-03 APPROVAL**
+- Implementation authorization: **GRANTED CONDITIONALLY; NOT EXERCISABLE BEFORE FINAL CPERD-03 APPROVAL**
 
 ## 1. Authority
 
