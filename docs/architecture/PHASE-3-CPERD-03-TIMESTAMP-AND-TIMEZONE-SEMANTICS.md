@@ -12,7 +12,7 @@ This document reconciles the CPERD-03 timestamp and timezone columns with OD-08.
 
 ## 2. Static inventory
 
-- TIMESTAMPTZ columns: 118 candidate fields.
+- TIMESTAMPTZ columns: 126 candidate fields.
 - DATE columns: 3 fields.
 - Timestamp without time zone: 0.
 - Explicit timezone identifier columns: districts.timezone, events.timezone and event_sessions.timezone.
