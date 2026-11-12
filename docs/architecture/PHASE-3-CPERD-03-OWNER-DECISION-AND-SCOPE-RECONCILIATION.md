@@ -88,37 +88,37 @@ Preserve the project-owner approval of the DDD-013 design decision. External ind
 
 A future scope change requires explicit project-owner approval and impact analysis. Do not retain a deferred feature in the active physical model merely because it exists in CPERD-02.
 
-## 5. CPERD-02 contradictions to resolve
+## 5. CPERD-02 contradictions and CPERD-03 disposition
 
-1. CPERD-02 contains `church_transfer_requests`, transfer API commands, transfer indexes and transfer transaction contracts. Remove them from DYMS 1.0.
-2. CPERD-02 includes finance tables and finance reports. Remove them from DYMS 1.0.
-3. CPERD-02 includes credential issuance/evidence tables. Remove issuance/evidence capabilities from DYMS 1.0; preserve only membership category distinctions and any explicitly included qualification references.
-4. CPERD-02 has no explicit federation entity and no district-to-federation FK. Add the hierarchy and federation-scoped district code uniqueness.
-5. CPERD-02 marks current church membership uniqueness as policy blocked. IDX-R02 resolves the product rule; the exact persisted lifecycle predicate must be specified.
-6. CPERD-02 marks normalized email uniqueness as policy blocked. OD-04 resolves the uniqueness requirement; the canonical normalization representation still needs a deterministic technical specification.
-7. CPERD-02 marks the current member-category index predicate as blocked. OD-04/DDD-002 require one active primary category; define the exact predicate.
-8. CPERD-02 marks department membership uniqueness as blocked. Preserve multiple departments while preventing duplicate current membership in the same department.
-9. CPERD-02 marks event registration uniqueness as blocked. Reconcile it with approved event registration and capacity behavior.
-10. CPERD-02 column defaults are frequently recorded as NOT SPECIFIED IN SOURCE. Resolve each column's default policy.
-11. CPERD-02 uses UUID columns but does not state the approved UUIDv7 generation contract.
-12. CPERD-02 uses VARCHAR plus CHECK for multiple technical states. Reconcile stable technical states with OD-07's PostgreSQL ENUM requirement.
-13. CPERD-02 contains multiple inconsistent inventory totals. Regenerate all counts from CPERD-03 canonical registers.
-14. CPERD-02 and its manifest contain inconsistent owner-review and approval language. CPERD-03 must use one consistent status and exact-hash manifest.
+1. Church Transfer: CPERD-02 contained transfer table/API/index/trigger/lifecycle proposals. CPERD-03 successor physical candidates exclude the transfer table, transfer actor fields, transfer FKs and transfer indexes. The API scope proposal excludes all transfer routes. Transfer reporting and retention are excluded from active v1.
+2. Finance/payment/budget: CPERD-02 contained finance tables, routes and reports. CPERD-03 successor physical candidates exclude finance/payment/budget tables and their FKs/indexes. API and report proposals defer these capabilities. Payment-provider callbacks are not active v1 integrations.
+3. Credential issuance/evidence: CPERD-02 contained credential definition, version, issuance and evidence tables/routes. CPERD-03 excludes these capabilities. Master Guide remains a qualification/credential distinction, not a primary membership category.
+4. Federation hierarchy: CPERD-03 adds a Federation entity candidate, required districts.federation_id, federation-scoped district code uniqueness and a federation FK. The current candidate inventory has 57 tables and 547 columns.
+5. Federation oversight: The approved owner boundary is read-only cross-district oversight within one federation. CPERD-03 API and report proposals add a GET-only aggregate query surface. It does not grant operational mutation, report-run creation, export, audit detail or member-level evidence access.
+6. Current church membership: IDX-R02 resolves the product rule. ACTIVE is current; SUSPENDED and TERMINATED are not current; reactivation restores the same row. The candidate unique index predicate is status = 'ACTIVE'. API transition and transaction contracts remain open.
+7. Primary member category: DDD-002/OD-04 require one active primary category. The candidate unique index uses status = 'ACTIVE'; persisted ENUM and transition reconciliation remain open.
+8. Department membership: Multiple departments remain allowed. Exact current-state uniqueness predicate remains open.
+9. Event registration: Exact uniqueness and capacity-consuming state predicate remain open.
+10. Column defaults: All 547 column rows now have an explicit candidate default policy. Nullable/non-nullable handling and UUIDv7 defaults were reconciled. Owner review remains pending.
+11. UUID strategy: All 56 UUID primary-key rows specify application-generated UUIDv7 with no database default. Exact generator package/version and operational contract remain open.
+12. Technical states: The ENUM catalogue maps 56 state columns to 53 proposed types. Sixteen mappings remain open or conflicted, including the idempotency status mismatch between the integrity CHECK and lifecycle catalogue.
+13. Cross-register counts: Current documentation-level candidate totals are 57 tables, 547 columns, 127 FKs, 176 index rows, 40 lifecycle rows and 107 requirement rows. Static checks passed for FK column existence, target keys, support-index coverage, duplicate names and scope leaks. Independent review remains pending.
+14. Historical approvals: CPERD-01/CPERD-02 approval records and hashes remain immutable. CPERD-03 uses a successor status and will require a new exact-hash approval manifest.
 
 ## 6. Technical questions that require explicit specification, not invented policy
 
 The following are design details to resolve using approved decisions:
 - Exact canonical email normalization algorithm and storage/index representation.
-- Exact stable technical ENUM type catalogue and values.
+- Final ENUM vocabulary and transition reconciliation for the 16 open/conflicted state mappings.
 - Exact membership, category, department membership, appointment and event registration lifecycle predicates.
-- Every column's default source and nullability rationale.
-- Exact UUIDv7 generator contract and failure behavior.
+- Owner review of the 547 explicit candidate default policies.
+- Exact UUIDv7 generator package/version and failure behavior.
 - Every event/recurrence timezone field and local-time interpretation rule.
 - Exact FK source/target ordered column pairs and composite ownership keys.
 - Index rationale and duplicate/redundant index elimination.
 - Trigger execution context and trusted timestamp source.
-- Retention-source enrollment for included tables, with no invented duration.
-- Report definitions and data owners restricted to included source domains.
+- Retention-source enrollment for included tables, with no invented duration or unapproved source links.
+- Report definitions, data owners and field disclosure restricted to included source domains, including Federation aggregate-only oversight.
 
 ## 7. Status control
 
