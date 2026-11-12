@@ -196,16 +196,17 @@ CPERD-03 is not complete until the following artifacts are generated and reconci
 5. CHECK, trigger and database-integrity register.
 6. Lifecycle state catalogue.
 7. Bounded-context and ownership reconciliation.
-8. API contract and scope reconciliation.
-9. Requirement-to-physical traceability matrix.
-10. Retention-source enrollment reconciliation.
-11. Report catalogue and data-governance reconciliation.
-12. DFR/DDD/IDX owner-decision reconciliation register.
-13. Technical ENUM and state-type catalogue.
-14. Physical table scope classification.
-15. Static consistency verification report.
-16. Independent technical review report.
-17. Exact-hash approval manifest.
+8. Cross-district ownership integrity reconciliation.
+9. API contract and scope reconciliation.
+10. Requirement-to-physical traceability matrix.
+11. Retention-source enrollment reconciliation.
+12. Report catalogue and data-governance reconciliation.
+13. DFR/DDD/IDX owner-decision reconciliation register.
+14. Technical ENUM and state-type catalogue.
+15. Physical table scope classification.
+16. Static consistency verification report.
+17. Independent technical review report.
+18. Exact-hash approval manifest.
 
 Current documentation-level candidate counts are 57 tables, 547 columns, 127 named foreign keys, 176 index rows, 40 lifecycle rows and 107 requirement rows. The initial static report records 0 duplicate column pairs, 0 unresolved default placeholders, 0 missing FK source/target columns, 0 missing FK support-index references, 0 duplicate index names and 0 scope-excluded table references in the candidate column/FK/index/lifecycle registers. These are draft candidate counts, not certified final physical inventory totals. The master ERD, API, ownership, retention and report mappings remain under reconciliation. Do not treat these numbers as approval or runtime verification.
 
