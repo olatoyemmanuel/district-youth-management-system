@@ -103,7 +103,8 @@ A future scope change requires explicit project-owner approval and impact analys
 11. UUID strategy: All 56 UUID primary-key rows specify application-generated UUIDv7 with no database default. Exact generator package/version and operational contract remain open.
 12. Technical states: The ENUM catalogue maps 56 state columns to 53 proposed types. Sixteen mappings remain open or conflicted, including the idempotency status mismatch between the integrity CHECK and lifecycle catalogue.
 13. Cross-register counts: Current documentation-level candidate totals are 57 tables, 547 columns, 127 FKs, 175 index rows, 40 lifecycle rows and 107 requirement rows. Static checks passed for FK column existence, target keys, support-index coverage, duplicate names and scope leaks. Independent review remains pending.
-14. Historical approvals: CPERD-01/CPERD-02 approval records and hashes remain immutable. CPERD-03 uses a successor status and will require a new exact-hash approval manifest.
+14. Phone uniqueness: OD-04 does not approve global phone uniqueness. CPERD-03 removes the inherited unique phone index; phone_e164 remains optional and is not a unique account key.
+15. Historical approvals: CPERD-01/CPERD-02 approval records and hashes remain immutable. CPERD-03 uses a successor status and will require a new exact-hash approval manifest.
 
 ## 6. Technical questions that require explicit specification, not invented policy
 
@@ -113,7 +114,7 @@ The following are design details to resolve using approved decisions:
 - Exact membership, category, department membership, appointment and event registration lifecycle predicates.
 - Owner review of the 547 explicit candidate default policies.
 - Exact UUIDv7 generator package/version and failure behavior.
-- Every event/recurrence timezone field and local-time interpretation rule.
+- Every event/recurrence timezone field and local-time interpretation rule; 126 TIMESTAMPTZ fields, three IANA timezone identifiers and the absence of recurrence fields are documented in the timestamp semantics register.
 - Exact FK source/target ordered column pairs and composite ownership keys.
 - Index rationale and duplicate/redundant index elimination.
 - Trigger execution context and trusted timestamp source.
