@@ -90,7 +90,7 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 
 | Artifact | Path | Git blob SHA |
 |---|---|---|
-| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `99188a7793d64f41516cabf4c0b50bc0496b0026` |
+| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `b37447fa36852f2a6d0993b16c52565aaf1b569f` |
 | Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `45300927ad9e801e0afcdaf5daca483fcb1e580f` |
 | FK register | `PHASE-3-CPERD-03-CANONICAL-FOREIGN-KEY-REGISTER.md` | `9e60b6a2de7f650de9c53079ad78f0072c31f44b` |
 | Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `1bae0b39ccfb459c329a955df796b2f22d05022f` |
