@@ -7,7 +7,7 @@
 - Status: **SUCCESSOR RECONCILIATION IN PROGRESS — NOT APPROVED**
 - Supersedes for review: CPERD-02 candidate only; CPERD-02 and CPERD-01 approval artifacts remain immutable
 - Design authority: Project owner
-- Implementation: **NOT AUTHORIZED**
+- Implementation authorization: **GRANTED BY PROJECT OWNER ON 2026-11-12; CONDITIONAL ON FINAL CPERD-03 PHYSICAL ERD APPROVAL**
 
 ## 1. Purpose
 
@@ -237,7 +237,7 @@ Static verification does not substitute for post-authorization PostgreSQL execut
 
 ## 11. Implementation boundary
 
-**IMPLEMENTATION NOT AUTHORIZED.**
+**IMPLEMENTATION AUTHORIZATION GRANTED; EXECUTION BLOCKED PENDING FINAL CPERD-03 APPROVAL.**
 
 This CPERD-03 draft authorizes documentation-only reconciliation. It does not authorize:
 - Prisma schema/model creation or modification.
@@ -248,10 +248,10 @@ This CPERD-03 draft authorizes documentation-only reconciliation. It does not au
 - API, backend or frontend implementation.
 - CI changes, infrastructure provisioning or deployment.
 
-The project owner must separately approve the exact final CPERD-03 hashes and issue a separate explicit implementation authorization before implementation begins.
+The project owner has issued explicit implementation authorization on 2026-11-12. This authorization is conditional and cannot be exercised until the project owner approves the exact final CPERD-03 physical ERD artifact hashes. Final ERD approval remains a separate required gate. Any scope change beyond the approved DYMS 1.0 package requires renewed owner authorization.
 
 ## 12. Current status
 
-**CPERD-03 Draft 0.1 — RECONCILIATION IN PROGRESS.**
+**CPERD-03 Draft 0.2 — RECONCILIATION IN PROGRESS.**
 
-The current file is a control and correction baseline. It is not the final physical ERD, not a certification report and not an implementation authorization.
+The current file is a control and correction baseline. It is not the final physical ERD or a certification report. The separate implementation authorization has been granted but cannot be exercised before approval of the final CPERD-03 artifact hashes.
