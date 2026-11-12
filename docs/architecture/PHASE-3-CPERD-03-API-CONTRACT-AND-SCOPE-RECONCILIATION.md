@@ -102,6 +102,8 @@ Rules:
 5. Apply rate limiting to public, authenticated and abuse-prone routes. Rate limiting is mandatory.
 6. Use the DFR-001 authentication/session protections and DFR-004 lifetimes.
 7. Federation-authorized identities are denied all operational mutation routes, even if a district or church role is also presented; the federation oversight permission itself never grants operational authority.
+8. Do not accept client-supplied created_at, updated_at, occurred_at, recorded_at, issued_at, approved_at, revoked_at or other trusted system/audit timestamps. The owning server, worker or database generates them. Local event/session schedules are submitted with an IANA timezone and converted to exact UTC instants.
+9. Member provisioning derives district_id from the authenticated membership administrator's authorized district scope. A client-supplied district_id must not select another district.
 
 ## 8. Contract closure requirements
 
