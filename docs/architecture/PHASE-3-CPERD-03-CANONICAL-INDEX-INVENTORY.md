@@ -171,7 +171,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | `uq_idempotency_pre_auth_identity` | `idempotency_records` | `pre_auth_context_id, operation_code, scope_fingerprint, key_digest WHERE scope_mode = 'PRE_AUTHENTICATION'` | PROPOSED FOR INDEPENDENT REVIEW | D13-PDR-01 |
 | `uq_idempotency_recovery_events_claim` | `idempotency_recovery_events` | `idempotency_record_id, fencing_counter WHERE event_type = 'CLAIMED'` | Unique / partial unique | D13-PDR-01 claim uniqueness |
 | `uq_member_categories_code` | `member_categories` | `code` | Unique / partial unique | Medium catalogue |
-| `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE UNRESOLVED current-category predicate (ODR-001)` | POLICY BLOCKED | Medium catalogue |
+| `uq_member_category_assignments_current` | `member_category_assignments` | `member_id WHERE status = 'ACTIVE'` | UNIQUE / current primary category | DDD-002; one active primary category per member; exact lifecycle labels remain subject to enum reconciliation |
 | `uq_member_category_eligibility_rules_version` | `member_category_eligibility_rules` | `member_category_id, version` | Unique / FK support | MEM-005 eligibility provenance |
 | `uq_members_member_number` | `members` | `member_number` | Unique / partial unique | Medium catalogue |
 | `uq_members_user_account` | `members` | `user_account_id` | Unique / partial unique | Medium catalogue |
@@ -209,7 +209,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 
 1. `uq_church_memberships_current`: candidate predicate is `status = 'ACTIVE'`, exactly matching IDX-R02. SUSPENDED and TERMINATED are not current. Reactivation returns the same row to ACTIVE.
 2. `uq_user_accounts_email_present`: specify one deterministic canonical normalization algorithm and stored representation. OD-04 requires global uniqueness of normalized email; do not guess trimming, Unicode normalization or case-folding details.
-3. `uq_member_category_assignments_current`: one active primary category per member; exact canonical current-state label and partial predicate require cross-register reconciliation.
+3. `uq_member_category_assignments_current`: candidate predicate is `status = 'ACTIVE'`, matching the lifecycle catalogue's active primary category state; verify exact ENUM mapping before approval.
 4. `uq_department_memberships_current`: permit multiple departments; prevent duplicate current membership for the same member and department. Exact state predicate remains to be reconciled.
 5. `uq_event_registrations_current_member`: reconcile exact event registration states and capacity-consuming behavior before finalizing predicate.
 6. Remove any residual index that references excluded/deferred tables or transfer-only fields.
