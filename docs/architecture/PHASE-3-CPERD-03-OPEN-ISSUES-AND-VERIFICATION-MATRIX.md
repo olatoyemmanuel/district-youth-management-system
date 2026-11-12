@@ -30,10 +30,10 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | ID | Required work | Evidence required | Status |
 |---|---|---|---|
 | UNI-01 | Normalized email uniqueness | Canonical normalization specification and global unique constraint/index | OPEN |
-| UNI-02 | Single active primary category | Exact current-category predicate and partial unique index | OPEN |
+| UNI-02 | Single active primary category | Candidate partial unique predicate status = 'ACTIVE' is present; enum label and transition mapping remain pending | PARTIALLY CLOSED |
 | UNI-03 | Department membership uniqueness | Multiple departments allowed; one current membership per member/department | OPEN |
-| UNI-04 | Event attendance uniqueness | Unique member/event/attendance context enforced | OPEN |
-| UNI-05 | Appointment conflict prevention | Exact scope key and approved active-interval overlap invariant | OPEN |
+| UNI-04 | Event attendance uniqueness | Separate EVENT and SESSION unique indexes are present; subject-mode consistency and independent semantic review remain | PARTIALLY CLOSED |
+| UNI-05 | Appointment conflict prevention | DDD-004 overlap rule and position-scope composite FKs are represented; trigger transaction/lock contract and independent review remain | PARTIALLY CLOSED |
 | INT-01 | UUIDv7 generation | 56/56 UUID primary-key rows specify application-generated UUIDv7 and no database default; generator package/version verification remains open | PARTIALLY CLOSED |
 | INT-02 | FK integrity | Static check: 127 FK rows; all source/target columns and target keys resolve; all 127 supporting indexes match ordered source tuples | STATIC CHECK PASS; INDEPENDENT REVIEW PENDING |
 | INT-03 | Cross-district integrity | Parent scope enforced by composite relationships and transaction-safe application checks | OPEN |
@@ -48,13 +48,13 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | TYPE-01 | Stable technical states | ENUM catalogue has 56 state-column mappings and 53 distinct proposed types; 16 mappings remain open/conflicted, including the idempotency status mismatch | PARTIALLY CLOSED |
 | TYPE-02 | Business categories | Lookup tables and versioned business values, not ENUMs where values evolve | OPEN |
 | TYPE-03 | JSONB boundary | Every JSONB column has documented metadata/integration purpose and validation boundary | OPEN |
-| TYPE-04 | Numeric precision | NUMERIC(19,4) retained as a future finance standard only; no finance tables in DYMS 1.0 | OPEN |
+| TYPE-04 | Numeric precision | NUMERIC(19,4) retained as a future finance standard only; no monetary columns or finance tables in DYMS 1.0 | CLOSED FOR DYMS 1.0; FUTURE STANDARD RETAINED |
 | TYPE-05 | Column defaults | All 547 columns now have an explicit candidate default policy; nullable/non-nullable policy and UUIDv7 corrections applied; owner review remains | STATIC CHECK PASS; OWNER REVIEW PENDING |
-| TIME-01 | UTC persistence | All exact instants use TIMESTAMPTZ and are persisted as UTC instants | OPEN |
+| TIME-01 | UTC persistence | Static check found no non-TIMESTAMPTZ timestamp types; trusted server/database generation and UTC handling require field-by-field contract review | PARTIALLY CLOSED |
 | TIME-02 | IANA zones | Every timezone field uses a valid IANA identifier and has a documented owner/source | OPEN |
 | TIME-03 | Recurring schedules | Local recurrence rule and timezone are preserved separately from calculated instants | OPEN |
 | TIME-04 | Audit clocks | Audit timestamps are server/database-generated; synchronized system clock requirement is documented | OPEN |
-| TIME-05 | Calendar semantics | DATE used for calendar-only values; TIMESTAMPTZ used for exact instants | OPEN |
+| TIME-05 | Calendar semantics | DATE used for date_of_birth, term_start and term_end; exact instants use TIMESTAMPTZ | STATIC CHECK PASS; SEMANTIC REVIEW PENDING |
 
 ## 5. Reporting, retention and audit
 
