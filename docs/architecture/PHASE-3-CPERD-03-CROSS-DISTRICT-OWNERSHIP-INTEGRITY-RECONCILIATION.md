@@ -74,6 +74,85 @@ If the project owner accepts the candidate closure:
 
 These are candidate physical corrections, not yet applied to the canonical column/FK/index registers. The exact final column count and FK/index totals therefore remain provisional.
 
+
+## 5A. Detailed candidate physical delta
+
+The following is the recommended candidate closure for owner review. It is intentionally separate from the canonical registers until the project owner reviews the design.
+
+### 5A.1 Candidate columns
+
+| Table | Candidate column | Nullability | Purpose |
+|---|---|---|---|
+| members | district_id | NOT NULL | Establish the member's single owning district; immutable in DYMS 1.0 |
+| church_memberships | district_id | NOT NULL | Bind the member and church to the same district |
+| member_category_assignments | district_id | NOT NULL | Make category history directly district-owned and support same-district member FK |
+| department_memberships | district_id | NOT NULL | Bind the member and department to the same district |
+| event_registrations | district_id | NOT NULL | Bind the registering member and event to the same district |
+| event_attendance_subjects | district_id | NOT NULL | Bind the attendance subject's member and event to the same district |
+| user_role_assignments | federation_id | NULL | Support a federation-scoped read-only oversight grant |
+| user_role_assignments | scope_type | NOT NULL | Explicit FEDERATION/DISTRICT/CHURCH/DEPARTMENT assignment scope |
+| access_denies | federation_id | NULL | Permit a deny to target one federation-scoped oversight grant |
+| access_denies | scope_type | NOT NULL | Explicit FEDERATION/DISTRICT/CHURCH/DEPARTMENT deny scope |
+
+All new IDs remain application-generated UUIDv7 where they are identifiers. New scope columns use PostgreSQL UUID. No database-generated UUID default is proposed.
+
+### 5A.2 Candidate key and FK changes
+
+| Table | Candidate key / FK | Ordered source tuple | Target tuple | Action |
+|---|---|---|---|---|
+| members | UNIQUE target key | id, district_id | — | Add exact composite UNIQUE target for downstream ownership FKs |
+| members | FK to district | district_id | districts(id) | Add NOT NULL RESTRICT/RESTRICT FK |
+| church_memberships | member ownership FK | member_id, district_id | members(id, district_id) | Replace simple member FK |
+| church_memberships | church ownership FK | church_id, district_id | churches(id, district_id) | Replace simple church FK |
+| member_category_assignments | member ownership FK | member_id, district_id | members(id, district_id) | Replace simple member FK |
+| department_memberships | member ownership FK | member_id, district_id | members(id, district_id) | Replace simple member FK |
+| department_memberships | department ownership FK | department_id, district_id | departments(id, district_id) | Replace simple department FK |
+| appointments | appointee ownership FK | appointee_member_id, district_id | members(id, district_id) | Add alongside the existing position-scope FKs |
+| event_registrations | event ownership FK | event_id, district_id | events(id, district_id) | Replace simple event FK |
+| event_registrations | member ownership FK | member_id, district_id | members(id, district_id) | Replace simple member FK |
+| event_attendance_subjects | event ownership FK | event_id, district_id | events(id, district_id) | Replace simple event FK |
+| event_attendance_subjects | member ownership FK | member_id, district_id | members(id, district_id) | Replace simple member FK |
+| user_role_assignments | federation scope FK | federation_id | federations(id) | Add nullable RESTRICT/RESTRICT FK |
+| access_denies | federation scope FK | federation_id | federations(id) | Add nullable RESTRICT/RESTRICT FK |
+| user_role_assignments | child-scope FKs | church_id,district_id; department_id,district_id | churches(id,district_id); departments(id,district_id) | Replace simple child FKs with composite ownership FKs |
+| access_denies | child-scope FKs | church_id,district_id; department_id,district_id | churches(id,district_id); departments(id,district_id) | Replace simple child FKs with composite ownership FKs |
+| audit_events | child-scope FKs | church_id,district_id; department_id,district_id | churches(id,district_id); departments(id,district_id) | Replace simple child FKs where both scope values are present |
+| audit_access_events | child-scope FKs | church_id,district_id; department_id,district_id | churches(id,district_id); departments(id,district_id) | Replace simple child FKs where both scope values are present |
+
+All replacement FKs retain MATCH SIMPLE and RESTRICT/RESTRICT. CHECKs must require district_id whenever church_id or department_id is populated. A Federation-scoped authorization row requires federation_id only. A District-scoped row requires district_id only. Church and Department scopes require district_id plus the matching child ID.
+
+### 5A.3 Authorization scope ENUM
+
+Proposed type: `authorization_scope_type`
+
+Candidate labels:
+- FEDERATION
+- DISTRICT
+- CHURCH
+- DEPARTMENT
+
+This type is distinct from `organizational_scope_type`, which remains DISTRICT, CHURCH and DEPARTMENT for positions and appointments. Federation is not a position scope and does not grant appointment or operational authority.
+
+### 5A.4 Supporting indexes
+
+Each new composite FK requires a source index whose leading columns exactly match the ordered source tuple. The final index delta must include:
+- members(district_id) FK support and UNIQUE(id,district_id) target key.
+- church_memberships(member_id,district_id) and church_memberships(church_id,district_id).
+- member_category_assignments(member_id,district_id).
+- department_memberships(member_id,district_id) and department_memberships(department_id,district_id).
+- appointments(appointee_member_id,district_id).
+- event_registrations(event_id,district_id) and event_registrations(member_id,district_id).
+- event_attendance_subjects(event_id,district_id) and event_attendance_subjects(member_id,district_id).
+- user_role_assignments(federation_id), user_role_assignments(church_id,district_id), user_role_assignments(department_id,district_id).
+- access_denies(federation_id), access_denies(church_id,district_id), access_denies(department_id,district_id).
+- Composite child-scope support indexes for audit_events and audit_access_events where not already covered by an exact leading tuple.
+
+Existing indexes may be reused only where their leading ordered columns exactly match. Rebuild the index register and recalculate totals after this delta is approved.
+
+### 5A.5 Candidate impact
+
+This proposal adds 10 columns across the affected tables, adds a composite UNIQUE target on members, adds four net FK relationships before any further semantic corrections, and requires a full supporting-index delta. These are planning counts only. The final FK/index counts must be generated from the reconciled successor registers, not estimated from this proposal.
+
 ## 6. Verification requirements
 
 1. Every child row that carries both a district and a church/department must have a composite FK proving the child belongs to that district.
