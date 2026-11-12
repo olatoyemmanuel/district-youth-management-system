@@ -16,14 +16,14 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | SCOPE-01 | Remove Church Transfer from DYMS 1.0 | CPERD-03 column/FK/index/lifecycle/traceability candidates exclude transfer; integrity/API/report reconciliation still required | PARTIALLY CLOSED |
 | SCOPE-02 | Remove finance/payment/budget model from DYMS 1.0 | CPERD-03 column/FK/index/lifecycle/traceability/integrity candidates exclude finance; API/report/retention reconciliation still required | PARTIALLY CLOSED |
 | SCOPE-03 | Defer credential issuance and evidence management | CPERD-03 column/FK/index/lifecycle/traceability/integrity candidates exclude issuance/evidence; API/report/retention reconciliation still required | PARTIALLY CLOSED |
-| SCOPE-04 | Preserve the distinction between membership category and credential | Membership categories remain Adventurer, Pathfinder and Senior Youth as approved; Master Guide remains a credential/qualification, not a member category | OPEN |
+| SCOPE-04 | Preserve the distinction between membership category and credential | 107-ID traceability preserves Master Guide as a domain distinction; credential issuance/evidence remains deferred | PARTIALLY CLOSED |
 | ORG-01 | Add federation parent entity | Federation candidate and districts.federation_id represented in column and FK candidates; master ERD, composite ownership and static checks remain | PARTIALLY CLOSED |
-| ORG-02 | Enforce district code uniqueness within federation | Composite unique key/index and supporting relationship design | OPEN |
-| ORG-03 | Enforce church code uniqueness within district | Composite unique key/index retained and verified | OPEN |
+| ORG-02 | Enforce district code uniqueness within federation | Candidate UNIQUE(federation_id, code) index and column mapping present; exact code normalization/case policy remains open | PARTIALLY CLOSED |
+| ORG-03 | Enforce church code uniqueness within district | Existing district-scoped church code unique candidate retained; independent semantic review remains | PARTIALLY CLOSED |
 | ORG-04 | Enforce district ownership on child records | Composite FK or equivalent database-level ownership constraints, plus application validation | OPEN |
-| MEM-01 | Define IDX-R02 current membership invariant | Exact lifecycle states, partial unique index predicate, CHECK constraints and API transition contract | OPEN |
-| MEM-02 | Preserve suspension/reactivation identity | Reactivation restores the same membership record; no new current membership row is created | OPEN |
-| MEM-03 | Preserve termination history | Terminated record remains historical and is excluded from current membership uniqueness | OPEN |
+| MEM-01 | Define IDX-R02 current membership invariant | ACTIVE/SUSPENDED/TERMINATED lifecycle and status='ACTIVE' unique predicate reconciled; API transition contract remains open | PARTIALLY CLOSED |
+| MEM-02 | Preserve suspension/reactivation identity | Lifecycle catalogue explicitly restores the same suspended membership row to ACTIVE; API transaction contract remains open | PARTIALLY CLOSED |
+| MEM-03 | Preserve termination history | TERMINATED remains historical and excluded from current membership uniqueness; API/history enforcement remains open | PARTIALLY CLOSED |
 
 ## 3. Uniqueness and integrity
 
@@ -34,8 +34,8 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | UNI-03 | Department membership uniqueness | Multiple departments allowed; one current membership per member/department | OPEN |
 | UNI-04 | Event attendance uniqueness | Unique member/event/attendance context enforced | OPEN |
 | UNI-05 | Appointment conflict prevention | Exact scope key and approved active-interval overlap invariant | OPEN |
-| INT-01 | UUIDv7 generation | Application-layer generator contract, native UUID storage and no implicit random UUID defaults | OPEN |
-| INT-02 | FK integrity | Every FK target exists, ordered columns match, delete/update action is approved | OPEN |
+| INT-01 | UUIDv7 generation | 56/56 UUID primary-key rows specify application-generated UUIDv7 and no database default; generator package/version verification remains open | PARTIALLY CLOSED |
+| INT-02 | FK integrity | Static check: 127 FK rows; all source/target columns and target keys resolve; all 127 supporting indexes match ordered source tuples | STATIC CHECK PASS; INDEPENDENT REVIEW PENDING |
 | INT-03 | Cross-district integrity | Parent scope enforced by composite relationships and transaction-safe application checks | OPEN |
 | INT-04 | CHECK integrity | Every CHECK references existing columns and enforces a documented invariant | OPEN |
 | INT-05 | Trigger integrity | Every trigger has exact timing, event, owner, function, privilege and side-effect contract | OPEN |
@@ -45,11 +45,11 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 
 | ID | Required work | Evidence required | Status |
 |---|---|---|---|
-| TYPE-01 | Stable technical states | PostgreSQL ENUM catalogue and exact use by every relevant column | OPEN |
+| TYPE-01 | Stable technical states | ENUM catalogue has 12 candidate mappings; 44 additional state-bearing fields remain open or conflict with lifecycle candidates | PARTIALLY CLOSED |
 | TYPE-02 | Business categories | Lookup tables and versioned business values, not ENUMs where values evolve | OPEN |
 | TYPE-03 | JSONB boundary | Every JSONB column has documented metadata/integration purpose and validation boundary | OPEN |
 | TYPE-04 | Numeric precision | NUMERIC(19,4) retained as a future finance standard only; no finance tables in DYMS 1.0 | OPEN |
-| TYPE-05 | Column defaults | Every column specifies database default, application-generated value or explicitly no default | OPEN |
+| TYPE-05 | Column defaults | All 547 columns now have an explicit candidate default policy; nullable/non-nullable policy and UUIDv7 corrections applied; owner review remains | STATIC CHECK PASS; OWNER REVIEW PENDING |
 | TIME-01 | UTC persistence | All exact instants use TIMESTAMPTZ and are persisted as UTC instants | OPEN |
 | TIME-02 | IANA zones | Every timezone field uses a valid IANA identifier and has a documented owner/source | OPEN |
 | TIME-03 | Recurring schedules | Local recurrence rule and timezone are preserved separately from calculated instants | OPEN |
@@ -73,8 +73,8 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | ID | Required work | Acceptance criteria | Status |
 |---|---|---|---|
 | XREG-01 | Master ERD ↔ column register | Exact same table and column sets | OPEN |
-| XREG-02 | Column register ↔ FK register | Every FK source/target column exists and ordered key matches | OPEN |
-| XREG-03 | FK register ↔ index register | Every FK has a suitable supporting index | OPEN |
+| XREG-02 | Column register ↔ FK register | Static check: all 127 FK source/target columns exist and ordered target key arity matches | STATIC CHECK PASS; INDEPENDENT REVIEW PENDING |
+| XREG-03 | FK register ↔ index register | Static check: all 127 support-index references resolve and lead with the ordered source FK tuple | STATIC CHECK PASS; INDEPENDENT REVIEW PENDING |
 | XREG-04 | Unique rules ↔ index register | Every approved uniqueness invariant has exact database enforcement or documented justified alternative | OPEN |
 | XREG-05 | CHECK register ↔ column register | No dangling or ambiguous CHECK references | OPEN |
 | XREG-06 | Trigger register ↔ lifecycle/API | Trigger effects do not contradict application transition contracts | OPEN |
@@ -82,10 +82,12 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | XREG-08 | API ↔ physical model | Every persisted field, FK, status and idempotency invariant has a physical mapping | OPEN |
 | XREG-09 | Requirements ↔ physical model | Every included requirement maps once; deferred requirements are explicitly classified | OPEN |
 | XREG-10 | Scope exclusion | No excluded/deferred capability remains active in the DYMS 1.0 model | OPEN |
-| XREG-11 | Inventory totals | Counts are generated from canonical successor registers and agree across all documents | OPEN |
+| XREG-11 | Inventory totals | Current static counts: 57 tables, 547 columns, 127 FKs, 176 index rows, 40 lifecycle rows, 107 requirement rows; master ERD count reconciliation remains | PARTIALLY CLOSED |
 | XREG-12 | Exact hash manifest | Every reviewed artifact hash matches the committed file | OPEN |
 
 ## 7. Static verification requirements
+
+Initial report: [CPERD-03 Static Consistency Verification Report](PHASE-3-CPERD-03-STATIC-CONSISTENCY-VERIFICATION-REPORT.md). It records a documentation-level static check pass with open design findings. It is not independent assurance or final certification.
 
 The CPERD-03 static verification report must include:
 - Table count and unique table names.
