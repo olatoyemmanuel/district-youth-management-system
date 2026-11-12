@@ -194,7 +194,6 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | `uq_role_permissions_role_permission` | `role_permissions` | `role_id, permission_id` | Unique / partial unique | Medium catalogue |
 | `uq_user_accounts_email_present` | `user_accounts` | `UNRESOLVED: normalized email expression; no stored normalized_email column is declared WHERE email IS NOT NULL` | POLICY BLOCKED | Medium catalogue |
 | `uq_user_accounts_login_identifier` | `user_accounts` | `login_identifier` | Unique / partial unique | Medium catalogue |
-| `uq_user_accounts_phone_present` | `user_accounts` | `phone_e164 WHERE phone_e164 IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_webhook_events_provider_event` | `webhook_events` | `provider_id, provider_event_id` | Unique / partial unique | Medium catalogue |
 | `uq_positions_id_district_scope_type` | `positions` | `id, district_id, allowed_scope_type` | Unique candidate key | Appointment scope-type/district composite FK |
 | `uq_positions_id_church` | `positions` | `id, church_id` | Unique candidate key | Appointment church-scope composite FK |
