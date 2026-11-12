@@ -99,7 +99,7 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 | ENUM catalogue | `PHASE-3-CPERD-03-TECHNICAL-ENUM-AND-STATE-TYPE-CATALOGUE.md` | `ca934fe3f925a9b11593d1b534ea2a5af111b7e0` |
 | Requirement traceability | `PHASE-3-CPERD-03-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md` | `e99b07568ab7fd093abe8eb5e16e412c0975ebc3` |
 | API scope reconciliation | `PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md` | `1edd859e67de404c9389812f84a8dc7eeca56093` |
-| Bounded-context reconciliation | `PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md` | `9736ff1991d182858ccedbfdfb07f8ad43678500` |
+| Bounded-context reconciliation | `PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md` | `8c7ad25ea03fed50b6eb2482402aa08cb7f13785` |
 | Cross-district ownership review | `PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md` | `776e8e8c7a4df27acc7b671bc2368deeeaa8578d` |
 | Retention source reconciliation | `PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md` | `c1029a4a8f97541c004c3ae812a888c2c512dc22` |
 | Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `8ff3ef03a435d3d0263d0a936e62e56d5b2d7e87` |
