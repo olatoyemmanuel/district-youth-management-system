@@ -98,6 +98,8 @@ Initial report: [CPERD-03 Static Consistency Verification Report](PHASE-3-CPERD-
 
 Additional successor artifacts: [API Contract and Scope Reconciliation](PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md), [Bounded-Context and Ownership Reconciliation](PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md), [Cross-District Ownership Integrity Reconciliation](PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md), [Retention Source-Enrollment Scope Reconciliation](PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md), and the CPERD-13 reporting addendum. These remain proposals pending owner review.
 
+Timestamp policy candidate: [CPERD-03 Timestamp and Timezone Semantics](PHASE-3-CPERD-03-TIMESTAMP-AND-TIMEZONE-SEMANTICS.md). It records 126 TIMESTAMPTZ fields, 3 DATE fields, 3 IANA timezone identifier fields and no recurrence-rule column. Field-level ownership, DST and trusted timestamp review remain open.
+
 The CPERD-03 static verification report must include:
 - Table count and unique table names.
 - Column count and unique table/column pairs.
