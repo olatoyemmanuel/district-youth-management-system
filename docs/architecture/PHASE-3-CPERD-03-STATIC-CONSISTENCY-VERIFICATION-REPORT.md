@@ -31,6 +31,7 @@ The report is not an independent technical review. It is not final physical ERD 
 | FK target candidate keys | PASS | All declared PK and composite UNIQUE target keys resolve to their named candidate indexes |
 | Index candidates | PASS | 175 named index rows |
 | Duplicate index names | PASS | 0 duplicates |
+| Unapproved phone uniqueness | PASS | No unique phone index remains; OD-04 does not approve phone uniqueness |
 | Index identifier length | PASS | 0 names exceed PostgreSQL's 63-byte identifier limit |
 | Index table references | PASS | 0 index rows reference a table absent from the column register |
 | Lifecycle rows | PASS | 40 included lifecycle rows; excluded/deferred lifecycle rows absent |
@@ -90,10 +91,10 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 
 | Artifact | Path | Git blob SHA |
 |---|---|---|
-| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `b37447fa36852f2a6d0993b16c52565aaf1b569f` |
+| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `8f1026cd4c84a66b25c701318e5751684e096896` |
 | Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `e5f20d77c165fa01573a6ad46870ff81f00c5e75` |
 | FK register | `PHASE-3-CPERD-03-CANONICAL-FOREIGN-KEY-REGISTER.md` | `9e60b6a2de7f650de9c53079ad78f0072c31f44b` |
-| Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `d303adec8800eff8a8f98d5eef905fd7fb9e8a13` |
+| Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `be2e67ca1cc3f4877a95fbc55a418898e1bee9ae` |
 | Lifecycle catalogue | `PHASE-3-CPERD-03-LIFECYCLE-STATE-CATALOGUE.md` | `29c449cfef99eee07bef423180080ab1d9b98335` |
 | Integrity and trigger register | `PHASE-3-CPERD-03-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md` | `b0680278a7dd934faf8b02c1812f54cf79a9e3c3` |
 | ENUM catalogue | `PHASE-3-CPERD-03-TECHNICAL-ENUM-AND-STATE-TYPE-CATALOGUE.md` | `ca934fe3f925a9b11593d1b534ea2a5af111b7e0` |
@@ -102,8 +103,8 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 | Bounded-context reconciliation | `PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md` | `8c7ad25ea03fed50b6eb2482402aa08cb7f13785` |
 | Cross-district ownership review | `PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md` | `776e8e8c7a4df27acc7b671bc2368deeeaa8578d` |
 | Retention source reconciliation | `PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md` | `c1029a4a8f97541c004c3ae812a888c2c512dc22` |
-| Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `8ff3ef03a435d3d0263d0a936e62e56d5b2d7e87` |
-| Owner decision reconciliation | `PHASE-3-CPERD-03-OWNER-DECISION-AND-SCOPE-RECONCILIATION.md` | `28397c2a78c7fca79543968a4fdba61b4b6d9fa7` |
+| Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `0a1c345cf884c43ba3d53c90f9d0a0e4138a97cf` |
+| Owner decision reconciliation | `PHASE-3-CPERD-03-OWNER-DECISION-AND-SCOPE-RECONCILIATION.md` | `1a71b2672ae770981e0a69512fa3723fe28e9229` |
 | Physical table scope classification | `PHASE-3-CPERD-03-PHYSICAL-TABLE-SCOPE-CLASSIFICATION.md` | `6d4fd2dce548a8ec267a4e4729dd1ff2feceb08a` |
 | Reporting catalogue proposal/addendum | `PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md` | `3a8b4b1c063cfa07cba1d41601cc72ef899675e6` |
 
