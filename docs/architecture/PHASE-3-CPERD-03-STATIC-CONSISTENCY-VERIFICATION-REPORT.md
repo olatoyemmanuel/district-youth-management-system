@@ -35,6 +35,7 @@ The report is not an independent technical review. It is not final physical ERD 
 | Index table references | PASS | 0 index rows reference a table absent from the column register |
 | Lifecycle rows | PASS | 40 included lifecycle rows; excluded/deferred lifecycle rows absent |
 | Requirement traceability | PASS | 107 requirement rows retained and individually classified |
+| ENUM state-column coverage | PASS WITH OPEN VOCABULARIES | 56 state-column mappings across 53 distinct proposed ENUM types; 16 mappings remain open/conflicted |
 | CPERD-02 API route inventory | PASS | 151 endpoint rows; 128 distinct route path strings parsed |
 | Deferred API route families | PASS | 8 Church Transfer, 16 finance/payment/budget and 9 credential route strings identified for exclusion/deferment |
 | Federation oversight API proposal | PASS WITH OPEN CONTRACT | Three GET-only, federation-bounded, aggregate-only route candidates added; request/response and permission review remains open |
@@ -49,7 +50,7 @@ The static checks above do not close these design issues:
 1. **Email normalization:** OD-04 approves globally unique normalized email. The canonical normalization algorithm and persisted normalized representation remain unresolved. The corresponding unique index remains blocked.
 2. **Department membership uniqueness:** The exact current-state predicate remains unresolved. Multiple department memberships are allowed; duplicate current membership for the same member/department must be prevented.
 3. **Event registration uniqueness/capacity:** Exact registration states and the capacity-consuming predicate remain unresolved.
-4. **Technical ENUM closure:** The new ENUM catalogue records 12 candidate type mappings. Forty-four additional state-bearing columns still require vocabulary/lifecycle reconciliation. Some existing lifecycle candidates conflict and must not be silently converted into ENUM values.
+4. **Technical ENUM closure:** The successor ENUM catalogue contains 56 state-column mappings across 53 distinct proposed types. Sixteen mappings remain open or conflicted. In particular, idempotency_records.status differs between the inherited integrity CHECK and lifecycle catalogue and must be reconciled before the ENUM can be finalized.
 5. **Timezone validation:** Three IANA timezone fields exist: districts.timezone, events.timezone and event_sessions.timezone. Their application validation and authoritative ownership/source contract remain to be documented.
 6. **Recurring events:** No explicit local recurrence-rule column is present in the current column inventory. Confirm whether recurring event schedules are in scope; if they are, preserve the local recurrence rule separately from calculated UTC instants.
 7. **Cross-district ownership:** Column existence and FK supporting-index checks pass. Composite ownership coverage for every child relationship still needs a dedicated semantic review.
