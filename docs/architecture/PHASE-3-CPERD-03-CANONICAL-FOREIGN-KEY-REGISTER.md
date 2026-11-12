@@ -165,4 +165,4 @@ This is a mechanically filtered candidate count, not a certified final FK count.
 7. Reconcile nullable references and MATCH SIMPLE semantics against lifecycle requirements.
 8. Run independent static checks for duplicate names, missing targets, invalid columns and unsupported actions.
 
-**Status: DRAFT 0.1 — NOT APPROVED. No implementation is authorized by this register.**
+**Status: DRAFT 0.2 — NOT APPROVED. Implementation authorization is conditional on final CPERD-03 approval and is not exercisable yet.**
