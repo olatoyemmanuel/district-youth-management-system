@@ -83,4 +83,4 @@ Do not infer missing institutional policy. A state marked POLICY BLOCKED or TBD 
 6. Ensure no Church Transfer, finance, payment, budget or credential issuance lifecycle remains in DYMS 1.0.
 7. Reconcile all remaining rows against approved DDD and ODR decisions.
 
-**Status: DRAFT 0.1 — NOT APPROVED. No implementation is authorized by this register.**
+**Status: DRAFT 0.2 — NOT APPROVED. Implementation authorization is conditional on final CPERD-03 approval and is not exercisable yet.**
