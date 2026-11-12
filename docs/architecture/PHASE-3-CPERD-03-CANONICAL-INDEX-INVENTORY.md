@@ -16,7 +16,7 @@ The retained rows are not automatically approved. Every index requires validatio
 ## 2. Mechanical scope delta
 
 - CPERD-02 index rows: 235.
-- Retained after first-pass exclusions: 176.
+- Retained after first-pass exclusions: 175.
 - Federation candidates: `uq_federations_code`, `uq_districts_federation_code` and `ix_fk_districts_federation_id`.
 - Current membership uniqueness is no longer blocked at the business-rule level by IDX-R02. The persisted predicate must use the approved ACTIVE/SUSPENDED/TERMINATED semantics.
 - Normalized email uniqueness is approved by OD-04, but exact canonical normalization storage/expression remains open.
