@@ -20,7 +20,7 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | ORG-01 | Add federation parent entity | Federation candidate and districts.federation_id represented in column and FK candidates; master ERD, composite ownership and static checks remain | PARTIALLY CLOSED |
 | ORG-02 | Enforce district code uniqueness within federation | Candidate UNIQUE(federation_id, code) index and column mapping present; exact code normalization/case policy remains open | PARTIALLY CLOSED |
 | ORG-03 | Enforce church code uniqueness within district | Existing district-scoped church code unique candidate retained; independent semantic review remains | PARTIALLY CLOSED |
-| ORG-04 | Enforce district ownership on child records | Composite FK or equivalent database-level ownership constraints, plus application validation | OPEN |
+| ORG-04 | Enforce district ownership on child records | [Cross-District Ownership Integrity Reconciliation](PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md) identifies missing member/child district keys and simple-FK scope gaps; candidate correction requires owner review | BLOCKER / OPEN |
 | MEM-01 | Define IDX-R02 current membership invariant | ACTIVE/SUSPENDED/TERMINATED lifecycle and status='ACTIVE' unique predicate reconciled; API transition contract remains open | PARTIALLY CLOSED |
 | MEM-02 | Preserve suspension/reactivation identity | Lifecycle catalogue explicitly restores the same suspended membership row to ACTIVE; API transaction contract remains open | PARTIALLY CLOSED |
 | MEM-03 | Preserve termination history | TERMINATED remains historical and excluded from current membership uniqueness; API/history enforcement remains open | PARTIALLY CLOSED |
@@ -89,12 +89,14 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | XREG-15 | Federation oversight boundary | Federation routes are GET-only, federation-bounded and aggregate-only; no operational mutation or report export | PARTIALLY CLOSED |
 | XREG-16 | Retention source inventory ↔ v1 scope | Only included record classes are candidates; no source links or schedules are assumed approved | OPEN |
 | XREG-17 | Report catalogue ↔ scope and data ownership | Deferred reports excluded; federation oversight separate from district report runs; source-owner and disclosure rules reviewed | PARTIALLY CLOSED |
+| XREG-18 | Cross-district ownership closure | Member, membership, department participation, appointment, registration and attendance relationships prove same-district ownership at DB and app layers | BLOCKER / OPEN |
+| XREG-19 | Federation authorization scope | Federation-scoped grant and deny model binds oversight to one federation without granting operational mutation | BLOCKER / OPEN |
 
 ## 7. Static verification requirements
 
 Initial report: [CPERD-03 Static Consistency Verification Report](PHASE-3-CPERD-03-STATIC-CONSISTENCY-VERIFICATION-REPORT.md). It records a documentation-level static check pass with open design findings. It is not independent assurance or final certification.
 
-Additional successor artifacts: [API Contract and Scope Reconciliation](PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md), [Bounded-Context and Ownership Reconciliation](PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md), and the CPERD-13 reporting addendum. These remain proposals pending owner review.
+Additional successor artifacts: [API Contract and Scope Reconciliation](PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md), [Bounded-Context and Ownership Reconciliation](PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md), [Cross-District Ownership Integrity Reconciliation](PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md), [Retention Source-Enrollment Scope Reconciliation](PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md), and the CPERD-13 reporting addendum. These remain proposals pending owner review.
 
 The CPERD-03 static verification report must include:
 - Table count and unique table names.
