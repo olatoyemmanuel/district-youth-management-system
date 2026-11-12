@@ -191,3 +191,42 @@ Before a candidate report becomes an approved report definition:
 - Implementation authorization: **NOT GRANTED**.
 
 This proposal does not amend the approved CPERD-01 master ERD and does not authorize report seeds, SQL, Prisma, API implementation, export jobs, storage configuration, tests or deployment.
+
+
+## 12. CPERD-03 owner-scope reconciliation addendum (2026-11-12)
+
+This section supersedes conflicting wording in §§2.1 and 4 for the DYMS 1.0 Federation oversight boundary.
+
+### 12.1 Federation oversight is read-only and federation-bounded
+
+The project-owner-approved Federation rule permits federation-authorized users to view cross-district reports and monitor activity within their own federation. It does not grant operational administration.
+
+- Federation oversight is limited to the districts linked to the authenticated user's federation.
+- The oversight surface is aggregate-only by default and excludes member-level personal records, individual attendance rows, credential evidence, audit event detail and sensitive investigation content.
+- It is a read-only query surface. Federation users cannot create report runs, request exports, edit report definitions or mutate source records.
+- This surface is separate from the persisted `report_runs` model. Standard report runs remain district-, church- or department-scoped. No GLOBAL scope is introduced.
+- A federation oversight query must derive its district set server-side from Organization ownership. Client-supplied district lists are never trusted.
+- Federation oversight does not grant Audit Officer permission or access to source-domain records.
+
+### 12.2 Candidate Federation oversight view
+
+| Candidate | Purpose | Accountable owner proposal | Scope | Candidate classification | Export permission |
+|---|---|---|---|---|---|
+| RC-15 Federation Activity Oversight | Display aggregate district activity, event/program counts, attendance participation summaries and operational status across the authorized federation | Organization as primary owner, with source-context review by Membership, Events, Attendance and Department Membership | One federation and its linked districts | INTERNAL; aggregate-only; no direct member identifiers | No export in v1 proposal; GET-only dashboard/query |
+
+RC-15 is a read-only aggregate query, not a stored report definition/run or a downloadable export. Its exact measures, freshness, source-owner approvals, redaction and permission mapping remain open for review. Do not seed or publish it as an approved report without owner approval.
+
+### 12.3 Excluded/deferred report candidates
+
+- RC-03 Church Transfer Register: EXCLUDED with Church Transfer.
+- RC-08 Finance Account and Transaction Summary: DEFERRED with finance/payment management.
+- RC-09 Budget Performance: DEFERRED with finance/budget management.
+- RC-10 Credential Register: DEFERRED with credential issuance/evidence management.
+
+All other candidate reports remain proposals and require report-specific data-owner, classification, scope, field-minimization, redaction, export and retention review.
+
+### 12.4 Physical-design boundary
+
+No new report table, report-run scope column, federation report-run FK or export workflow is introduced by this addendum. The existing district/church/department `report_runs` scope remains unchanged. Federation oversight is implemented as a separately authorized read-only aggregate query contract, subject to final API and physical-design reconciliation.
+
+**Status: PROPOSAL ONLY — NOT APPROVED.**
