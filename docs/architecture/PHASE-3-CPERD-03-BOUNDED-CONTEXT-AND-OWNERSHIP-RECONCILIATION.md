@@ -62,6 +62,7 @@ Cross-district operational data access is denied. The only cross-district v1 exc
 ## 5. Membership and leadership boundaries
 
 - Each member has one individual user account. Shared/guardian-operated accounts are not supported.
+- Candidate physical ownership correction: members carries a required district_id, derived during provisioning from the authorized district administrator's scope and immutable in DYMS 1.0 while Church Transfer is excluded. The exact composite FK correction is documented in the Cross-District Ownership Integrity Reconciliation and remains subject to owner review.
 - Primary membership categories are Adventurer, Pathfinder and Senior Youth.
 - Master Guide is a credential/qualification classification, not a primary membership category. Credential definition/issuance/evidence workflows remain deferred.
 - One member has one current church membership. ACTIVE is current; SUSPENDED and TERMINATED are not current. Reactivation restores the same suspended membership row to ACTIVE.
@@ -89,7 +90,7 @@ No downstream context writes directly to an upstream context's tables. Every cro
 
 ## 7. Federation Oversight query boundary
 
-- The authenticated federation principal resolves to one federation.
+- The authenticated federation principal resolves to one federation through an explicit federation-scoped grant. The current grant/deny register lacks this scope; the proposed authorization_scope_type/federation_id correction remains a physical-design blocker.
 - The query service derives the set of districts belonging to that federation from Organization ownership.
 - Every aggregate is filtered to that set before aggregation.
 - Only predefined, approved aggregate metrics are returned.
