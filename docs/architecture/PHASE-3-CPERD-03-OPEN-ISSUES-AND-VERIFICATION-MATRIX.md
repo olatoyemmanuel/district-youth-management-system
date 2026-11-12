@@ -45,7 +45,7 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 
 | ID | Required work | Evidence required | Status |
 |---|---|---|---|
-| TYPE-01 | Stable technical states | ENUM catalogue has 12 candidate mappings; 44 additional state-bearing fields remain open or conflict with lifecycle candidates | PARTIALLY CLOSED |
+| TYPE-01 | Stable technical states | ENUM catalogue has 56 state-column mappings and 53 distinct proposed types; 16 mappings remain open/conflicted, including the idempotency status mismatch | PARTIALLY CLOSED |
 | TYPE-02 | Business categories | Lookup tables and versioned business values, not ENUMs where values evolve | OPEN |
 | TYPE-03 | JSONB boundary | Every JSONB column has documented metadata/integration purpose and validation boundary | OPEN |
 | TYPE-04 | Numeric precision | NUMERIC(19,4) retained as a future finance standard only; no finance tables in DYMS 1.0 | OPEN |
