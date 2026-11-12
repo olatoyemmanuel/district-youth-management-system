@@ -37,7 +37,7 @@ The source route rows for Church Transfer, finance and credentials must not be c
 | Context | Included API responsibilities | Required authorization boundary |
 |---|---|---|
 | Identity & Access | Login, refresh, logout, sessions, password reset/change, CSRF, current actor | DFR-001 and DFR-004; own-account/session scope; rate limiting |
-| Membership | Member provisioning/profile, category assignment/history, current church membership/history | Individual account per member; scoped membership authority; no transfer workflow |
+| Membership | Member provisioning/profile, category assignment/history, current church membership/history | Individual account per member; member district derived from the authorized administrator's scope; scoped membership authority; no transfer workflow |
 | Organization | District, church and district-owned department catalogues | District-owned administration; federation users are read-only |
 | Leadership | Position catalogue, appointment submission, approval, rejection, termination, renewal | Higher-authority approval; no self-approval; scope-bound appointment authority |
 | Department Membership | Request, read, approve, withdraw, reasoned termination | Member/self or designated department coordinator |
@@ -81,6 +81,8 @@ Rules:
 5. These endpoints are GET-only. They do not create report runs or exports. They return bounded read-only query results.
 6. Federation oversight queries are separate from `report_runs`. The persisted report-run scope remains district, church or department; federation oversight is a read-only aggregate query contract and does not introduce GLOBAL report scope.
 7. Each response is rate-limited, audited where sensitive, and filtered by federation ownership before aggregation.
+8. Federation oversight permission must be assigned at one explicit federation scope. The current user-role grant/deny candidate lacks federation scope, so the API remains blocked until the proposed authorization_scope_type and federation_id correction is reconciled into the physical registers.
+9. The authority permitted to issue/revoke federation oversight grants is not inferred here. It must be defined by the owner-approved governance/appointment authority model; federation users cannot grant or approve their own oversight role.
 
 ## 6. Reporting, audit and retention limits
 
