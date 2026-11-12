@@ -3,13 +3,13 @@
 - Revision: 0.1
 - Date: 2026-11-12
 - Status: **WORKING RECONCILIATION REGISTER — NOT AN APPROVAL RECORD**
-- Implementation: **NOT AUTHORIZED**
+- Implementation authorization: **GRANTED BY PROJECT OWNER ON 2026-11-12; CONDITIONAL ON FINAL CPERD-03 PHYSICAL ERD APPROVAL**
 
 ## 1. Authority and preservation
 
 This register reconciles CPERD-02 design content against later project-owner decisions. It does not alter historical approval records. CPERD-01 and CPERD-02 remain preserved as their exact approved/candidate artifacts and hashes.
 
-A physical-design proposal is not an owner approval. An owner approval is not implementation authorization.
+A physical-design proposal is not an owner approval. The project owner has separately granted implementation authorization on 2026-11-12. That authorization cannot be exercised until the exact final CPERD-03 physical ERD artifacts are approved.
 
 ## 2. Explicitly approved DFR-003 decisions
 
@@ -129,4 +129,4 @@ This document is a reconciliation register only.
 - OD-09: NOT APPROVED.
 - OD-10 through OD-12: approval status not verified.
 - CPERD-03 final owner approval: NOT GRANTED.
-- Implementation authorization: NOT GRANTED.
+- Implementation authorization: GRANTED CONDITIONALLY on 2026-11-12; execution remains blocked pending final CPERD-03 approval.
