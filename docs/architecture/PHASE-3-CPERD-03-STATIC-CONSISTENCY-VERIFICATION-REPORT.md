@@ -1,6 +1,6 @@
 # DYMS Phase 3 — CPERD-03 Static Consistency Verification Report
 
-- Revision: SCVR-03 Draft 0.1
+- Revision: SCVR-03 Draft 0.2
 - Date: 2026-11-12
 - Branch: `cperd-03-documentation-reconciliation`
 - Verification type: Documentation-level static consistency only
@@ -94,7 +94,7 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 
 | Artifact | Path | Git blob SHA |
 |---|---|---|
-| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `8f1026cd4c84a66b25c701318e5751684e096896` |
+| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `e884f7cc23f4a861fff8fa004b91d9ec96fa49f9` |
 | Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `e5f20d77c165fa01573a6ad46870ff81f00c5e75` |
 | FK register | `PHASE-3-CPERD-03-CANONICAL-FOREIGN-KEY-REGISTER.md` | `9e60b6a2de7f650de9c53079ad78f0072c31f44b` |
 | Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `be2e67ca1cc3f4877a95fbc55a418898e1bee9ae` |
@@ -102,13 +102,14 @@ These are the exact Git blob hashes inspected for this report on branch `cperd-0
 | Integrity and trigger register | `PHASE-3-CPERD-03-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md` | `b0680278a7dd934faf8b02c1812f54cf79a9e3c3` |
 | ENUM catalogue | `PHASE-3-CPERD-03-TECHNICAL-ENUM-AND-STATE-TYPE-CATALOGUE.md` | `ca934fe3f925a9b11593d1b534ea2a5af111b7e0` |
 | Requirement traceability | `PHASE-3-CPERD-03-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md` | `e99b07568ab7fd093abe8eb5e16e412c0975ebc3` |
-| API scope reconciliation | `PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md` | `1edd859e67de404c9389812f84a8dc7eeca56093` |
+| API scope reconciliation | `PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md` | `20af026a15d28fc840c95a2b105d8e7f04f8e28b` |
 | Bounded-context reconciliation | `PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md` | `8c7ad25ea03fed50b6eb2482402aa08cb7f13785` |
 | Cross-district ownership review | `PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md` | `776e8e8c7a4df27acc7b671bc2368deeeaa8578d` |
 | Retention source reconciliation | `PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md` | `c1029a4a8f97541c004c3ae812a888c2c512dc22` |
-| Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `0a1c345cf884c43ba3d53c90f9d0a0e4138a97cf` |
-| Owner decision reconciliation | `PHASE-3-CPERD-03-OWNER-DECISION-AND-SCOPE-RECONCILIATION.md` | `1a71b2672ae770981e0a69512fa3723fe28e9229` |
+| Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `df088b014186bc2c7d86962c7eeef7907cfbc973` |
+| Owner decision reconciliation | `PHASE-3-CPERD-03-OWNER-DECISION-AND-SCOPE-RECONCILIATION.md` | `1255a0d3e0223d6ec5cc9201485c2d49b01e1a32` |
 | Physical table scope classification | `PHASE-3-CPERD-03-PHYSICAL-TABLE-SCOPE-CLASSIFICATION.md` | `6d4fd2dce548a8ec267a4e4729dd1ff2feceb08a` |
 | Reporting catalogue proposal/addendum | `PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md` | `3a8b4b1c063cfa07cba1d41601cc72ef899675e6` |
+| Timestamp and timezone semantics | `PHASE-3-CPERD-03-TIMESTAMP-AND-TIMEZONE-SEMANTICS.md` | `f9fdb69024107e0f2ca566905345187d0c87383d` |
 
 The input hashes above identify the precise documentation snapshots used for the current static pass. Any subsequent edit invalidates the corresponding hash and requires a new fetch and verification pass before owner approval.
