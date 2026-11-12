@@ -102,7 +102,7 @@ A future scope change requires explicit project-owner approval and impact analys
 10. Column defaults: All 547 column rows now have an explicit candidate default policy. Nullable/non-nullable handling and UUIDv7 defaults were reconciled. Owner review remains pending.
 11. UUID strategy: All 56 UUID primary-key rows specify application-generated UUIDv7 with no database default. Exact generator package/version and operational contract remain open.
 12. Technical states: The ENUM catalogue maps 56 state columns to 53 proposed types. Sixteen mappings remain open or conflicted, including the idempotency status mismatch between the integrity CHECK and lifecycle catalogue.
-13. Cross-register counts: Current documentation-level candidate totals are 57 tables, 547 columns, 127 FKs, 176 index rows, 40 lifecycle rows and 107 requirement rows. Static checks passed for FK column existence, target keys, support-index coverage, duplicate names and scope leaks. Independent review remains pending.
+13. Cross-register counts: Current documentation-level candidate totals are 57 tables, 547 columns, 127 FKs, 175 index rows, 40 lifecycle rows and 107 requirement rows. Static checks passed for FK column existence, target keys, support-index coverage, duplicate names and scope leaks. Independent review remains pending.
 14. Historical approvals: CPERD-01/CPERD-02 approval records and hashes remain immutable. CPERD-03 uses a successor status and will require a new exact-hash approval manifest.
 
 ## 6. Technical questions that require explicit specification, not invented policy
