@@ -84,10 +84,17 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | XREG-10 | Scope exclusion | No excluded/deferred capability remains active in the DYMS 1.0 model | OPEN |
 | XREG-11 | Inventory totals | Current static counts: 57 tables, 547 columns, 127 FKs, 176 index rows, 40 lifecycle rows, 107 requirement rows; master ERD count reconciliation remains | PARTIALLY CLOSED |
 | XREG-12 | Exact hash manifest | Every reviewed artifact hash matches the committed file | OPEN |
+| XREG-13 | Bounded contexts ↔ physical ownership | Every included table and route has one owning context; deferred domains are excluded | PARTIALLY CLOSED |
+| XREG-14 | API route scope ↔ 107 requirements | Every active route maps to requirement, command/query, permission, lifecycle and error contract | PARTIALLY CLOSED |
+| XREG-15 | Federation oversight boundary | Federation routes are GET-only, federation-bounded and aggregate-only; no operational mutation or report export | PARTIALLY CLOSED |
+| XREG-16 | Retention source inventory ↔ v1 scope | Only included record classes are candidates; no source links or schedules are assumed approved | OPEN |
+| XREG-17 | Report catalogue ↔ scope and data ownership | Deferred reports excluded; federation oversight separate from district report runs; source-owner and disclosure rules reviewed | PARTIALLY CLOSED |
 
 ## 7. Static verification requirements
 
 Initial report: [CPERD-03 Static Consistency Verification Report](PHASE-3-CPERD-03-STATIC-CONSISTENCY-VERIFICATION-REPORT.md). It records a documentation-level static check pass with open design findings. It is not independent assurance or final certification.
+
+Additional successor artifacts: [API Contract and Scope Reconciliation](PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md), [Bounded-Context and Ownership Reconciliation](PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md), and the CPERD-13 reporting addendum. These remain proposals pending owner review.
 
 The CPERD-03 static verification report must include:
 - Table count and unique table names.
