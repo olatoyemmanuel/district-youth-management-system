@@ -201,10 +201,12 @@ CPERD-03 is not complete until the following artifacts are generated and reconci
 10. Retention-source enrollment reconciliation.
 11. DFR/DDD/IDX owner-decision reconciliation register.
 12. Static consistency verification report.
-13. Independent technical review report.
-14. Exact-hash approval manifest.
+13. Technical ENUM and state-type catalogue.
+14. Physical table scope classification.
+15. Independent technical review report.
+16. Exact-hash approval manifest.
 
-The counts for tables, columns, foreign keys, indexes and checks are intentionally **NOT YET ESTABLISHED**. Regenerate them from CPERD-03 source registers after scope corrections. Do not copy CPERD-02 counts.
+Current documentation-level candidate counts are 57 tables, 547 columns, 127 named foreign keys, 176 index rows, 40 lifecycle rows and 107 requirement rows. The initial static report records 0 duplicate column pairs, 0 unresolved default placeholders, 0 missing FK source/target columns, 0 missing FK support-index references, 0 duplicate index names and 0 scope-excluded table references in the candidate column/FK/index/lifecycle registers. These are draft candidate counts, not certified final physical inventory totals. The master ERD, API, ownership, retention and report mappings remain under reconciliation. Do not treat these numbers as approval or runtime verification.
 
 ## 9. Verification acceptance criteria
 
@@ -252,6 +254,6 @@ The project owner has issued explicit implementation authorization on 2026-11-12
 
 ## 12. Current status
 
-**CPERD-03 Draft 0.2 — RECONCILIATION IN PROGRESS.**
+**CPERD-03 Draft 0.3 — RECONCILIATION IN PROGRESS.**
 
 The current file is a control and correction baseline. It is not the final physical ERD or a certification report. The separate implementation authorization has been granted but cannot be exercised before approval of the final CPERD-03 artifact hashes.
