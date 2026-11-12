@@ -41,6 +41,9 @@ The report is not an independent technical review. It is not final physical ERD 
 | Deferred API route families | PASS | 8 Church Transfer, 16 finance/payment/budget and 9 credential route strings identified for exclusion/deferment |
 | Federation oversight API proposal | PASS WITH OPEN CONTRACT | Three GET-only, federation-bounded, aggregate-only route candidates added; request/response and permission review remains open |
 | Non-timezone timestamp types | PASS | 0 non-TIMESTAMPTZ timestamp columns detected |
+| Timestamp/date inventory | PASS | 126 TIMESTAMPTZ columns and 3 DATE columns |
+| Timezone identifiers | OPEN | Three fields use text IANA identifiers; application validation and timezone ownership contract remain open |
+| Recurrence representation | OPEN | No recurrence-rule column exists; recurrence is not represented as an active v1 capability |
 | Calendar-date columns | PASS | DATE retained for date_of_birth, term_start and term_end |
 | Scope-excluded FK/index rows | PASS | 0 excluded/deferred table references in candidate FK and index rows |
 | Cross-district semantic ownership | BLOCKED | Referential columns and support indexes resolve, but member district ownership and several member-to-district child relationships are not yet proven by composite FKs |
