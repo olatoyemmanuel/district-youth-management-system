@@ -3,7 +3,7 @@
 - Revision: 0.1
 - Date: 2026-11-12
 - Status: **WORKING CHECKLIST — NOT FINAL VERIFICATION**
-- Implementation: **NOT AUTHORIZED**
+- Implementation authorization: **GRANTED CONDITIONALLY; EXECUTION BLOCKED PENDING FINAL CPERD-03 APPROVAL**
 
 ## 1. Purpose
 
@@ -13,11 +13,11 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 
 | ID | Required work | Evidence required | Status |
 |---|---|---|---|
-| SCOPE-01 | Remove Church Transfer from DYMS 1.0 | No transfer table, transfer FK, transfer index, transfer trigger, transfer API, transfer report or transfer requirement remains active | OPEN |
-| SCOPE-02 | Remove finance/payment/budget model from DYMS 1.0 | No finance table, finance FK, finance index, finance trigger, finance API or finance report remains active | OPEN |
-| SCOPE-03 | Defer credential issuance and evidence management | No credential issuance/evidence table, issuance API, verification API or credential evidence report remains active in DYMS 1.0 | OPEN |
+| SCOPE-01 | Remove Church Transfer from DYMS 1.0 | CPERD-03 column/FK/index/lifecycle/traceability candidates exclude transfer; integrity/API/report reconciliation still required | PARTIALLY CLOSED |
+| SCOPE-02 | Remove finance/payment/budget model from DYMS 1.0 | CPERD-03 column/FK/index/lifecycle/traceability/integrity candidates exclude finance; API/report/retention reconciliation still required | PARTIALLY CLOSED |
+| SCOPE-03 | Defer credential issuance and evidence management | CPERD-03 column/FK/index/lifecycle/traceability/integrity candidates exclude issuance/evidence; API/report/retention reconciliation still required | PARTIALLY CLOSED |
 | SCOPE-04 | Preserve the distinction between membership category and credential | Membership categories remain Adventurer, Pathfinder and Senior Youth as approved; Master Guide remains a credential/qualification, not a member category | OPEN |
-| ORG-01 | Add federation parent entity | Federation table and district FK represented in ERD, column and FK registers | OPEN |
+| ORG-01 | Add federation parent entity | Federation candidate and districts.federation_id represented in column and FK candidates; master ERD, composite ownership and static checks remain | PARTIALLY CLOSED |
 | ORG-02 | Enforce district code uniqueness within federation | Composite unique key/index and supporting relationship design | OPEN |
 | ORG-03 | Enforce church code uniqueness within district | Composite unique key/index retained and verified | OPEN |
 | ORG-04 | Enforce district ownership on child records | Composite FK or equivalent database-level ownership constraints, plus application validation | OPEN |
@@ -120,6 +120,8 @@ Independent technical review must examine:
 The review report must identify reviewer, date, exact artifact hashes, findings, severity, disposition and ACCEPT/REVISE/BLOCK result. Do not mark external independent DDD-013 assurance complete without the actual review evidence.
 
 ## 9. Implementation boundary
+
+The project owner issued explicit implementation authorization on 2026-11-12. This authorization is conditional and cannot be exercised until the exact final CPERD-03 physical ERD artifacts are approved. Final ERD approval remains a separate required gate.
 
 All work in this matrix is documentation-only.
 
