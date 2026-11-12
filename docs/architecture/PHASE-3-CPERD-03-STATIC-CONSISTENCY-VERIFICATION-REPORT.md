@@ -82,3 +82,29 @@ The CPERD-03 package is not ready for final owner approval. Close the open desig
 The project owner's implementation authorization is recorded as conditional. It is not exercisable until the final CPERD-03 physical ERD artifacts are explicitly approved.
 
 **No implementation is authorized by this report.**
+
+
+## 6. Input artifact SHA inventory
+
+These are the exact Git blob hashes inspected for this report on branch `cperd-03-documentation-reconciliation`. The report's own final blob hash and any later revisions must be recorded in the final approval manifest.
+
+| Artifact | Path | Git blob SHA |
+|---|---|---|
+| Master physical ERD | `PHASE-3-CONSOLIDATED-PHYSICAL-ERD-CPERD-03.md` | `99188a7793d64f41516cabf4c0b50bc0496b0026` |
+| Column register | `PHASE-3-CPERD-03-CANONICAL-PHYSICAL-COLUMN-REGISTER.md` | `45300927ad9e801e0afcdaf5daca483fcb1e580f` |
+| FK register | `PHASE-3-CPERD-03-CANONICAL-FOREIGN-KEY-REGISTER.md` | `9e60b6a2de7f650de9c53079ad78f0072c31f44b` |
+| Index inventory | `PHASE-3-CPERD-03-CANONICAL-INDEX-INVENTORY.md` | `1bae0b39ccfb459c329a955df796b2f22d05022f` |
+| Lifecycle catalogue | `PHASE-3-CPERD-03-LIFECYCLE-STATE-CATALOGUE.md` | `29c449cfef99eee07bef423180080ab1d9b98335` |
+| Integrity and trigger register | `PHASE-3-CPERD-03-PHYSICAL-INTEGRITY-AND-TRIGGER-REGISTER.md` | `b0680278a7dd934faf8b02c1812f54cf79a9e3c3` |
+| ENUM catalogue | `PHASE-3-CPERD-03-TECHNICAL-ENUM-AND-STATE-TYPE-CATALOGUE.md` | `ca934fe3f925a9b11593d1b534ea2a5af111b7e0` |
+| Requirement traceability | `PHASE-3-CPERD-03-REQUIREMENT-TO-PHYSICAL-TRACEABILITY.md` | `e99b07568ab7fd093abe8eb5e16e412c0975ebc3` |
+| API scope reconciliation | `PHASE-3-CPERD-03-API-CONTRACT-AND-SCOPE-RECONCILIATION.md` | `83380ada31ece92c0122704174cd707e033c65b4` |
+| Bounded-context reconciliation | `PHASE-3-CPERD-03-BOUNDED-CONTEXT-AND-OWNERSHIP-RECONCILIATION.md` | `9736ff1991d182858ccedbfdfb07f8ad43678500` |
+| Cross-district ownership review | `PHASE-3-CPERD-03-CROSS-DISTRICT-OWNERSHIP-INTEGRITY-RECONCILIATION.md` | `b25bb4579c3da899688e9ce45bfc808d19414ada` |
+| Retention source reconciliation | `PHASE-3-CPERD-03-RETENTION-SOURCE-ENROLLMENT-SCOPE-RECONCILIATION.md` | `c1029a4a8f97541c004c3ae812a888c2c512dc22` |
+| Open issues matrix | `PHASE-3-CPERD-03-OPEN-ISSUES-AND-VERIFICATION-MATRIX.md` | `8ff3ef03a435d3d0263d0a936e62e56d5b2d7e87` |
+| Owner decision reconciliation | `PHASE-3-CPERD-03-OWNER-DECISION-AND-SCOPE-RECONCILIATION.md` | `28397c2a78c7fca79543968a4fdba61b4b6d9fa7` |
+| Physical table scope classification | `PHASE-3-CPERD-03-PHYSICAL-TABLE-SCOPE-CLASSIFICATION.md` | `6d4fd2dce548a8ec267a4e4729dd1ff2feceb08a` |
+| Reporting catalogue proposal/addendum | `PHASE-3-CPERD-13-REPORT-CATALOGUE-AND-DATA-GOVERNANCE-PROPOSAL.md` | `3a8b4b1c063cfa07cba1d41601cc72ef899675e6` |
+
+The input hashes above identify the precise documentation snapshots used for the current static pass. Any subsequent edit invalidates the corresponding hash and requires a new fetch and verification pass before owner approval.
