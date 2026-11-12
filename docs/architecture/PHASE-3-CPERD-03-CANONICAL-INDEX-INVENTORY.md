@@ -17,7 +17,7 @@ The retained rows are not automatically approved. Every index requires validatio
 
 - CPERD-02 index rows: 235.
 - Retained after first-pass exclusions: 176.
-- Additions required for Federation: `uq_districts_federation_code` and `ix_fk_districts_federation_id`.
+- Federation candidates: `uq_federations_code`, `uq_districts_federation_code` and `ix_fk_districts_federation_id`.
 - Current membership uniqueness is no longer blocked at the business-rule level by IDX-R02. The persisted predicate must use the approved ACTIVE/SUSPENDED/TERMINATED semantics.
 - Normalized email uniqueness is approved by OD-04, but exact canonical normalization storage/expression remains open.
 - Other policy-dependent indexes remain open until their exact predicates are reconciled.
@@ -29,6 +29,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | Index name | Table | Key columns / predicate | Classification | Source |
 |---|---|---|---|---|
 | `uq_districts_federation_code` | `districts` | `federation_id, code` | UNIQUE candidate; OD-04 scoped uniqueness | CPERD-03 federation hierarchy; exact code normalization open |
+| `uq_federations_code` | `federations` | `code` | UNIQUE candidate; global federation code uniqueness | CPERD-03 hierarchy; normalization/case policy remains open |
 | `ix_fk_districts_federation_id` | `districts` | `federation_id` | FK support | CPERD-03 FK candidate |
 | `ix_access_denies_department_id` | `access_denies` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
 | `ix_access_denies_church_id` | `access_denies` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
@@ -61,8 +62,8 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | `ix_event_registrations_event_status` | `event_registrations` | `event_id, status, registered_at` | Access / workload | Medium catalogue |
 | `ix_event_sessions_event_start` | `event_sessions` | `event_id, starts_at` | Access / workload | Medium catalogue |
 | `ix_events_church_district` | `events` | `church_id, district_id` | FK support | Composite church/district FK |
-| `ix_events_church_start` | `events` | `church_id, starts_at WHERE church_id IS NOT NULL AND district_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
-| `ix_events_district_start` | `events` | `district_id, starts_at WHERE district_id IS NOT NULL AND church_id IS NULL AND department_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_events_church_start` | `events` | `church_id, starts_at WHERE church_id IS NOT NULL AND district_id IS NULL` | Access / workload | Medium catalogue |
+| `ix_events_district_start` | `events` | `district_id, starts_at WHERE district_id IS NOT NULL AND church_id IS NULL` | Access / workload | Medium catalogue |
 | `ix_fk_access_denies_issued_by_user_account_id` | `access_denies` | `issued_by_user_account_id` | FK support | FK register + Medium catalogue |
 | `ix_fk_access_denies_permission_id` | `access_denies` | `permission_id` | FK support | FK register + Medium catalogue |
 | `ix_fk_access_denies_reviewed_by_user_account_id` | `access_denies` | `reviewed_by_user_account_id WHERE reviewed_by_user_account_id IS NOT NULL` | FK support | FK register + Medium catalogue |
@@ -81,10 +82,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | `ix_fk_attendance_records_subject_event_member` | `attendance_records` | `attendance_subject_id, event_id, member_id` | FK support | FK register |
 | `ix_fk_audit_access_events_audit_event_id` | `audit_access_events` | `audit_event_id WHERE audit_event_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_audit_events_initiating_user_account_id` | `audit_events` | `initiating_user_account_id WHERE initiating_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_church_memberships_accepted_by_user_account_id` | `church_memberships` | `accepted_by_user_account_id WHERE accepted_by_user_account_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_church_memberships_approved_by_user_account_id` | `church_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_church_memberships_church_id` | `church_memberships` | `church_id WHERE church_id IS NOT NULL` | FK support | FK register |
-| `ix_fk_church_memberships_initiated_by_user_account_id` | `church_memberships` | `initiated_by_user_account_id` | FK support | FK register |
 | `ix_fk_department_memberships_approved_by_user_account_id` | `department_memberships` | `approved_by_user_account_id WHERE approved_by_user_account_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_department_memberships_department_id` | `department_memberships` | `department_id WHERE department_id IS NOT NULL` | FK support | FK register |
 | `ix_fk_department_memberships_eligibility_rule_id` | `department_memberships` | `eligibility_rule_id` | FK support | FK register |
@@ -156,7 +154,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 | `uq_attendance_records_event_subject` | `attendance_records` | `attendance_subject_id WHERE event_session_id IS NULL` | Unique / partial unique | Medium catalogue |
 | `uq_attendance_records_session_subject` | `attendance_records` | `attendance_subject_id, event_session_id WHERE event_session_id IS NOT NULL` | Unique / partial unique | Medium catalogue |
 | `uq_auth_sessions_id_user_account` | `auth_sessions` | `id, user_account_id` | Unique candidate key | DDD-013 session ownership |
-| `uq_church_memberships_current` | `church_memberships` | `member_id WHERE UNRESOLVED current-membership predicate (ODR-002)` | POLICY BLOCKED | Medium catalogue |
+| `uq_church_memberships_current` | `church_memberships` | `member_id WHERE status = 'ACTIVE'` | UNIQUE / current membership | IDX-R02; one ACTIVE membership per member; SUSPENDED and TERMINATED are not current |
 | `uq_churches_district_code` | `churches` | `district_id, code` | Unique / partial unique | Medium catalogue |
 | `uq_churches_id_district` | `churches` | `id, district_id` | Unique / partial unique | FK register |
 | `uq_department_eligibility_rules_version` | `department_eligibility_rules` | `department_id, version` | Unique / partial unique | Medium catalogue |
@@ -209,7 +207,7 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 
 ## 4. Required predicate decisions and verification
 
-1. `uq_church_memberships_current`: exact predicate must be identical to IDX-R02 and the lifecycle catalogue. ACTIVE is current; SUSPENDED and TERMINATED are not current. Reactivation returns the same row to ACTIVE.
+1. `uq_church_memberships_current`: candidate predicate is `status = 'ACTIVE'`, exactly matching IDX-R02. SUSPENDED and TERMINATED are not current. Reactivation returns the same row to ACTIVE.
 2. `uq_user_accounts_email_present`: specify one deterministic canonical normalization algorithm and stored representation. OD-04 requires global uniqueness of normalized email; do not guess trimming, Unicode normalization or case-folding details.
 3. `uq_member_category_assignments_current`: one active primary category per member; exact canonical current-state label and partial predicate require cross-register reconciliation.
 4. `uq_department_memberships_current`: permit multiple departments; prevent duplicate current membership for the same member and department. Exact state predicate remains to be reconciled.
@@ -220,4 +218,4 @@ The mechanical row count is not a certified inventory. Rebuild the inventory fro
 9. Verify every indexed column exists and every partial predicate references an approved stable state.
 10. Reconcile index workload purpose with query/API contracts and report access patterns.
 
-**Status: DRAFT 0.1 — NOT APPROVED. No implementation is authorized by this register.**
+**Status: DRAFT 0.2 — NOT APPROVED. Implementation authorization is conditional on final CPERD-03 approval and is not exercisable yet.**
