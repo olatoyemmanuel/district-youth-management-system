@@ -82,7 +82,7 @@ This matrix controls the CPERD-03 documentation reconciliation. Each item must b
 | XREG-08 | API ↔ physical model | Every persisted field, FK, status and idempotency invariant has a physical mapping | OPEN |
 | XREG-09 | Requirements ↔ physical model | Every included requirement maps once; deferred requirements are explicitly classified | OPEN |
 | XREG-10 | Scope exclusion | No excluded/deferred capability remains active in the DYMS 1.0 model | OPEN |
-| XREG-11 | Inventory totals | Current static counts: 57 tables, 547 columns, 127 FKs, 176 index rows, 40 lifecycle rows, 107 requirement rows; master ERD count reconciliation remains | PARTIALLY CLOSED |
+| XREG-11 | Inventory totals | Current static counts: 57 tables, 547 columns, 127 FKs, 175 index rows, 40 lifecycle rows, 107 requirement rows; master ERD count reconciliation remains | PARTIALLY CLOSED |
 | XREG-12 | Exact hash manifest | Every reviewed artifact hash matches the committed file | OPEN |
 | XREG-13 | Bounded contexts ↔ physical ownership | Every included table and route has one owning context; deferred domains are excluded | PARTIALLY CLOSED |
 | XREG-14 | API route scope ↔ 107 requirements | Every active route maps to requirement, command/query, permission, lifecycle and error contract | PARTIALLY CLOSED |
